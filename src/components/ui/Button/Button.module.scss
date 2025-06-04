@@ -1,58 +1,58 @@
 // src/components/ui/Button/Button.module.scss
-@import '../../../styles/variables';
-@import '../../../styles/mixins';
+@use '../../../styles/variables' as vars;
+@use '../../../styles/mixins' as mix;
 
 .button {
-  @include button-base;
+  @include mix.button-base;
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-xs;
-  font-family: $font-family;
+  gap: vars.$spacing-xs;
+  font-family: vars.$font-family;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: $transition-standard;
+  transition: vars.$transition-standard;
   white-space: nowrap;
   
   &:focus-visible {
-    outline: 2px solid $primary-accent-solid;
+    outline: 2px solid vars.$primary-accent-solid;
     outline-offset: 2px;
   }
   
   // Variants
   &.primary {
-    @include button-primary;
+    @include mix.button-primary;
   }
   
   &.secondary {
-    @include button-secondary;
+    @include mix.button-secondary;
   }
   
   &.cta {
-    @include button-cta;
+    @include mix.button-cta;
   }
   
   // Sizes
   &.small {
-    padding: $spacing-xs $spacing-md;
-    font-size: $font-body-sm;
-    font-weight: $font-medium;
-    border-radius: $spacing-xs;
+    padding: vars.$spacing-xs vars.$spacing-md;
+    font-size: vars.$font-body-sm;
+    font-weight: vars.$font-medium;
+    border-radius: vars.$spacing-xs;
     min-height: 32px;
   }
   
   &.medium {
-    padding: $spacing-sm $spacing-lg;
-    font-size: $font-body;
-    font-weight: $font-semibold;
-    border-radius: $spacing-sm;
+    padding: vars.$spacing-sm vars.$spacing-lg;
+    font-size: vars.$font-body;
+    font-weight: vars.$font-semibold;
+    border-radius: vars.$spacing-sm;
     min-height: 40px;
   }
   
   &.large {
-    @include button-large;
+    @include mix.button-large;
     min-height: 48px;
   }
   
@@ -82,17 +82,17 @@
   
   // Icon positioning
   .iconLeft {
-    margin-right: $spacing-xs;
+    margin-right: vars.$spacing-xs;
   }
   
   .iconRight {
-    margin-left: $spacing-xs;
+    margin-left: vars.$spacing-xs;
   }
   
   .content {
     display: flex;
     align-items: center;
-    transition: $transition-quick;
+    transition: vars.$transition-quick;
   }
   
   // Loading spinner
@@ -127,8 +127,8 @@
   }
   
   &.secondary:hover:not(.disabled):not(.loading) {
-    border-color: $hover-border;
-    background: $hover-bg;
+    border-color: vars.$hover-border;
+    background: vars.$hover-bg;
     transform: translateY(-1px);
   }
   
@@ -143,20 +143,20 @@
   }
   
   // Responsive adjustments
-  @include mobile-only {
+  @include mix.mobile-only {
     &.large {
-      padding: $spacing-md $spacing-xl;
-      font-size: $font-body;
+      padding: vars.$spacing-md vars.$spacing-xl;
+      font-size: vars.$font-body;
     }
     
     &.medium {
-      padding: $spacing-sm $spacing-lg;
-      font-size: $font-body-sm;
+      padding: vars.$spacing-sm vars.$spacing-lg;
+      font-size: vars.$font-body-sm;
     }
     
     &.small {
-      padding: $spacing-xs $spacing-sm;
-      font-size: $font-caption;
+      padding: vars.$spacing-xs vars.$spacing-sm;
+      font-size: vars.$font-caption;
     }
   }
 }

@@ -1,3 +1,5 @@
+'use client';
+
 // src/components/ui/Button/Button.tsx
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
