@@ -1,0 +1,354 @@
+// src/components/ui/LoadingSpinner/LoadingSpinner.module.scss
+@use '../../../styles/variables' as vars;
+@use '../../../styles/mixins' as mix;
+
+.loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &.centered {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+  }
+  
+  &.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+  }
+}
+
+.overlayContainer {
+  position: relative;
+  
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(2px);
+    border-radius: inherit;
+  }
+}
+
+.spinnerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-sm;
+}
+
+// Spinner Icon (Lucide Loader2)
+.spinnerIcon {
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Dots Animation
+.dotsContainer {
+  display: flex;
+  gap: vars.$spacing-xs;
+  align-items: center;
+}
+
+.dot {
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite both;
+  
+  &:nth-child(1) { animation-delay: -0.32s; }
+  &:nth-child(2) { animation-delay: -0.16s; }
+  &:nth-child(3) { animation-delay: 0s; }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Pulse Animation
+.pulseContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulseRing {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: pulseRing 2s ease-out infinite;
+}
+
+.pulseCore {
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+// Bars Animation
+.barsContainer {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 20px;
+}
+
+.bar {
+  border-radius: 2px;
+  animation: bars 1.2s ease-in-out infinite;
+  
+  &:nth-child(1) { animation-delay: -0.45s; }
+  &:nth-child(2) { animation-delay: -0.3s; }
+  &:nth-child(3) { animation-delay: -0.15s; }
+  &:nth-child(4) { animation-delay: 0s; }
+}
+
+@keyframes bars {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+// Size Variants
+.small {
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .pulseRing,
+  .pulseCore {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .bar {
+    width: 3px;
+    height: 12px;
+  }
+  
+  .barsContainer {
+    height: 12px;
+  }
+  
+  .loadingText {
+    font-size: vars.$font-body-sm;
+  }
+}
+
+.medium {
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .pulseRing,
+  .pulseCore {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .bar {
+    width: 4px;
+    height: 20px;
+  }
+  
+  .barsContainer {
+    height: 20px;
+  }
+  
+  .loadingText {
+    font-size: vars.$font-body;
+  }
+}
+
+.large {
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .pulseRing,
+  .pulseCore {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .bar {
+    width: 5px;
+    height: 28px;
+  }
+  
+  .barsContainer {
+    height: 28px;
+  }
+  
+  .loadingText {
+    font-size: vars.$font-body-lg;
+  }
+}
+
+.xlarge {
+  .dot {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .pulseRing,
+  .pulseCore {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .bar {
+    width: 6px;
+    height: 36px;
+  }
+  
+  .barsContainer {
+    height: 36px;
+  }
+  
+  .loadingText {
+    font-size: vars.$font-subtitle;
+    font-weight: vars.$font-medium;
+  }
+}
+
+// Color Variants
+.primary {
+  .spinnerIcon,
+  .dot,
+  .pulseCore,
+  .bar {
+    color: vars.$primary-accent-solid;
+    background-color: vars.$primary-accent-solid;
+  }
+  
+  .pulseRing {
+    border: 2px solid vars.$primary-accent-solid;
+    background: transparent;
+  }
+  
+  .loadingText {
+    color: vars.$primary-text;
+  }
+}
+
+.secondary {
+  .spinnerIcon,
+  .dot,
+  .pulseCore,
+  .bar {
+    color: vars.$secondary-accent-solid;
+    background-color: vars.$secondary-accent-solid;
+  }
+  
+  .pulseRing {
+    border: 2px solid vars.$secondary-accent-solid;
+    background: transparent;
+  }
+  
+  .loadingText {
+    color: vars.$primary-text;
+  }
+}
+
+.accent {
+  .spinnerIcon,
+  .dot,
+  .pulseCore,
+  .bar {
+    color: vars.$success-accent-solid;
+    background-color: vars.$success-accent-solid;
+  }
+  
+  .pulseRing {
+    border: 2px solid vars.$success-accent-solid;
+    background: transparent;
+  }
+  
+  .loadingText {
+    color: vars.$primary-text;
+  }
+}
+
+.white {
+  .spinnerIcon,
+  .dot,
+  .pulseCore,
+  .bar {
+    color: white;
+    background-color: white;
+  }
+  
+  .pulseRing {
+    border: 2px solid white;
+    background: transparent;
+  }
+  
+  .loadingText {
+    color: white;
+  }
+}
+
+// Loading Text
+.loadingText {
+  margin-top: vars.$spacing-xs;
+  font-weight: vars.$font-medium;
+  text-align: center;
+  line-height: 1.4;
+  
+  @include mix.mobile-only {
+    font-size: vars.$font-body-sm;
+  }
+}
+
+// Accessibility
+@media (prefers-reduced-motion: reduce) {
+  .spinnerIcon,
+  .dot,
+  .pulseRing,
+  .bar {
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+  }
+}
