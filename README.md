@@ -61,7 +61,6 @@ pnpm type-check # TypeScript validation
 pnpm storybook # Start Storybook development
 pnpm build-storybook # Build Storybook for deployment
 
-```
 
 ## 📁 Project Structure
 
