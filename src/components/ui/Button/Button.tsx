@@ -1,9 +1,10 @@
-'use client';
-
 // src/components/ui/Button/Button.tsx
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import styles from './Button.module.scss';
+
+// Debug: Log the styles object to see what's available
+console.log('Button styles:', styles);
 
 export interface ButtonProps {
   children: React.ReactNode;
@@ -42,12 +43,12 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const buttonClasses = [
-    styles.button,
-    styles[variant],
-    styles[size],
-    disabled && styles.disabled,
-    loading && styles.loading,
-    fullWidth && styles.fullWidth,
+    styles.button || 'button', // Fallback if styles.button is undefined
+    styles[variant] || variant,
+    styles[size] || size,
+    disabled && (styles.disabled || 'disabled'),
+    loading && (styles.loading || 'loading'),
+    fullWidth && (styles.fullWidth || 'fullWidth'),
     className,
   ]
     .filter(Boolean)

@@ -32,7 +32,11 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div style={{ fontFamily: "Inter, sans-serif" }}>
+      <div style={{ 
+        fontFamily: 'Inter, sans-serif',
+        // Add basic styling here instead of importing globals.scss
+        color: '#2d3748',
+      }}>
         <Story />
       </div>
     ),

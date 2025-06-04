@@ -14,53 +14,14 @@ const config: StorybookConfig = {
   },
   staticDirs: ["../public"],
   docs: {
-    autodocs: "tag",
+    autodocs: false,
+  },
+  // Simplify by using Next.js built-in SCSS support
+  sassOptions: {
+    includePaths: [path.join(__dirname, "../src/styles")],
   },
   webpackFinal: async (config) => {
-    // Remove existing CSS rules to avoid conflicts
-    config.module!.rules = config.module!.rules!.filter((rule) => {
-      if (typeof rule !== "object" || !rule) return true;
-      if (rule === "...") return true;
-
-      const test = rule.test;
-      if (!test) return true;
-
-      const testStr = test.toString();
-      return (
-        !testStr.includes("css") &&
-        !testStr.includes("scss") &&
-        !testStr.includes("sass")
-      );
-    });
-
-    // Add our SCSS handling
-    config.module!.rules!.push({
-      test: /\.scss$/,
-      use: [
-        "style-loader",
-        {
-          loader: "css-loader",
-          options: {
-            modules: {
-              auto: (resourcePath: string) => resourcePath.includes(".module."),
-              localIdentName: "[name]__[local]--[hash:base64:5]",
-            },
-            importLoaders: 1,
-          },
-        },
-        {
-          loader: "sass-loader",
-          options: {
-            sassOptions: {
-              includePaths: [path.resolve(__dirname, "../src/styles")],
-            },
-          },
-        },
-      ],
-      include: path.resolve(__dirname, "../src"),
-    });
-
-    // Handle path aliases
+    // Only add path aliases - let Next.js handle SCSS
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
