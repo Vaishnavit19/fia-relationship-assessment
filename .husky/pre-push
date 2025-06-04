@@ -1,0 +1,11 @@
+# Run type checking
+echo "🔍 Running type check..."
+pnpm type-check
+
+# Run full linting (without --fix to avoid changes)
+echo "🔍 Running ESLint..."
+pnpm lint
+
+# Run build to make sure everything compiles
+echo "🔍 Running build check..."
+pnpm build
