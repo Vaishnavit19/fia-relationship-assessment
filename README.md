@@ -67,32 +67,32 @@ pnpm build-storybook # Build Storybook for deployment
 ```
 
 fia-relationship-assessment/
-├── .storybook/ # Storybook configuration
+├── .storybook/           # Storybook configuration
 ├── src/
-│ ├── app/ # Next.js App Router pages
-│ │ ├── layout.tsx # Root layout
-│ │ ├── page.tsx # Homepage
-│ │ ├── assessment/ # Assessment flow
-│ │ └── results/ # Results page
-│ ├── components/ # React components
-│ │ ├── ui/ # Reusable UI components
-│ │ ├── assessment/ # Assessment-specific components
-│ │ ├── results/ # Results-specific components
-│ │ └── layout/ # Layout components
-│ ├── lib/ # Utilities and logic
-│ │ ├── types.ts # TypeScript definitions
-│ │ ├── store.ts # Zustand state management
-│ │ ├── data.ts # Data loading functions
-│ │ └── utils.ts # Helper functions
-│ ├── data/ # JSON data files
-│ │ ├── scenarios.json # Assessment scenarios
-│ │ ├── archetypes.json # Relationship archetypes
-│ │ └── config.json # App configuration
-│ └── styles/ # SCSS stylesheets
-│ ├── globals.scss # Global styles
-│ ├── variables.scss # Design system variables
-│ └── mixins.scss # SCSS mixins and utilities
-├── public/ # Static assets
+│ ├── app/                # Next.js App Router pages
+│ │ ├── layout.tsx        # Root layout
+│ │ ├── page.tsx          # Homepage
+│ │ ├── assessment/       # Assessment flow
+│ │ └── results/          # Results page
+│ ├── components/         # React components
+│ │ ├── ui/               # Reusable UI components
+│ │ ├── assessment/       # Assessment-specific components
+│ │ ├── results/          # Results-specific components
+│ │ └── layout/           # Layout components
+│ ├── lib/                # Utilities and logic
+│ │ ├── types.ts          # TypeScript definitions
+│ │ ├── store.ts          # Zustand state management
+│ │ ├── data.ts           # Data loading functions
+│ │ └── utils.ts          # Helper functions
+│ ├── data/               # JSON data files
+│ │ ├── scenarios.json    # Assessment scenarios
+│ │ ├── archetypes.json   # Relationship archetypes
+│ │ └── config.json       # App configuration
+│ └── styles/             # SCSS stylesheets
+│ ├── globals.scss        # Global styles
+│ ├── variables.scss      # Design system variables
+│ └── mixins.scss         # SCSS mixins and utilities
+├── public/               # Static assets
 ├── package.json
 ├── next.config.js
 ├── tsconfig.json
