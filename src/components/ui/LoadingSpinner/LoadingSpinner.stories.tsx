@@ -1,8 +1,10 @@
 // src/components/ui/LoadingSpinner/LoadingSpinner.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { LoadingSpinner } from './LoadingSpinner';
-import { Card } from '../Card';
+import type { Meta, StoryObj } from '@storybook/nextjs';
+
 import { Button } from '../Button';
+import { Card } from '../Card';
+
+import { LoadingSpinner } from './LoadingSpinner';
 
 const meta = {
   title: 'UI/LoadingSpinner',

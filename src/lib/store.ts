@@ -5,8 +5,9 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { ScoreData, UserAnswer, UserData, AssessmentResult, Scenario } from './types';
+
 import { scenarios, getScenarioById, getArchetypeByHighestScore, calculateProgress } from './data';
+import { ScoreData, UserAnswer, UserData, AssessmentResult, Scenario, AnswerOption } from './types';
 
 // Store State Interface
 export interface AssessmentState {
@@ -17,32 +18,32 @@ export interface AssessmentState {
   userData: UserData | null;
   isComplete: boolean;
   isStarted: boolean;
-  
+
   // Computed values
   progress: number;
   currentQuestion: Scenario | null;
   totalQuestions: number;
 }
 
-// Store Actions Interface  
+// Store Actions Interface
 export interface AssessmentActions {
   // User data actions
   setUserData: (data: UserData) => void;
-  
+
   // Assessment flow actions
   startAssessment: () => void;
-  addAnswer: (scenarioId: number, selectedOption: any) => void;
+  addAnswer: (scenarioId: number, selectedOption: AnswerOption) => void;
   goToNextScenario: (nextScenarioId: number | string) => void;
   goToPreviousQuestion: () => void;
-  
+
   // Navigation actions
   goToScenario: (scenarioId: number) => void;
   canGoBack: () => boolean;
-  
+
   // Results actions
   completeAssessment: () => void;
   getResults: () => AssessmentResult | null;
-  
+
   // Reset actions
   resetAssessment: () => void;
   resetToQuestion: (scenarioId: number) => void;
@@ -71,7 +72,7 @@ export const useAssessmentStore = create<AssessmentStore>()(
       (set, get) => ({
         // Initial State
         ...initialState,
-        
+
         // Actions
         setUserData: (data: UserData) => {
           set({ userData: data }, false, 'setUserData');
@@ -79,17 +80,21 @@ export const useAssessmentStore = create<AssessmentStore>()(
 
         startAssessment: () => {
           const firstScenario = getScenarioById(1);
-          set({
-            isStarted: true,
-            currentScenario: 1,
-            currentQuestion: firstScenario,
-            progress: calculateProgress(1),
-          }, false, 'startAssessment');
+          set(
+            {
+              isStarted: true,
+              currentScenario: 1,
+              currentQuestion: firstScenario,
+              progress: calculateProgress(1),
+            },
+            false,
+            'startAssessment'
+          );
         },
 
-        addAnswer: (scenarioId: number, selectedOption: any) => {
+        addAnswer: (scenarioId: number, selectedOption: AnswerOption) => {
           const state = get();
-          
+
           // Create new answer
           const newAnswer: UserAnswer = {
             scenarioId,
@@ -111,10 +116,14 @@ export const useAssessmentStore = create<AssessmentStore>()(
             { emotional: 0, logical: 0, exploratory: 0 }
           );
 
-          set({
-            answers: updatedAnswers,
-            scores: newScores,
-          }, false, 'addAnswer');
+          set(
+            {
+              answers: updatedAnswers,
+              scores: newScores,
+            },
+            false,
+            'addAnswer'
+          );
         },
 
         goToNextScenario: (nextScenarioId: number | string) => {
@@ -125,41 +134,53 @@ export const useAssessmentStore = create<AssessmentStore>()(
 
           const nextScenario = getScenarioById(nextScenarioId as number);
           if (nextScenario) {
-            set({
-              currentScenario: nextScenario.id,
-              currentQuestion: nextScenario,
-              progress: calculateProgress(nextScenario.id),
-            }, false, 'goToNextScenario');
+            set(
+              {
+                currentScenario: nextScenario.id,
+                currentQuestion: nextScenario,
+                progress: calculateProgress(nextScenario.id),
+              },
+              false,
+              'goToNextScenario'
+            );
           }
         },
 
         goToPreviousQuestion: () => {
           const state = get();
           const answers = state.answers;
-          
+
           if (answers.length === 0) return;
 
           // Get the previous question from answers history
           const lastAnswer = answers[answers.length - 1];
           const previousScenario = getScenarioById(lastAnswer.scenarioId);
-          
+
           if (previousScenario) {
-            set({
-              currentScenario: previousScenario.id,
-              currentQuestion: previousScenario,
-              progress: calculateProgress(previousScenario.id),
-            }, false, 'goToPreviousQuestion');
+            set(
+              {
+                currentScenario: previousScenario.id,
+                currentQuestion: previousScenario,
+                progress: calculateProgress(previousScenario.id),
+              },
+              false,
+              'goToPreviousQuestion'
+            );
           }
         },
 
         goToScenario: (scenarioId: number) => {
           const scenario = getScenarioById(scenarioId);
           if (scenario) {
-            set({
-              currentScenario: scenarioId,
-              currentQuestion: scenario,
-              progress: calculateProgress(scenarioId),
-            }, false, 'goToScenario');
+            set(
+              {
+                currentScenario: scenarioId,
+                currentQuestion: scenario,
+                progress: calculateProgress(scenarioId),
+              },
+              false,
+              'goToScenario'
+            );
           }
         },
 
@@ -169,21 +190,25 @@ export const useAssessmentStore = create<AssessmentStore>()(
         },
 
         completeAssessment: () => {
-          set({
-            isComplete: true,
-            progress: 100,
-          }, false, 'completeAssessment');
+          set(
+            {
+              isComplete: true,
+              progress: 100,
+            },
+            false,
+            'completeAssessment'
+          );
         },
 
         getResults: (): AssessmentResult | null => {
           const state = get();
-          
+
           if (!state.isComplete || !state.userData) {
             return null;
           }
 
           const archetype = getArchetypeByHighestScore(state.scores);
-          
+
           return {
             totalScores: state.scores,
             archetype,
@@ -193,18 +218,22 @@ export const useAssessmentStore = create<AssessmentStore>()(
         },
 
         resetAssessment: () => {
-          set({
-            ...initialState,
-            userData: get().userData, // Keep user data
-          }, false, 'resetAssessment');
+          set(
+            {
+              ...initialState,
+              userData: get().userData, // Keep user data
+            },
+            false,
+            'resetAssessment'
+          );
         },
 
         resetToQuestion: (scenarioId: number) => {
           const state = get();
-          
+
           // Remove answers from this question onwards
           const filteredAnswers = state.answers.filter(a => a.scenarioId < scenarioId);
-          
+
           // Recalculate scores
           const newScores = filteredAnswers.reduce(
             (acc, answer) => ({
@@ -216,20 +245,24 @@ export const useAssessmentStore = create<AssessmentStore>()(
           );
 
           const scenario = getScenarioById(scenarioId);
-          
-          set({
-            currentScenario: scenarioId,
-            currentQuestion: scenario,
-            answers: filteredAnswers,
-            scores: newScores,
-            isComplete: false,
-            progress: calculateProgress(scenarioId),
-          }, false, 'resetToQuestion');
+
+          set(
+            {
+              currentScenario: scenarioId,
+              currentQuestion: scenario,
+              answers: filteredAnswers,
+              scores: newScores,
+              isComplete: false,
+              progress: calculateProgress(scenarioId),
+            },
+            false,
+            'resetToQuestion'
+          );
         },
       }),
       {
         name: 'fia-assessment-store',
-        partialize: (state) => ({
+        partialize: state => ({
           // Only persist essential data
           userData: state.userData,
           answers: state.answers,

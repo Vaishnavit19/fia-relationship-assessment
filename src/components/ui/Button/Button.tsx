@@ -1,10 +1,9 @@
 // src/components/ui/Button/Button.tsx
-import React from 'react';
 import { LucideIcon } from 'lucide-react';
+import React from 'react';
+
 import styles from './Button.module.scss';
 
-// Debug: Log the styles object to see what's available
-console.log('Button styles:', styles);
 
 export interface ButtonProps {
   children: React.ReactNode;

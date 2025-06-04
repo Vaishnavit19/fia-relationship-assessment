@@ -3,11 +3,10 @@
 // GLOBAL STYLES
 // ==========================================================================
 
-@forward './variables';
-@forward './mixins';
+@forward "./variables";
+@forward "./mixins";
 
-@use './variables' as vars;
-@use './mixins' as mix;
+@use "./mixins" as mix;
 
 // CSS Reset & Base Styles
 // ==========================================================================
@@ -35,21 +34,32 @@ body {
 
 // Typography Base
 // ==========================================================================
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: vars.$font-bold;
   line-height: 1.2;
   margin-bottom: vars.$spacing-md;
   color: vars.$primary-text;
 }
 
-h1 { @include mix.text-hero; }
-h2 { @include mix.text-title; }
-h3 { @include mix.text-subtitle; }
+h1 {
+  @include mix.text-hero;
+}
+h2 {
+  @include mix.text-title;
+}
+h3 {
+  @include mix.text-subtitle;
+}
 
 p {
   @include mix.text-body;
   margin-bottom: vars.$spacing-md;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -59,7 +69,7 @@ a {
   color: vars.$primary-accent-solid;
   text-decoration: none;
   transition: vars.$transition-standard;
-  
+
   &:hover {
     text-decoration: underline;
   }
@@ -75,15 +85,15 @@ button {
   &-primary {
     @include mix.button-primary;
   }
-  
+
   &-secondary {
     @include mix.button-secondary;
   }
-  
+
   &-large {
     @include mix.button-large;
   }
-  
+
   &-cta {
     @include mix.button-cta;
   }
@@ -97,26 +107,26 @@ button {
 
 .grid {
   @include mix.grid-container;
-  
+
   &-responsive {
     @include mix.grid-responsive;
   }
-  
+
   &-2 {
     @include mix.grid-columns(2);
-    
+
     @include mix.mobile-only {
       @include mix.grid-columns(1);
     }
   }
-  
+
   &-3 {
     @include mix.grid-columns(3);
-    
+
     @include mix.tablet-only {
       @include mix.grid-columns(2);
     }
-    
+
     @include mix.mobile-only {
       @include mix.grid-columns(1);
     }
@@ -125,18 +135,18 @@ button {
 
 .flex {
   display: flex;
-  
+
   &-center {
     @include mix.flex-center;
   }
-  
+
   &-between {
     @include mix.flex-between;
   }
-  
+
   &-column {
     @include mix.flex-column;
-    
+
     &-center {
       @include mix.flex-column-center;
     }
@@ -147,19 +157,19 @@ button {
 // ==========================================================================
 .card {
   @include mix.card-base;
-  
+
   &-main {
     @include mix.card-main;
   }
-  
+
   &-small {
     @include mix.card-small;
   }
-  
+
   &-hover {
     @include mix.card-hover;
   }
-  
+
   &-interactive {
     @include mix.card-interactive;
   }
@@ -171,35 +181,35 @@ button {
   &-hero {
     @include mix.text-hero;
   }
-  
+
   &-title {
     @include mix.text-title;
   }
-  
+
   &-subtitle {
     @include mix.text-subtitle;
   }
-  
+
   &-body {
     @include mix.text-body;
   }
-  
+
   &-small {
     @include mix.text-small;
   }
-  
+
   &-center {
     text-align: center;
   }
-  
+
   &-primary {
     color: vars.$primary-text;
   }
-  
+
   &-secondary {
     color: vars.$secondary-text;
   }
-  
+
   &-subtle {
     color: vars.$subtle-text;
   }
@@ -211,11 +221,11 @@ button {
   &-large {
     @include mix.avatar-large;
   }
-  
+
   &-medium {
     @include mix.avatar-medium;
   }
-  
+
   &-small {
     @include mix.avatar-small;
   }
@@ -230,30 +240,66 @@ button {
 // Spacing Utilities
 // ==========================================================================
 .mt {
-  &-xs { margin-top: vars.$spacing-xs; }
-  &-sm { margin-top: vars.$spacing-sm; }
-  &-md { margin-top: vars.$spacing-md; }
-  &-lg { margin-top: vars.$spacing-lg; }
-  &-xl { margin-top: vars.$spacing-xl; }
-  &-2xl { margin-top: vars.$spacing-2xl; }
+  &-xs {
+    margin-top: vars.$spacing-xs;
+  }
+  &-sm {
+    margin-top: vars.$spacing-sm;
+  }
+  &-md {
+    margin-top: vars.$spacing-md;
+  }
+  &-lg {
+    margin-top: vars.$spacing-lg;
+  }
+  &-xl {
+    margin-top: vars.$spacing-xl;
+  }
+  &-2xl {
+    margin-top: vars.$spacing-2xl;
+  }
 }
 
 .mb {
-  &-xs { margin-bottom: vars.$spacing-xs; }
-  &-sm { margin-bottom: vars.$spacing-sm; }
-  &-md { margin-bottom: vars.$spacing-md; }
-  &-lg { margin-bottom: vars.$spacing-lg; }
-  &-xl { margin-bottom: vars.$spacing-xl; }
-  &-2xl { margin-bottom: vars.$spacing-2xl; }
+  &-xs {
+    margin-bottom: vars.$spacing-xs;
+  }
+  &-sm {
+    margin-bottom: vars.$spacing-sm;
+  }
+  &-md {
+    margin-bottom: vars.$spacing-md;
+  }
+  &-lg {
+    margin-bottom: vars.$spacing-lg;
+  }
+  &-xl {
+    margin-bottom: vars.$spacing-xl;
+  }
+  &-2xl {
+    margin-bottom: vars.$spacing-2xl;
+  }
 }
 
 .p {
-  &-xs { padding: vars.$spacing-xs; }
-  &-sm { padding: vars.$spacing-sm; }
-  &-md { padding: vars.$spacing-md; }
-  &-lg { padding: vars.$spacing-lg; }
-  &-xl { padding: vars.$spacing-xl; }
-  &-2xl { padding: vars.$spacing-2xl; }
+  &-xs {
+    padding: vars.$spacing-xs;
+  }
+  &-sm {
+    padding: vars.$spacing-sm;
+  }
+  &-md {
+    padding: vars.$spacing-md;
+  }
+  &-lg {
+    padding: vars.$spacing-lg;
+  }
+  &-xl {
+    padding: vars.$spacing-xl;
+  }
+  &-2xl {
+    padding: vars.$spacing-2xl;
+  }
 }
 
 // Animation Classes
@@ -262,11 +308,11 @@ button {
   &-fade-in {
     @include mix.animate-fade-in;
   }
-  
+
   &-slide-up {
     @include mix.animate-slide-up;
   }
-  
+
   &-pulse {
     @include mix.animate-pulse;
   }
@@ -333,7 +379,7 @@ button {
 ::-webkit-scrollbar-thumb {
   background: vars.$border-color;
   border-radius: vars.$radius-sm;
-  
+
   &:hover {
     background: vars.$hover-border;
   }

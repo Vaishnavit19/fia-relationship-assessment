@@ -1,5 +1,6 @@
 // src/components/ui/Card/Card.tsx
 import React from 'react';
+
 import styles from './Card.module.scss';
 
 export interface CardProps {
@@ -36,7 +37,7 @@ export const Card: React.FC<CardProps> = ({
   'aria-selected': ariaSelected,
   ...props
 }) => {
-  const isInteractive = onClick || variant === 'interactive';
+  const isInteractive = onClick ?? variant === 'interactive';
   
   const handleClick = () => {
     if (!disabled && onClick) {
@@ -68,8 +69,8 @@ export const Card: React.FC<CardProps> = ({
   const cardProps = {
     className: cardClasses,
     style,
-    role: role || (isInteractive ? 'button' : undefined),
-    tabIndex: tabIndex !== undefined ? tabIndex : (isInteractive && !disabled ? 0 : undefined),
+    role: role ?? (isInteractive ? 'button' : undefined),
+    tabIndex: tabIndex ?? (isInteractive && !disabled ? 0 : undefined),
     'aria-label': ariaLabel,
     'aria-selected': ariaSelected,
     'aria-disabled': disabled,

@@ -1,8 +1,10 @@
 // src/components/ui/Card/Card.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Heart, Brain, Star, ChevronRight } from 'lucide-react';
-import { Card } from './Card';
+
 import { Button } from '../Button';
+
+import { Card } from './Card';
 
 const meta = {
   title: 'UI/Card',
@@ -298,7 +300,7 @@ export const QuestionCard: Story = {
     children: (
       <div>
         <h3>Assessment Question</h3>
-        <p>You're planning a trip together. How do you decide on the length of your stay?</p>
+        <p>You&apos;re planning a trip together. How do you decide on the length of your stay?</p>
       </div>
     ),
     className: 'question-card',
@@ -318,7 +320,7 @@ export const OptionCard: Story = {
     children: (
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <strong>A.</strong>
-        <span>Let's pick whatever number of days makes us both feel relaxed and connected.</span>
+        <span>Let&apos;s pick whatever number of days makes us both feel relaxed and connected.</span>
       </div>
     ),
     variant: 'interactive',
@@ -339,7 +341,7 @@ export const SelectedOption: Story = {
     children: (
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <strong>B.</strong>
-        <span>I'll run the costs and schedules to choose the most efficient trip length.</span>
+        <span>I&apos;ll run the costs and schedules to choose the most efficient trip length.</span>
       </div>
     ),
     variant: 'interactive',
@@ -362,7 +364,7 @@ export const ResultCard: Story = {
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>💝</div>
         <h2>The Heartfelt Companion</h2>
         <p style={{ marginBottom: '16px', color: '#718096' }}>Connection-Focused Partner</p>
-        <p>You prioritize emotional connection and togetherness above all else. Your partner's happiness is your happiness.</p>
+        <p>You prioritize emotional connection and togetherness above all else. Your partner&apos;s happiness is your happiness.</p>
       </div>
     ),
     size: 'large',
@@ -387,7 +389,7 @@ export const CardWithActions: Story = {
           <p className="card-subtitle">Question 3 of 7</p>
         </div>
         <div className="card-content">
-          <p>You're making great progress! Each question helps us understand your relationship style better.</p>
+          <p>You&apos;re making great progress! Each question helps us understand your relationship style better.</p>
         </div>
         <div className="card-footer">
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
@@ -411,6 +413,9 @@ export const CardWithActions: Story = {
 };
 
 export const ArchetypeShowcase: Story = {
+  args: {
+    children: 'Demo Card', // Required args for the story
+  },
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', maxWidth: '800px' }}>
       <Card className="result-card emotional" padding="large">

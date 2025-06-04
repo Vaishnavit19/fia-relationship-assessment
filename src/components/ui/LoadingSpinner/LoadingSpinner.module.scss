@@ -1,19 +1,18 @@
 // src/components/ui/LoadingSpinner/LoadingSpinner.module.scss
-@use '../../../styles/variables' as vars;
-@use '../../../styles/mixins' as mix;
+@use "../../../styles/mixins" as mix;
 
 .loading {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  
+
   &.centered {
     display: flex;
     width: 100%;
     height: 100%;
     min-height: 100px;
   }
-  
+
   &.overlay {
     position: fixed;
     top: 0;
@@ -28,7 +27,7 @@
 
 .overlayContainer {
   position: relative;
-  
+
   .loading {
     position: absolute;
     top: 0;
@@ -55,8 +54,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // Dots Animation
@@ -69,18 +72,26 @@
 .dot {
   border-radius: 50%;
   animation: bounce 1.4s ease-in-out infinite both;
-  
-  &:nth-child(1) { animation-delay: -0.32s; }
-  &:nth-child(2) { animation-delay: -0.16s; }
-  &:nth-child(3) { animation-delay: 0s; }
+
+  &:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  &:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0s;
+  }
 }
 
 @keyframes bounce {
-  0%, 80%, 100% { 
+  0%,
+  80%,
+  100% {
     transform: scale(0.6);
     opacity: 0.5;
   }
-  40% { 
+  40% {
     transform: scale(1);
     opacity: 1;
   }
@@ -129,15 +140,25 @@
 .bar {
   border-radius: 2px;
   animation: bars 1.2s ease-in-out infinite;
-  
-  &:nth-child(1) { animation-delay: -0.45s; }
-  &:nth-child(2) { animation-delay: -0.3s; }
-  &:nth-child(3) { animation-delay: -0.15s; }
-  &:nth-child(4) { animation-delay: 0s; }
+
+  &:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  &:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  &:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0s;
+  }
 }
 
 @keyframes bars {
-  0%, 40%, 100% {
+  0%,
+  40%,
+  100% {
     transform: scaleY(0.4);
     opacity: 0.5;
   }
@@ -153,22 +174,22 @@
     width: 6px;
     height: 6px;
   }
-  
+
   .pulseRing,
   .pulseCore {
     width: 16px;
     height: 16px;
   }
-  
+
   .bar {
     width: 3px;
     height: 12px;
   }
-  
+
   .barsContainer {
     height: 12px;
   }
-  
+
   .loadingText {
     font-size: vars.$font-body-sm;
   }
@@ -179,22 +200,22 @@
     width: 8px;
     height: 8px;
   }
-  
+
   .pulseRing,
   .pulseCore {
     width: 24px;
     height: 24px;
   }
-  
+
   .bar {
     width: 4px;
     height: 20px;
   }
-  
+
   .barsContainer {
     height: 20px;
   }
-  
+
   .loadingText {
     font-size: vars.$font-body;
   }
@@ -205,22 +226,22 @@
     width: 12px;
     height: 12px;
   }
-  
+
   .pulseRing,
   .pulseCore {
     width: 32px;
     height: 32px;
   }
-  
+
   .bar {
     width: 5px;
     height: 28px;
   }
-  
+
   .barsContainer {
     height: 28px;
   }
-  
+
   .loadingText {
     font-size: vars.$font-body-lg;
   }
@@ -231,22 +252,22 @@
     width: 16px;
     height: 16px;
   }
-  
+
   .pulseRing,
   .pulseCore {
     width: 48px;
     height: 48px;
   }
-  
+
   .bar {
     width: 6px;
     height: 36px;
   }
-  
+
   .barsContainer {
     height: 36px;
   }
-  
+
   .loadingText {
     font-size: vars.$font-subtitle;
     font-weight: vars.$font-medium;
@@ -262,12 +283,12 @@
     color: vars.$primary-accent-solid;
     background-color: vars.$primary-accent-solid;
   }
-  
+
   .pulseRing {
     border: 2px solid vars.$primary-accent-solid;
     background: transparent;
   }
-  
+
   .loadingText {
     color: vars.$primary-text;
   }
@@ -281,12 +302,12 @@
     color: vars.$secondary-accent-solid;
     background-color: vars.$secondary-accent-solid;
   }
-  
+
   .pulseRing {
     border: 2px solid vars.$secondary-accent-solid;
     background: transparent;
   }
-  
+
   .loadingText {
     color: vars.$primary-text;
   }
@@ -300,12 +321,12 @@
     color: vars.$success-accent-solid;
     background-color: vars.$success-accent-solid;
   }
-  
+
   .pulseRing {
     border: 2px solid vars.$success-accent-solid;
     background: transparent;
   }
-  
+
   .loadingText {
     color: vars.$primary-text;
   }
@@ -319,12 +340,12 @@
     color: white;
     background-color: white;
   }
-  
+
   .pulseRing {
     border: 2px solid white;
     background: transparent;
   }
-  
+
   .loadingText {
     color: white;
   }
@@ -336,7 +357,7 @@
   font-weight: vars.$font-medium;
   text-align: center;
   line-height: 1.4;
-  
+
   @include mix.mobile-only {
     font-size: vars.$font-body-sm;
   }

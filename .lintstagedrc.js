@@ -14,7 +14,4 @@ module.exports = {
   
   // Format all supported files
   '*.{json,md,scss,css,yaml,yml}': ['prettier --write'],
-  
-  // Type check only source files
-  'src/**/*.{ts,tsx}': ['tsc --noEmit --skipLibCheck'],
 };

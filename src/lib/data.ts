@@ -3,10 +3,11 @@
 // ASSESSMENT DATA LOADER
 // ==========================================================================
 
-import { Scenario, RelationshipArchetype } from './types';
-import scenariosData from '../data/scenarios.json';
 import archetypesData from '../data/archetypes.json';
 import config from '../data/config.json';
+import scenariosData from '../data/scenarios.json';
+
+import { Scenario, RelationshipArchetype } from './types';
 
 // Load data from JSON files
 export const scenarios: Scenario[] = scenariosData.scenarios;
@@ -18,15 +19,19 @@ export const getScenarioById = (id: number): Scenario | undefined => {
   return scenarios.find(scenario => scenario.id === id);
 };
 
-export const getArchetypeByHighestScore = (scores: { emotional: number; logical: number; exploratory: number }): RelationshipArchetype => {
+export const getArchetypeByHighestScore = (scores: {
+  emotional: number;
+  logical: number;
+  exploratory: number;
+}): RelationshipArchetype => {
   const { emotional, logical, exploratory } = scores;
-  
+
   if (emotional >= logical && emotional >= exploratory) {
-    return archetypes.find(a => a.id === 'heartfelt') || archetypes[0];
+    return archetypes.find(a => a.id === 'heartfelt') ?? archetypes[0];
   } else if (logical >= exploratory) {
-    return archetypes.find(a => a.id === 'strategic') || archetypes[1];
+    return archetypes.find(a => a.id === 'strategic') ?? archetypes[1];
   } else {
-    return archetypes.find(a => a.id === 'spontaneous') || archetypes[2];
+    return archetypes.find(a => a.id === 'spontaneous') ?? archetypes[2];
   }
 };
 

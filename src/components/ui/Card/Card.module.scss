@@ -1,6 +1,5 @@
 // src/components/ui/Card/Card.module.scss
-@use '../../../styles/variables' as vars;
-@use '../../../styles/mixins' as mix;
+@use "../../../styles/mixins" as mix;
 
 .card {
   @include mix.card-base;
@@ -12,170 +11,176 @@
   box-shadow: vars.$shadow-card;
   transition: vars.$transition-standard;
   border: 1px solid transparent;
-  
+
   // Variants
   &.default {
     // Base styling already applied
   }
-  
+
   &.elevated {
     box-shadow: vars.$shadow-card-hover;
     transform: translateY(-2px);
   }
-  
+
   &.interactive {
     @include mix.card-interactive;
     cursor: pointer;
     border-color: vars.$border-color;
-    
+
     &:hover:not(.disabled) {
       @include mix.card-hover;
       border-color: vars.$hover-border;
     }
-    
+
     &:focus-visible {
       outline: 2px solid vars.$primary-accent-solid;
       outline-offset: 2px;
     }
   }
-  
+
   &.outlined {
     border: 2px solid vars.$border-color;
     box-shadow: none;
-    
+
     &:hover:not(.disabled) {
       border-color: vars.$hover-border;
       box-shadow: vars.$shadow-card;
     }
   }
-  
+
   // Sizes
   &.small {
     border-radius: vars.$radius-lg;
     min-height: 120px;
   }
-  
+
   &.medium {
     border-radius: vars.$radius-xl;
     min-height: 200px;
   }
-  
+
   &.large {
     border-radius: vars.$radius-xl;
     min-height: 300px;
-    
+
     @include mix.mobile-only {
       border-radius: vars.$radius-lg;
     }
   }
-  
+
   // Padding variants
   &.padding-none {
     padding: 0;
   }
-  
+
   &.padding-small {
     padding: vars.$spacing-lg;
-    
+
     @include mix.mobile-only {
       padding: vars.$spacing-md;
     }
   }
-  
+
   &.padding-medium {
     padding: vars.$spacing-2xl;
-    
+
     @include mix.mobile-only {
       padding: vars.$spacing-lg;
     }
   }
-  
+
   &.padding-large {
     padding: vars.$spacing-3xl;
-    
+
     @include mix.mobile-only {
       padding: vars.$spacing-xl;
     }
   }
-  
+
   // States
   &.hover {
     @include mix.card-hover;
   }
-  
+
   &.selected {
     border-color: vars.$primary-accent-solid;
     background: rgba(255, 107, 157, 0.05);
-    box-shadow: 0 0 0 1px vars.$primary-accent-solid, vars.$shadow-card;
+    box-shadow:
+      0 0 0 1px vars.$primary-accent-solid,
+      vars.$shadow-card;
   }
-  
+
   &.disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
-    
+
     &:hover {
       transform: none !important;
       box-shadow: inherit;
       border-color: inherit;
     }
   }
-  
+
   // Interactive states
   &.interactive {
     &:active:not(.disabled) {
       transform: translateY(0);
     }
   }
-  
+
   // Special styling for assessment content
   &.question-card {
     border-left: 4px solid vars.$primary-accent-solid;
     background: vars.$light-bg;
   }
-  
+
   &.option-card {
     border: 2px solid vars.$border-color;
     cursor: pointer;
     transition: vars.$transition-standard;
-    
+
     &:hover:not(.disabled) {
       border-color: vars.$primary-accent-solid;
       background: rgba(255, 107, 157, 0.02);
     }
-    
+
     &.selected {
       border-color: vars.$primary-accent-solid;
       background: rgba(255, 107, 157, 0.05);
     }
   }
-  
+
   &.result-card {
     border: 2px solid transparent;
-    background: linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
-                vars.$secondary-accent border-box;
-    
+    background:
+      linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
+      vars.$secondary-accent border-box;
+
     &.emotional {
-      background: linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
-                  vars.$success-accent border-box;
+      background:
+        linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
+        vars.$success-accent border-box;
     }
-    
+
     &.logical {
-      background: linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
-                  vars.$secondary-accent border-box;
+      background:
+        linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
+        vars.$secondary-accent border-box;
     }
-    
+
     &.exploratory {
-      background: linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
-                  vars.$warning-accent border-box;
+      background:
+        linear-gradient(vars.$card-bg, vars.$card-bg) padding-box,
+        vars.$warning-accent border-box;
     }
   }
-  
+
   // Animation classes
   &.animate-in {
     @include mix.animate-slide-up;
   }
-  
+
   &.animate-fade {
     @include mix.animate-fade-in;
   }
@@ -184,12 +189,12 @@
 // Card content helpers
 .card-header {
   margin-bottom: vars.$spacing-lg;
-  
+
   .card-title {
     @include mix.text-subtitle;
     margin-bottom: vars.$spacing-xs;
   }
-  
+
   .card-subtitle {
     @include mix.text-small;
     color: vars.$secondary-text;
@@ -198,7 +203,7 @@
 
 .card-content {
   flex: 1;
-  
+
   p:last-child {
     margin-bottom: 0;
   }
@@ -208,7 +213,7 @@
   margin-top: vars.$spacing-lg;
   padding-top: vars.$spacing-lg;
   border-top: 1px solid vars.$border-color;
-  
+
   &.no-border {
     border-top: none;
     padding-top: 0;

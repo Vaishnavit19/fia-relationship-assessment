@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ChevronRight, ArrowLeft, Heart } from 'lucide-react';
+
 import { Button } from './Button';
 
 const meta = {
@@ -161,6 +162,9 @@ export const PreviousQuestion: Story = {
 
 // Interactive Stories
 export const AllVariants: Story = {
+  args: {
+    children: 'Demo Button', // Required args for the story
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
       <Button variant="primary">Primary</Button>
@@ -178,6 +182,9 @@ export const AllVariants: Story = {
 };
 
 export const AllSizes: Story = {
+  args: {
+    children: 'Demo Button', // Required args for the story
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
       <Button size="small">Small</Button>
