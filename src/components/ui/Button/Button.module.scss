@@ -1,0 +1,162 @@
+// src/components/ui/Button/Button.module.scss
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.button {
+  @include button-base;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  font-family: $font-family;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: $transition-standard;
+  white-space: nowrap;
+  
+  &:focus-visible {
+    outline: 2px solid $primary-accent-solid;
+    outline-offset: 2px;
+  }
+  
+  // Variants
+  &.primary {
+    @include button-primary;
+  }
+  
+  &.secondary {
+    @include button-secondary;
+  }
+  
+  &.cta {
+    @include button-cta;
+  }
+  
+  // Sizes
+  &.small {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-body-sm;
+    font-weight: $font-medium;
+    border-radius: $spacing-xs;
+    min-height: 32px;
+  }
+  
+  &.medium {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-body;
+    font-weight: $font-semibold;
+    border-radius: $spacing-sm;
+    min-height: 40px;
+  }
+  
+  &.large {
+    @include button-large;
+    min-height: 48px;
+  }
+  
+  // States
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    
+    &:hover {
+      transform: none !important;
+      box-shadow: inherit;
+    }
+  }
+  
+  &.loading {
+    cursor: wait;
+    
+    .content {
+      opacity: 0.7;
+    }
+  }
+  
+  &.fullWidth {
+    width: 100%;
+  }
+  
+  // Icon positioning
+  .iconLeft {
+    margin-right: $spacing-xs;
+  }
+  
+  .iconRight {
+    margin-left: $spacing-xs;
+  }
+  
+  .content {
+    display: flex;
+    align-items: center;
+    transition: $transition-quick;
+  }
+  
+  // Loading spinner
+  .spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+  }
+  
+  .spinnerInner {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  // Hover effects by variant
+  &.primary:hover:not(.disabled):not(.loading) {
+    transform: translateY(-2px);
+    box-shadow: 0 0.375rem 1.25rem rgba(102, 126, 234, 0.4);
+  }
+  
+  &.secondary:hover:not(.disabled):not(.loading) {
+    border-color: $hover-border;
+    background: $hover-bg;
+    transform: translateY(-1px);
+  }
+  
+  &.cta:hover:not(.disabled):not(.loading) {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 2rem rgba(255, 107, 157, 0.4);
+  }
+  
+  // Active states
+  &:active:not(.disabled):not(.loading) {
+    transform: translateY(0);
+  }
+  
+  // Responsive adjustments
+  @include mobile-only {
+    &.large {
+      padding: $spacing-md $spacing-xl;
+      font-size: $font-body;
+    }
+    
+    &.medium {
+      padding: $spacing-sm $spacing-lg;
+      font-size: $font-body-sm;
+    }
+    
+    &.small {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-caption;
+    }
+  }
+}
