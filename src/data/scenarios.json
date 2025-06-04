@@ -1,0 +1,172 @@
+{
+  "scenarios": [
+    {
+      "id": 1,
+      "text": "You're planning a trip together. How do you decide on the length of your stay?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Let's pick whatever number of days makes us both feel relaxed and connected.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 2
+        },
+        {
+          "letter": "B",
+          "text": "I'll run the costs and schedules to choose the most efficient trip length.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 2
+        },
+        {
+          "letter": "C",
+          "text": "Let's go as long as our schedules allow—more days means more chances for spontaneous adventures.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "text": "Time to choose your destination. What drives your decision?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "If London makes you happier, I'm good with it.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 3
+        },
+        {
+          "letter": "B",
+          "text": "Cost, flights, and attractions favor Paris—let's choose that.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 4
+        },
+        {
+          "letter": "C",
+          "text": "London vibe calls to me—let's chase that spontaneity.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 3
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "text": "You're going to London! But your partner's flight gets delayed by 6 hours. What's your move?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "I'll cancel and rebook so we arrive together.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 5
+        },
+        {
+          "letter": "B",
+          "text": "I'll compare rebooking fees; if too high, I'll go ahead.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 6
+        },
+        {
+          "letter": "C",
+          "text": "This is great—more time to explore solo.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 6
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "text": "You're heading to Paris! But your partner's flight gets delayed by 6 hours. What's your move?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "I'll cancel and rebook so we arrive together.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 5
+        },
+        {
+          "letter": "B",
+          "text": "I'll compare rebooking fees; if too high, I'll go ahead.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 6
+        },
+        {
+          "letter": "C",
+          "text": "This is great—more time to explore solo.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 6
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "text": "You're waiting at an airport hotel. Your partner hasn't responded to texts in 3 hours. Your thoughts?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Please let me know you're okay—I'm really worried.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 7
+        },
+        {
+          "letter": "B",
+          "text": "They're probably tied up with work.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 7
+        },
+        {
+          "letter": "C",
+          "text": "I'll explore the nearby café and take photos.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "text": "You have a solo day in the city while waiting. How do you spend it?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "I'll visit that café we wanted—and send photos.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 7
+        },
+        {
+          "letter": "B",
+          "text": "Let's stick to the planned tour.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 7
+        },
+        {
+          "letter": "C",
+          "text": "I'll walk around and explore the neighborhood.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "text": "You spot an amazing street artist performing, but your phone battery is at 5%. What do you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Put phone away and enjoy the moment.",
+          "scores": { "emotional": 1, "logical": 1, "exploratory": 0 },
+          "next": "end"
+        },
+        {
+          "letter": "B",
+          "text": "Take one quick photo, then save battery.",
+          "scores": { "emotional": 0, "logical": 1, "exploratory": 1 },
+          "next": "end"
+        },
+        {
+          "letter": "C",
+          "text": "Let battery die to capture this.",
+          "scores": { "emotional": 1, "logical": 0, "exploratory": 1 },
+          "next": "end"
+        }
+      ]
+    }
+  ]
+}
