@@ -1,9 +1,4 @@
 // src/components/ui/ShareButtons/index.ts
-export { ShareButtons, AssessmentShare, useShare } from './ShareButtons';
-export type {
-  ShareButtonsProps,
-  AssessmentShareProps,
-  ShareData,
-  SharePlatform,
-} from './ShareButtons';
+export { ShareButtons, useShareData } from './ShareButtons';
+export type { ShareButtonsProps, ShareData } from './ShareButtons';
 export { default } from './ShareButtons';

@@ -1,8 +1,8 @@
 // src/components/ui/Modal/Modal.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import { AlertTriangle, CheckCircle, Info, Settings, Heart } from 'lucide-react';
 import React from 'react';
+import { fn } from 'storybook/test';
 
 import { Button } from '../Button';
 
@@ -121,7 +121,10 @@ export const Default: Story = {
   args: {
     children: (
       <div>
-        <p>This is a basic modal with default styling. It can contain any content you need to display in an overlay.</p>
+        <p>
+          This is a basic modal with default styling. It can contain any content you need to display
+          in an overlay.
+        </p>
         <p>The modal is fully accessible with proper focus management and keyboard navigation.</p>
       </div>
     ),
@@ -141,7 +144,9 @@ export const WithActions: Story = {
     primaryActionText: 'Confirm',
     secondaryActionText: 'Cancel',
     children: (
-      <p>Are you sure you want to proceed with this action? This will save your current progress.</p>
+      <p>
+        Are you sure you want to proceed with this action? This will save your current progress.
+      </p>
     ),
   },
   parameters: {
@@ -161,7 +166,10 @@ export const Warning: Story = {
     secondaryActionText: 'Cancel',
     primaryActionDestructive: true,
     children: (
-      <p>You are about to leave the assessment. Your progress will be lost if you haven&apos;t saved it. Are you sure you want to continue?</p>
+      <p>
+        You are about to leave the assessment. Your progress will be lost if you haven&apos;t saved
+        it. Are you sure you want to continue?
+      </p>
     ),
   },
   parameters: {
@@ -280,7 +288,7 @@ export const Sizes: Story = {
     title: 'Different Sizes',
     children: <p>This modal demonstrates different size options.</p>,
   },
-  render: (args) => {
+  render: args => {
     const smallModal = useModal();
     const mediumModal = useModal();
     const largeModal = useModal();
@@ -293,22 +301,48 @@ export const Sizes: Story = {
         <Button onClick={largeModal.openModal}>Large Modal</Button>
         <Button onClick={fullscreenModal.openModal}>Fullscreen Modal</Button>
 
-        <Modal {...args} isOpen={smallModal.isOpen} onClose={smallModal.closeModal} size="small" title="Small Modal">
+        <Modal
+          {...args}
+          isOpen={smallModal.isOpen}
+          onClose={smallModal.closeModal}
+          size="small"
+          title="Small Modal"
+        >
           <p>This is a small modal perfect for simple confirmations.</p>
         </Modal>
 
-        <Modal {...args} isOpen={mediumModal.isOpen} onClose={mediumModal.closeModal} size="medium" title="Medium Modal">
+        <Modal
+          {...args}
+          isOpen={mediumModal.isOpen}
+          onClose={mediumModal.closeModal}
+          size="medium"
+          title="Medium Modal"
+        >
           <p>This is a medium modal suitable for most content.</p>
         </Modal>
 
-        <Modal {...args} isOpen={largeModal.isOpen} onClose={largeModal.closeModal} size="large" title="Large Modal">
+        <Modal
+          {...args}
+          isOpen={largeModal.isOpen}
+          onClose={largeModal.closeModal}
+          size="large"
+          title="Large Modal"
+        >
           <div>
             <p>This is a large modal for extensive content.</p>
-            <p>It provides more space for complex forms, detailed information, or rich media content.</p>
+            <p>
+              It provides more space for complex forms, detailed information, or rich media content.
+            </p>
           </div>
         </Modal>
 
-        <Modal {...args} isOpen={fullscreenModal.isOpen} onClose={fullscreenModal.closeModal} size="fullscreen" title="Fullscreen Modal">
+        <Modal
+          {...args}
+          isOpen={fullscreenModal.isOpen}
+          onClose={fullscreenModal.closeModal}
+          size="fullscreen"
+          title="Fullscreen Modal"
+        >
           <div>
             <p>This is a fullscreen modal that takes up most of the viewport.</p>
             <p>Perfect for immersive experiences or when you need maximum screen real estate.</p>
@@ -349,9 +383,7 @@ export const ActionLoading: Story = {
     primaryActionText: 'Save',
     secondaryActionText: 'Cancel',
     primaryActionLoading: true,
-    children: (
-      <p>Your assessment results will be saved to your account for future reference.</p>
-    ),
+    children: <p>Your assessment results will be saved to your account for future reference.</p>,
   },
   parameters: {
     docs: {
@@ -365,7 +397,7 @@ export const ActionLoading: Story = {
 export const ConfirmationModalExample: Story = {
   render: () => {
     const modal = useModal();
-    
+
     return (
       <div>
         <Button onClick={modal.openModal}>Delete Assessment</Button>
@@ -394,7 +426,7 @@ export const ConfirmationModalExample: Story = {
 export const AssessmentExitWarning: Story = {
   render: () => {
     const modal = useModal();
-    
+
     return (
       <div>
         <Button onClick={modal.openModal}>Leave Assessment</Button>
@@ -414,7 +446,10 @@ export const AssessmentExitWarning: Story = {
         >
           <div>
             <p>You&apos;re about to leave the relationship assessment.</p>
-            <p><strong>Your progress will be saved</strong> and you can continue later from where you left off.</p>
+            <p>
+              <strong>Your progress will be saved</strong> and you can continue later from where you
+              left off.
+            </p>
             <p>Are you sure you want to leave?</p>
           </div>
         </Modal>
@@ -433,7 +468,7 @@ export const AssessmentExitWarning: Story = {
 export const ArchetypeInfoModal: Story = {
   render: () => {
     const modal = useModal();
-    
+
     return (
       <div>
         <Button onClick={modal.openModal}>Learn About The Heartfelt Companion</Button>
@@ -454,11 +489,17 @@ export const ArchetypeInfoModal: Story = {
           <div>
             <div style={{ textAlign: 'center', margin: '0 0 2rem 0' }}>
               <div style={{ fontSize: '4rem', margin: '0 0 1rem 0' }}>💝</div>
-              <h3 style={{ margin: '0 0 0.5rem 0', color: '#87ceeb' }}>Connection-Focused Partner</h3>
+              <h3 style={{ margin: '0 0 0.5rem 0', color: '#87ceeb' }}>
+                Connection-Focused Partner
+              </h3>
             </div>
-            
-            <p>You prioritize emotional connection and togetherness above all else. Your partner&apos;s happiness is your happiness, and you create deep bonds through shared experiences.</p>
-            
+
+            <p>
+              You prioritize emotional connection and togetherness above all else. Your
+              partner&apos;s happiness is your happiness, and you create deep bonds through shared
+              experiences.
+            </p>
+
             <h4 style={{ margin: '1.5rem 0 0.5rem 0', color: '#2d3748' }}>Key Characteristics:</h4>
             <ul style={{ margin: '0 0 1.5rem 1.5rem', lineHeight: '1.6' }}>
               <li>Puts partner&apos;s feelings first</li>
@@ -467,8 +508,11 @@ export const ArchetypeInfoModal: Story = {
               <li>Sacrifices personal preferences for relationship harmony</li>
               <li>Thrives on intimate moments and deep conversations</li>
             </ul>
-            
-            <p>If this sounds like you, take the assessment to see how you balance emotional connection with logical planning and adventurous exploration in your relationships.</p>
+
+            <p>
+              If this sounds like you, take the assessment to see how you balance emotional
+              connection with logical planning and adventurous exploration in your relationships.
+            </p>
           </div>
         </Modal>
       </div>
@@ -490,7 +534,10 @@ export const MobileView: Story = {
     secondaryActionText: 'Cancel',
     children: (
       <div>
-        <p>This modal is optimized for mobile devices with slide-up animation and full-width action buttons.</p>
+        <p>
+          This modal is optimized for mobile devices with slide-up animation and full-width action
+          buttons.
+        </p>
         <p>The layout adapts to smaller screens while maintaining usability.</p>
       </div>
     ),
@@ -510,7 +557,7 @@ export const MobileView: Story = {
 export const UseModalHook: Story = {
   render: () => {
     const modal = useModal();
-    
+
     return (
       <div style={{ display: 'flex', gap: '1rem' }}>
         <Button onClick={modal.openModal}>Open Modal</Button>

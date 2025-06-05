@@ -2,12 +2,12 @@
 @use '../../../styles/mixins' as mix;
 
 .userInfoForm {
-  max-width: 500px;
   margin: 0 auto;
+  max-width: 500px;
   
   @include mix.mobile-only {
-    max-width: none;
     margin: 0;
+    max-width: none;
   }
 }
 
@@ -23,22 +23,22 @@
 
 // Header Section
 .header {
-  text-align: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: vars.$spacing-md;
+  text-align: center;
 }
 
 .iconContainer {
-  width: 64px;
-  height: 64px;
-  border-radius: vars.$radius-full;
-  background: vars.$primary-accent;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  background: vars.$primary-accent;
+  border-radius: vars.$radius-full;
   box-shadow: vars.$shadow-accent;
+  display: flex;
+  height: 64px;
+  justify-content: center;
+  width: 64px;
 }
 
 .headerIcon {
@@ -46,11 +46,11 @@
 }
 
 .title {
+  color: vars.$primary-text;
   font-size: vars.$font-main;
   font-weight: vars.$font-bold;
-  color: vars.$primary-text;
-  margin: 0;
   line-height: 1.3;
+  margin: 0;
 
   @include mix.mobile-only {
     font-size: vars.$font-section;
@@ -71,16 +71,16 @@
 
 // Error Alert
 .errorAlert {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-sm;
-  padding: vars.$spacing-md vars.$spacing-lg;
-  background: rgba(229, 62, 62, 0.05);
-  border: 1px solid rgba(229, 62, 62, 0.2);
+  background: rgb(229 62 62 / 5%);
+  border: 1px solid rgb(229 62 62 / 20%);
   border-radius: vars.$radius-md;
   color: #e53e3e;
+  display: flex;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-md vars.$spacing-lg;
 
   svg {
     flex-shrink: 0;
@@ -101,11 +101,11 @@
 }
 
 .label {
-  font-size: vars.$font-body-sm;
-  font-weight: vars.$font-semibold;
+  align-items: center;
   color: vars.$primary-text;
   display: flex;
-  align-items: center;
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-semibold;
   gap: vars.$spacing-xs;
 
   svg {
@@ -114,13 +114,13 @@
 }
 
 .input {
-  padding: vars.$spacing-md vars.$spacing-lg;
+  background: vars.$card-bg;
   border: 2px solid vars.$border-color;
   border-radius: vars.$radius-md;
-  font-size: vars.$font-body;
-  font-family: inherit;
-  background: vars.$card-bg;
   color: vars.$primary-text;
+  font-family: inherit;
+  font-size: vars.$font-body;
+  padding: vars.$spacing-md vars.$spacing-lg;
   transition: vars.$transition-standard;
   width: 100%;
 
@@ -129,9 +129,9 @@
   }
 
   &:focus {
-    outline: none;
     border-color: vars.$primary-accent-solid;
-    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+    box-shadow: 0 0 0 3px rgb(255 107 157 / 10%);
+    outline: none;
   }
 
   &:disabled {
@@ -142,12 +142,12 @@
 
   &Error {
     border-color: #e53e3e;
-    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    box-shadow: 0 0 0 3px rgb(229 62 62 / 10%);
   }
 
   @include mix.mobile-only {
-    padding: vars.$spacing-sm vars.$spacing-md;
     font-size: vars.$font-body-sm;
+    padding: vars.$spacing-sm vars.$spacing-md;
   }
 }
 
@@ -165,32 +165,32 @@
 
 // Consent Checkboxes
 .consents {
+  background: vars.$light-bg;
+  border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-md;
   display: flex;
   flex-direction: column;
   gap: vars.$spacing-md;
   padding: vars.$spacing-lg;
-  background: vars.$light-bg;
-  border-radius: vars.$radius-md;
-  border: 1px solid vars.$border-color;
 }
 
 .checkboxLabel {
-  display: flex;
   align-items: flex-start;
-  gap: vars.$spacing-sm;
   cursor: pointer;
+  display: flex;
   font-size: vars.$font-body-sm;
+  gap: vars.$spacing-sm;
   line-height: 1.5;
 }
 
 .checkbox {
-  width: 18px;
+  accent-color: vars.$primary-accent-solid;
+  cursor: pointer;
+  flex-shrink: 0;
   height: 18px;
   margin: 0;
   margin-top: 2px; // Align with text
-  flex-shrink: 0;
-  cursor: pointer;
-  accent-color: vars.$primary-accent-solid;
+  width: 18px;
 
   &Error {
     outline: 2px solid #e53e3e;
@@ -228,23 +228,23 @@
   min-width: 200px;
 
   @include mix.mobile-only {
-    width: 100%;
     min-width: auto;
+    width: 100%;
   }
 }
 
 // Footer
 .footer {
-  text-align: center;
-  padding-top: vars.$spacing-md;
   border-top: 1px solid vars.$border-color;
+  padding-top: vars.$spacing-md;
+  text-align: center;
 }
 
 .footerText {
   color: vars.$subtle-text;
   font-size: vars.$font-body-sm;
-  margin: 0;
   font-style: italic;
+  margin: 0;
 }
 
 // Variant Styles
@@ -255,8 +255,8 @@
 .variantMinimal {
   .header {
     .iconContainer {
-      width: 48px;
       height: 48px;
+      width: 48px;
     }
 
     .title {
@@ -281,16 +281,16 @@
     padding: vars.$spacing-xl 0;
 
     .iconContainer {
-      width: 80px;
-      height: 80px;
       background: vars.$success-accent;
+      height: 80px;
+      width: 80px;
     }
 
     .title {
-      font-size: vars.$font-hero;
       background: vars.$primary-accent;
       background-clip: text;
-      -webkit-background-clip: text;
+      background-clip: text;
+      font-size: vars.$font-hero;
       -webkit-text-fill-color: transparent;
     }
   }
@@ -309,6 +309,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -320,7 +321,7 @@
 .form {
   &:focus-within {
     .submitButton:not(:disabled) {
-      box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+      box-shadow: 0 0 0 3px rgb(255 107 157 / 10%);
     }
   }
 }
@@ -339,32 +340,32 @@
 }
 
 // Dark Mode Support
-@media (prefers-color-scheme: dark) {
-  .userInfoForm {
-    background: #1a202c;
-    border-color: #2d3748;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .userInfoForm {
+//     background: #1a202c;
+//     border-color: #2d3748;
+//   }
 
-  .input {
-    background: #2d3748;
-    border-color: #4a5568;
-    color: white;
+//   .input {
+//     background: #2d3748;
+//     border-color: #4a5568;
+//     color: white;
 
-    &:focus {
-      border-color: vars.$primary-accent-solid;
-    }
-  }
+//     &:focus {
+//       border-color: vars.$primary-accent-solid;
+//     }
+//   }
 
-  .consents {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
+//   .consents {
+//     background: #2d3748;
+//     border-color: #4a5568;
+//   }
 
-  .errorAlert {
-    background: rgba(245, 101, 101, 0.1);
-    border-color: rgba(245, 101, 101, 0.3);
-  }
-}
+//   .errorAlert {
+//     background: rgba(245, 101, 101, 0.1);
+//     border-color: rgba(245, 101, 101, 0.3);
+//   }
+// }
 
 // High Contrast Mode
 @media (prefers-contrast: high) {
@@ -372,8 +373,8 @@
     border: 3px solid black;
 
     &:focus {
-      border-color: black;
       background: yellow;
+      border-color: black;
       color: black;
     }
 
@@ -415,9 +416,9 @@
 // Print Styles
 @media print {
   .userInfoForm {
-    page-break-inside: avoid;
-    box-shadow: none;
     border: 1px solid black;
+    box-shadow: none;
+    page-break-inside: avoid;
   }
 
   .submitButton {
@@ -429,7 +430,7 @@
   }
 
   .input {
-    border: 1px solid black;
     background: white;
+    border: 1px solid black;
   }
 }

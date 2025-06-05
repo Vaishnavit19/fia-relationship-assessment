@@ -87,19 +87,19 @@ export const Modal: React.FC<ModalProps> = ({
     if (isOpen) {
       // Store currently focused element
       previouslyFocusedElement.current = document.activeElement as HTMLElement;
-      
+
       // Focus the modal
       const modalElement = modalRef.current;
       if (modalElement) {
         modalElement.focus();
       }
-      
+
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
     } else {
       // Restore body scroll
       document.body.style.overflow = '';
-      
+
       // Restore focus to previously focused element
       if (previouslyFocusedElement.current) {
         previouslyFocusedElement.current.focus();
@@ -141,7 +141,7 @@ export const Modal: React.FC<ModalProps> = ({
       const focusableElements = modalElement.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
-      
+
       const firstElement = focusableElements[0] as HTMLElement;
       const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
@@ -183,7 +183,7 @@ export const Modal: React.FC<ModalProps> = ({
   // Get variant icon
   const getVariantIcon = () => {
     if (icon) return icon;
-    
+
     switch (variant) {
       case 'warning':
         return <AlertTriangle size={24} />;
@@ -212,7 +212,7 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className={styles.overlay}
       onClick={handleBackdropClick}
       style={{ zIndex }}
@@ -221,29 +221,20 @@ export const Modal: React.FC<ModalProps> = ({
       aria-labelledby={title ? 'modal-title' : undefined}
       aria-describedby="modal-content"
     >
-      <div 
-        className={modalClasses}
-        ref={modalRef}
-        tabIndex={-1}
-        role="document"
-      >
+      <div className={modalClasses} ref={modalRef} tabIndex={-1} role="document">
         <Card className={styles.modalCard} variant="elevated">
           {/* Header */}
           {((title ?? showCloseButton) || getVariantIcon()) && (
             <div className={styles.header}>
               <div className={styles.headerContent}>
-                {getVariantIcon() && (
-                  <div className={styles.iconContainer}>
-                    {getVariantIcon()}
-                  </div>
-                )}
+                {getVariantIcon() && <div className={styles.iconContainer}>{getVariantIcon()}</div>}
                 {title && (
                   <h2 id="modal-title" className={styles.title}>
                     {title}
                   </h2>
                 )}
               </div>
-              
+
               {showCloseButton && (
                 <button
                   type="button"
@@ -283,10 +274,10 @@ export const Modal: React.FC<ModalProps> = ({
                   {secondaryActionText}
                 </Button>
               )}
-              
+
               {primaryActionText && (
                 <Button
-                  variant={primaryActionDestructive ? 'destructive' : 'primary'}
+                  variant={primaryActionDestructive ? 'secondary' : 'primary'}
                   onClick={handlePrimaryAction}
                   disabled={primaryActionLoading}
                   className={styles.primaryAction}

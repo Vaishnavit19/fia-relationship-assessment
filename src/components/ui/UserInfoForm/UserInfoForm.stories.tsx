@@ -1,6 +1,6 @@
 // src/components/ui/UserInfoForm/UserInfoForm.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 import { UserInfoForm } from './UserInfoForm';
 
@@ -89,7 +89,8 @@ The component integrates with the assessment flow by:
   },
   args: {
     title: 'Welcome to Your Relationship Assessment',
-    description: 'We need just a few details to personalize your experience and share your results.',
+    description:
+      'We need just a few details to personalize your experience and share your results.',
     requireEmail: false,
     showPrivacyConsent: true,
     showEmailConsent: true,
@@ -105,7 +106,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: { error: null },
   parameters: {
     docs: {
       description: {
@@ -119,7 +120,9 @@ export const RequiredEmail: Story = {
   args: {
     requireEmail: true,
     title: 'Create Your Assessment Profile',
-    description: 'Please provide your name and email to receive your personalized relationship insights.',
+    description:
+      'Please provide your name and email to receive your personalized relationship insights.',
+    error: null,
   },
   parameters: {
     docs: {
@@ -138,6 +141,7 @@ export const MinimalVariant: Story = {
     showEmailConsent: false,
     showPrivacyConsent: false,
     submitText: 'Continue',
+    error: null,
   },
   parameters: {
     docs: {
@@ -152,8 +156,10 @@ export const WelcomeVariant: Story = {
   args: {
     variant: 'welcome',
     title: 'Discover Your Relationship Style',
-    description: 'Take our comprehensive assessment to understand how you and your partner navigate relationships together.',
+    description:
+      'Take our comprehensive assessment to understand how you and your partner navigate relationships together.',
     submitText: 'Begin Journey',
+    error: null,
   },
   parameters: {
     docs: {
@@ -173,6 +179,7 @@ export const WithInitialData: Story = {
     },
     title: 'Complete Your Profile',
     description: 'Please review and complete your information.',
+    error: null,
   },
   parameters: {
     docs: {
@@ -187,6 +194,7 @@ export const Loading: Story = {
   args: {
     loading: true,
     submitText: 'Creating Profile...',
+    error: null,
   },
   parameters: {
     docs: {
@@ -216,6 +224,7 @@ export const NoConsents: Story = {
     showEmailConsent: false,
     title: 'Assessment Setup',
     description: 'Enter your details to begin the relationship assessment.',
+    error: null,
   },
   parameters: {
     docs: {
@@ -229,11 +238,13 @@ export const NoConsents: Story = {
 export const CustomContent: Story = {
   args: {
     title: 'Join Our Research Study',
-    description: 'Help us understand relationship dynamics by participating in our comprehensive travel scenario assessment.',
+    description:
+      'Help us understand relationship dynamics by participating in our comprehensive travel scenario assessment.',
     submitText: 'Join Study',
     requireEmail: true,
     showEmailConsent: false,
     showPrivacyConsent: true,
+    error: null,
   },
   parameters: {
     docs: {
@@ -245,18 +256,22 @@ export const CustomContent: Story = {
 };
 
 export const AllVariants: Story = {
-  args: {},
-  render: (args) => (
+  args: { error: null },
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
       <div>
-        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>Default Variant</h3>
+        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>
+          Default Variant
+        </h3>
         <UserInfoForm {...args} />
       </div>
-      
+
       <div>
-        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>Minimal Variant</h3>
-        <UserInfoForm 
-          {...args} 
+        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>
+          Minimal Variant
+        </h3>
+        <UserInfoForm
+          {...args}
           variant="minimal"
           title="Quick Setup"
           description="Just your name to get started."
@@ -264,11 +279,13 @@ export const AllVariants: Story = {
           showPrivacyConsent={false}
         />
       </div>
-      
+
       <div>
-        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>Welcome Variant</h3>
-        <UserInfoForm 
-          {...args} 
+        <h3 style={{ margin: '0 0 2rem 0', color: '#2d3748', textAlign: 'center' }}>
+          Welcome Variant
+        </h3>
+        <UserInfoForm
+          {...args}
           variant="welcome"
           title="Discover Your Style"
           description="Begin your relationship journey with us."
@@ -291,6 +308,7 @@ export const ValidationDemo: Story = {
     title: 'Form Validation Example',
     description: 'Try submitting without filling required fields to see validation in action.',
     requireEmail: true,
+    error: null,
   },
   parameters: {
     docs: {
@@ -305,6 +323,7 @@ export const MobileOptimized: Story = {
   args: {
     title: 'Mobile Experience',
     description: 'Optimized for touch interaction and small screens.',
+    error: null,
   },
   parameters: {
     viewport: {

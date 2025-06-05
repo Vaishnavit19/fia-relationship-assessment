@@ -209,7 +209,7 @@ export const AssessmentPage: React.FC = () => {
                 <UserInfoForm
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onSubmit={handleUserSubmit}
-                  isLoading={isLoading}
+                  loading={isLoading}
                   error={error}
                 />
               </Card>
@@ -242,18 +242,19 @@ export const AssessmentPage: React.FC = () => {
                 />
 
                 {/* Answer Options */}
-                <div className={styles.optionsContainer}>
+                {/* <div className={styles.optionsContainer}>
                   {currentQuestion.options.map(option => (
                     <OptionButton
                       key={option.letter}
-                      option={option}
-                      isSelected={selectedOption?.letter === option.letter}
+                      // option={option}
+                      selected={selectedOption?.letter === option.letter}
                       onClick={() => handleAnswerSelect(option)}
                       disabled={isLoading}
                       className={styles.optionButton}
+                      text={'dunno what text'}
                     />
                   ))}
-                </div>
+                </div> */}
 
                 {/* Error Display */}
                 {error && (
@@ -267,11 +268,12 @@ export const AssessmentPage: React.FC = () => {
                 <div className={styles.navigationContainer}>
                   <NavigationControls
                     canGoBack={canGoBack()}
-                    canGoForward={!!selectedOption}
-                    onBack={handleGoBack}
+                    canGoNext={!!selectedOption}
+                    onPrevious={handleGoBack}
                     onNext={handleAnswerSubmit}
-                    isLoading={isLoading}
-                    nextButtonText="Continue"
+                    nextLoading={isLoading}
+                    previousLoading={isLoading}
+                    nextText="Continue"
                   />
                 </div>
               </div>

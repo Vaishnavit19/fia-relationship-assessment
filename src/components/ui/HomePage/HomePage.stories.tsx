@@ -1,6 +1,6 @@
 // src/components/ui/HomePage/HomePage.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 import { HomePage } from './HomePage';
 
@@ -99,7 +99,8 @@ export const WithProgress: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Homepage for returning users with existing assessment progress. Shows continue and start over options.',
+        story:
+          'Homepage for returning users with existing assessment progress. Shows continue and start over options.',
       },
     },
   },
@@ -155,7 +156,8 @@ export const InteractiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive demonstration of all homepage functionality including animations and hover states.',
+        story:
+          'Interactive demonstration of all homepage functionality including animations and hover states.',
       },
     },
   },
@@ -169,7 +171,8 @@ export const MobileView: Story = {
     },
     docs: {
       description: {
-        story: 'Mobile-optimized view showing responsive design with stacked layout and touch-friendly interactions.',
+        story:
+          'Mobile-optimized view showing responsive design with stacked layout and touch-friendly interactions.',
       },
     },
   },
@@ -194,7 +197,7 @@ export const TabletView: Story = {
 // Layout Testing Stories
 export const HeroOnly: Story = {
   args: {},
-  render: (args) => (
+  render: args => (
     <div style={{ height: '100vh', overflow: 'hidden' }}>
       <HomePage {...args} />
     </div>
@@ -210,7 +213,7 @@ export const HeroOnly: Story = {
 
 export const ArchetypesSection: Story = {
   args: {},
-  render: (args) => (
+  render: args => (
     <div style={{ paddingTop: '100vh' }}>
       <HomePage {...args} />
     </div>
@@ -247,7 +250,8 @@ export const ReducedMotion: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Version with reduced motion for users who prefer less animation (set via CSS media query).',
+        story:
+          'Version with reduced motion for users who prefer less animation (set via CSS media query).',
       },
     },
   },
@@ -270,9 +274,9 @@ export const MinimalContent: Story = {
   args: {
     onLearnMore: undefined,
   },
-  render: (args) => (
-    <HomePage 
-      {...args} 
+  render: args => (
+    <HomePage
+      {...args}
       // This would be used to pass minimal content versions
     />
   ),
@@ -294,7 +298,8 @@ export const ErrorState: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Error state handling when assessment cannot be started (would need error prop in real implementation).',
+        story:
+          'Error state handling when assessment cannot be started (would need error prop in real implementation).',
       },
     },
   },
@@ -314,7 +319,7 @@ export const WithAnimations: Story = {
 
 export const StaticVersion: Story = {
   args: {},
-  render: (args) => (
+  render: args => (
     <div style={{ '--disable-animations': 'true' } as React.CSSProperties}>
       <HomePage {...args} />
     </div>

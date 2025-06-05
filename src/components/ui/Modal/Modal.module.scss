@@ -4,19 +4,16 @@
 // Overlay
 // ==========================================================================
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(45, 55, 72, 0.8);
-  backdrop-filter: blur(4px);
-  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: vars.$spacing-base;
-  opacity: 0;
   animation: overlayFadeIn 0.3s ease-out forwards;
+  backdrop-filter: blur(4px);
+  background: rgb(45 55 72 / 80%);
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  padding: vars.$spacing-base;
+  position: fixed;
 
   @keyframes overlayFadeIn {
     from { opacity: 0; }
@@ -24,40 +21,41 @@
   }
 
   @include mix.mobile-only {
-    padding: vars.$spacing-sm;
     align-items: flex-end;
+    padding: vars.$spacing-sm;
   }
 }
 
 // Modal Container
 // ==========================================================================
 .modal {
-  position: relative;
-  width: 100%;
-  max-height: 90vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  transform: scale(0.9) translateY(20px);
+  max-height: 90vh;
   opacity: 0;
+  overflow: hidden;
+  position: relative;
+  transform: scale(0.9) translateY(20px);
+  width: 100%;
   
   &.animated {
     animation: modalSlideIn 0.3s ease-out 0.1s forwards;
   }
 
   &:not(.animated) {
-    transform: scale(1) translateY(0);
     opacity: 1;
+    transform: scale(1) translateY(0);
   }
 
   @keyframes modalSlideIn {
     from {
-      transform: scale(0.9) translateY(20px);
       opacity: 0;
+      transform: scale(0.9) translateY(20px);
     }
+
     to {
-      transform: scale(1) translateY(0);
       opacity: 1;
+      transform: scale(1) translateY(0);
     }
   }
 
@@ -107,26 +105,26 @@
 }
 
 .sizeFullscreen {
-  max-width: 95vw;
   max-height: 95vh;
+  max-width: 95vw;
 
   @include mix.mobile-only {
-    max-width: 100%;
-    max-height: 100vh;
     border-radius: 0;
+    max-height: 100vh;
+    max-width: 100%;
   }
 }
 
 // Modal Card
 // ==========================================================================
 .modalCard {
-  width: 100%;
-  height: 100%;
-  max-height: inherit;
+  box-shadow: vars.$shadow-card-hover;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  max-height: inherit;
   padding: 0;
-  box-shadow: vars.$shadow-card-hover;
+  width: 100%;
 
   @include mix.mobile-only {
     border-radius: vars.$radius-lg vars.$radius-lg 0 0;
@@ -136,12 +134,12 @@
 // Header
 // ==========================================================================
 .header {
-  display: flex;
   align-items: center;
+  border-bottom: 1px solid vars.$border-color;
+  display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   padding: vars.$spacing-lg vars.$spacing-xl;
-  border-bottom: 1px solid vars.$border-color;
-  flex-shrink: 0;
 
   @include mix.mobile-only {
     padding: vars.$spacing-md vars.$spacing-lg;
@@ -149,49 +147,50 @@
 }
 
 .headerContent {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-md;
+  display: flex;
   flex: 1;
+  gap: vars.$spacing-md;
   min-width: 0;
 }
 
 .iconContainer {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  align-items: center;
   border-radius: vars.$radius-full;
   display: flex;
-  align-items: center;
+  flex-shrink: 0;
+  height: 40px;
   justify-content: center;
+  width: 40px;
   
   .variantWarning & {
-    background: rgba(255, 179, 71, 0.1);
+    background: rgb(255 179 71 / 10%);
     color: vars.$warning-accent-solid;
   }
   
   .variantError & {
-    background: rgba(239, 68, 68, 0.1);
+    background: rgb(239 68 68 / 10%);
     color: #ef4444;
   }
   
   .variantSuccess & {
-    background: rgba(135, 206, 235, 0.1);
+    background: rgb(135 206 235 / 10%);
     color: vars.$success-accent-solid;
   }
   
   .variantInfo & {
-    background: rgba(102, 126, 234, 0.1);
+    background: rgb(102 126 234 / 10%);
     color: vars.$secondary-accent-solid;
   }
 }
 
 .title {
   @include mix.text-subtitle;
-  margin: 0;
-  font-weight: vars.$font-semibold;
+
   color: vars.$primary-text;
   flex: 1;
+  font-weight: vars.$font-semibold;
+  margin: 0;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -204,13 +203,14 @@
 
 .closeButton {
   @include mix.button-base;
-  width: 36px;
-  height: 36px;
-  border-radius: vars.$radius-sm;
+
   background: transparent;
+  border-radius: vars.$radius-sm;
   color: vars.$secondary-text;
-  padding: 0;
   flex-shrink: 0;
+  height: 36px;
+  padding: 0;
+  width: 36px;
   
   &:hover:not(:disabled) {
     background: vars.$hover-bg;
@@ -218,8 +218,8 @@
   }
   
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   &:focus-visible {
@@ -232,8 +232,8 @@
 // ==========================================================================
 .content {
   flex: 1;
-  padding: vars.$spacing-xl;
   overflow-y: auto;
+  padding: vars.$spacing-xl;
   
   @include mix.mobile-only {
     padding: vars.$spacing-lg;
@@ -261,22 +261,22 @@
 // Loading State
 // ==========================================================================
 .loadingContainer {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: vars.$spacing-md;
+  justify-content: center;
   padding: vars.$spacing-2xl;
   text-align: center;
 }
 
 .loadingSpinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid vars.$border-color;
-  border-top: 3px solid vars.$primary-accent-solid;
-  border-radius: vars.$radius-full;
   animation: spin 1s linear infinite;
+  border: 3px solid vars.$border-color;
+  border-radius: vars.$radius-full;
+  border-top: 3px solid vars.$primary-accent-solid;
+  height: 40px;
+  width: 40px;
 
   @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -286,6 +286,7 @@
 
 .loadingText {
   @include mix.text-body;
+
   color: vars.$secondary-text;
   margin: 0;
 }
@@ -297,17 +298,17 @@
 // Actions
 // ==========================================================================
 .actions {
-  display: flex;
-  gap: vars.$spacing-sm;
-  padding: vars.$spacing-lg vars.$spacing-xl;
   border-top: 1px solid vars.$border-color;
+  display: flex;
   flex-shrink: 0;
+  gap: vars.$spacing-sm;
   justify-content: flex-end;
+  padding: vars.$spacing-lg vars.$spacing-xl;
 
   @include mix.mobile-only {
-    padding: vars.$spacing-md vars.$spacing-lg;
     flex-direction: column-reverse;
     gap: vars.$spacing-xs;
+    padding: vars.$spacing-md vars.$spacing-lg;
   }
 }
 
@@ -327,9 +328,10 @@
 // ==========================================================================
 .confirmationMessage {
   @include mix.text-body;
+
   color: vars.$secondary-text;
-  margin: 0;
   line-height: 1.6;
+  margin: 0;
   text-align: center;
 }
 
@@ -396,7 +398,7 @@
 // High contrast mode
 @media (prefers-contrast: high) {
   .overlay {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgb(0 0 0 / 90%);
   }
   
   .modalCard {
@@ -422,8 +424,8 @@
   
   .modal {
     animation: none;
-    transform: scale(1) translateY(0);
     opacity: 1;
+    transform: scale(1) translateY(0);
   }
   
   .loadingSpinner {
@@ -435,19 +437,19 @@
 // Print styles
 @media print {
   .overlay {
-    position: static;
-    background: none;
     backdrop-filter: none;
+    background: none;
     padding: 0;
+    position: static;
   }
   
   .modal {
-    transform: none;
-    opacity: 1;
-    max-height: none;
-    box-shadow: none;
     border: 1px solid black;
+    box-shadow: none;
+    max-height: none;
+    opacity: 1;
     page-break-inside: avoid;
+    transform: none;
   }
   
   .header {
@@ -464,16 +466,16 @@
 }
 
 // Dark mode support
-@media (prefers-color-scheme: dark) {
-  .overlay {
-    background: rgba(0, 0, 0, 0.9);
-  }
+// @media (prefers-color-scheme: dark) {
+//   .overlay {
+//     background: rgba(0, 0, 0, 0.9);
+//   }
   
-  .loadingSpinner {
-    border-color: #4a5568;
-    border-top-color: vars.$primary-accent-solid;
-  }
-}
+//   .loadingSpinner {
+//     border-color: #4a5568;
+//     border-top-color: vars.$primary-accent-solid;
+//   }
+// }
 
 // Animation performance optimization
 .modal {

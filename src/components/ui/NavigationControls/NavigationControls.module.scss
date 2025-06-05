@@ -2,11 +2,11 @@
 @use '../../../styles/mixins' as mix;
 
 .navigationControls {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-md;
-  width: 100%;
   padding: vars.$spacing-lg 0;
+  width: 100%;
 
   @include mix.mobile-only {
     gap: vars.$spacing-sm;
@@ -18,8 +18,8 @@
 .leftActions,
 .centerContent,
 .rightActions {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-sm;
 }
 
@@ -28,8 +28,8 @@
 }
 
 .centerContent {
-  justify-content: center;
   flex: 1;
+  justify-content: center;
 }
 
 .rightActions {
@@ -40,8 +40,8 @@
 .previousButton,
 .nextButton,
 .customAction {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-xs;
   position: relative;
   white-space: nowrap;
@@ -60,30 +60,30 @@
 
 .shortcut {
   background: vars.$light-bg;
-  color: vars.$secondary-text;
-  padding: 2px vars.$spacing-xs;
+  border: 1px solid vars.$border-color;
   border-radius: vars.$radius-sm;
+  color: vars.$secondary-text;
   font-size: vars.$font-caption;
   font-weight: vars.$font-medium;
   margin-left: vars.$spacing-xs;
-  border: 1px solid vars.$border-color;
+  padding: 2px vars.$spacing-xs;
 }
 
 // Progress Info
 .progressInfo {
-  display: flex;
   align-items: center;
+  background: vars.$light-bg;
+  border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-sm;
+  display: flex;
   justify-content: center;
   padding: vars.$spacing-xs vars.$spacing-md;
-  background: vars.$light-bg;
-  border-radius: vars.$radius-sm;
-  border: 1px solid vars.$border-color;
 }
 
 .progressText {
+  color: vars.$secondary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  color: vars.$secondary-text;
 }
 
 // Variant Styles
@@ -181,18 +181,18 @@
 
 // Context-specific styling
 .contextAssessment {
-  border-top: 1px solid vars.$border-color;
-  background: rgba(255, 107, 157, 0.02);
+  background: rgb(255 107 157 / 2%);
   border-radius: vars.$radius-md;
-  padding: vars.$spacing-lg;
+  border-top: 1px solid vars.$border-color;
   margin-top: vars.$spacing-lg;
+  padding: vars.$spacing-lg;
 
   .nextButton {
     background: vars.$primary-accent;
     
     &:hover:not(:disabled) {
+      box-shadow: 0 6px 25px rgb(255 107 157 / 30%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(255, 107, 157, 0.3);
     }
   }
 
@@ -204,8 +204,8 @@
 
 .contextForm {
   border-top: 1px solid vars.$border-color;
-  padding-top: vars.$spacing-lg;
   margin-top: vars.$spacing-lg;
+  padding-top: vars.$spacing-lg;
 
   .nextButton {
     min-width: 120px;
@@ -216,12 +216,12 @@
   background: vars.$light-bg;
   border: 1px solid vars.$border-color;
   border-radius: vars.$radius-lg;
-  padding: vars.$spacing-lg vars.$spacing-xl;
   box-shadow: vars.$shadow-card;
+  padding: vars.$spacing-lg vars.$spacing-xl;
 
   .progressInfo {
     background: vars.$card-bg;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 10%);
   }
 }
 
@@ -242,9 +242,9 @@
       }
       
       .centerContent {
+        margin-bottom: vars.$spacing-sm;
         order: -1;
         width: 100%;
-        margin-bottom: vars.$spacing-sm;
       }
     }
   }
@@ -267,7 +267,7 @@
   }
 
   // Stack navigation on very small screens
-  @media (max-width: 480px) {
+  @media (width <= 480px) {
     .navigationControls {
       &:not(.variantMinimal) {
         flex-direction: column;
@@ -275,8 +275,8 @@
         
         .leftActions,
         .rightActions {
-          width: 100%;
           justify-content: center;
+          width: 100%;
         }
         
         .centerContent {
@@ -313,6 +313,7 @@
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -332,28 +333,28 @@
 }
 
 // Dark mode support
-@media (prefers-color-scheme: dark) {
-  .contextAssessment {
-    background: rgba(255, 107, 157, 0.05);
-    border-color: #2d3748;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .contextAssessment {
+//     background: rgba(255, 107, 157, 0.05);
+//     border-color: #2d3748;
+//   }
 
-  .contextWizard {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
+//   .contextWizard {
+//     background: #2d3748;
+//     border-color: #4a5568;
+//   }
 
-  .progressInfo {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
+//   .progressInfo {
+//     background: #2d3748;
+//     border-color: #4a5568;
+//   }
 
-  .shortcut {
-    background: #4a5568;
-    border-color: #2d3748;
-    color: #e2e8f0;
-  }
-}
+//   .shortcut {
+//     background: #4a5568;
+//     border-color: #2d3748;
+//     color: #e2e8f0;
+//   }
+// }
 
 // High contrast mode
 @media (prefers-contrast: high) {
@@ -368,8 +369,8 @@
   }
 
   .shortcut {
-    border: 2px solid black;
     background: white;
+    border: 2px solid black;
     color: black;
   }
 }

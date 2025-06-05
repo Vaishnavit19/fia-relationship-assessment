@@ -244,8 +244,6 @@ export const ResultsPage: React.FC = () => {
                 <ScoreChart
                   scores={results.totalScores}
                   maxScore={12}
-                  showPercentages={true}
-                  showLabels={true}
                   animated={true}
                   className={styles.scoreChart}
                 />
@@ -328,10 +326,11 @@ export const ResultsPage: React.FC = () => {
         {/* Share Modal */}
         {showShareModal && (
           <ShareButtons
-            url={typeof window !== 'undefined' ? window.location.href : ''}
-            title={`I'm a ${primaryArchetype.name}! Discover your relationship archetype.`}
-            description={`Take the FIA Relationship Assessment to discover your unique partnership style.`}
-            onClose={() => setShowShareModal(false)}
+            shareData={{
+              title: `I'm a ${primaryArchetype.name}! Discover your relationship archetype.`,
+              text: `Take the FIA Relationship Assessment to discover your unique partnership style.`,
+              url: typeof window !== 'undefined' ? window.location.href : '',
+            }}
             className={styles.shareModal}
           />
         )}

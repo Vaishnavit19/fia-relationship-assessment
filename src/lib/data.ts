@@ -15,8 +15,8 @@ export const archetypes: RelationshipArchetype[] = archetypesData.archetypes;
 export const appConfig = config;
 
 // Helper functions
-export const getScenarioById = (id: number): Scenario | undefined => {
-  return scenarios.find(scenario => scenario.id === id);
+export const getScenarioById = (id: number): Scenario | null => {
+  return scenarios.find(scenario => scenario.id === id) ?? null;
 };
 
 export const getArchetypeByHighestScore = (scores: {

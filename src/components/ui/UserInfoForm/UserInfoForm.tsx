@@ -40,7 +40,7 @@ export interface UserInfoFormProps {
   /** Form variant */
   variant?: 'default' | 'minimal' | 'welcome';
   /** Error message */
-  error?: string;
+  error: string | null;
   /** Whether to auto-focus the name field */
   autoFocus?: boolean;
 }
@@ -99,7 +99,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
 
   const handleInputChange = (field: keyof UserData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     // Clear field error when user starts typing
     if (fieldErrors[field]) {
       setFieldErrors(prev => ({ ...prev, [field]: '' }));
@@ -108,8 +108,8 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
 
   const handleBlur = (field: keyof UserData) => {
     setTouched(prev => ({ ...prev, [field]: true }));
-    
-    const value = formData[field];
+
+    const value = formData[field] ?? (typeof formData[field] === 'boolean' ? false : '');
     const error = validateField(field, value);
     setFieldErrors(prev => ({ ...prev, [field]: error }));
   };
@@ -120,7 +120,8 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
 
     // Validate all fields
     (Object.keys(formData) as (keyof UserData)[]).forEach(field => {
-      const error = validateField(field, formData[field]);
+      const value = formData[field] ?? (typeof formData[field] === 'boolean' ? false : '');
+      const error = validateField(field, value);
       if (error) {
         errors[field] = error;
         isValid = false;
@@ -140,7 +141,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onSubmit(formData);
     }
@@ -155,7 +156,8 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
     .join(' ');
 
   const hasErrors = Object.values(fieldErrors).some(error => error !== '');
-  const isFormValid = formData.name.trim().length >= 2 && 
+  const isFormValid =
+    formData.name.trim().length >= 2 &&
     (!requireEmail || (formData.email && formData.email.trim() !== '')) &&
     (!showPrivacyConsent || formData.privacyConsent) &&
     !hasErrors;
@@ -194,7 +196,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
               className={`${styles.input} ${fieldErrors.name && touched.name ? styles.inputError : ''}`}
               placeholder="Enter your first name"
               value={formData.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
+              onChange={e => handleInputChange('name', e.target.value)}
               onBlur={() => handleBlur('name')}
               disabled={loading}
               // autoFocus={autoFocus}
@@ -218,7 +220,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
               className={`${styles.input} ${fieldErrors.email && touched.email ? styles.inputError : ''}`}
               placeholder="Enter your email address"
               value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={e => handleInputChange('email', e.target.value)}
               onBlur={() => handleBlur('email')}
               disabled={loading}
               autoComplete="email"
@@ -228,9 +230,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
               <span className={styles.fieldError}>{fieldErrors.email}</span>
             )}
             {!requireEmail && (
-              <span className={styles.fieldHint}>
-                We&apos;ll email your results if provided
-              </span>
+              <span className={styles.fieldHint}>We&apos;ll email your results if provided</span>
             )}
           </div>
         </div>
@@ -244,7 +244,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
                   type="checkbox"
                   className={styles.checkbox}
                   checked={formData.consentToContact}
-                  onChange={(e) => handleInputChange('consentToContact', e.target.checked)}
+                  onChange={e => handleInputChange('consentToContact', e.target.checked)}
                   disabled={loading}
                 />
                 <span className={styles.checkboxText}>
@@ -259,7 +259,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
                   type="checkbox"
                   className={`${styles.checkbox} ${fieldErrors.privacyConsent && touched.privacyConsent ? styles.checkboxError : ''}`}
                   checked={formData.privacyConsent}
-                  onChange={(e) => handleInputChange('privacyConsent', e.target.checked)}
+                  onChange={e => handleInputChange('privacyConsent', e.target.checked)}
                   onBlur={() => handleBlur('privacyConsent')}
                   disabled={loading}
                   required

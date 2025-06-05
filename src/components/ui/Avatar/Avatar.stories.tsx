@@ -1,7 +1,7 @@
 // src/components/ui/Avatar/Avatar.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import React from 'react';
+import { fn } from 'storybook/test';
 
 import { Avatar, AvatarGroup, AssessmentAvatar } from './Avatar';
 
@@ -161,7 +161,7 @@ export const WithImage: Story = {
 };
 
 export const Sizes: Story = {
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
       <Avatar {...args} size="small" />
       <Avatar {...args} size="medium" />
@@ -183,7 +183,7 @@ export const Shapes: Story = {
     src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     size: 'large',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
       <Avatar {...args} shape="circle" />
       <Avatar {...args} shape="rounded" />
@@ -204,7 +204,7 @@ export const Colors: Story = {
     name: 'User Name',
     size: 'large',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
       <Avatar {...args} color="primary" />
       <Avatar {...args} color="secondary" />
@@ -227,7 +227,7 @@ export const WithStatus: Story = {
     src: 'https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face',
     size: 'large',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
       <div style={{ textAlign: 'center' }}>
         <Avatar {...args} status="online" />
@@ -261,7 +261,7 @@ export const WithBadges: Story = {
     name: 'Sarah Johnson',
     size: 'large',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
       <Avatar {...args} badge="5" badgeVariant="primary" />
       <Avatar {...args} badge="99+" badgeVariant="error" />
@@ -383,7 +383,8 @@ export const ArchetypeAvatars: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Archetype-specific avatars with custom gradients and emojis representing assessment results.',
+        story:
+          'Archetype-specific avatars with custom gradients and emojis representing assessment results.',
       },
     },
   },
@@ -392,9 +393,21 @@ export const ArchetypeAvatars: Story = {
 export const AvatarGroupExample: Story = {
   render: () => {
     const groupAvatars = [
-      { id: '1', name: 'Sarah Johnson', src: 'https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face' },  
-      { id: '2', name: 'Michael Chen', src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' },
-      { id: '3', name: 'Emma Davis', src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face' },
+      {
+        id: '1',
+        name: 'Sarah Johnson',
+        src: 'https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face',
+      },
+      {
+        id: '2',
+        name: 'Michael Chen',
+        src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      },
+      {
+        id: '3',
+        name: 'Emma Davis',
+        src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+      },
       { id: '4', name: 'James Wilson', color: 'primary' as const },
       { id: '5', name: 'Lisa Rodriguez', color: 'secondary' as const },
       { id: '6', name: 'David Kim', color: 'success' as const },
@@ -407,12 +420,12 @@ export const AvatarGroupExample: Story = {
           <h4 style={{ margin: '0 0 1rem 0' }}>Default Group (max 5)</h4>
           <AvatarGroup avatars={groupAvatars} />
         </div>
-        
+
         <div>
           <h4 style={{ margin: '0 0 1rem 0' }}>Large Size, Max 3</h4>
           <AvatarGroup avatars={groupAvatars} max={3} size="large" />
         </div>
-        
+
         <div>
           <h4 style={{ margin: '0 0 1rem 0' }}>Tight Spacing</h4>
           <AvatarGroup avatars={groupAvatars} spacing="tight" max={4} />
@@ -443,7 +456,7 @@ export const AssessmentAvatarExample: Story = {
         />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Completed Assessment</p>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <AssessmentAvatar
           name="Michael Chen"
@@ -453,7 +466,7 @@ export const AssessmentAvatarExample: Story = {
         />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>In Progress (65%)</p>
       </div>
-      
+
       <div style={{ textAlign: 'center' }}>
         <AssessmentAvatar
           name="Emma Davis"
@@ -511,57 +524,59 @@ export const ErrorFallback: Story = {
 
 export const AllStates: Story = {
   render: () => (
-    <div style={{ 
-      display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
-      gap: '2rem',
-      textAlign: 'center'
-    }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gap: '2rem',
+        textAlign: 'center',
+      }}
+    >
       <div>
         <Avatar name="Default" size="large" />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Default</p>
       </div>
-      
+
       <div>
-        <Avatar 
-          name="With Image" 
+        <Avatar
+          name="With Image"
           src="https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face"
-          size="large" 
+          size="large"
         />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>With Image</p>
       </div>
-      
+
       <div>
         <Avatar name="Loading" size="large" isLoading={true} />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Loading</p>
       </div>
-      
+
       <div>
         <Avatar name="Editable" size="large" editable={true} />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Editable</p>
       </div>
-      
+
       <div>
         <Avatar name="With Status" size="large" status="online" />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>With Status</p>
       </div>
-      
+
       <div>
         <Avatar name="With Badge" size="large" badge="99+" badgeVariant="error" />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>With Badge</p>
       </div>
-      
+
       <div>
-        <Avatar 
-          name="Archetype" 
-          size="large" 
+        <Avatar
+          name="Archetype"
+          size="large"
           color="archetype"
           archetypeGradient={sampleArchetypes.heartfelt.gradient}
           archetypeEmoji={sampleArchetypes.heartfelt.icon}
         />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Archetype</p>
       </div>
-      
+
       <div>
         <Avatar name="Current User" size="large" isCurrentUser={true} />
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>Current User</p>

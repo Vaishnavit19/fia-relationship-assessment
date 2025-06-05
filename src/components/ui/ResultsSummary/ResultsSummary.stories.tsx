@@ -1,6 +1,6 @@
 // src/components/ui/ResultsSummary/ResultsSummary.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 import { ResultsSummary } from './ResultsSummary';
 
@@ -14,51 +14,54 @@ const heartfeltArchetype = {
   id: 'heartfelt',
   name: 'The Heartfelt Companion',
   title: 'Connection-Focused Partner',
-  description: 'You prioritize emotional connection and togetherness above all else. Your partner\'s happiness is your happiness, and you create deep bonds through shared experiences.',
+  description:
+    "You prioritize emotional connection and togetherness above all else. Your partner's happiness is your happiness, and you create deep bonds through shared experiences.",
   traits: [
-    'Puts partner\'s feelings first',
+    "Puts partner's feelings first",
     'Values shared experiences over individual adventures',
     'Creates emotional safety and connection',
     'Sacrifices personal preferences for relationship harmony',
-    'Thrives on intimate moments and deep conversations'
+    'Thrives on intimate moments and deep conversations',
   ],
   icon: '💝',
   color: '#87ceeb',
-  gradient: 'linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%)'
+  gradient: 'linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%)',
 };
 
 const strategicArchetype = {
   id: 'strategic',
   name: 'The Strategic Navigator',
   title: 'Logic-Driven Planner',
-  description: 'You approach relationships and travel with careful planning and practical thinking. You create well-organized adventures through efficient decision-making.',
+  description:
+    'You approach relationships and travel with careful planning and practical thinking. You create well-organized adventures through efficient decision-making.',
   traits: [
     'Makes decisions based on logic and efficiency',
     'Plans ahead to avoid problems',
     'Values practical solutions over emotional responses',
     'Creates structure and organization in relationships',
-    'Focuses on long-term benefits and outcomes'
+    'Focuses on long-term benefits and outcomes',
   ],
   icon: '🧠',
   color: '#667eea',
-  gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
 };
 
 const spontaneousArchetype = {
   id: 'spontaneous',
   name: 'The Spontaneous Explorer',
   title: 'Adventure-Seeking Spirit',
-  description: 'You embrace the unexpected and thrive on new experiences. You bring excitement to relationships through your adventurous approach to life.',
+  description:
+    'You embrace the unexpected and thrive on new experiences. You bring excitement to relationships through your adventurous approach to life.',
   traits: [
     'Embraces spontaneity and new experiences',
     'Comfortable with uncertainty and change',
     'Values personal freedom and independence',
     'Brings excitement and adventure to relationships',
-    'Thrives on exploring the unknown'
+    'Thrives on exploring the unknown',
   ],
   icon: '🌟',
   color: '#ffb347',
-  gradient: 'linear-gradient(135deg, #ffb347 0%, #ffd700 100%)'
+  gradient: 'linear-gradient(135deg, #ffb347 0%, #ffd700 100%)',
 };
 
 const allArchetypes = [heartfeltArchetype, strategicArchetype, spontaneousArchetype];
@@ -68,12 +71,12 @@ const sampleAnswers = [
     scenarioId: 1,
     selectedOption: {
       letter: 'A',
-      text: 'Let\'s pick whatever number of days makes us both feel relaxed and connected.',
+      text: "Let's pick whatever number of days makes us both feel relaxed and connected.",
       scores: { emotional: 2, logical: 0, exploratory: 0 },
-      next: 2
+      next: 2,
     },
-    timestamp: new Date('2024-01-15T14:30:00Z')
-  }
+    timestamp: new Date('2024-01-15T14:30:00Z'),
+  },
 ];
 
 const meta = {
@@ -187,7 +190,8 @@ export const HeartfeltCompanion: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results for "The Heartfelt Companion" - someone who prioritizes emotional connection above all else.',
+        story:
+          'Results for "The Heartfelt Companion" - someone who prioritizes emotional connection above all else.',
       },
     },
   },
@@ -209,7 +213,8 @@ export const StrategicNavigator: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results for "The Strategic Navigator" - someone who approaches relationships with careful planning.',
+        story:
+          'Results for "The Strategic Navigator" - someone who approaches relationships with careful planning.',
       },
     },
   },
@@ -231,7 +236,8 @@ export const SpontaneousExplorer: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results for "The Spontaneous Explorer" - someone who thrives on adventure and spontaneity.',
+        story:
+          'Results for "The Spontaneous Explorer" - someone who thrives on adventure and spontaneity.',
       },
     },
   },
@@ -322,7 +328,8 @@ export const WithoutActions: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results display without action buttons, suitable for read-only views or embedded contexts.',
+        story:
+          'Results display without action buttons, suitable for read-only views or embedded contexts.',
       },
     },
   },
@@ -396,7 +403,8 @@ export const LowEngagement: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results for someone with lower overall engagement scores, still discovering their preferences.',
+        story:
+          'Results for someone with lower overall engagement scores, still discovering their preferences.',
       },
     },
   },
@@ -470,7 +478,7 @@ export const RecentCompletion: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Results showing today\'s completion date.',
+        story: "Results showing today's completion date.",
       },
     },
   },

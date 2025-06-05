@@ -3,11 +3,12 @@
 
 .questionCard {
   @include mix.card-main;
+
   display: flex;
   flex-direction: column;
   gap: vars.$spacing-2xl;
-  max-width: 800px;
   margin: 0 auto;
+  max-width: 800px;
   position: relative;
 
   @include mix.mobile-only {
@@ -39,19 +40,19 @@
 }
 
 .questionMeta {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .questionNumber {
+  background: vars.$light-bg;
+  border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-sm;
+  color: vars.$secondary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  color: vars.$secondary-text;
-  background: vars.$light-bg;
   padding: vars.$spacing-xs vars.$spacing-sm;
-  border-radius: vars.$radius-sm;
-  border: 1px solid vars.$border-color;
 }
 
 .questionContent {
@@ -61,21 +62,21 @@
 }
 
 .questionTitle {
-  display: flex;
   align-items: flex-start;
+  display: flex;
   gap: vars.$spacing-md;
 }
 
 .questionIcon {
-  flex-shrink: 0;
   color: vars.$primary-accent-solid;
+  flex-shrink: 0;
   margin-top: vars.$spacing-xs;
 }
 
 .questionText {
+  color: vars.$primary-text;
   font-size: vars.$font-section;
   font-weight: vars.$font-bold;
-  color: vars.$primary-text;
   line-height: 1.3;
   margin: 0;
 
@@ -100,15 +101,16 @@
 
 .option {
   @include mix.card-interactive;
-  padding: vars.$spacing-lg;
+
   cursor: pointer;
-  transition: vars.$transition-standard;
+  padding: vars.$spacing-lg;
   position: relative;
+  transition: vars.$transition-standard;
 
   &:hover:not(.optionDisabled) {
     border-color: vars.$primary-accent-solid;
-    transform: translateY(-1px);
     box-shadow: vars.$shadow-card;
+    transform: translateY(-1px);
   }
 
   &:focus-visible {
@@ -117,8 +119,8 @@
   }
 
   &Selected {
+    background: rgb(255 107 157 / 5%);
     border-color: vars.$primary-accent-solid;
-    background: rgba(255, 107, 157, 0.05);
     box-shadow: vars.$shadow-card;
 
     .optionLetter {
@@ -133,14 +135,14 @@
   }
 
   &Disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
     background: vars.$light-bg;
+    cursor: not-allowed;
+    opacity: 0.6;
 
     &:hover {
-      transform: none;
       border-color: vars.$border-color;
       box-shadow: none;
+      transform: none;
     }
   }
 
@@ -150,46 +152,46 @@
 }
 
 .optionContent {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-md;
   width: 100%;
 }
 
 .optionLetter {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: vars.$radius-full;
+  align-items: center;
   background: vars.$light-bg;
   border: 2px solid vars.$border-color;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: vars.$font-bold;
-  font-size: vars.$font-body-sm;
+  border-radius: vars.$radius-full;
   color: vars.$primary-text;
+  display: flex;
+  flex-shrink: 0;
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-bold;
+  height: 32px;
+  justify-content: center;
   transition: vars.$transition-standard;
+  width: 32px;
 
   @include mix.mobile-only {
-    width: 28px;
-    height: 28px;
     font-size: vars.$font-caption;
+    height: 28px;
+    width: 28px;
   }
 }
 
 .optionText {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: vars.$spacing-xs;
   text-align: left;
 }
 
 .optionMain {
+  color: vars.$primary-text;
   font-size: vars.$font-body;
   font-weight: vars.$font-medium;
-  color: vars.$primary-text;
   line-height: 1.5;
 
   @include mix.mobile-only {
@@ -198,8 +200,8 @@
 }
 
 .optionDescription {
-  font-size: vars.$font-body-sm;
   color: vars.$secondary-text;
+  font-size: vars.$font-body-sm;
   line-height: 1.4;
 
   @include mix.mobile-only {
@@ -208,44 +210,45 @@
 }
 
 .optionIndicator {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
   align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  height: 24px;
   justify-content: center;
+  width: 24px;
 }
 
 .selectedIndicator {
+  animation: slideInRight 0.3s ease-out;
   color: vars.$primary-accent-solid;
   opacity: 0;
   transition: vars.$transition-standard;
-  animation: slideInRight 0.3s ease-out;
 
   @keyframes slideInRight {
     from {
-      transform: translateX(-8px);
       opacity: 0;
+      transform: translateX(-8px);
     }
+
     to {
-      transform: translateX(0);
       opacity: 1;
+      transform: translateX(0);
     }
   }
 }
 
 // Error Message
 .errorMessage {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-xs;
+  background: rgb(229 62 62 / 5%);
+  border: 1px solid rgb(229 62 62 / 20%);
+  border-radius: vars.$radius-sm;
   color: #e53e3e;
+  display: flex;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
+  gap: vars.$spacing-xs;
   padding: vars.$spacing-sm vars.$spacing-md;
-  background: rgba(229, 62, 62, 0.05);
-  border: 1px solid rgba(229, 62, 62, 0.2);
-  border-radius: vars.$radius-sm;
 
   svg {
     flex-shrink: 0;
@@ -254,10 +257,10 @@
 
 // Continue Section
 .continueSection {
+  border-top: 1px solid vars.$border-color;
   display: flex;
   justify-content: center;
   padding-top: vars.$spacing-lg;
-  border-top: 1px solid vars.$border-color;
 
   @include mix.mobile-only {
     padding-top: vars.$spacing-md;
@@ -268,8 +271,8 @@
   min-width: 200px;
   
   @include mix.mobile-only {
-    width: 100%;
     min-width: auto;
+    width: 100%;
   }
 }
 
@@ -283,8 +286,8 @@
   
   .optionSelected {
     background: linear-gradient(135deg, 
-      rgba(255, 107, 157, 0.05) 0%, 
-      rgba(255, 138, 155, 0.05) 100%
+      rgb(255 107 157 / 5%) 0%, 
+      rgb(255 138 155 / 5%) 100%
     );
   }
 }
@@ -324,6 +327,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -332,26 +336,26 @@
 }
 
 // Dark mode support
-@media (prefers-color-scheme: dark) {
-  .questionCard {
-    background: #1a202c;
-    border-color: #2d3748;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .questionCard {
+//     background: #1a202c;
+//     border-color: #2d3748;
+//   }
   
-  .option {
-    background: #2d3748;
-    border-color: #4a5568;
+//   .option {
+//     background: #2d3748;
+//     border-color: #4a5568;
     
-    &Selected {
-      background: rgba(255, 107, 157, 0.1);
-    }
-  }
+//     &Selected {
+//       background: rgba(255, 107, 157, 0.1);
+//     }
+//   }
   
-  .optionLetter {
-    background: #4a5568;
-    border-color: #2d3748;
-  }
-}
+//   .optionLetter {
+//     background: #4a5568;
+//     border-color: #2d3748;
+//   }
+// }
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
@@ -408,9 +412,9 @@
 // Print styles
 @media print {
   .questionCard {
-    page-break-inside: avoid;
-    box-shadow: none;
     border: 1px solid black;
+    box-shadow: none;
+    page-break-inside: avoid;
   }
   
   .continueButton {

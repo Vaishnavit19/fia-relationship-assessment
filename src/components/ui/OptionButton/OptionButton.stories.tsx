@@ -1,8 +1,8 @@
 // src/components/ui/OptionButton/OptionButton.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import { Heart, MapPin, Clock, Camera } from 'lucide-react';
 import React from 'react';
+import { fn } from 'storybook/test';
 
 import { OptionButton } from './OptionButton';
 
@@ -175,7 +175,7 @@ export const Variants: Story = {
     letter: 'A',
     selected: true,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '500px' }}>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>Default</h4>
@@ -210,7 +210,7 @@ export const Sizes: Story = {
     letter: 'A',
     selected: true,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
       <OptionButton {...args} size="small" text="Small size option" />
       <OptionButton {...args} size="medium" text="Medium size option" />
@@ -231,7 +231,7 @@ export const SelectionStyles: Story = {
     text: 'Selection style demonstration',
     selected: true,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>Radio Style</h4>
@@ -261,32 +261,27 @@ export const AssessmentColors: Story = {
     selected: true,
     description: 'Assessment-specific color variants',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '500px' }}>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>💝 Emotional Response</h4>
-        <OptionButton 
-          {...args} 
-          text="Focus on feelings and connection" 
-          letter="A" 
+        <OptionButton
+          {...args}
+          text="Focus on feelings and connection"
+          letter="A"
           color="emotional"
         />
       </div>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>🧠 Logical Response</h4>
-        <OptionButton 
-          {...args} 
-          text="Analyze costs and efficiency" 
-          letter="B" 
-          color="logical"
-        />
+        <OptionButton {...args} text="Analyze costs and efficiency" letter="B" color="logical" />
       </div>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>🌟 Exploratory Response</h4>
-        <OptionButton 
-          {...args} 
-          text="Embrace spontaneity and adventure" 
-          letter="C" 
+        <OptionButton
+          {...args}
+          text="Embrace spontaneity and adventure"
+          letter="C"
           color="exploratory"
         />
       </div>
@@ -295,7 +290,8 @@ export const AssessmentColors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Assessment-specific color variants that align with the three relationship archetypes.',
+        story:
+          'Assessment-specific color variants that align with the three relationship archetypes.',
       },
     },
   },
@@ -335,7 +331,8 @@ export const AssessmentScenario: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Complete assessment scenario showing how options work together with different color variants.',
+        story:
+          'Complete assessment scenario showing how options work together with different color variants.',
       },
     },
   },
@@ -346,7 +343,7 @@ export const States: Story = {
     text: 'Option button states',
     letter: 'A',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
       <div>
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#2d3748' }}>Default</h4>
@@ -380,23 +377,11 @@ export const CustomIcons: Story = {
     selected: true,
     showIndicator: false,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-      <OptionButton 
-        {...args} 
-        text="Explore the city" 
-        icon={<MapPin size={20} />}
-      />
-      <OptionButton 
-        {...args} 
-        text="Capture memories" 
-        icon={<Camera size={20} />}
-      />
-      <OptionButton 
-        {...args} 
-        text="Take your time" 
-        icon={<Clock size={20} />}
-      />
+      <OptionButton {...args} text="Explore the city" icon={<MapPin size={20} />} />
+      <OptionButton {...args} text="Capture memories" icon={<Camera size={20} />} />
+      <OptionButton {...args} text="Take your time" icon={<Clock size={20} />} />
     </div>
   ),
   parameters: {
@@ -412,12 +397,10 @@ export const MultipleChoice: Story = {
   args: {},
   render: () => {
     const [selectedOptions, setSelectedOptions] = React.useState<string[]>(['B']);
-    
+
     const handleToggle = (letter: string) => {
-      setSelectedOptions(prev => 
-        prev.includes(letter) 
-          ? prev.filter(l => l !== letter)
-          : [...prev, letter]
+      setSelectedOptions(prev =>
+        prev.includes(letter) ? prev.filter(l => l !== letter) : [...prev, letter]
       );
     };
 

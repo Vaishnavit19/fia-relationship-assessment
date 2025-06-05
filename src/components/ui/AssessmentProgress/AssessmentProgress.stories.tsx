@@ -1,7 +1,7 @@
 // src/components/ui/AssessmentProgress/AssessmentProgress.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import React from 'react';
+import { fn } from 'storybook/test';
 
 import { AssessmentProgress } from './AssessmentProgress';
 
@@ -72,7 +72,7 @@ const customStepLabels = [
   'Decision Making',
   'Communication',
   'Adaptability',
-  'Results'
+  'Results',
 ];
 
 const meta = {
@@ -193,7 +193,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default assessment progress component showing current step, progress bar, and navigation controls.',
+        story:
+          'Default assessment progress component showing current step, progress bar, and navigation controls.',
       },
     },
   },
@@ -224,7 +225,8 @@ export const Detailed: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Detailed variant showing step indicators, completion stats, and enhanced navigation.',
+        story:
+          'Detailed variant showing step indicators, completion stats, and enhanced navigation.',
       },
     },
   },
@@ -289,7 +291,8 @@ export const LastStep: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Final step showing completion state with restart option and "Complete" button text.',
+        story:
+          'Final step showing completion state with restart option and "Complete" button text.',
       },
     },
   },
@@ -319,50 +322,58 @@ export const Positions: Story = {
     steps: sampleSteps.slice(0, 5),
     totalSteps: 5,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
       <div>
         <h3 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Top Position (Default)</h3>
-        <div style={{ 
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          padding: '1rem'
-        }}>
+        <div
+          style={{
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            padding: '1rem',
+          }}
+        >
           <AssessmentProgress {...args} position="top" />
         </div>
       </div>
-      
+
       <div>
         <h3 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Bottom Position</h3>
-        <div style={{ 
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          padding: '1rem'
-        }}>
+        <div
+          style={{
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            padding: '1rem',
+          }}
+        >
           <AssessmentProgress {...args} position="bottom" />
         </div>
       </div>
-      
+
       <div>
         <h3 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Sidebar Position</h3>
-        <div style={{ 
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          padding: '1rem',
-          display: 'flex',
-          gap: '2rem'
-        }}>
-          <AssessmentProgress {...args} position="sidebar" variant="detailed" />
-          <div style={{ 
-            flex: 1, 
-            padding: '2rem',
-            background: '#f8fafc',
+        <div
+          style={{
+            border: '1px solid #e2e8f0',
             borderRadius: '8px',
+            padding: '1rem',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#718096'
-          }}>
+            gap: '2rem',
+          }}
+        >
+          <AssessmentProgress {...args} position="sidebar" variant="detailed" />
+          <div
+            style={{
+              flex: 1,
+              padding: '2rem',
+              background: '#f8fafc',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#718096',
+            }}
+          >
             Main Content Area
           </div>
         </div>
@@ -383,23 +394,23 @@ export const ProgressStates: Story = {
     variant: 'detailed',
     stepLabels: customStepLabels,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Just Started (14%)</h4>
         <AssessmentProgress {...args} currentStep={1} progress={14} canGoBack={false} />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Mid Progress (57%)</h4>
         <AssessmentProgress {...args} currentStep={4} progress={57} />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Nearly Complete (86%)</h4>
         <AssessmentProgress {...args} currentStep={6} progress={86} />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Completed (100%)</h4>
         <AssessmentProgress {...args} currentStep={7} progress={100} showRestart={true} />
@@ -423,11 +434,11 @@ export const InteractiveDemo: Story = {
   render: () => {
     const [currentStep, setCurrentStep] = React.useState(3);
     const [loading, setLoading] = React.useState(false);
-    
+
     const progress = Math.round((currentStep / 7) * 100);
     const canGoBack = currentStep > 1;
     const canGoNext = currentStep < 7;
-    
+
     const handleNext = () => {
       if (canGoNext) {
         setLoading(true);
@@ -437,23 +448,23 @@ export const InteractiveDemo: Story = {
         }, 1000);
       }
     };
-    
+
     const handlePrevious = () => {
       if (canGoBack) {
         setCurrentStep(prev => prev - 1);
       }
     };
-    
+
     const handleStepSelect = (stepId: number) => {
       if (stepId <= currentStep) {
         setCurrentStep(stepId);
       }
     };
-    
+
     const handleRestart = () => {
       setCurrentStep(1);
     };
-    
+
     // Update step states based on current step
     const updatedSteps = sampleSteps.map(step => ({
       ...step,
@@ -461,7 +472,7 @@ export const InteractiveDemo: Story = {
       current: step.id === currentStep,
       accessible: step.id <= currentStep,
     }));
-    
+
     return (
       <div>
         <AssessmentProgress
@@ -487,7 +498,8 @@ export const InteractiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive demo showing real navigation behavior with loading states and step selection.',
+        story:
+          'Interactive demo showing real navigation behavior with loading states and step selection.',
       },
     },
   },
@@ -517,20 +529,28 @@ export const AssessmentThemes: Story = {
     variant: 'detailed',
     currentStep: 4,
     progress: 57,
-    stepLabels: ['Setup', 'Travel Style', 'Decision Making', 'Communication', 'Flexibility', 'Values', 'Results'],
+    stepLabels: [
+      'Setup',
+      'Travel Style',
+      'Decision Making',
+      'Communication',
+      'Flexibility',
+      'Values',
+      'Results',
+    ],
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Relationship Theme</h4>
         <AssessmentProgress {...args} assessmentType="relationship" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Travel Theme</h4>
         <AssessmentProgress {...args} assessmentType="travel" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>General Theme</h4>
         <AssessmentProgress {...args} assessmentType="general" />

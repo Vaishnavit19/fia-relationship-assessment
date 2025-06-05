@@ -55,7 +55,7 @@ export interface QuestionCardProps {
   /** Whether options are in single or multi-select mode */
   multiSelect?: boolean;
   /** Error message to display */
-  error?: string;
+  error?: string | null;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -109,42 +109,31 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         {(questionNumber ?? totalQuestions) && (
           <div className={styles.questionMeta}>
             <span className={styles.questionNumber}>
-              {questionNumber && totalQuestions 
+              {questionNumber && totalQuestions
                 ? `Question ${questionNumber} of ${totalQuestions}`
-                : questionNumber 
-                ? `Question ${questionNumber}`
-                : ''
-              }
+                : questionNumber
+                  ? `Question ${questionNumber}`
+                  : ''}
             </span>
           </div>
         )}
-        
+
         <div className={styles.questionContent}>
           <div className={styles.questionTitle}>
-            {icon && (
-              <div className={styles.questionIcon}>
-                {icon}
-              </div>
-            )}
-            <h2 className={styles.questionText}>
-              {question}
-            </h2>
+            {icon && <div className={styles.questionIcon}>{icon}</div>}
+            <h2 className={styles.questionText}>{question}</h2>
           </div>
-          
-          {description && (
-            <p className={styles.questionDescription}>
-              {description}
-            </p>
-          )}
+
+          {description && <p className={styles.questionDescription}>{description}</p>}
         </div>
       </div>
 
       {/* Options List */}
       <div className={styles.optionsList}>
-        {options.map((option) => {
+        {options.map(option => {
           const isSelected = selectedOption === option.letter;
           const isDisabled = option.disabled;
-          
+
           const optionClasses = [
             styles.option,
             isSelected && styles.optionSelected,
@@ -158,30 +147,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               key={option.letter}
               className={optionClasses}
               onClick={() => handleOptionClick(option.letter)}
-              onKeyDown={(e) => handleKeyDown(e, option.letter)}
+              onKeyDown={e => handleKeyDown(e, option.letter)}
               role={multiSelect ? 'checkbox' : 'radio'}
               aria-checked={isSelected}
               aria-disabled={isDisabled}
               tabIndex={isDisabled ? -1 : 0}
             >
               <div className={styles.optionContent}>
-                {showOptionLetters && (
-                  <div className={styles.optionLetter}>
-                    {option.letter}
-                  </div>
-                )}
-                
+                {showOptionLetters && <div className={styles.optionLetter}>{option.letter}</div>}
+
                 <div className={styles.optionText}>
-                  <span className={styles.optionMain}>
-                    {option.text}
-                  </span>
+                  <span className={styles.optionMain}>{option.text}</span>
                   {option.description && (
-                    <span className={styles.optionDescription}>
-                      {option.description}
-                    </span>
+                    <span className={styles.optionDescription}>{option.description}</span>
                   )}
                 </div>
-                
+
                 <div className={styles.optionIndicator}>
                   {isSelected && (
                     <div className={styles.selectedIndicator}>

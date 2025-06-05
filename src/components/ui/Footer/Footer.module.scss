@@ -14,31 +14,32 @@
 
 .container {
   @include mix.container;
-  padding-top: vars.$spacing-2xl;
+
   padding-bottom: vars.$spacing-xl;
+  padding-top: vars.$spacing-2xl;
 
   .footerMinimal & {
-    padding-top: vars.$spacing-lg;
     padding-bottom: vars.$spacing-lg;
+    padding-top: vars.$spacing-lg;
   }
 }
 
 // Main Content Section
 .mainContent {
   display: grid;
-  grid-template-columns: 1fr 2fr;
   gap: vars.$spacing-2xl;
+  grid-template-columns: 1fr 2fr;
   margin-bottom: vars.$spacing-2xl;
 
   @include mix.tablet-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-xl;
+    grid-template-columns: 1fr;
     margin-bottom: vars.$spacing-xl;
   }
 
   @include mix.mobile-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
     margin-bottom: vars.$spacing-lg;
   }
 }
@@ -51,12 +52,12 @@
 }
 
 .logo {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-sm;
   color: vars.$primary-text;
-  font-weight: vars.$font-bold;
+  display: flex;
   font-size: vars.$font-body-lg;
+  font-weight: vars.$font-bold;
+  gap: vars.$spacing-sm;
   margin-bottom: vars.$spacing-xs;
 }
 
@@ -79,11 +80,11 @@
 }
 
 .contact {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-xs;
   color: vars.$secondary-text;
+  display: flex;
   font-size: vars.$font-body-sm;
+  gap: vars.$spacing-xs;
   margin-top: vars.$spacing-sm;
 
   svg {
@@ -94,17 +95,17 @@
 // Links Section
 .linksSection {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: vars.$spacing-xl;
+  grid-template-columns: repeat(3, 1fr);
 
   @include mix.tablet-only {
-    grid-template-columns: repeat(2, 1fr);
     gap: vars.$spacing-lg;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @include mix.mobile-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -115,32 +116,32 @@
 }
 
 .linkGroupTitle {
+  color: vars.$primary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-semibold;
-  color: vars.$primary-text;
+  letter-spacing: 0.05em;
   margin: 0 0 vars.$spacing-xs 0;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .linkList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: vars.$spacing-xs;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .link {
-  color: vars.$secondary-text;
-  text-decoration: none;
-  font-size: vars.$font-body-sm;
-  transition: vars.$transition-standard;
-  display: flex;
   align-items: center;
+  color: vars.$secondary-text;
+  display: flex;
+  font-size: vars.$font-body-sm;
   gap: vars.$spacing-xs;
   padding: vars.$spacing-xs 0;
+  text-decoration: none;
+  transition: vars.$transition-standard;
 
   &:hover {
     color: vars.$primary-accent-solid;
@@ -148,9 +149,9 @@
   }
 
   &:focus-visible {
+    border-radius: vars.$radius-sm;
     outline: 2px solid vars.$primary-accent-solid;
     outline-offset: 2px;
-    border-radius: vars.$radius-sm;
   }
 
   svg {
@@ -165,8 +166,8 @@
 
 // Divider
 .divider {
-  height: 1px;
   background: vars.$border-color;
+  height: 1px;
   margin: vars.$spacing-xl 0;
 
   @include mix.mobile-only {
@@ -176,14 +177,14 @@
 
 // Bottom Section
 .bottomSection {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-md;
+  justify-content: space-between;
 
   @include mix.mobile-only {
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     gap: vars.$spacing-sm;
     text-align: center;
   }
@@ -199,27 +200,27 @@
 }
 
 .badges {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-md;
 
   @include mix.mobile-only {
-    order: 1;
     gap: vars.$spacing-sm;
+    order: 1;
   }
 }
 
 .badge {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-xs;
+  background: vars.$light-bg;
+  border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-sm;
   color: vars.$secondary-text;
+  display: flex;
   font-size: vars.$font-caption;
   font-weight: vars.$font-medium;
+  gap: vars.$spacing-xs;
   padding: vars.$spacing-xs vars.$spacing-sm;
-  background: vars.$light-bg;
-  border-radius: vars.$radius-sm;
-  border: 1px solid vars.$border-color;
   
   svg {
     color: vars.$primary-accent-solid;
@@ -261,21 +262,21 @@
 }
 
 // Dark mode support (if needed later)
-@media (prefers-color-scheme: dark) {
-  .footer {
-    background: #1a202c;
-    border-top-color: #2d3748;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .footer {
+//     background: #1a202c;
+//     border-top-color: #2d3748;
+//   }
 
-  .divider {
-    background: #2d3748;
-  }
+//   .divider {
+//     background: #2d3748;
+//   }
 
-  .badge {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
-}
+//   .badge {
+//     background: #2d3748;
+//     border-color: #4a5568;
+//   }
+// }
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {

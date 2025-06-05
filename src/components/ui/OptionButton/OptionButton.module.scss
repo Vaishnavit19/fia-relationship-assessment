@@ -434,26 +434,26 @@
 }
 
 // Dark Mode Support
-@media (prefers-color-scheme: dark) {
-  .optionButton {
-    background: #2d3748;
-    border-color: #4a5568;
+// @media (prefers-color-scheme: dark) {
+//   .optionButton {
+//     background: #2d3748;
+//     border-color: #4a5568;
 
-    &.selected {
-      background: #1a202c;
-    }
-  }
+//     &.selected {
+//       background: #1a202c;
+//     }
+//   }
 
-  .letter {
-    background: #4a5568;
-    border-color: #2d3748;
-  }
+//   .letter {
+//     background: #4a5568;
+//     border-color: #2d3748;
+//   }
 
-  .checkbox {
-    background: #4a5568;
-    border-color: #2d3748;
-  }
-}
+//   .checkbox {
+//     background: #4a5568;
+//     border-color: #2d3748;
+//   }
+// }
 
 // Reduced Motion Support
 @media (prefers-reduced-motion: reduce) {

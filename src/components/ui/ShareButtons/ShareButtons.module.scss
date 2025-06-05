@@ -9,17 +9,17 @@
 // Header Section
 // ==========================================================================
 .header {
-  display: flex;
   align-items: center;
+  border-bottom: 1px solid vars.$border-color;
+  display: flex;
   justify-content: space-between;
   margin-bottom: vars.$spacing-lg;
   padding-bottom: vars.$spacing-md;
-  border-bottom: 1px solid vars.$border-color;
 }
 
 .headerContent {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-sm;
 }
 
@@ -29,29 +29,30 @@
 
 .headerTitle {
   @include mix.text-subtitle;
-  margin: 0;
-  font-weight: vars.$font-semibold;
+
   color: vars.$primary-text;
+  font-weight: vars.$font-semibold;
+  margin: 0;
 }
 
 .shareCount {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-xs;
-  padding: vars.$spacing-xs vars.$spacing-sm;
   background: vars.$light-bg;
   border-radius: vars.$radius-sm;
+  display: flex;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs vars.$spacing-sm;
 }
 
 .countNumber {
+  color: vars.$primary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-bold;
-  color: vars.$primary-text;
 }
 
 .countLabel {
-  font-size: vars.$font-caption;
   color: vars.$secondary-text;
+  font-size: vars.$font-caption;
 }
 
 // Message Prefix
@@ -61,6 +62,7 @@
   
   p {
     @include mix.text-small;
+
     color: vars.$secondary-text;
     margin: 0;
     text-align: center;
@@ -70,15 +72,15 @@
 // Buttons Container
 // ==========================================================================
 .buttonsContainer {
-  display: flex;
-  gap: vars.$spacing-sm;
   align-items: center;
-  justify-content: center;
+  display: flex;
   flex-wrap: nowrap;
+  gap: vars.$spacing-sm;
+  justify-content: center;
 
   .orientationVertical & {
-    flex-direction: column;
     align-items: stretch;
+    flex-direction: column;
   }
 
   .orientationHorizontal & {
@@ -95,30 +97,31 @@
 // ==========================================================================
 .shareButton {
   @include mix.button-base;
-  display: flex;
+
   align-items: center;
-  justify-content: center;
-  gap: vars.$spacing-xs;
-  border: 2px solid transparent;
   background: vars.$card-bg;
+  border: 2px solid transparent;
   color: vars.$secondary-text;
-  position: relative;
+  display: flex;
+  gap: vars.$spacing-xs;
+  justify-content: center;
   overflow: hidden;
+  position: relative;
   
   &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
+      rgb(255 255 255 / 30%) 50%,
       transparent 100%
     );
+    content: '';
+    height: 100%;
+    left: -100%;
+    position: absolute;
+    top: 0;
     transition: left 0.6s ease;
+    width: 100%;
   }
 
   &:hover::before {
@@ -126,10 +129,10 @@
   }
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
     border-color: var(--platform-color, vars.$border-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
     color: var(--platform-color, vars.$primary-text);
+    transform: translateY(-2px);
   }
 
   &:active:not(:disabled) {
@@ -137,8 +140,8 @@
   }
 
   &:disabled {
-    opacity: 0.6;
     cursor: not-allowed;
+    opacity: 0.6;
     transform: none;
   }
 
@@ -149,8 +152,8 @@
 }
 
 .buttonIcon {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
   transition: vars.$transition-standard;
   
@@ -162,18 +165,18 @@
 .buttonLabel {
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  white-space: nowrap;
   transition: vars.$transition-standard;
+  white-space: nowrap;
 }
 
 // Size Variants
 // ==========================================================================
 .sizeSmall {
   .shareButton {
-    padding: vars.$spacing-xs vars.$spacing-sm;
     border-radius: vars.$radius-sm;
     font-size: vars.$font-caption;
     min-height: 32px;
+    padding: vars.$spacing-xs vars.$spacing-sm;
     
     .orientationVertical & {
       padding: vars.$spacing-sm;
@@ -187,10 +190,10 @@
 
 .sizeMedium {
   .shareButton {
-    padding: vars.$spacing-sm vars.$spacing-md;
     border-radius: vars.$radius-md;
     font-size: vars.$font-body-sm;
     min-height: 40px;
+    padding: vars.$spacing-sm vars.$spacing-md;
     
     .orientationVertical & {
       padding: vars.$spacing-md;
@@ -200,10 +203,10 @@
 
 .sizeLarge {
   .shareButton {
-    padding: vars.$spacing-md vars.$spacing-lg;
     border-radius: vars.$radius-lg;
     font-size: vars.$font-body;
     min-height: 48px;
+    padding: vars.$spacing-md vars.$spacing-lg;
     
     .orientationVertical & {
       padding: vars.$spacing-lg;
@@ -225,9 +228,9 @@
   padding: vars.$spacing-md;
   
   .shareButton {
-    min-width: 44px;
-    min-height: 44px;
     border-radius: vars.$radius-full;
+    min-height: 44px;
+    min-width: 44px;
     padding: vars.$spacing-sm;
   }
   
@@ -243,19 +246,19 @@
     min-width: 120px;
     
     @include mix.mobile-only {
-      min-width: auto;
       flex: 1;
+      min-width: auto;
     }
   }
 }
 
 .variantFloating {
-  position: fixed;
   bottom: vars.$spacing-base;
+  box-shadow: vars.$shadow-card-hover;
+  max-width: 200px;
+  position: fixed;
   right: vars.$spacing-base;
   z-index: 100;
-  max-width: 200px;
-  box-shadow: vars.$shadow-card-hover;
   
   .buttonsContainer {
     flex-direction: column;
@@ -263,20 +266,20 @@
   }
   
   .shareButton {
-    width: 48px;
-    height: 48px;
     border-radius: vars.$radius-full;
+    height: 48px;
     padding: 0;
+    width: 48px;
     
     &:hover {
-      width: auto;
-      padding: 0 vars.$spacing-md;
       border-radius: vars.$radius-lg;
+      padding: 0 vars.$spacing-md;
+      width: auto;
       
       .buttonLabel {
+        animation: slideIn 0.3s ease-out;
         display: inline-block;
         margin-left: vars.$spacing-xs;
-        animation: slideIn 0.3s ease-out;
       }
     }
   }
@@ -291,6 +294,7 @@
       opacity: 0;
       transform: translateX(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateX(0);
@@ -299,17 +303,17 @@
   
   @include mix.mobile-only {
     bottom: vars.$spacing-sm;
-    right: vars.$spacing-sm;
     max-width: 160px;
+    right: vars.$spacing-sm;
     
     .shareButton {
-      width: 44px;
       height: 44px;
+      width: 44px;
       
       &:hover {
-        width: 44px;
-        padding: 0;
         border-radius: vars.$radius-full;
+        padding: 0;
+        width: 44px;
         
         .buttonLabel {
           display: none;
@@ -346,7 +350,8 @@
   
   &.copied {
     --platform-color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
+
+    background: rgb(16 185 129 / 10%);
     border-color: #10b981;
     color: #10b981;
   }
@@ -363,17 +368,18 @@
 // Footer
 // ==========================================================================
 .footer {
+  border-top: 1px solid vars.$border-color;
   margin-top: vars.$spacing-lg;
   padding-top: vars.$spacing-md;
-  border-top: 1px solid vars.$border-color;
 }
 
 .footerText {
   @include mix.text-small;
+
   color: vars.$secondary-text;
+  line-height: 1.5;
   margin: 0;
   text-align: center;
-  line-height: 1.5;
 }
 
 // Animation Support
@@ -394,6 +400,7 @@
       opacity: 0;
       transform: translateY(10px) scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: translateY(0) scale(1);
@@ -411,16 +418,16 @@
   }
   
   .buttonsContainer {
-    max-width: 300px;
     margin: 0 auto;
+    max-width: 300px;
   }
 }
 
 .orientationHorizontal {
   .shareButton {
     flex-direction: column;
-    text-align: center;
     min-width: 80px;
+    text-align: center;
     
     .variantCompact & {
       flex-direction: row;
@@ -449,8 +456,8 @@
   .shareButtons {
     .orientationHorizontal .buttonsContainer {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
       gap: vars.$spacing-sm;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     }
     
     .shareButton {
@@ -462,36 +469,36 @@
     padding: vars.$spacing-lg;
     
     .shareButton {
-      padding: vars.$spacing-sm;
       font-size: vars.$font-body-sm;
+      padding: vars.$spacing-sm;
     }
   }
 }
 
 // Dark Mode Support
 // ==========================================================================
-@media (prefers-color-scheme: dark) {
-  .shareButton {
-    background: rgba(45, 55, 72, 0.8);
-    border-color: rgba(255, 255, 255, 0.1);
+// @media (prefers-color-scheme: dark) {
+//   .shareButton {
+//     background: rgba(45, 55, 72, 0.8);
+//     border-color: rgba(255, 255, 255, 0.1);
     
-    &:hover {
-      background: rgba(45, 55, 72, 0.9);
-      border-color: var(--platform-color);
-    }
-  }
+//     &:hover {
+//       background: rgba(45, 55, 72, 0.9);
+//       border-color: var(--platform-color);
+//     }
+//   }
   
-  .shareCount {
-    background: rgba(45, 55, 72, 0.6);
-  }
-}
+//   .shareCount {
+//     background: rgba(45, 55, 72, 0.6);
+//   }
+// }
 
 // High Contrast Mode
 // ==========================================================================
 @media (prefers-contrast: high) {
   .shareButton {
-    border: 3px solid black;
     background: white;
+    border: 3px solid black;
     color: black;
     
     &:hover {
@@ -544,14 +551,15 @@
 // Accessibility Enhancements
 // ==========================================================================
 .shareButton {
+  min-height: 44px;
+
   // Ensure buttons are large enough for touch
   min-width: 44px;
-  min-height: 44px;
   
   // Improve focus visibility
   &:focus-visible {
-    z-index: 1;
     outline-width: 3px;
+    z-index: 1;
   }
 }
 
@@ -565,14 +573,14 @@
   }
   
   &::after {
+    animation: spin 1s linear infinite;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    border-top: 2px solid currentcolor;
     content: '';
+    height: 16px;
     position: absolute;
     width: 16px;
-    height: 16px;
-    border: 2px solid transparent;
-    border-top: 2px solid currentColor;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
   }
   
   @keyframes spin {

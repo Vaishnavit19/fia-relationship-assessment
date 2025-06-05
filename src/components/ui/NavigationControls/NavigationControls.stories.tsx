@@ -1,9 +1,14 @@
 // src/components/ui/NavigationControls/NavigationControls.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import React from 'react';
+import { fn } from 'storybook/test';
 
-import { NavigationControls, createRestartAction, createHomeAction, createSaveAction } from './NavigationControls';
+import {
+  NavigationControls,
+  createRestartAction,
+  createHomeAction,
+  createSaveAction,
+} from './NavigationControls';
 
 const meta = {
   title: 'UI/NavigationControls',
@@ -201,10 +206,7 @@ export const LastStep: Story = {
 export const WithCustomActions: Story = {
   args: {
     context: 'assessment',
-    customActions: [
-      createRestartAction(fn()),
-      createSaveAction(fn(), true, false),
-    ],
+    customActions: [createRestartAction(fn()), createSaveAction(fn(), true, false)],
     progressInfo: {
       current: 4,
       total: 7,
@@ -239,7 +241,7 @@ export const Variants: Story = {
     context: 'assessment',
     progressInfo: { current: 3, total: 7 },
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Default</h4>
@@ -247,21 +249,21 @@ export const Variants: Story = {
           <NavigationControls {...args} variant="default" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Compact</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
           <NavigationControls {...args} variant="compact" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Spaced</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
           <NavigationControls {...args} variant="spaced" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Minimal</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
@@ -283,7 +285,7 @@ export const Alignments: Story = {
   args: {
     size: 'medium',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Space Between (Default)</h4>
@@ -291,22 +293,27 @@ export const Alignments: Story = {
           <NavigationControls {...args} alignment="space-between" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Left Aligned</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
           <NavigationControls {...args} alignment="left" showNext={false} />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Center Aligned</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
-          <NavigationControls {...args} alignment="center" showPrevious={false} showNext={false} 
-            customActions={[createSaveAction(fn(), true)]} />
+          <NavigationControls
+            {...args}
+            alignment="center"
+            showPrevious={false}
+            showNext={false}
+            customActions={[createSaveAction(fn(), true)]}
+          />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Right Aligned</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
@@ -328,18 +335,18 @@ export const IconStyles: Story = {
   args: {
     showShortcuts: true,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Chevron Icons</h4>
         <NavigationControls {...args} iconStyle="chevron" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Arrow Icons</h4>
         <NavigationControls {...args} iconStyle="arrow" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Skip Icons</h4>
         <NavigationControls {...args} iconStyle="skip" />
@@ -359,7 +366,7 @@ export const Contexts: Story = {
   args: {
     progressInfo: { current: 2, total: 5 },
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Assessment Context</h4>
@@ -367,21 +374,21 @@ export const Contexts: Story = {
           <NavigationControls {...args} context="assessment" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Form Context</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
           <NavigationControls {...args} context="form" position="last" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Wizard Context</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
           <NavigationControls {...args} context="wizard" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>General Context</h4>
         <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem' }}>
@@ -408,7 +415,8 @@ export const KeyboardShortcuts: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Navigation controls with keyboard shortcuts enabled. Use arrow keys to navigate (when not focused on input fields).',
+        story:
+          'Navigation controls with keyboard shortcuts enabled. Use arrow keys to navigate (when not focused on input fields).',
       },
     },
   },
@@ -420,7 +428,7 @@ export const InteractiveDemo: Story = {
     const [currentStep, setCurrentStep] = React.useState(1);
     const [loading, setLoading] = React.useState(false);
     const totalSteps = 7;
-    
+
     const handleNext = () => {
       if (currentStep < totalSteps) {
         setLoading(true);
@@ -430,32 +438,34 @@ export const InteractiveDemo: Story = {
         }, 1000);
       }
     };
-    
+
     const handlePrevious = () => {
       if (currentStep > 1) {
         setCurrentStep(prev => prev - 1);
       }
     };
-    
+
     const handleRestart = () => {
       setCurrentStep(1);
     };
-    
+
     const getPosition = () => {
       if (currentStep === 1) return 'first';
       if (currentStep === totalSteps) return 'last';
       return 'middle';
     };
-    
+
     return (
       <div>
-        <div style={{ 
-          padding: '2rem',
-          textAlign: 'center',
-          background: '#f8fafc',
-          borderRadius: '8px',
-          marginBottom: '2rem'
-        }}>
+        <div
+          style={{
+            padding: '2rem',
+            textAlign: 'center',
+            background: '#f8fafc',
+            borderRadius: '8px',
+            marginBottom: '2rem',
+          }}
+        >
           <h3 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>
             Assessment Question {currentStep}
           </h3>
@@ -463,7 +473,7 @@ export const InteractiveDemo: Story = {
             This is a demo of interactive navigation controls.
           </p>
         </div>
-        
+
         <NavigationControls
           context="assessment"
           position={getPosition()}
@@ -475,9 +485,7 @@ export const InteractiveDemo: Story = {
             current: currentStep,
             total: totalSteps,
           }}
-          customActions={[
-            createRestartAction(handleRestart, currentStep > 1),
-          ]}
+          customActions={[createRestartAction(handleRestart, currentStep > 1)]}
           onNext={handleNext}
           onPrevious={handlePrevious}
         />
@@ -487,7 +495,8 @@ export const InteractiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive demo showing real navigation behavior with state management and loading states.',
+        story:
+          'Interactive demo showing real navigation behavior with state management and loading states.',
       },
     },
   },

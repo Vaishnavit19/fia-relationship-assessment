@@ -1,6 +1,6 @@
 // src/components/ui/ArchetypeCard/ArchetypeCard.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 import { ArchetypeCard } from './ArchetypeCard';
 
@@ -9,51 +9,54 @@ const heartfeltArchetype = {
   id: 'heartfelt',
   name: 'The Heartfelt Companion',
   title: 'Connection-Focused Partner',
-  description: 'You prioritize emotional connection and togetherness above all else. Your partner\'s happiness is your happiness, and you create deep bonds through shared experiences.',
+  description:
+    "You prioritize emotional connection and togetherness above all else. Your partner's happiness is your happiness, and you create deep bonds through shared experiences.",
   traits: [
-    'Puts partner\'s feelings first',
+    "Puts partner's feelings first",
     'Values shared experiences over individual adventures',
     'Creates emotional safety and connection',
     'Sacrifices personal preferences for relationship harmony',
-    'Thrives on intimate moments and deep conversations'
+    'Thrives on intimate moments and deep conversations',
   ],
   icon: '💝',
   color: '#87ceeb',
-  gradient: 'linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%)'
+  gradient: 'linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%)',
 };
 
 const strategicArchetype = {
   id: 'strategic',
   name: 'The Strategic Navigator',
   title: 'Logic-Driven Planner',
-  description: 'You approach relationships and travel with careful planning and practical thinking. You create well-organized adventures through efficient decision-making.',
+  description:
+    'You approach relationships and travel with careful planning and practical thinking. You create well-organized adventures through efficient decision-making.',
   traits: [
     'Makes decisions based on logic and efficiency',
     'Plans ahead to avoid problems',
     'Values practical solutions over emotional responses',
     'Creates structure and organization in relationships',
-    'Focuses on long-term benefits and outcomes'
+    'Focuses on long-term benefits and outcomes',
   ],
   icon: '🧠',
   color: '#667eea',
-  gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
 };
 
 const spontaneousArchetype = {
   id: 'spontaneous',
   name: 'The Spontaneous Explorer',
   title: 'Adventure-Seeking Spirit',
-  description: 'You embrace the unexpected and thrive on new experiences. You bring excitement to relationships through your adventurous approach to life.',
+  description:
+    'You embrace the unexpected and thrive on new experiences. You bring excitement to relationships through your adventurous approach to life.',
   traits: [
     'Embraces spontaneity and new experiences',
     'Comfortable with uncertainty and change',
     'Values personal freedom and independence',
     'Brings excitement and adventure to relationships',
-    'Thrives on exploring the unknown'
+    'Thrives on exploring the unknown',
   ],
   icon: '🌟',
   color: '#ffb347',
-  gradient: 'linear-gradient(135deg, #ffb347 0%, #ffd700 100%)'
+  gradient: 'linear-gradient(135deg, #ffb347 0%, #ffd700 100%)',
 };
 
 const meta = {
@@ -104,11 +107,11 @@ Specifically designed for the relationship assessment with:
     },
     isPrimary: {
       control: { type: 'boolean' },
-      description: 'Whether this is the user\'s primary archetype',
+      description: "Whether this is the user's primary archetype",
     },
     isSecondary: {
       control: { type: 'boolean' },
-      description: 'Whether this is the user\'s secondary archetype',
+      description: "Whether this is the user's secondary archetype",
     },
     showDetails: {
       control: { type: 'boolean' },
@@ -182,7 +185,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default archetype card showing the Heartfelt Companion with full details and traits.',
+        story:
+          'Default archetype card showing the Heartfelt Companion with full details and traits.',
       },
     },
   },
@@ -197,7 +201,7 @@ export const WithScore: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Archetype card with score display showing user\'s match percentage.',
+        story: "Archetype card with score display showing user's match percentage.",
       },
     },
   },
@@ -258,32 +262,30 @@ export const AllArchetypes: Story = {
     maxScore: 12,
     interactive: true,
   },
-  render: (args) => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
-      <ArchetypeCard 
-        {...args} 
+  render: args => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+        gap: '2rem',
+      }}
+    >
+      <ArchetypeCard
+        {...args}
         archetype={heartfeltArchetype}
         score={11}
         isPrimary={true}
         variant="result"
       />
-      <ArchetypeCard 
-        {...args} 
-        archetype={strategicArchetype}
-        score={7}
-        isSecondary={true}
-      />
-      <ArchetypeCard 
-        {...args} 
-        archetype={spontaneousArchetype}
-        score={4}
-      />
+      <ArchetypeCard {...args} archetype={strategicArchetype} score={7} isSecondary={true} />
+      <ArchetypeCard {...args} archetype={spontaneousArchetype} score={4} />
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'All three relationship archetypes displayed together with different scores and states.',
+        story:
+          'All three relationship archetypes displayed together with different scores and states.',
       },
     },
   },
@@ -295,23 +297,23 @@ export const Variants: Story = {
     score: 8,
     isPrimary: true,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Default Variant</h4>
         <ArchetypeCard {...args} variant="default" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Detailed Variant</h4>
         <ArchetypeCard {...args} variant="detailed" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Compact Variant</h4>
         <ArchetypeCard {...args} variant="compact" />
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Result Variant</h4>
         <ArchetypeCard {...args} variant="result" />
@@ -332,7 +334,7 @@ export const Sizes: Story = {
     showScore: true,
     score: 9,
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Small Size</h4>
@@ -340,14 +342,14 @@ export const Sizes: Story = {
           <ArchetypeCard {...args} size="small" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Medium Size</h4>
         <div style={{ maxWidth: '400px' }}>
           <ArchetypeCard {...args} size="medium" />
         </div>
       </div>
-      
+
       <div>
         <h4 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Large Size</h4>
         <div style={{ maxWidth: '500px' }}>
@@ -372,25 +374,17 @@ export const CompactComparison: Story = {
     showTraits: false,
     maxScore: 12,
   },
-  render: (args) => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
-      <ArchetypeCard 
-        {...args} 
-        archetype={heartfeltArchetype}
-        score={11}
-        isPrimary={true}
-      />
-      <ArchetypeCard 
-        {...args} 
-        archetype={strategicArchetype}
-        score={7}
-        isSecondary={true}
-      />
-      <ArchetypeCard 
-        {...args} 
-        archetype={spontaneousArchetype}
-        score={4}
-      />
+  render: args => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      <ArchetypeCard {...args} archetype={heartfeltArchetype} score={11} isPrimary={true} />
+      <ArchetypeCard {...args} archetype={strategicArchetype} score={7} isSecondary={true} />
+      <ArchetypeCard {...args} archetype={spontaneousArchetype} score={4} />
     </div>
   ),
   parameters: {
@@ -410,23 +404,33 @@ export const ResultsDisplay: Story = {
     actionText: 'Read Full Analysis',
     maxScore: 12,
   },
-  render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+  render: args => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+        maxWidth: '600px',
+        margin: '0 auto',
+      }}
+    >
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2 style={{ color: '#2d3748', margin: '0 0 0.5rem 0' }}>Your Assessment Results</h2>
-        <p style={{ color: '#718096', margin: 0 }}>Discover your relationship archetype based on your travel preferences</p>
+        <p style={{ color: '#718096', margin: 0 }}>
+          Discover your relationship archetype based on your travel preferences
+        </p>
       </div>
-      
-      <ArchetypeCard 
-        {...args} 
+
+      <ArchetypeCard
+        {...args}
         archetype={heartfeltArchetype}
         score={11}
         isPrimary={true}
         primaryBadge="Your Primary Type"
       />
-      
-      <ArchetypeCard 
-        {...args} 
+
+      <ArchetypeCard
+        {...args}
         archetype={strategicArchetype}
         score={7}
         isSecondary={true}
@@ -438,7 +442,8 @@ export const ResultsDisplay: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Complete results display showing primary and secondary archetypes as they would appear in the assessment results.',
+        story:
+          'Complete results display showing primary and secondary archetypes as they would appear in the assessment results.',
       },
     },
   },
@@ -452,14 +457,22 @@ export const EducationalOverview: Story = {
     actionText: 'Learn More',
     variant: 'detailed',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2 style={{ color: '#2d3748', margin: '0 0 0.5rem 0' }}>Relationship Archetypes</h2>
-        <p style={{ color: '#718096', margin: 0 }}>Discover the three primary relationship styles and how they approach travel together</p>
+        <p style={{ color: '#718096', margin: 0 }}>
+          Discover the three primary relationship styles and how they approach travel together
+        </p>
       </div>
-      
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: '2rem',
+        }}
+      >
         <ArchetypeCard {...args} archetype={heartfeltArchetype} />
         <ArchetypeCard {...args} archetype={strategicArchetype} />
         <ArchetypeCard {...args} archetype={spontaneousArchetype} />
@@ -469,7 +482,8 @@ export const EducationalOverview: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Educational overview showing all three archetypes for learning about relationship types.',
+        story:
+          'Educational overview showing all three archetypes for learning about relationship types.',
       },
     },
   },

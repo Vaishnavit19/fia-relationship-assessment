@@ -88,7 +88,7 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
   animated = true,
 }) => {
   const percentage = score && maxScore ? Math.round((score / maxScore) * 100) : 0;
-  
+
   const cardClasses = [
     styles.archetypeCard,
     styles[`variant${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
@@ -109,12 +109,12 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (interactive && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      if (onClick) onClick();
-    }
-  };
+  // const handleKeyDown = (event: React.KeyboardEvent) => {
+  //   if (interactive && (event.key === 'Enter' || event.key === ' ')) {
+  //     event.preventDefault();
+  //     if (onClick) onClick();
+  //   }
+  // };
 
   // Get archetype-specific icon
   const getArchetypeIcon = () => {
@@ -135,7 +135,6 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
       className={cardClasses}
       variant={variant === 'result' ? 'elevated' : 'default'}
       onClick={handleClick}
-      onKeyDown={interactive ? handleKeyDown : undefined}
       tabIndex={interactive ? 0 : undefined}
       role={interactive ? 'button' : undefined}
       aria-label={interactive ? `Learn more about ${archetype.name}` : undefined}
@@ -162,9 +161,7 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
           <span className={styles.emoji} role="img" aria-label={archetype.name}>
             {archetype.icon}
           </span>
-          <div className={styles.iconOverlay}>
-            {getArchetypeIcon()}
-          </div>
+          <div className={styles.iconOverlay}>{getArchetypeIcon()}</div>
         </div>
 
         <div className={styles.headerContent}>
@@ -179,9 +176,7 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
               {score}
               <span className={styles.maxScore}>/{maxScore}</span>
             </div>
-            <div className={styles.scorePercentage}>
-              {percentage}%
-            </div>
+            <div className={styles.scorePercentage}>{percentage}%</div>
           </div>
         )}
       </div>
@@ -212,14 +207,9 @@ export const ArchetypeCard: React.FC<ArchetypeCardProps> = ({
       {showScore && score !== undefined && (
         <div className={styles.scoreBar}>
           <div className={styles.scoreTrack}>
-            <div 
-              className={styles.scoreFill}
-              style={{ width: `${percentage}%` }}
-            />
+            <div className={styles.scoreFill} style={{ width: `${percentage}%` }} />
           </div>
-          <span className={styles.scoreLabel}>
-            Match: {percentage}%
-          </span>
+          <span className={styles.scoreLabel}>Match: {percentage}%</span>
         </div>
       )}
 

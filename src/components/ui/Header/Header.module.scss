@@ -5,15 +5,15 @@
   background: vars.$card-bg;
   border-bottom: 1px solid vars.$border-color;
   position: relative;
-  z-index: 100;
   transition: vars.$transition-standard;
+  z-index: 100;
 
   &Fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     box-shadow: vars.$shadow-card;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
   }
 
   &WithProgress {
@@ -22,40 +22,41 @@
 }
 
 .container {
-  @include mix.container;
+  align-items: center;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  align-items: center;
-  padding-top: vars.$spacing-lg;
-  padding-bottom: vars.$spacing-lg;
   min-height: 70px;
-
+  padding-bottom: vars.$spacing-lg;
+  padding-top: vars.$spacing-lg;
+  
+  @include mix.container;
   @include mix.mobile-only {
     grid-template-columns: auto 1fr auto;
-    padding-top: vars.$spacing-md;
-    padding-bottom: vars.$spacing-md;
     min-height: 60px;
+    padding-bottom: vars.$spacing-md;
+    padding-top: vars.$spacing-md;
   }
 }
 
 // Left Section - Back button or Logo
 .leftSection {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-self: start;
 }
 
 .backButton {
   @include mix.button-base;
+
+  align-items: center;
   background: none;
   border: none;
+  border-radius: vars.$radius-sm;
   color: vars.$primary-text;
   display: flex;
-  align-items: center;
+  font-weight: vars.$font-medium;
   gap: vars.$spacing-xs;
   padding: vars.$spacing-sm vars.$spacing-md;
-  border-radius: vars.$radius-sm;
-  font-weight: vars.$font-medium;
   transition: vars.$transition-standard;
 
   &:hover {
@@ -80,13 +81,13 @@
 }
 
 .logo {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-sm;
   color: vars.$primary-text;
-  text-decoration: none;
-  font-weight: vars.$font-bold;
+  display: flex;
   font-size: vars.$font-body-lg;
+  font-weight: vars.$font-bold;
+  gap: vars.$spacing-sm;
+  text-decoration: none;
   transition: vars.$transition-standard;
 
   &:hover {
@@ -95,9 +96,9 @@
   }
 
   &:focus-visible {
+    border-radius: vars.$radius-sm;
     outline: 2px solid vars.$primary-accent-solid;
     outline-offset: 2px;
-    border-radius: vars.$radius-sm;
   }
 }
 
@@ -118,25 +119,25 @@
 
 // Center Section - Progress or Title
 .centerSection {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   justify-self: center;
-  width: 100%;
   max-width: 400px;
+  width: 100%;
 
   @include mix.mobile-only {
-    max-width: none;
     margin: 0 vars.$spacing-sm;
+    max-width: none;
   }
 }
 
 .pageTitle {
+  color: vars.$primary-text;
   font-size: vars.$font-subtitle;
   font-weight: vars.$font-bold;
-  color: vars.$primary-text;
-  text-align: center;
   margin: 0;
+  text-align: center;
 
   @include mix.mobile-only {
     font-size: vars.$font-body-lg;
@@ -144,22 +145,22 @@
 }
 
 .progressContainer {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: vars.$spacing-xs;
+  width: 100%;
 }
 
 .progressInfo {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .progressText {
+  color: vars.$secondary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  color: vars.$secondary-text;
   text-align: center;
 
   @include mix.mobile-only {
@@ -169,9 +170,10 @@
 
 .progressBar {
   @include mix.progress-bar;
-  height: 6px;
+
   background: vars.$light-bg;
   border-radius: vars.$radius-xl;
+  height: 6px;
   overflow: hidden;
   position: relative;
 
@@ -181,26 +183,23 @@
 }
 
 .progressFill {
-  height: 100%;
   background: vars.$primary-accent;
   border-radius: vars.$radius-xl;
-  transition: vars.$transition-progress;
+  height: 100%;
   position: relative;
+  transition: vars.$transition-progress;
 
   &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    animation: shimmer 2s infinite;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
+      rgb(255 255 255 / 30%) 50%,
       transparent 100%
     );
-    animation: shimmer 2s infinite;
+    content: '';
+    inset: 0;
+    position: absolute;
   }
 }
 
@@ -208,6 +207,7 @@
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -215,14 +215,14 @@
 
 // Right Section - Navigation
 .rightSection {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-self: end;
 }
 
 .nav {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-sm;
 
   @include mix.mobile-only {
@@ -231,21 +231,21 @@
 }
 
 .navLink {
-  display: flex;
   align-items: center;
-  gap: vars.$spacing-xs;
-  color: vars.$secondary-text;
-  text-decoration: none;
-  padding: vars.$spacing-sm;
   border-radius: vars.$radius-sm;
-  font-weight: vars.$font-medium;
+  color: vars.$secondary-text;
+  display: flex;
   font-size: vars.$font-body-sm;
-  transition: vars.$transition-standard;
+  font-weight: vars.$font-medium;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-sm;
   position: relative;
+  text-decoration: none;
+  transition: vars.$transition-standard;
 
   &:hover {
-    color: vars.$primary-text;
     background: vars.$hover-bg;
+    color: vars.$primary-text;
   }
 
   &:focus-visible {
@@ -254,19 +254,19 @@
   }
 
   &Active {
+    background: rgb(255 107 157 / 10%);
     color: vars.$primary-accent-solid;
-    background: rgba(255, 107, 157, 0.1);
 
     &::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 2px;
       background: vars.$primary-accent-solid;
       border-radius: vars.$radius-xl;
+      bottom: -2px;
+      content: '';
+      height: 2px;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 20px;
     }
   }
 
@@ -293,29 +293,29 @@
 
   // Ensure navigation icons are touch-friendly
   .navLink {
-    min-width: 44px;
-    min-height: 44px;
     justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
   }
 
   .backButton {
-    min-width: 44px;
-    min-height: 44px;
     justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
 // Dark mode support (if needed later)
-@media (prefers-color-scheme: dark) {
-  .header {
-    background: #1a202c;
-    border-bottom-color: #2d3748;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .header {
+//     background: #1a202c;
+//     border-bottom-color: #2d3748;
+//   }
 
-  .progressBar {
-    background: #2d3748;
-  }
-}
+//   .progressBar {
+//     background: #2d3748;
+//   }
+// }
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {

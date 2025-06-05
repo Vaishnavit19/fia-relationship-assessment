@@ -1,7 +1,7 @@
 // src/components/ui/QuestionCard/QuestionCard.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
 import { MapPin, Heart, Compass } from 'lucide-react';
+import { fn } from 'storybook/test';
 
 import { QuestionCard } from './QuestionCard';
 
@@ -10,18 +10,18 @@ const sampleOptions = [
   {
     letter: 'A',
     text: "Let's pick whatever number of days makes us both feel relaxed and connected.",
-    description: 'Focus on emotional comfort and togetherness'
+    description: 'Focus on emotional comfort and togetherness',
   },
   {
     letter: 'B',
     text: "I'll run the costs and schedules to choose the most efficient trip length.",
-    description: 'Practical approach with budget and time optimization'
+    description: 'Practical approach with budget and time optimization',
   },
   {
     letter: 'C',
     text: "Let's go as long as our schedules allow—more days means more chances for spontaneous adventures.",
-    description: 'Embrace flexibility and spontaneous experiences'
-  }
+    description: 'Embrace flexibility and spontaneous experiences',
+  },
 ];
 
 const destinationOptions = [
@@ -36,22 +36,22 @@ const destinationOptions = [
   {
     letter: 'C',
     text: "London vibe calls to me—let's chase that spontaneity.",
-  }
+  },
 ];
 
 const shortOptions = [
   {
     letter: 'A',
-    text: 'Plan everything in advance'
+    text: 'Plan everything in advance',
   },
   {
     letter: 'B',
-    text: 'Mix of planning and spontaneity'
+    text: 'Mix of planning and spontaneity',
   },
   {
     letter: 'C',
-    text: 'Go with the flow completely'
-  }
+    text: 'Go with the flow completely',
+  },
 ];
 
 const meta = {
@@ -182,7 +182,8 @@ export const WithSelection: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Question card with an option selected, showing the selected state and enabled continue button.',
+        story:
+          'Question card with an option selected, showing the selected state and enabled continue button.',
       },
     },
   },
@@ -190,8 +191,8 @@ export const WithSelection: Story = {
 
 export const WithDescription: Story = {
   args: {
-    question: "Time to choose your destination. What drives your decision?",
-    description: "Consider how you and your partner typically make travel decisions together.",
+    question: 'Time to choose your destination. What drives your decision?',
+    description: 'Consider how you and your partner typically make travel decisions together.',
     options: destinationOptions,
     questionNumber: 2,
     icon: <MapPin size={24} />,
@@ -239,7 +240,7 @@ export const Variants: Story = {
     options: shortOptions,
     selectedOption: 'B',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h3 style={{ margin: '0 0 1rem 0', color: '#2d3748' }}>Default Variant</h3>
@@ -266,24 +267,25 @@ export const Variants: Story = {
 
 export const AssessmentFlow: Story = {
   args: {
-    question: "You spot an amazing street artist performing, but your phone battery is at 5%. What do you do?",
-    description: "This is the final question of your assessment.",
+    question:
+      'You spot an amazing street artist performing, but your phone battery is at 5%. What do you do?',
+    description: 'This is the final question of your assessment.',
     options: [
       {
         letter: 'A',
         text: 'Put phone away and enjoy the moment.',
-        description: 'Live in the present and create memories'
+        description: 'Live in the present and create memories',
       },
       {
         letter: 'B',
         text: 'Take one quick photo, then save battery.',
-        description: 'Balance capturing memories with practical needs'
+        description: 'Balance capturing memories with practical needs',
       },
       {
-        letter: 'C', 
+        letter: 'C',
         text: 'Let battery die to capture this.',
-        description: 'Prioritize documenting the unique experience'
-      }
+        description: 'Prioritize documenting the unique experience',
+      },
     ],
     questionNumber: 7,
     totalQuestions: 7,
@@ -302,7 +304,7 @@ export const AssessmentFlow: Story = {
 
 export const MultiSelect: Story = {
   args: {
-    question: "Which travel preferences apply to you? (Select all that apply)",
+    question: 'Which travel preferences apply to you? (Select all that apply)',
     options: [
       {
         letter: 'A',
@@ -314,12 +316,12 @@ export const MultiSelect: Story = {
       },
       {
         letter: 'C',
-        text: 'I prioritize my partner\'s happiness',
+        text: "I prioritize my partner's happiness",
       },
       {
         letter: 'D',
         text: 'I like to research destinations thoroughly',
-      }
+      },
     ],
     multiSelect: true,
     selectedOption: 'A',
@@ -336,7 +338,7 @@ export const MultiSelect: Story = {
 
 export const WithoutLetters: Story = {
   args: {
-    question: "How do you prefer to handle unexpected delays during travel?",
+    question: 'How do you prefer to handle unexpected delays during travel?',
     options: shortOptions,
     showOptionLetters: false,
     selectedOption: 'B',
@@ -352,20 +354,20 @@ export const WithoutLetters: Story = {
 
 export const CustomIcons: Story = {
   args: {
-    question: "What motivates your travel decisions most?",
+    question: 'What motivates your travel decisions most?',
     options: shortOptions,
     selectedOption: 'C',
   },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <QuestionCard 
-        {...args} 
-        icon={<Heart size={24} />} 
+      <QuestionCard
+        {...args}
+        icon={<Heart size={24} />}
         question="What drives your emotional connection to travel?"
       />
-      <QuestionCard 
-        {...args} 
-        icon={<Compass size={24} />} 
+      <QuestionCard
+        {...args}
+        icon={<Compass size={24} />}
         question="How do you navigate new destinations?"
       />
     </div>
@@ -388,7 +390,8 @@ export const NoProgress: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Question card without progress indicators, useful for bonus or standalone questions.',
+        story:
+          'Question card without progress indicators, useful for bonus or standalone questions.',
       },
     },
   },

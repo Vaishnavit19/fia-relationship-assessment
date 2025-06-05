@@ -15,10 +15,10 @@
 
 // Step Details
 .stepDetails {
-  display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  display: flex;
   gap: vars.$spacing-md;
+  justify-content: space-between;
 
   @include mix.mobile-only {
     flex-direction: column;
@@ -27,29 +27,29 @@
 }
 
 .stepInfo {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: vars.$spacing-xs;
 }
 
 .stepNumber {
+  background: vars.$light-bg;
+  border-radius: vars.$radius-sm;
+  color: vars.$secondary-text;
+  display: inline-block;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  color: vars.$secondary-text;
-  background: vars.$light-bg;
   padding: vars.$spacing-xs vars.$spacing-sm;
-  border-radius: vars.$radius-sm;
-  display: inline-block;
   width: fit-content;
 }
 
 .stepTitle {
+  color: vars.$primary-text;
   font-size: vars.$font-subtitle;
   font-weight: vars.$font-semibold;
-  color: vars.$primary-text;
-  margin: 0;
   line-height: 1.3;
+  margin: 0;
 
   @include mix.mobile-only {
     font-size: vars.$font-body-lg;
@@ -57,22 +57,22 @@
 }
 
 .stepDescription {
-  font-size: vars.$font-body-sm;
   color: vars.$secondary-text;
-  margin: 0;
+  font-size: vars.$font-body-sm;
   line-height: 1.4;
+  margin: 0;
 }
 
 .completionInfo {
+  align-items: flex-end;
   display: flex;
   flex-direction: column;
   gap: vars.$spacing-xs;
-  align-items: flex-end;
   text-align: right;
 
   @include mix.mobile-only {
-    flex-direction: row;
     align-items: center;
+    flex-direction: row;
     text-align: left;
   }
 }
@@ -93,12 +93,12 @@
 
 // Step Indicators
 .stepIndicators {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  gap: vars.$spacing-sm;
-  padding: vars.$spacing-md 0;
+  display: flex;
   flex-wrap: wrap;
+  gap: vars.$spacing-sm;
+  justify-content: center;
+  padding: vars.$spacing-md 0;
 
   @include mix.mobile-only {
     gap: vars.$spacing-xs;
@@ -107,18 +107,19 @@
 
 .stepIndicator {
   @include mix.button-base;
-  display: flex;
+
   align-items: center;
-  gap: vars.$spacing-xs;
-  padding: vars.$spacing-xs;
-  border-radius: vars.$radius-full;
   background: transparent;
   border: none;
+  border-radius: vars.$radius-full;
   cursor: pointer;
-  transition: vars.$transition-standard;
+  display: flex;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs;
   position: relative;
+  transition: vars.$transition-standard;
 
-  &:hover:not(.stepInaccessible):not(:disabled) {
+  &:hover:not(.stepInaccessible, :disabled) {
     background: vars.$hover-bg;
     transform: scale(1.1);
   }
@@ -131,23 +132,23 @@
   &Completed {
     .stepIndicatorContent {
       background: vars.$success-accent-solid;
-      color: white;
       border-color: vars.$success-accent-solid;
+      color: white;
     }
   }
 
   &Current {
     .stepIndicatorContent {
       background: vars.$primary-accent-solid;
-      color: white;
       border-color: vars.$primary-accent-solid;
-      box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.3);
+      box-shadow: 0 0 0 3px rgb(255 107 157 / 30%);
+      color: white;
     }
   }
 
   &Inaccessible {
-    opacity: 0.4;
     cursor: not-allowed;
+    opacity: 0.4;
 
     &:hover {
       background: transparent;
@@ -157,30 +158,31 @@
 }
 
 .stepIndicatorContent {
-  width: 28px;
-  height: 28px;
-  border-radius: vars.$radius-full;
-  border: 2px solid vars.$border-color;
-  background: vars.$card-bg;
-  display: flex;
   align-items: center;
+  background: vars.$card-bg;
+  border: 2px solid vars.$border-color;
+  border-radius: vars.$radius-full;
+  color: vars.$secondary-text;
+  display: flex;
+  height: 28px;
   justify-content: center;
   transition: vars.$transition-standard;
-  color: vars.$secondary-text;
+  width: 28px;
 }
 
 .currentDot {
-  width: 8px;
-  height: 8px;
-  border-radius: vars.$radius-full;
-  background: currentColor;
   animation: pulse 2s infinite;
+  background: currentcolor;
+  border-radius: vars.$radius-full;
+  height: 8px;
+  width: 8px;
 
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
       transform: scale(1);
     }
+
     50% {
       opacity: 0.7;
       transform: scale(0.8);
@@ -189,20 +191,20 @@
 }
 
 .stepLabel {
+  color: vars.$primary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
-  color: vars.$primary-text;
   white-space: nowrap;
 }
 
 // Navigation Controls
 .navigationControls {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: vars.$spacing-md;
-  padding-top: vars.$spacing-md;
   border-top: 1px solid vars.$border-color;
+  display: flex;
+  gap: vars.$spacing-md;
+  justify-content: space-between;
+  padding-top: vars.$spacing-md;
 
   @include mix.mobile-only {
     flex-direction: column;
@@ -212,13 +214,13 @@
 
 .navigationLeft,
 .navigationRight {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-sm;
 
   @include mix.mobile-only {
-    width: 100%;
     justify-content: center;
+    width: 100%;
   }
 }
 
@@ -240,13 +242,13 @@
 
 // Quick Stats
 .quickStats {
-  display: flex;
-  justify-content: center;
-  gap: vars.$spacing-2xl;
-  padding: vars.$spacing-lg;
   background: vars.$light-bg;
-  border-radius: vars.$radius-md;
   border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-md;
+  display: flex;
+  gap: vars.$spacing-2xl;
+  justify-content: center;
+  padding: vars.$spacing-lg;
 
   @include mix.mobile-only {
     gap: vars.$spacing-lg;
@@ -255,16 +257,16 @@
 }
 
 .stat {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: vars.$spacing-xs;
 }
 
 .statValue {
+  color: vars.$primary-text;
   font-size: vars.$font-section;
   font-weight: vars.$font-bold;
-  color: vars.$primary-text;
 
   @include mix.mobile-only {
     font-size: vars.$font-subtitle;
@@ -272,11 +274,11 @@
 }
 
 .statLabel {
-  font-size: vars.$font-body-sm;
   color: vars.$secondary-text;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: vars.$font-body-sm;
   font-weight: vars.$font-medium;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 // Variant Styles
@@ -313,10 +315,10 @@
   gap: vars.$spacing-xl;
   
   .stepIndicators {
-    padding: vars.$spacing-lg 0;
     background: vars.$light-bg;
     border-radius: vars.$radius-md;
     margin: vars.$spacing-md 0;
+    padding: vars.$spacing-lg 0;
   }
 }
 
@@ -327,11 +329,11 @@
 
 .positionBottom {
   .navigationControls {
-    border-top: none;
     border-bottom: 1px solid vars.$border-color;
-    padding-top: 0;
-    padding-bottom: vars.$spacing-md;
+    border-top: none;
     order: -1;
+    padding-bottom: vars.$spacing-md;
+    padding-top: 0;
   }
 }
 
@@ -339,31 +341,31 @@
   max-width: 300px;
   
   .stepIndicators {
-    flex-direction: column;
     align-items: stretch;
+    flex-direction: column;
     gap: vars.$spacing-xs;
   }
 
   .stepIndicator {
-    justify-content: flex-start;
-    padding: vars.$spacing-sm vars.$spacing-md;
-    border-radius: vars.$radius-md;
     background: vars.$card-bg;
     border: 1px solid vars.$border-color;
+    border-radius: vars.$radius-md;
+    justify-content: flex-start;
+    padding: vars.$spacing-sm vars.$spacing-md;
 
-    &:hover:not(.stepInaccessible):not(:disabled) {
+    &:hover:not(.stepInaccessible, :disabled) {
       background: vars.$hover-bg;
-      transform: none;
       border-color: vars.$primary-accent-solid;
+      transform: none;
     }
 
     &Completed {
-      background: rgba(135, 206, 235, 0.1);
+      background: rgb(135 206 235 / 10%);
       border-color: vars.$success-accent-solid;
     }
 
     &Current {
-      background: rgba(255, 107, 157, 0.1);
+      background: rgb(255 107 157 / 10%);
       border-color: vars.$primary-accent-solid;
     }
   }
@@ -375,8 +377,8 @@
 
   .navigationLeft,
   .navigationRight {
-    width: 100%;
     justify-content: center;
+    width: 100%;
   }
 }
 
@@ -391,8 +393,8 @@
 
   .quickStats {
     background: linear-gradient(135deg, 
-      rgba(255, 107, 157, 0.05) 0%, 
-      rgba(135, 206, 235, 0.05) 100%
+      rgb(255 107 157 / 5%) 0%, 
+      rgb(135 206 235 / 5%) 100%
     );
   }
 }
@@ -417,8 +419,8 @@
   }
 
   .stepIndicatorContent {
-    width: 24px;
     height: 24px;
+    width: 24px;
   }
 
   .quickStats {
@@ -427,24 +429,24 @@
 }
 
 // Dark Mode Support
-@media (prefers-color-scheme: dark) {
-  .assessmentProgress {
-    .stepNumber {
-      background: #2d3748;
-      color: #e2e8f0;
-    }
+// @media (prefers-color-scheme: dark) {
+//   .assessmentProgress {
+//     .stepNumber {
+//       background: #2d3748;
+//       color: #e2e8f0;
+//     }
 
-    .stepIndicatorContent {
-      background: #2d3748;
-      border-color: #4a5568;
-    }
+//     .stepIndicatorContent {
+//       background: #2d3748;
+//       border-color: #4a5568;
+//     }
 
-    .quickStats {
-      background: #2d3748;
-      border-color: #4a5568;
-    }
-  }
-}
+//     .quickStats {
+//       background: #2d3748;
+//       border-color: #4a5568;
+//     }
+//   }
+// }
 
 // Reduced Motion Support
 @media (prefers-reduced-motion: reduce) {
@@ -455,7 +457,7 @@
   .stepIndicator {
     transition: none;
 
-    &:hover:not(.stepInaccessible):not(:disabled) {
+    &:hover:not(.stepInaccessible, :disabled) {
       transform: none;
     }
   }
