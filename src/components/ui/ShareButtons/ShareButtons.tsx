@@ -1,24 +1,26 @@
 // src/components/ui/ShareButtons/ShareButtons.tsx
 'use client';
 
-import { 
-  Share2, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
-  Mail, 
-  Link2, 
+import {
+  Share2,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Mail,
+  Link2,
   Download,
   Copy,
   Check,
-  MessageCircle
+  MessageCircle,
 } from 'lucide-react';
 import React, { useState, useCallback } from 'react';
 
-import { Button } from '../Button';
+// import { Button } from '../Button';
 import { Card } from '../Card';
 
 import styles from './ShareButtons.module.scss';
+
+console.log('unused', Link2);
 
 export interface ShareData {
   /** Title to share */
@@ -37,7 +39,16 @@ export interface ShareButtonsProps {
   /** Data to share */
   shareData: ShareData;
   /** Available sharing platforms */
-  platforms?: ('facebook' | 'twitter' | 'linkedin' | 'email' | 'whatsapp' | 'copy' | 'download' | 'native')[];
+  platforms?: (
+    | 'facebook'
+    | 'twitter'
+    | 'linkedin'
+    | 'email'
+    | 'whatsapp'
+    | 'copy'
+    | 'download'
+    | 'native'
+  )[];
   /** Component variant */
   variant?: 'default' | 'compact' | 'detailed' | 'floating';
   /** Button size */
@@ -73,7 +84,7 @@ const PLATFORM_CONFIG = {
     name: 'Facebook',
     icon: Facebook,
     color: '#1877f2',
-    getUrl: (data: ShareData) => 
+    getUrl: (data: ShareData) =>
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.url)}&quote=${encodeURIComponent(data.text)}`,
   },
   twitter: {
@@ -132,44 +143,47 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
   // Check if Web Share API is supported
   const isNativeShareSupported = typeof navigator !== 'undefined' && 'share' in navigator;
 
-  const handlePlatformShare = useCallback(async (platform: string) => {
-    try {
-      setIsSharing(true);
-      
-      if (platform === 'native' && isNativeShareSupported) {
-        await navigator.share({
-          title: shareData.title,
-          text: shareData.text,
-          url: shareData.url,
-        });
-      } else if (platform === 'copy') {
-        await navigator.clipboard.writeText(shareData.url);
-        setCopiedUrl(true);
-        setTimeout(() => setCopiedUrl(false), 2000);
-      } else if (platform === 'download' && onDownload) {
-        onDownload();
-      } else if (PLATFORM_CONFIG[platform as keyof typeof PLATFORM_CONFIG]) {
-        const config = PLATFORM_CONFIG[platform as keyof typeof PLATFORM_CONFIG];
-        const shareUrl = config.getUrl(shareData);
-        window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
-      }
+  const handlePlatformShare = useCallback(
+    async (platform: string) => {
+      try {
+        setIsSharing(true);
 
-      if (onShare) {
-        onShare(platform);
+        if (platform === 'native' && isNativeShareSupported) {
+          await navigator.share({
+            title: shareData.title,
+            text: shareData.text,
+            url: shareData.url,
+          });
+        } else if (platform === 'copy') {
+          await navigator.clipboard.writeText(shareData.url);
+          setCopiedUrl(true);
+          setTimeout(() => setCopiedUrl(false), 2000);
+        } else if (platform === 'download' && onDownload) {
+          onDownload();
+        } else if (PLATFORM_CONFIG[platform as keyof typeof PLATFORM_CONFIG]) {
+          const config = PLATFORM_CONFIG[platform as keyof typeof PLATFORM_CONFIG];
+          const shareUrl = config.getUrl(shareData);
+          window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
+        }
+
+        if (onShare) {
+          onShare(platform);
+        }
+      } catch (error) {
+        console.error(`Failed to share on ${platform}:`, error);
+        if (onError) {
+          onError(platform, error as Error);
+        }
+      } finally {
+        setIsSharing(false);
       }
-    } catch (error) {
-      console.error(`Failed to share on ${platform}:`, error);
-      if (onError) {
-        onError(platform, error as Error);
-      }
-    } finally {
-      setIsSharing(false);
-    }
-  }, [shareData, onShare, onError, onDownload, isNativeShareSupported]);
+    },
+    [shareData, onShare, onError, onDownload, isNativeShareSupported]
+  );
 
   const getButtonContent = (platform: string) => {
     const config = PLATFORM_CONFIG[platform as keyof typeof PLATFORM_CONFIG];
-    
+
     if (platform === 'native') {
       return {
         icon: Share2,
@@ -177,7 +191,7 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
         color: '#6b7280',
       };
     }
-    
+
     if (platform === 'copy') {
       return {
         icon: copiedUrl ? Check : Copy,
@@ -185,7 +199,7 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
         color: copiedUrl ? '#10b981' : '#6b7280',
       };
     }
-    
+
     if (platform === 'download') {
       return {
         icon: Download,
@@ -194,11 +208,13 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
       };
     }
 
-    return config ? {
-      icon: config.icon,
-      label: config.name,
-      color: config.color,
-    } : null;
+    return config
+      ? {
+          icon: config.icon,
+          label: config.name,
+          color: config.color,
+        }
+      : null;
   };
 
   const containerClasses = [
@@ -244,7 +260,9 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
           <button
             type="button"
             className={`${styles.shareButton} ${styles.nativeButton}`}
-            onClick={() => {void handlePlatformShare('native')}}
+            onClick={() => {
+              void handlePlatformShare('native');
+            }}
             disabled={isSharing}
             aria-label="Share using device's native share menu"
           >
@@ -258,38 +276,44 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({
         )}
 
         {/* Platform Buttons */}
-        {platforms.filter(p => p !== 'native' && p !== 'download').map((platform) => {
-          const content = getButtonContent(platform);
-          if (!content) return null;
+        {platforms
+          .filter(p => p !== 'native' && p !== 'download')
+          .map(platform => {
+            const content = getButtonContent(platform);
+            if (!content) return null;
 
-          const IconComponent = content.icon;
+            const IconComponent = content.icon;
 
-          return (
-            <button
-              key={platform}
-              type="button"
-              className={`${styles.shareButton} ${styles[`${platform}Button`]}`}
-              onClick={() => {void handlePlatformShare(platform)}}
-              disabled={isSharing}
-              style={{ '--platform-color': content.color } as React.CSSProperties}
-              aria-label={`Share on ${content.label}`}
-            >
-              <div className={styles.buttonIcon}>
-                <IconComponent size={size === 'small' ? 16 : size === 'large' ? 24 : 20} />
-              </div>
-              {showLabels && variant !== 'compact' && (
-                <span className={styles.buttonLabel}>{content.label}</span>
-              )}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={platform}
+                type="button"
+                className={`${styles.shareButton} ${styles[`${platform}Button`]}`}
+                onClick={() => {
+                  void handlePlatformShare(platform);
+                }}
+                disabled={isSharing}
+                style={{ '--platform-color': content.color } as React.CSSProperties}
+                aria-label={`Share on ${content.label}`}
+              >
+                <div className={styles.buttonIcon}>
+                  <IconComponent size={size === 'small' ? 16 : size === 'large' ? 24 : 20} />
+                </div>
+                {showLabels && variant !== 'compact' && (
+                  <span className={styles.buttonLabel}>{content.label}</span>
+                )}
+              </button>
+            );
+          })}
 
         {/* Download Button */}
         {platforms.includes('download') && allowDownload && (
           <button
             type="button"
             className={`${styles.shareButton} ${styles.downloadButton}`}
-            onClick={() => {void handlePlatformShare('download')}}
+            onClick={() => {
+              void handlePlatformShare('download');
+            }}
             disabled={isSharing}
             aria-label={downloadText}
           >

@@ -5,7 +5,7 @@
 // src/components/pages/AssessmentPage/AssessmentPage.tsx
 'use client';
 
-import { ArrowLeft, ArrowRight, Home, AlertCircle } from 'lucide-react';
+import { Home, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -15,7 +15,7 @@ import { Card } from '@/components/ui/Card';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Modal } from '@/components/ui/Modal';
 import NavigationControls from '@/components/ui/NavigationControls';
-import OptionButton from '@/components/ui/OptionButton';
+// import OptionButton from '@/components/ui/OptionButton';
 import PageLayout from '@/components/ui/PageLayout';
 import QuestionCard from '@/components/ui/QuestionCard';
 import UserInfoForm from '@/components/ui/UserInfoForm';
@@ -49,6 +49,8 @@ export const AssessmentPage: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState<AnswerOption | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  console.log('unused var', userData);
 
   // Handle assessment completion
   useEffect(() => {

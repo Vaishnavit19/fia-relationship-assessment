@@ -1,6 +1,6 @@
 // src/components/ui/Modal/Modal.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { AlertTriangle, CheckCircle, Info, Settings, Heart } from 'lucide-react';
+import { Settings, Heart } from 'lucide-react';
 import React from 'react';
 import { fn } from 'storybook/test';
 

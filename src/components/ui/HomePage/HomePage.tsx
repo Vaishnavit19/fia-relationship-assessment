@@ -1,7 +1,7 @@
 // src/components/ui/HomePage/HomePage.tsx
 'use client';
 
-import { ArrowRight, Clock, Users, Heart, Brain, Compass, Star, CheckCircle } from 'lucide-react';
+import { ArrowRight, Clock, Users, Heart, Star, CheckCircle } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '../Button';
@@ -28,18 +28,18 @@ const features = [
   {
     icon: <Clock size={24} />,
     title: '5-7 Minutes',
-    description: 'Quick assessment based on travel scenarios'
+    description: 'Quick assessment based on travel scenarios',
   },
   {
     icon: <Users size={24} />,
     title: '3 Archetypes',
-    description: 'Discover your unique relationship style'
+    description: 'Discover your unique relationship style',
   },
   {
     icon: <Star size={24} />,
     title: 'Personalized Results',
-    description: 'Detailed insights into your dynamics'
-  }
+    description: 'Detailed insights into your dynamics',
+  },
 ];
 
 const archetypes = [
@@ -48,22 +48,22 @@ const archetypes = [
     icon: '💝',
     name: 'The Heartfelt Companion',
     description: 'Prioritizes emotional connection and togetherness',
-    color: '#87ceeb'
+    color: '#87ceeb',
   },
   {
     id: 'strategic',
     icon: '🧠',
     name: 'The Strategic Navigator',
     description: 'Approaches relationships with careful planning',
-    color: '#667eea'
+    color: '#667eea',
   },
   {
     id: 'spontaneous',
     icon: '🌟',
     name: 'The Spontaneous Explorer',
     description: 'Embraces unexpected adventures and experiences',
-    color: '#ffb347'
-  }
+    color: '#ffb347',
+  },
 ];
 
 const benefits = [
@@ -71,7 +71,7 @@ const benefits = [
   'Learn how you balance emotion, logic, and adventure',
   'Discover insights through relatable travel scenarios',
   'Get personalized recommendations for your type',
-  'Share results with your partner for deeper connection'
+  'Share results with your partner for deeper connection',
 ];
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -111,10 +111,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span className={styles.gradientText}> Relationship Style</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Through travel scenarios that reveal how you balance emotional connection, 
-              logical planning, and adventurous exploration in your relationships.
+              Through travel scenarios that reveal how you balance emotional connection, logical
+              planning, and adventurous exploration in your relationships.
             </p>
-            
+
             {/* CTA Buttons */}
             <div className={styles.ctaContainer}>
               {hasProgress ? (
@@ -156,9 +156,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className={styles.features}>
               {features.map((feature, index) => (
                 <div key={index} className={styles.feature}>
-                  <div className={styles.featureIcon}>
-                    {feature.icon}
-                  </div>
+                  <div className={styles.featureIcon}>{feature.icon}</div>
                   <div className={styles.featureContent}>
                     <h3 className={styles.featureTitle}>{feature.title}</h3>
                     <p className={styles.featureDescription}>{feature.description}</p>
@@ -182,7 +180,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </span>
                 </div>
               ))}
-              
+
               {/* Central Visual */}
               <div className={styles.centralVisual}>
                 <div className={styles.innerCircle}>
@@ -213,7 +211,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
           </div>
-          
+
           <div className={styles.step}>
             <div className={styles.stepNumber}>2</div>
             <div className={styles.stepContent}>
@@ -223,7 +221,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
           </div>
-          
+
           <div className={styles.step}>
             <div className={styles.stepNumber}>3</div>
             <div className={styles.stepContent}>
@@ -246,10 +244,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <div className={styles.archetypeCards}>
-          {archetypes.map((archetype) => (
+          {archetypes.map(archetype => (
             <Card key={archetype.id} className={styles.archetypeCard} variant="elevated">
               <div className={styles.archetypeHeader}>
-                <div 
+                <div
                   className={styles.archetypeIcon}
                   style={{ '--archetype-color': archetype.color } as React.CSSProperties}
                 >
@@ -266,11 +264,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         {onLearnMore && (
           <div className={styles.learnMoreContainer}>
-            <Button
-              variant="secondary"
-              size="medium"
-              onClick={handleLearnMoreClick}
-            >
+            <Button variant="secondary" size="medium" onClick={handleLearnMoreClick}>
               Learn More About Each Type
             </Button>
           </div>
@@ -301,7 +295,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className={styles.ctaContent}>
             <h2 className={styles.ctaTitle}>Ready to Discover Your Relationship Style?</h2>
             <p className={styles.ctaDescription}>
-              Take the assessment now and gain insights into how you approach relationships through travel decisions.
+              Take the assessment now and gain insights into how you approach relationships through
+              travel decisions.
             </p>
             <Button
               variant="cta"

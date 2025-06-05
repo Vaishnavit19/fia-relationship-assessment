@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { fn } from 'storybook/test';
 
-import { ShareButtons, useShareData } from './ShareButtons';
+import { ShareButtons } from './ShareButtons';
 
 // Sample share data for stories
 const sampleShareData = {

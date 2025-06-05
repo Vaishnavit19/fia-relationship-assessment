@@ -3,12 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { fn } from 'storybook/test';
 
-import {
-  NavigationControls,
-  createRestartAction,
-  createHomeAction,
-  createSaveAction,
-} from './NavigationControls';
+import { NavigationControls, createRestartAction, createSaveAction } from './NavigationControls';
 
 const meta = {
   title: 'UI/NavigationControls',

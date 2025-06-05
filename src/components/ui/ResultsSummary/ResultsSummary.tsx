@@ -103,6 +103,9 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const generateInsights = (): string[] => {
     const { emotional, logical, exploratory } = result.totalScores;
     const total = emotional + logical + exploratory;
+
+    console.log('unused', total);
+
     const insights: string[] = [];
 
     // Primary archetype insight

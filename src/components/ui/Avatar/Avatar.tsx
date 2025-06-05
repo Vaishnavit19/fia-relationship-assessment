@@ -1,11 +1,11 @@
 // src/components/ui/Avatar/Avatar.tsx
 'use client';
 
-import { User, Camera, Edit3, Check, X } from 'lucide-react';
+import { User, Camera, Edit3 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState, useRef, useCallback } from 'react';
 
-import { Button } from '../Button';
+// import { Button } from '../Button';
 
 import styles from './Avatar.module.scss';
 
@@ -54,22 +54,22 @@ export interface AvatarProps {
 
 const getInitials = (name: string): string => {
   if (!name) return '';
-  
+
   const names = name.trim().split(/\s+/);
   if (names.length === 1) {
     return names[0].charAt(0).toUpperCase();
   }
-  
+
   return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
 };
 
 const getColorClass = (color: string, name?: string): string => {
   if (color === 'archetype') return 'archetype';
   if (color !== 'neutral') return color;
-  
+
   // Generate consistent color based on name
   if (!name) return 'neutral';
-  
+
   const colors = ['primary', 'secondary', 'success', 'warning'];
   const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return colors[hash % colors.length];
@@ -100,14 +100,19 @@ export const Avatar: React.FC<AvatarProps> = ({
   const [imageError, setImageError] = useState(false);
   const [uploadHover, setUploadHover] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const getSizeInPixels = (size: string): number => {
     switch (size) {
-      case 'small': return 32;
-      case 'medium': return 48;
-      case 'large': return 64;
-      case 'xlarge': return 96;
-      default: return 48;
+      case 'small':
+        return 32;
+      case 'medium':
+        return 48;
+      case 'large':
+        return 64;
+      case 'xlarge':
+        return 96;
+      default:
+        return 48;
     }
   };
 
@@ -132,21 +137,27 @@ export const Avatar: React.FC<AvatarProps> = ({
     }
   }, [editable, isLoading, onClick]);
 
-  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && onAvatarChange) {
-      onAvatarChange(file);
-    }
-    // Reset input value to allow same file selection
-    event.target.value = '';
-  }, [onAvatarChange]);
+  const handleFileChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file && onAvatarChange) {
+        onAvatarChange(file);
+      }
+      // Reset input value to allow same file selection
+      event.target.value = '';
+    },
+    [onAvatarChange]
+  );
 
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (isInteractive && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      handleClick();
-    }
-  }, [isInteractive, handleClick]);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (isInteractive && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        handleClick();
+      }
+    },
+    [isInteractive, handleClick]
+  );
 
   const avatarClasses = [
     styles.avatar,
@@ -177,11 +188,11 @@ export const Avatar: React.FC<AvatarProps> = ({
         tabIndex={isInteractive ? 0 : undefined}
         role={isInteractive ? 'button' : undefined}
         aria-label={
-          editable 
+          editable
             ? `Change avatar for ${name || 'user'}`
-            : clickable 
-            ? `View profile for ${name || 'user'}`
-            : alt ?? `Avatar for ${name || 'user'}`
+            : clickable
+              ? `View profile for ${name || 'user'}`
+              : (alt ?? `Avatar for ${name || 'user'}`)
         }
         title={tooltip ?? (editable ? 'Click to change avatar' : undefined)}
         onMouseEnter={() => editable && setUploadHover(true)}
@@ -241,14 +252,18 @@ export const Avatar: React.FC<AvatarProps> = ({
 
       {/* Status Indicator */}
       {status && (
-        <div className={`${styles.statusIndicator} ${styles[`status${status.charAt(0).toUpperCase() + status.slice(1)}`]}`}>
+        <div
+          className={`${styles.statusIndicator} ${styles[`status${status.charAt(0).toUpperCase() + status.slice(1)}`]}`}
+        >
           <div className={styles.statusDot} />
         </div>
       )}
 
       {/* Badge */}
       {badge && (
-        <div className={`${styles.badge} ${styles[`badge${badgeVariant.charAt(0).toUpperCase() + badgeVariant.slice(1)}`]}`}>
+        <div
+          className={`${styles.badge} ${styles[`badge${badgeVariant.charAt(0).toUpperCase() + badgeVariant.slice(1)}`]}`}
+        >
           {badge}
         </div>
       )}
@@ -313,11 +328,15 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({
   return (
     <div className={groupClasses}>
       {visibleAvatars.map((avatar, index) => (
-        <div key={avatar.id} className={styles.groupAvatar} style={{ zIndex: visibleAvatars.length - index }}>
+        <div
+          key={avatar.id}
+          className={styles.groupAvatar}
+          style={{ zIndex: visibleAvatars.length - index }}
+        >
           <Avatar {...avatar} size={size} shape={shape} />
         </div>
       ))}
-      
+
       {excessCount > 0 && (
         <div className={styles.groupAvatar} style={{ zIndex: 0 }}>
           {renderExcess ? (
@@ -340,7 +359,8 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({
 };
 
 // Assessment-specific avatar with archetype styling
-export interface AssessmentAvatarProps extends Omit<AvatarProps, 'color' | 'archetypeGradient' | 'archetypeEmoji'> {
+export interface AssessmentAvatarProps
+  extends Omit<AvatarProps, 'color' | 'archetypeGradient' | 'archetypeEmoji'> {
   /** Assessment archetype */
   archetype?: {
     id: string;
@@ -395,9 +415,7 @@ export const AssessmentAvatar: React.FC<AssessmentAvatarProps> = ({
       badge={getBadgeContent()}
       badgeVariant={getBadgeVariant()}
       tooltip={
-        archetype
-          ? `${avatarProps.name ?? 'User'} - ${archetype.name}`
-          : avatarProps.tooltip
+        archetype ? `${avatarProps.name ?? 'User'} - ${archetype.name}` : avatarProps.tooltip
       }
     />
   );

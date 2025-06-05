@@ -152,6 +152,7 @@ export const InteractiveDemo: Story = {
     // This would be used for automated testing/interaction demos
     // Since we can't actually test interactions in this context,
     // this serves as documentation for how the component would be tested
+    console.log(canvasElement, step, 'unused vars');
   },
   parameters: {
     docs: {

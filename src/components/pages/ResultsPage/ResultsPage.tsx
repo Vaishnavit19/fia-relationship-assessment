@@ -6,7 +6,6 @@
 'use client';
 
 import {
-  ArrowLeft,
   Download,
   RefreshCw,
   Share2,
@@ -29,7 +28,7 @@ import ScoreChart from '@/components/ui/ScoreChart';
 import { ShareButtons } from '@/components/ui/ShareButtons';
 import { archetypes } from '@/lib/data';
 import { useResultsPage } from '@/lib/store';
-import type { AssessmentResult } from '@/lib/types';
+// import type { AssessmentResult } from '@/lib/types';
 
 import styles from './ResultsPage.module.scss';
 
@@ -195,7 +194,7 @@ export const ResultsPage: React.FC = () => {
                 </Button>
                 <Button
                   variant="secondary"
-                  onClick={handleDownloadPDF}
+                  onClick={void handleDownloadPDF}
                   disabled={isDownloading}
                   className={styles.actionButton}
                 >

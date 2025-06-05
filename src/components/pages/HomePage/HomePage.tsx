@@ -1,4 +1,3 @@
-
 // ==========================================================================
 // HOMEPAGE ORCHESTRATOR COMPONENT
 // ==========================================================================
@@ -6,8 +5,8 @@
 // src/components/pages/HomePage/HomePage.tsx
 'use client';
 
-import { ArrowRight, Users, Heart, Brain, Compass, Clock, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowRight, Users, Heart, Clock, CheckCircle } from 'lucide-react';
+// import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -18,7 +17,6 @@ import { appConfig } from '@/lib/data';
 import { useAssessmentStore } from '@/lib/store';
 
 import styles from './HomePage.module.scss';
-
 
 export const HomePage: React.FC = () => {
   const router = useRouter();
@@ -38,12 +36,14 @@ export const HomePage: React.FC = () => {
     {
       icon: <Users size={24} />,
       title: 'Travel-Based Scenarios',
-      description: 'Discover your relationship style through realistic travel situations and decision-making moments.',
+      description:
+        'Discover your relationship style through realistic travel situations and decision-making moments.',
     },
     {
       icon: <Heart size={24} />,
       title: 'Three Relationship Archetypes',
-      description: 'Learn whether you\'re a Heartfelt Companion, Strategic Navigator, or Spontaneous Explorer.',
+      description:
+        "Learn whether you're a Heartfelt Companion, Strategic Navigator, or Spontaneous Explorer.",
     },
     {
       icon: <Clock size={24} />,
@@ -53,7 +53,8 @@ export const HomePage: React.FC = () => {
     {
       icon: <CheckCircle size={24} />,
       title: 'Science-Based Results',
-      description: 'Get personalized insights based on proven relationship psychology and behavioral patterns.',
+      description:
+        'Get personalized insights based on proven relationship psychology and behavioral patterns.',
     },
   ];
 
@@ -87,8 +88,7 @@ export const HomePage: React.FC = () => {
             <div className={styles.heroContent}>
               <div className={styles.heroText}>
                 <h1 className={styles.heroTitle}>
-                  Discover Your{' '}
-                  <span className={styles.highlightText}>Relationship Style</span>
+                  Discover Your <span className={styles.highlightText}>Relationship Style</span>
                   <br />
                   Through Travel
                 </h1>
@@ -97,7 +97,7 @@ export const HomePage: React.FC = () => {
                   logical planning, and adventurous exploration in relationships. Get personalized
                   insights in just {appConfig.assessment.timeEstimate}.
                 </p>
-                
+
                 <div className={styles.heroActions}>
                   {isStarted && userData ? (
                     <div className={styles.continueSection}>
@@ -114,11 +114,7 @@ export const HomePage: React.FC = () => {
                           Continue Assessment
                           <ArrowRight size={20} />
                         </Button>
-                        <Button
-                          variant="secondary"
-                          size="large"
-                          onClick={handleStartAssessment}
-                        >
+                        <Button variant="secondary" size="large" onClick={handleStartAssessment}>
                           Start Over
                         </Button>
                       </div>
@@ -134,7 +130,7 @@ export const HomePage: React.FC = () => {
                       <ArrowRight size={20} />
                     </Button>
                   )}
-                  
+
                   <div className={styles.assessmentStats}>
                     <div className={styles.stat}>
                       <strong>{appConfig.assessment.totalScenarios}</strong> Questions
@@ -148,21 +144,21 @@ export const HomePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className={styles.heroVisual}>
                 <div className={styles.archetypePreview}>
                   {archetypes.map((archetype, index) => (
                     <div
                       key={archetype.name}
                       className={styles.archetypeCard}
-                      style={{ 
-                        '--archetype-color': archetype.color,
-                        '--animation-delay': `${index * 0.2}s`,
-                      } as React.CSSProperties}
+                      style={
+                        {
+                          '--archetype-color': archetype.color,
+                          '--animation-delay': `${index * 0.2}s`,
+                        } as React.CSSProperties
+                      }
                     >
-                      <div className={styles.archetypeIcon}>
-                        {archetype.icon}
-                      </div>
+                      <div className={styles.archetypeIcon}>{archetype.icon}</div>
                       <h4 className={styles.archetypeName}>{archetype.name}</h4>
                       <p className={styles.archetypeDesc}>{archetype.description}</p>
                     </div>
@@ -182,17 +178,11 @@ export const HomePage: React.FC = () => {
                 Our assessment uses realistic travel scenarios to reveal your relationship patterns
               </p>
             </div>
-            
+
             <div className={styles.featuresGrid}>
-              {features.map((feature) => (
-                <Card
-                  key={feature.title}
-                  className={styles.featureCard}
-                  variant="default"
-                >
-                  <div className={styles.featureIcon}>
-                    {feature.icon}
-                  </div>
+              {features.map(feature => (
+                <Card key={feature.title} className={styles.featureCard} variant="default">
+                  <div className={styles.featureIcon}>{feature.icon}</div>
                   <h3 className={styles.featureTitle}>{feature.title}</h3>
                   <p className={styles.featureDescription}>{feature.description}</p>
                 </Card>
@@ -210,16 +200,16 @@ export const HomePage: React.FC = () => {
                 Discover which of these relationship styles resonates most with you
               </p>
             </div>
-            
+
             <div className={styles.archetypesGrid}>
-              {archetypes.map((archetype) => (
+              {archetypes.map(archetype => (
                 <Card
                   key={archetype.name}
                   className={styles.archetypeOverviewCard}
                   variant="default"
                 >
                   <div className={styles.archetypeHeader}>
-                    <div 
+                    <div
                       className={styles.archetypeIconLarge}
                       style={{ '--archetype-color': archetype.color } as React.CSSProperties}
                     >
@@ -241,8 +231,8 @@ export const HomePage: React.FC = () => {
               <div className={styles.ctaContent}>
                 <h2 className={styles.ctaTitle}>Ready to Discover Your Relationship Style?</h2>
                 <p className={styles.ctaSubtitle}>
-                  Join thousands who have discovered their relationship archetype and improved
-                  their partnerships through better understanding.
+                  Join thousands who have discovered their relationship archetype and improved their
+                  partnerships through better understanding.
                 </p>
                 <Button
                   variant="cta"
