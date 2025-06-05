@@ -1,0 +1,619 @@
+// src/components/pages/ResultsPage/ResultsPage.module.scss
+@use '../../../styles/mixins' as mix;
+
+.resultsPage {
+  animation: page-enter 0.8s ease-out;
+  background: vars.$bg-gradient;
+  min-height: 100vh;
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Header Section
+// ==========================================================================
+.header {
+  background: vars.$card-bg;
+  border-bottom: 1px solid vars.$border-color;
+  overflow: hidden;
+  padding: vars.$spacing-2xl 0;
+  position: relative;
+
+  &::before {
+    background: linear-gradient(
+      135deg,
+      rgb(255 107 157 / 3%) 0%,
+      rgb(102 126 234 / 3%) 50%,
+      rgb(255 179 71 / 3%) 100%
+    );
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl 0;
+  }
+}
+
+.headerContent {
+  align-items: center;
+  display: flex;
+  gap: vars.$spacing-xl;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-lg;
+    text-align: center;
+  }
+}
+
+.headerText {
+  flex: 1;
+}
+
+.headerTitle {
+  @include mix.text-hero;
+
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-sm;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-main;
+  }
+}
+
+.headerSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-lg;
+  line-height: 1.6;
+  margin: 0;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body;
+  }
+}
+
+.headerActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.actionButton {
+  min-width: 120px;
+
+  @include mix.mobile-only {
+    flex: 1;
+    max-width: 150px;
+  }
+}
+
+// Content Layout
+// ==========================================================================
+.content {
+  padding: vars.$spacing-3xl 0;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl 0;
+  }
+}
+
+.contentGrid {
+  display: grid;
+  gap: vars.$spacing-3xl;
+  grid-template-columns: 1fr;
+  margin: 0 auto;
+  max-width: 1000px;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-2xl;
+  }
+}
+
+// Section Styling
+// ==========================================================================
+.primarySection,
+.scoresSection,
+.summarySection,
+.secondarySection {
+  animation: fade-in-up 0.6s ease-out;
+  animation-fill-mode: both;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xl;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 0.2}s;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.sectionHeader {
+  align-items: center;
+  display: flex;
+  gap: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-xs;
+    text-align: center;
+  }
+}
+
+.sectionIcon {
+  color: vars.$primary-accent-solid;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  @include mix.text-title;
+
+  color: vars.$primary-text;
+  margin: 0;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-section;
+  }
+}
+
+.sectionSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-style: italic;
+  margin: 0;
+  margin-left: auto;
+
+  @include mix.mobile-only {
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+// Primary Archetype Section
+// ==========================================================================
+.primarySection {
+  position: relative;
+
+  &::before {
+    animation: celebrate 2s ease-in-out infinite;
+    content: '🎉';
+    font-size: 2rem;
+    position: absolute;
+    right: 20px;
+    top: -20px;
+    z-index: 1;
+
+    @include mix.mobile-only {
+      font-size: 1.5rem;
+      right: 10px;
+      top: -10px;
+    }
+  }
+
+  @keyframes celebrate {
+    0%, 100% {
+      opacity: 0.7; 
+      transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+      opacity: 1; 
+      transform: translateY(-10px) rotate(10deg);
+    }
+  }
+
+  .sectionHeader {
+    justify-content: center;
+    margin-bottom: vars.$spacing-2xl;
+
+    .sectionIcon {
+      color: #ffd700;
+    }
+  }
+}
+
+.primaryArchetypeCard {
+  animation: primary-archetype-appear 1s ease-out 0.4s both;
+  box-shadow: vars.$shadow-card-hover;
+  margin: 0 auto;
+  max-width: 600px;
+  transform: scale(1.02);
+
+  @keyframes primary-archetype-appear {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1.02);
+    }
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+// Scores Section
+// ==========================================================================
+.scoresSection {
+  background: vars.$card-bg;
+  border-radius: vars.$radius-xl;
+  box-shadow: vars.$shadow-card;
+  padding: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl;
+  }
+}
+
+.scoreChart {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+// Summary Section
+// ==========================================================================
+.summarySection {
+  .resultsSummary {
+    background: vars.$light-bg;
+    border-radius: vars.$radius-xl;
+    padding: vars.$spacing-2xl;
+
+    @include mix.mobile-only {
+      padding: vars.$spacing-xl;
+    }
+  }
+}
+
+// Secondary Archetypes Section
+// ==========================================================================
+.secondarySection {
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: vars.$spacing-xs;
+
+    @include mix.mobile-only {
+      align-items: center;
+      text-align: center;
+    }
+  }
+}
+
+.secondaryGrid {
+  display: grid;
+  gap: vars.$spacing-xl;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
+  }
+}
+
+.secondaryArchetypeCard {
+  transition: vars.$transition-standard;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Action Bar
+// ==========================================================================
+.actionBar {
+  background: vars.$card-bg;
+  border-top: 1px solid vars.$border-color;
+  margin-top: vars.$spacing-3xl;
+  padding: vars.$spacing-2xl 0;
+
+  @include mix.mobile-only {
+    margin-top: vars.$spacing-2xl;
+    padding: vars.$spacing-xl 0;
+  }
+}
+
+.actionBarContent {
+  align-items: center;
+  display: flex;
+  gap: vars.$spacing-xl;
+  justify-content: space-between;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-lg;
+    text-align: center;
+  }
+}
+
+.actionBarText {
+  flex: 1;
+}
+
+.actionBarTitle {
+  @include mix.text-subtitle;
+
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-xs;
+}
+
+.actionBarSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  margin: 0;
+}
+
+.actionBarButtons {
+  display: flex;
+  flex-shrink: 0;
+  gap: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.actionBarButton {
+  min-width: 160px;
+
+  @include mix.mobile-only {
+    flex: 1;
+    max-width: 180px;
+  }
+}
+
+// Loading States
+// ==========================================================================
+.loadingContainer {
+  @include mix.flex-column-center;
+
+  gap: vars.$spacing-xl;
+  min-height: 100vh;
+  padding: vars.$spacing-xl;
+  text-align: center;
+}
+
+.loadingTitle {
+  @include mix.text-title;
+
+  color: vars.$primary-text;
+  margin: 0;
+}
+
+.loadingText {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 400px;
+}
+
+// Error States
+// ==========================================================================
+.errorContainer {
+  @include mix.flex-center;
+
+  min-height: 100vh;
+  padding: vars.$spacing-xl;
+}
+
+.errorCard {
+  max-width: 500px;
+  padding: vars.$spacing-3xl;
+  text-align: center;
+  width: 100%;
+
+  @include mix.mobile-only {
+    margin: vars.$spacing-md;
+    padding: vars.$spacing-2xl;
+  }
+}
+
+.errorContent {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.errorIcon {
+  color: #e53e3e;
+  margin-bottom: vars.$spacing-md;
+}
+
+.errorTitle {
+  @include mix.text-subtitle;
+
+  color: vars.$primary-text;
+  margin: 0;
+}
+
+.errorMessage {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.errorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+  justify-content: center;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    width: 100%;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Share Modal
+// ==========================================================================
+.shareModal {
+  z-index: 1000;
+}
+
+// Responsive Grid Adjustments
+// ==========================================================================
+@include mix.tablet-only {
+  .secondaryGrid {
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    max-width: 400px;
+  }
+}
+
+
+// Hover Effects
+// ==========================================================================
+
+.actionButton:focus-visible,
+.actionBarButton:focus-visible {
+  outline: 2px solid vars.$primary-accent-solid;
+  outline-offset: 2px;
+}
+
+.actionButton,
+.actionBarButton {
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+}
+
+// Reduced Motion Support
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .primarySection,
+  .scoresSection,
+  .summarySection,
+  .secondarySection,
+  .resultsPage,
+  .primaryArchetypeCard {
+    animation: none;
+  }
+
+  .primarySection::before {
+    animation: none;
+  }
+
+  .actionButton:hover,
+  .actionBarButton:hover,
+  .secondaryArchetypeCard:hover {
+    transform: none;
+  }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom: 3px solid black;
+    
+    &::before {
+      display: none;
+    }
+  }
+
+  .sectionIcon {
+    color: #06c;
+  }
+
+  .primarySection::before {
+    display: none;
+  }
+
+  .scoresSection {
+    border: 2px solid black;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .resultsPage {
+    animation: none;
+    background: white;
+  }
+
+  .header {
+    background: white;
+    
+    &::before {
+      display: none;
+    }
+  }
+
+  .headerActions,
+  .actionBar {
+    display: none;
+  }
+
+  .content {
+    padding: vars.$spacing-lg 0;
+  }
+
+  .primarySection::before {
+    display: none;
+  }
+
+  .scoresSection,
+  .summarySection .resultsSummary {
+    background: white;
+    border: 1px solid black;
+  }
+
+  .primaryArchetypeCard,
+  .secondaryArchetypeCard {
+    border: 1px solid black;
+    box-shadow: none;
+    page-break-inside: avoid;
+    transform: none;
+  }
+}

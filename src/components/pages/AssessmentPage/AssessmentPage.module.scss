@@ -1,0 +1,485 @@
+// src/components/pages/AssessmentPage/AssessmentPage.module.scss
+@use '../../../styles/mixins' as mix;
+
+.assessmentPage {
+  background: vars.$bg-gradient;
+  min-height: 100vh;
+}
+
+// Progress Container
+// ==========================================================================
+.progressContainer {
+  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 95%);
+  border-bottom: 1px solid vars.$border-color;
+  padding: vars.$spacing-md 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+// Content Layout
+// ==========================================================================
+.content {
+  @include mix.container;
+
+  animation: page-enter 0.6s ease-out;
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  min-height: calc(100vh - 100px);
+  padding-bottom: vars.$spacing-2xl;
+  padding-top: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    padding-bottom: vars.$spacing-xl;
+    padding-top: vars.$spacing-xl;
+  }
+}
+
+// Registration Section
+// ==========================================================================
+.registrationSection {
+  @include mix.flex-center;
+
+  min-height: 60vh;
+}
+
+.registrationCard {
+  max-width: 500px;
+  padding: vars.$spacing-3xl;
+  text-align: center;
+  width: 100%;
+
+  @include mix.mobile-only {
+    margin: vars.$spacing-md;
+    padding: vars.$spacing-2xl;
+  }
+}
+
+.registrationHeader {
+  margin-bottom: vars.$spacing-2xl;
+}
+
+.registrationTitle {
+  @include mix.text-title;
+
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-md;
+}
+
+.registrationSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-lg;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Question Section
+// ==========================================================================
+.questionSection {
+  @include mix.grid-container;
+
+  align-items: start;
+  gap: vars.$spacing-3xl;
+  grid-template-columns: 1fr 300px;
+
+  @include mix.tablet-only {
+    gap: vars.$spacing-2xl;
+    grid-template-columns: 1fr 250px;
+  }
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-xl;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+.questionCard {
+  animation: slide-in-up 0.5s ease-out;
+
+  @keyframes slide-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Options Container
+// ==========================================================================
+.optionsContainer {
+  animation: fade-in 0.6s ease-out 0.2s both;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+.optionButton {
+  animation: slide-in-left 0.4s ease-out;
+  animation-fill-mode: both;
+
+  @for $i from 1 through 3 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{0.1 + ($i - 1) * 0.1}s;
+    }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+// Navigation Container
+// ==========================================================================
+.navigationContainer {
+  animation: fade-in 0.6s ease-out 0.4s both;
+  display: flex;
+  justify-content: center;
+  margin-top: vars.$spacing-lg;
+}
+
+// Sidebar
+// ==========================================================================
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+  position: sticky;
+  top: 120px;
+
+  @include mix.mobile-only {
+    order: -1;
+    position: static;
+  }
+}
+
+.infoCard {
+  padding: vars.$spacing-lg;
+  
+  @include mix.mobile-only {
+    padding: vars.$spacing-md;
+  }
+}
+
+.infoTitle {
+  @include mix.text-subtitle;
+
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-md;
+}
+
+.infoText {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-sm;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Progress Stats
+// ==========================================================================
+.progressStats {
+  display: flex;
+  gap: vars.$spacing-md;
+  justify-content: space-between;
+}
+
+.progressStat {
+  flex: 1;
+  text-align: center;
+
+  strong {
+    color: vars.$primary-text;
+    display: block;
+    font-size: vars.$font-body-lg;
+    font-weight: vars.$font-bold;
+    margin-bottom: 2px;
+  }
+
+  span {
+    color: vars.$secondary-text;
+    font-size: vars.$font-body-sm;
+  }
+}
+
+// Error States
+// ==========================================================================
+.errorContainer {
+  @include mix.flex-center;
+
+  min-height: 60vh;
+  padding: vars.$spacing-xl;
+}
+
+.errorCard {
+  max-width: 500px;
+  padding: vars.$spacing-3xl;
+  text-align: center;
+  width: 100%;
+}
+
+.errorContent {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.errorIcon {
+  color: #e53e3e;
+  margin-bottom: vars.$spacing-md;
+}
+
+.errorTitle {
+  @include mix.text-subtitle;
+
+  color: vars.$primary-text;
+  margin: 0;
+}
+
+.errorMessage {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.errorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+  justify-content: center;
+}
+
+.errorBanner {
+  align-items: center;
+  animation: slide-down 0.3s ease-out;
+  background: rgb(229 62 62 / 10%);
+  border: 1px solid rgb(229 62 62 / 20%);
+  border-radius: vars.$radius-sm;
+  color: #c53030;
+  display: flex;
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  gap: vars.$spacing-xs;
+  margin: vars.$spacing-md 0;
+  padding: vars.$spacing-sm vars.$spacing-md;
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Loading States
+// ==========================================================================
+.loadingContainer {
+  @include mix.flex-column-center;
+
+  gap: vars.$spacing-lg;
+  min-height: 40vh;
+}
+
+.loadingText {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-weight: vars.$font-medium;
+  margin: 0;
+}
+
+// Exit Modal
+// ==========================================================================
+.exitModal {
+  .modal-content {
+    max-width: 450px;
+  }
+}
+
+.exitModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.exitModalText {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.exitModalActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+  justify-content: center;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+  }
+}
+
+// Responsive Adjustments
+// ==========================================================================
+@include mix.mobile-only {
+  .questionSection {
+    .sidebar {
+      background: vars.$light-bg;
+      border-radius: vars.$radius-lg;
+      margin-bottom: vars.$spacing-lg;
+      padding: vars.$spacing-md;
+    }
+  }
+
+  .progressStats {
+    .progressStat {
+      strong {
+        font-size: vars.$font-body;
+      }
+    }
+  }
+
+  .errorActions,
+  .exitModalActions {
+    button {
+      min-width: 140px;
+    }
+  }
+}
+
+// Focus and Interaction States
+// ==========================================================================
+.optionButton:focus-visible {
+  outline: 2px solid vars.$primary-accent-solid;
+  outline-offset: 2px;
+}
+
+// Loading State Overlay
+// ==========================================================================
+.questionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xl;
+  max-width: 700px;
+  position: relative;
+
+  &.loading {
+    opacity: 0.7;
+    pointer-events: none;
+
+    &::after {
+      backdrop-filter: blur(2px);
+      background: rgb(255 255 255 / 50%);
+      border-radius: vars.$radius-lg;
+      content: '';
+      inset: 0;
+      position: absolute;
+      z-index: 10;
+    }
+  }
+}
+
+// Reduced Motion Support
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .questionCard,
+  .optionsContainer,
+  .optionButton,
+  .navigationContainer,
+  .errorBanner,
+  .content {
+    animation: none;
+  }
+
+  .questionContainer.loading::after {
+    backdrop-filter: none;
+  }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .errorBanner {
+    background: yellow;
+    border: 2px solid red;
+    color: black;
+  }
+
+  .progressContainer {
+    background: white;
+    border-bottom: 3px solid black;
+  }
+
+  .infoCard {
+    border: 2px solid black;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .assessmentPage {
+    background: white;
+  }
+
+  .progressContainer,
+  .navigationContainer,
+  .sidebar {
+    display: none;
+  }
+
+  .questionContainer {
+    max-width: none;
+  }
+
+  .registrationCard,
+  .errorCard {
+    border: 1px solid black;
+    box-shadow: none;
+  }
+}

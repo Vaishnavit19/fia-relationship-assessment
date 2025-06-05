@@ -2,10 +2,10 @@
 @use '../../../styles/mixins' as mix;
 
 .layout {
-  min-height: 100vh;
+  background: vars.$bg-gradient;
   display: flex;
   flex-direction: column;
-  background: vars.$bg-gradient;
+  min-height: 100vh;
 
   &FixedHeader {
     padding-top: 70px; // Account for fixed header height
@@ -31,10 +31,10 @@
 
 // Main content area
 .main {
-  flex: 1;
-  width: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
+  width: 100%;
 
   &Padded {
     padding: vars.$spacing-2xl vars.$spacing-base;
@@ -49,31 +49,31 @@
   }
 
   &Centered {
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     text-align: center;
   }
 }
 
 // Max width constraints
 .maxWidthSm {
-  max-width: 640px;
   margin: 0 auto;
+  max-width: 640px;
 }
 
 .maxWidthMd {
-  max-width: 768px;
   margin: 0 auto;
+  max-width: 768px;
 }
 
 .maxWidthLg {
-  max-width: 1024px;
   margin: 0 auto;
+  max-width: 1024px;
 }
 
 .maxWidthXl {
-  max-width: vars.$container-max-width;
   margin: 0 auto;
+  max-width: vars.$container-max-width;
 }
 
 .maxWidthFull {
@@ -84,22 +84,22 @@
 .assessmentLayout {
   .main {
     background: vars.$card-bg;
-    margin: vars.$spacing-lg;
     border-radius: vars.$radius-xl;
     box-shadow: vars.$shadow-card;
+    margin: vars.$spacing-lg;
 
     @include mix.mobile-only {
-      margin: vars.$spacing-sm;
       border-radius: vars.$radius-lg;
+      margin: vars.$spacing-sm;
     }
   }
 }
 
 .resultsLayout {
   background: linear-gradient(135deg, 
-    rgba(255, 107, 157, 0.05) 0%, 
-    rgba(102, 126, 234, 0.05) 50%, 
-    rgba(255, 179, 71, 0.05) 100%
+    rgb(255 107 157 / 5%) 0%, 
+    rgb(102 126 234 / 5%) 50%, 
+    rgb(255 179 71 / 5%) 100%
   );
 
   .main {
@@ -148,9 +148,9 @@
 // Loading state
 .layoutLoading {
   .main {
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 400px;
   }
 }
@@ -158,13 +158,13 @@
 // Error state
 .layoutError {
   .main {
+    align-items: center;
     display: flex;
     flex-direction: column;
+    gap: vars.$spacing-lg;
     justify-content: center;
-    align-items: center;
     min-height: 400px;
     text-align: center;
-    gap: vars.$spacing-lg;
   }
 }
 

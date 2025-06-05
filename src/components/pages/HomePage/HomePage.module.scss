@@ -8,24 +8,21 @@
 // Hero Section
 // ==========================================================================
 .hero {
-  padding: vars.$spacing-3xl 0;
   background: vars.$bg-gradient;
-  position: relative;
   overflow: hidden;
+  padding: vars.$spacing-3xl 0;
+  position: relative;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background: radial-gradient(
       ellipse 800px 600px at 50% 0%,
-      rgba(255, 107, 157, 0.05) 0%,
+      rgb(255 107 157 / 5%) 0%,
       transparent 50%
     );
+    content: '';
+    inset: 0;
     pointer-events: none;
+    position: absolute;
   }
 
   @include mix.mobile-only {
@@ -35,15 +32,16 @@
 
 .heroContent {
   @include mix.grid-container;
-  grid-template-columns: 1fr 1fr;
+
   align-items: center;
   gap: vars.$spacing-3xl;
+  grid-template-columns: 1fr 1fr;
   position: relative;
   z-index: 1;
 
   @include mix.mobile-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-2xl;
+    grid-template-columns: 1fr;
     text-align: center;
   }
 }
@@ -58,8 +56,9 @@
 
 .heroTitle {
   @include mix.text-hero;
-  margin-bottom: vars.$spacing-lg;
+
   line-height: 1.1;
+  margin-bottom: vars.$spacing-lg;
 
   @include mix.mobile-only {
     font-size: vars.$font-main;
@@ -68,14 +67,13 @@
 }
 
 .highlightText {
+  animation: gradient-shift 3s ease-in-out infinite;
   background: vars.$primary-accent;
   background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
-  animation: gradientShift 3s ease-in-out infinite;
+  -webkit-text-fill-color: transparent;
 
-  @keyframes gradientShift {
+  @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
@@ -83,10 +81,11 @@
 
 .heroSubtitle {
   @include mix.text-body;
-  font-size: vars.$font-body-lg;
+
   color: vars.$secondary-text;
-  margin-bottom: vars.$spacing-2xl;
+  font-size: vars.$font-body-lg;
   line-height: 1.6;
+  margin-bottom: vars.$spacing-2xl;
 
   @include mix.mobile-only {
     font-size: vars.$font-body;
@@ -107,13 +106,13 @@
 }
 
 .welcomeBack {
+  background: rgb(255 107 157 / 10%);
+  border-left: 4px solid vars.$primary-accent-solid;
+  border-radius: vars.$radius-sm;
   color: vars.$primary-text;
   font-weight: vars.$font-medium;
   margin: 0;
   padding: vars.$spacing-sm vars.$spacing-md;
-  background: rgba(255, 107, 157, 0.1);
-  border-radius: vars.$radius-sm;
-  border-left: 4px solid vars.$primary-accent-solid;
 }
 
 .actionButtons {
@@ -134,30 +133,30 @@
 }
 
 .assessmentStats {
+  border-top: 1px solid vars.$border-color;
   display: flex;
   gap: vars.$spacing-xl;
   padding-top: vars.$spacing-md;
-  border-top: 1px solid vars.$border-color;
 
   @include mix.mobile-only {
-    justify-content: center;
     gap: vars.$spacing-lg;
+    justify-content: center;
   }
 }
 
 .stat {
+  align-items: center;
+  color: vars.$secondary-text;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: vars.$secondary-text;
   font-size: vars.$font-body-sm;
+  text-align: center;
   
   strong {
     color: vars.$primary-text;
+    display: block;
     font-size: vars.$font-body-lg;
     font-weight: vars.$font-bold;
-    display: block;
     margin-bottom: 2px;
   }
 
@@ -173,9 +172,9 @@
 // Hero Visual
 // ==========================================================================
 .heroVisual {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   position: relative;
 
   @include mix.mobile-only {
@@ -185,31 +184,33 @@
 
 .archetypePreview {
   display: grid;
-  grid-template-columns: 1fr;
   gap: vars.$spacing-md;
+  grid-template-columns: 1fr;
   max-width: 300px;
   width: 100%;
 }
 
 .archetypeCard {
   @include mix.card-small;
-  text-align: center;
-  transition: vars.$transition-standard;
-  animation: floatIn 0.8s ease-out;
+
+  animation: float-in 0.8s ease-out;
   animation-delay: var(--animation-delay);
   animation-fill-mode: both;
   border-left: 4px solid var(--archetype-color);
+  text-align: center;
+  transition: vars.$transition-standard;
 
   &:hover {
-    transform: translateY(-4px);
     box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-4px);
   }
 
-  @keyframes floatIn {
+  @keyframes float-in {
     from {
       opacity: 0;
       transform: translateY(30px) scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: translateY(0) scale(1);
@@ -218,30 +219,30 @@
 }
 
 .archetypeIcon {
+  display: block;
   font-size: 2rem;
   margin-bottom: vars.$spacing-sm;
-  display: block;
 }
 
 .archetypeName {
+  color: vars.$primary-text;
   font-size: vars.$font-body;
   font-weight: vars.$font-semibold;
-  color: vars.$primary-text;
   margin: 0 0 vars.$spacing-xs 0;
 }
 
 .archetypeDesc {
-  font-size: vars.$font-body-sm;
   color: vars.$secondary-text;
-  margin: 0;
+  font-size: vars.$font-body-sm;
   line-height: 1.4;
+  margin: 0;
 }
 
 // Features Section
 // ==========================================================================
 .features {
-  padding: vars.$spacing-3xl 0;
   background: vars.$card-bg;
+  padding: vars.$spacing-3xl 0;
 
   @include mix.mobile-only {
     padding: vars.$spacing-2xl 0;
@@ -249,11 +250,11 @@
 }
 
 .sectionHeader {
-  text-align: center;
   margin-bottom: vars.$spacing-3xl;
-  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  max-width: 600px;
+  text-align: center;
 
   @include mix.mobile-only {
     margin-bottom: vars.$spacing-2xl;
@@ -262,11 +263,13 @@
 
 .sectionTitle {
   @include mix.text-title;
+
   margin-bottom: vars.$spacing-md;
 }
 
 .sectionSubtitle {
   @include mix.text-body;
+
   color: vars.$secondary-text;
   font-size: vars.$font-body-lg;
   margin: 0;
@@ -274,60 +277,48 @@
 
 .featuresGrid {
   @include mix.grid-container;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
   gap: vars.$spacing-xl;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 
   @include mix.mobile-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
   }
 }
 
-.featureCard {
-  text-align: center;
-  padding: vars.$spacing-2xl;
-  transition: vars.$transition-standard;
-  border: 2px solid transparent;
 
-  &:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 107, 157, 0.2);
-    box-shadow: vars.$shadow-card-hover;
-  }
-
-  @include mix.mobile-only {
-    padding: vars.$spacing-xl;
-  }
-}
 
 .featureIcon {
-  width: 60px;
-  height: 60px;
-  @include mix.flex-center;
-  margin: 0 auto vars.$spacing-lg auto;
   background: vars.$primary-accent;
   border-radius: vars.$radius-full;
-  color: white;
   box-shadow: vars.$shadow-accent;
+  color: white;
+  height: 60px;
+  margin: 0 auto vars.$spacing-lg auto;
+  width: 60px;
+  @include mix.flex-center;
 }
 
 .featureTitle {
   @include mix.text-subtitle;
+
   margin-bottom: vars.$spacing-sm;
 }
 
 .featureDescription {
   @include mix.text-body;
+
   color: vars.$secondary-text;
-  margin: 0;
   line-height: 1.6;
+  margin: 0;
 }
 
 // Archetypes Section
 // ==========================================================================
 .archetypes {
-  padding: vars.$spacing-3xl 0;
   background: vars.$light-bg;
+  padding: vars.$spacing-3xl 0;
 
   @include mix.mobile-only {
     padding: vars.$spacing-2xl 0;
@@ -336,64 +327,51 @@
 
 .archetypesGrid {
   @include mix.grid-container;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
   gap: vars.$spacing-xl;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
   @include mix.mobile-only {
-    grid-template-columns: 1fr;
     gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
   }
 }
 
-.archetypeOverviewCard {
-  text-align: center;
-  padding: vars.$spacing-2xl;
-  transition: vars.$transition-standard;
-  border: 2px solid transparent;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: vars.$shadow-card-hover;
-  }
-
-  @include mix.mobile-only {
-    padding: vars.$spacing-xl;
-  }
-}
 
 .archetypeHeader {
   margin-bottom: vars.$spacing-lg;
 }
 
 .archetypeIconLarge {
-  width: 80px;
-  height: 80px;
-  @include mix.flex-center;
-  margin: 0 auto vars.$spacing-md auto;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.9) 0%, 
-    rgba(255, 255, 255, 0.7) 100%
+    rgb(255 255 255 / 90%) 0%, 
+    rgb(255 255 255 / 70%) 100%
   );
-  border-radius: vars.$radius-full;
-  font-size: 2.5rem;
-  box-shadow: vars.$shadow-card;
   border: 3px solid var(--archetype-color);
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-card;
+  font-size: 2.5rem;
+  height: 80px;
+  margin: 0 auto vars.$spacing-md auto;
   position: relative;
+  width: 80px;
+  @include mix.flex-center;
 
   &::after {
-    content: '';
-    position: absolute;
-    inset: -6px;
-    border-radius: vars.$radius-full;
+    animation: rotate 4s linear infinite;
     background: conic-gradient(
       from 0deg at 50% 50%,
       var(--archetype-color) 0%,
       transparent 50%,
       var(--archetype-color) 100%
     );
-    z-index: -1;
+    border-radius: vars.$radius-full;
+    content: '';
+    inset: -6px;
     opacity: 0.3;
-    animation: rotate 4s linear infinite;
+    position: absolute;
+    z-index: -1;
   }
 
   @keyframes rotate {
@@ -404,21 +382,23 @@
 
 .archetypeTitle {
   @include mix.text-subtitle;
+
   margin: 0;
 }
 
 .archetypeOverviewDesc {
   @include mix.text-body;
+
   color: vars.$secondary-text;
-  margin: 0;
   line-height: 1.6;
+  margin: 0;
 }
 
 // CTA Section
 // ==========================================================================
 .cta {
-  padding: vars.$spacing-3xl 0;
   background: vars.$bg-gradient;
+  padding: vars.$spacing-3xl 0;
 
   @include mix.mobile-only {
     padding: vars.$spacing-2xl 0;
@@ -426,22 +406,19 @@
 }
 
 .ctaCard {
-  text-align: center;
-  padding: vars.$spacing-3xl;
   background: vars.$card-bg;
-  position: relative;
   overflow: hidden;
+  padding: vars.$spacing-3xl;
+  position: relative;
+  text-align: center;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background: vars.$primary-accent;
-    opacity: 0.02;
     border-radius: inherit;
+    content: '';
+    inset: 0;
+    opacity: 0.02;
+    position: absolute;
   }
 
   @include mix.mobile-only {
@@ -450,14 +427,15 @@
 }
 
 .ctaContent {
+  margin: 0 auto;
+  max-width: 600px;
   position: relative;
   z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .ctaTitle {
   @include mix.text-title;
+
   margin-bottom: vars.$spacing-md;
 
   @include mix.mobile-only {
@@ -467,10 +445,11 @@
 
 .ctaSubtitle {
   @include mix.text-body;
-  font-size: vars.$font-body-lg;
+
   color: vars.$secondary-text;
-  margin-bottom: vars.$spacing-2xl;
+  font-size: vars.$font-body-lg;
   line-height: 1.6;
+  margin-bottom: vars.$spacing-2xl;
 
   @include mix.mobile-only {
     font-size: vars.$font-body;
@@ -495,8 +474,8 @@
 
   .featuresGrid,
   .archetypesGrid {
-    max-width: 400px;
     margin: 0 auto;
+    max-width: 400px;
   }
 }
 
@@ -504,7 +483,7 @@
 // ==========================================================================
 .featureCard,
 .archetypeOverviewCard {
-  animation: fadeInUp 0.6s ease-out;
+  animation: fade-in-up 0.6s ease-out;
   animation-fill-mode: both;
 
   @for $i from 1 through 6 {
@@ -513,15 +492,49 @@
     }
   }
 
-  @keyframes fadeInUp {
+  @keyframes fade-in-up {
     from {
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+.featureCard {
+  border: 2px solid transparent;
+  padding: vars.$spacing-2xl;
+  text-align: center;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    border-color: rgb(255 107 157 / 20%);
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-2px);
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl;
+  }
+}
+
+.archetypeOverviewCard {
+  border: 2px solid transparent;
+  padding: vars.$spacing-2xl;
+  text-align: center;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-3px);
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl;
   }
 }
 
@@ -532,7 +545,6 @@
     animation: none;
     background: vars.$primary-accent-solid;
     background-clip: text;
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -546,9 +558,9 @@
     animation: none;
   }
 
-  * {
-    transition: none !important;
-  }
+  // * {
+  //   transition: none !important;
+  // }
 }
 
 // High Contrast Mode
@@ -560,9 +572,9 @@
 
   .highlightText {
     background: none;
-    -webkit-text-fill-color: initial;
-    color: #0066cc;
+    color: #06c;
     text-decoration: underline;
+    -webkit-text-fill-color: initial;
   }
 
   .featureCard,
@@ -571,7 +583,7 @@
   }
 
   .featureIcon {
-    background: #0066cc;
+    background: #06c;
     color: white;
   }
 }

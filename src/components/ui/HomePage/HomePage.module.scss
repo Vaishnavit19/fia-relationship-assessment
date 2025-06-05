@@ -11,25 +11,28 @@
 // ==========================================================================
 .hero {
   @include mix.container;
-  padding-top: vars.$spacing-3xl;
+
   padding-bottom: vars.$spacing-3xl;
+  padding-top: vars.$spacing-3xl;
   position: relative;
   z-index: 2;
 
   @include mix.mobile-only {
-    padding-top: vars.$spacing-2xl;
     padding-bottom: vars.$spacing-2xl;
+    padding-top: vars.$spacing-2xl;
   }
 }
 
 .heroContent {
   @include mix.grid-container;
   @include mix.grid-columns(2);
+
   align-items: center;
   gap: vars.$spacing-3xl;
 
   @include mix.mobile-only {
     @include mix.grid-columns(1);
+
     gap: vars.$spacing-2xl;
     text-align: center;
   }
@@ -47,8 +50,9 @@
 
 .heroTitle {
   @include mix.text-hero;
-  margin: 0;
+
   line-height: 1.1;
+  margin: 0;
 
   @include mix.mobile-only {
     font-size: 2.5rem;
@@ -60,14 +64,13 @@
 }
 
 .gradientText {
+  animation: gradient-shift 3s ease-in-out infinite;
   background: vars.$primary-accent;
   background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
-  animation: gradientShift 3s ease-in-out infinite;
+  -webkit-text-fill-color: transparent;
 
-  @keyframes gradientShift {
+  @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
@@ -75,51 +78,52 @@
 
 .heroSubtitle {
   @include mix.text-body;
-  font-size: vars.$font-body-lg;
+
   color: vars.$secondary-text;
-  margin: 0;
+  font-size: vars.$font-body-lg;
   line-height: 1.6;
+  margin: 0;
   max-width: 90%;
 
   @include mix.mobile-only {
-    max-width: 100%;
     font-size: vars.$font-body;
+    max-width: 100%;
   }
 }
 
 // CTA Container
 // ==========================================================================
 .ctaContainer {
-  display: flex;
-  gap: vars.$spacing-md;
   align-items: center;
+  display: flex;
   flex-wrap: wrap;
+  gap: vars.$spacing-md;
 
   @include mix.mobile-only {
     flex-direction: column;
-    width: 100%;
     gap: vars.$spacing-sm;
+    width: 100%;
   }
 }
 
 .primaryCta {
-  position: relative;
   overflow: hidden;
+  position: relative;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
+      rgb(255 255 255 / 30%) 50%,
       transparent 100%
     );
+    content: '';
+    height: 100%;
+    left: -100%;
+    position: absolute;
+    top: 0;
     transition: left 0.6s ease;
+    width: 100%;
   }
 
   &:hover::before {
@@ -127,8 +131,8 @@
   }
 
   @include mix.mobile-only {
-    width: 100%;
     max-width: 300px;
+    width: 100%;
   }
 }
 
@@ -150,8 +154,8 @@
 }
 
 .feature {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: vars.$spacing-sm;
   
   @include mix.mobile-only {
@@ -160,15 +164,15 @@
 }
 
 .featureIcon {
-  display: flex;
   align-items: center;
+  background: rgb(255 107 157 / 10%);
+  border-radius: vars.$radius-full;
+  color: vars.$primary-accent-solid;
+  display: flex;
+  flex-shrink: 0;
+  height: 40px;
   justify-content: center;
   width: 40px;
-  height: 40px;
-  border-radius: vars.$radius-full;
-  background: rgba(255, 107, 157, 0.1);
-  color: vars.$primary-accent-solid;
-  flex-shrink: 0;
 }
 
 .featureContent {
@@ -178,26 +182,26 @@
 }
 
 .featureTitle {
+  color: vars.$primary-text;
   font-size: vars.$font-body-sm;
   font-weight: vars.$font-semibold;
-  color: vars.$primary-text;
   margin: 0;
 }
 
 .featureDescription {
-  font-size: vars.$font-caption;
   color: vars.$secondary-text;
-  margin: 0;
+  font-size: vars.$font-caption;
   line-height: 1.4;
+  margin: 0;
 }
 
 // Hero Visual
 // ==========================================================================
 .heroVisual {
-  position: relative;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
+  position: relative;
 
   @include mix.mobile-only {
     margin-top: vars.$spacing-lg;
@@ -206,58 +210,58 @@
 }
 
 .visualContainer {
+  height: 300px;
   position: relative;
   width: 300px;
-  height: 300px;
   
   @include mix.mobile-only {
-    width: 250px;
     height: 250px;
+    width: 250px;
   }
 
   @include mix.tablet-only {
-    width: 280px;
     height: 280px;
+    width: 280px;
   }
 }
 
 .floatingIcon {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: vars.$radius-full;
-  background: vars.$card-bg;
-  box-shadow: vars.$shadow-card;
-  display: flex;
   align-items: center;
-  justify-content: center;
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
-  border: 3px solid transparent;
+  background: vars.$card-bg;
   background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-card;
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  position: absolute;
+  width: 60px;
 
   &::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: inherit;
     background: var(--archetype-color);
+    border-radius: inherit;
+    content: '';
+    inset: -3px;
     opacity: 0.2;
+    position: absolute;
     z-index: -1;
   }
 
   @include mix.mobile-only {
-    width: 50px;
     height: 50px;
+    width: 50px;
   }
 }
 
 .floating1 {
-  top: 20px;
-  left: 50px;
-  animation-name: float1;
   animation-delay: 0s;
+  animation-name: float1;
+  left: 50px;
+  top: 20px;
 
   @keyframes float1 {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -267,10 +271,10 @@
 }
 
 .floating2 {
-  top: 80px;
-  right: 30px;
-  animation-name: float2;
   animation-delay: 1s;
+  animation-name: float2;
+  right: 30px;
+  top: 80px;
 
   @keyframes float2 {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -280,10 +284,10 @@
 }
 
 .floating3 {
+  animation-delay: 2s;
+  animation-name: float3;
   bottom: 60px;
   left: 30px;
-  animation-name: float3;
-  animation-delay: 2s;
 
   @keyframes float3 {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -302,54 +306,54 @@
 }
 
 .centralVisual {
+  align-items: center;
+  animation: central-pulse 2s ease-in-out infinite;
+  background: vars.$secondary-accent;
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-card-hover;
+  display: flex;
+  height: 120px;
+  justify-content: center;
+  left: 50%;
   position: absolute;
   top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
   width: 120px;
-  height: 120px;
-  border-radius: vars.$radius-full;
-  background: vars.$secondary-accent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: vars.$shadow-card-hover;
-  animation: centralPulse 2s ease-in-out infinite;
 
-  @keyframes centralPulse {
+  @keyframes central-pulse {
     0%, 100% { transform: translate(-50%, -50%) scale(1); }
     50% { transform: translate(-50%, -50%) scale(1.05); }
   }
 
   @include mix.mobile-only {
-    width: 100px;
     height: 100px;
+    width: 100px;
   }
 }
 
 .innerCircle {
-  width: 80px;
-  height: 80px;
-  border-radius: vars.$radius-full;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
   align-items: center;
-  justify-content: center;
   backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 20%);
+  border-radius: vars.$radius-full;
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  width: 80px;
 
   @include mix.mobile-only {
-    width: 70px;
     height: 70px;
+    width: 70px;
   }
 }
 
 .centralIcon {
   color: white;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 10%));
 
   @include mix.mobile-only {
-    width: 36px;
     height: 36px;
+    width: 36px;
   }
 }
 
@@ -359,18 +363,19 @@
 .archetypesPreview,
 .benefits {
   @include mix.container;
-  padding-top: vars.$spacing-3xl;
+
   padding-bottom: vars.$spacing-3xl;
+  padding-top: vars.$spacing-3xl;
 
   @include mix.mobile-only {
-    padding-top: vars.$spacing-2xl;
     padding-bottom: vars.$spacing-2xl;
+    padding-top: vars.$spacing-2xl;
   }
 }
 
 .sectionHeader {
-  text-align: center;
   margin-bottom: vars.$spacing-2xl;
+  text-align: center;
 
   @include mix.mobile-only {
     margin-bottom: vars.$spacing-xl;
@@ -379,24 +384,26 @@
 
 .sectionTitle {
   @include mix.text-title;
+
   margin: 0 0 vars.$spacing-sm 0;
 }
 
 .sectionSubtitle {
   @include mix.text-body;
+
   color: vars.$secondary-text;
   margin: 0;
-  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  max-width: 600px;
 }
 
 // How It Works Steps
 // ==========================================================================
 .steps {
   display: flex;
-  justify-content: space-between;
   gap: vars.$spacing-xl;
+  justify-content: space-between;
   position: relative;
 
   @include mix.mobile-only {
@@ -410,18 +417,18 @@
 
   // Connection line (desktop only)
   &::before {
-    content: '';
-    position: absolute;
-    top: 30px;
-    left: 60px;
-    right: 60px;
-    height: 2px;
     background: linear-gradient(
       90deg,
       vars.$primary-accent-solid 0%,
       vars.$secondary-accent-solid 50%,
       vars.$warning-accent-solid 100%
     );
+    content: '';
+    height: 2px;
+    left: 60px;
+    position: absolute;
+    right: 60px;
+    top: 30px;
     z-index: 0;
 
     @include mix.tablet-up {
@@ -436,58 +443,67 @@
 
 .step {
   flex: 1;
-  text-align: center;
   position: relative;
+  text-align: center;
   z-index: 1;
 }
 
 .stepNumber {
-  width: 60px;
-  height: 60px;
-  border-radius: vars.$radius-full;
+  align-items: center;
   background: vars.$secondary-accent;
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-button;
   color: white;
   display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: vars.$font-subtitle;
   font-weight: vars.$font-bold;
+  height: 60px;
+  justify-content: center;
   margin: 0 auto vars.$spacing-md auto;
-  box-shadow: vars.$shadow-button;
   position: relative;
+  width: 60px;
 
   &::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: inherit;
+    animation: number-pulse 3s ease-in-out infinite;
     background: vars.$secondary-accent;
+    border-radius: inherit;
+    content: '';
+    inset: -4px;
     opacity: 0.2;
+    position: absolute;
     z-index: -1;
-    animation: numberPulse 3s ease-in-out infinite;
   }
 
-  @keyframes numberPulse {
-    0%, 100% { transform: scale(1); opacity: 0.2; }
-    50% { transform: scale(1.2); opacity: 0.1; }
+  @keyframes number-pulse {
+    0%, 100% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.1;
+      transform: scale(1.2);
+    }
   }
 }
 
 .stepContent {
-  max-width: 250px;
   margin: 0 auto;
+  max-width: 250px;
 }
 
 .stepTitle {
   @include mix.text-subtitle;
-  margin: 0 0 vars.$spacing-xs 0;
+
   font-size: vars.$font-body-lg;
+  margin: 0 0 vars.$spacing-xs 0;
 }
 
 .stepDescription {
   @include mix.text-small;
-  margin: 0;
+
   line-height: 1.5;
+  margin: 0;
 }
 
 // Archetype Cards Preview
@@ -495,10 +511,12 @@
 .archetypeCards {
   @include mix.grid-container;
   @include mix.grid-columns(3);
+
   gap: vars.$spacing-xl;
 
   @include mix.mobile-only {
     @include mix.grid-columns(1);
+
     gap: vars.$spacing-lg;
   }
 
@@ -508,14 +526,14 @@
 }
 
 .archetypeCard {
-  text-align: center;
-  padding: vars.$spacing-xl;
-  transition: vars.$transition-standard;
   cursor: default;
+  padding: vars.$spacing-xl;
+  text-align: center;
+  transition: vars.$transition-standard;
 
   &:hover {
-    transform: translateY(-4px);
     box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-4px);
   }
 
   @include mix.mobile-only {
@@ -524,32 +542,32 @@
 }
 
 .archetypeHeader {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: vars.$spacing-md;
   margin-bottom: vars.$spacing-md;
 }
 
 .archetypeIcon {
-  width: 80px;
-  height: 80px;
-  border-radius: vars.$radius-full;
+  align-items: center;
   background: vars.$card-bg;
   border: 4px solid var(--archetype-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: vars.$radius-full;
   box-shadow: vars.$shadow-card;
+  display: flex;
+  height: 80px;
+  justify-content: center;
   position: relative;
+  width: 80px;
 
   &::before {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    border-radius: inherit;
     background: var(--archetype-color);
+    border-radius: inherit;
+    content: '';
+    inset: -8px;
     opacity: 0.1;
+    position: absolute;
     z-index: -1;
   }
 
@@ -558,8 +576,8 @@
   }
 
   @include mix.mobile-only {
-    width: 70px;
     height: 70px;
+    width: 70px;
     
     .archetypeEmoji {
       font-size: 1.75rem;
@@ -569,27 +587,29 @@
 
 .archetypeName {
   @include mix.text-subtitle;
-  margin: 0;
+
   font-size: vars.$font-body-lg;
   font-weight: vars.$font-semibold;
+  margin: 0;
 }
 
 .archetypeDescription {
   @include mix.text-small;
-  margin: 0;
+
   line-height: 1.5;
+  margin: 0;
 }
 
 .learnMoreContainer {
-  text-align: center;
   margin-top: vars.$spacing-xl;
+  text-align: center;
 }
 
 // Benefits Section
 // ==========================================================================
 .benefitsCard {
-  max-width: 800px;
   margin: 0 auto;
+  max-width: 800px;
   padding: vars.$spacing-2xl;
 
   @include mix.mobile-only {
@@ -604,8 +624,8 @@
 }
 
 .benefit {
-  display: flex;
   align-items: flex-start;
+  display: flex;
   gap: vars.$spacing-sm;
 }
 
@@ -617,6 +637,7 @@
 
 .benefitText {
   @include mix.text-body;
+
   color: vars.$secondary-text;
   line-height: 1.6;
 }
@@ -625,8 +646,9 @@
 // ==========================================================================
 .finalCta {
   @include mix.container;
-  padding-top: vars.$spacing-2xl;
+
   padding-bottom: vars.$spacing-3xl;
+  padding-top: vars.$spacing-2xl;
 
   @include mix.mobile-only {
     padding-bottom: vars.$spacing-2xl;
@@ -636,27 +658,27 @@
 .ctaCard {
   background: vars.$secondary-accent;
   color: white;
-  text-align: center;
+  overflow: hidden;
   padding: vars.$spacing-3xl;
   position: relative;
-  overflow: hidden;
+  text-align: center;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    animation: cta-shimmer 4s ease-in-out infinite;
     background: radial-gradient(
       circle,
-      rgba(255, 255, 255, 0.1) 0%,
+      rgb(255 255 255 / 10%) 0%,
       transparent 70%
     );
-    animation: ctaShimmer 4s ease-in-out infinite;
+    content: '';
+    height: 200%;
+    left: -50%;
+    position: absolute;
+    top: -50%;
+    width: 200%;
   }
 
-  @keyframes ctaShimmer {
+  @keyframes cta-shimmer {
     0%, 100% { transform: rotate(0deg); }
     50% { transform: rotate(180deg); }
   }
@@ -667,14 +689,15 @@
 }
 
 .ctaContent {
+  margin: 0 auto;
+  max-width: 600px;
   position: relative;
   z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .ctaTitle {
   @include mix.text-title;
+
   color: white;
   margin: 0 0 vars.$spacing-md 0;
 
@@ -685,9 +708,10 @@
 
 .ctaDescription {
   @include mix.text-body;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 vars.$spacing-xl 0;
+
+  color: rgb(255 255 255 / 90%);
   line-height: 1.6;
+  margin: 0 0 vars.$spacing-xl 0;
 }
 
 .finalCtaButton {
@@ -695,9 +719,9 @@
   color: vars.$secondary-accent-solid;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgb(255 255 255 / 95%);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -739,7 +763,6 @@
   .gradientText {
     background: black;
     background-clip: text;
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -758,8 +781,8 @@
 @media print {
   .homePage {
     * {
-      box-shadow: none !important;
       animation: none !important;
+      box-shadow: none !important;
       transition: none !important;
     }
 

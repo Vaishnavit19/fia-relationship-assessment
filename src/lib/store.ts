@@ -1,17 +1,18 @@
 // lib/store.ts
 // ==========================================================================
-// ZUSTAND ASSESSMENT STORE
+// ZUSTAND ASSESSMENT STORE - RESTRUCTURED FOR V5 COMPATIBILITY
 // ==========================================================================
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 
 import { scenarios, getScenarioById, getArchetypeByHighestScore, calculateProgress } from './data';
 import { ScoreData, UserAnswer, UserData, AssessmentResult, Scenario, AnswerOption } from './types';
 
 // Store State Interface
 export interface AssessmentState {
-  // Current state
+  // Core assessment state
   currentScenario: number;
   answers: UserAnswer[];
   scores: ScoreData;
@@ -19,10 +20,11 @@ export interface AssessmentState {
   isComplete: boolean;
   isStarted: boolean;
 
-  // Computed values
+  // Computed/cached values
   progress: number;
   currentQuestion: Scenario | null;
   totalQuestions: number;
+  cachedResults: AssessmentResult | null;
 }
 
 // Store Actions Interface
@@ -47,6 +49,10 @@ export interface AssessmentActions {
   // Reset actions
   resetAssessment: () => void;
   resetToQuestion: (scenarioId: number) => void;
+
+  // Internal helpers
+  _updateComputedValues: () => void;
+  _createResults: () => AssessmentResult | null;
 }
 
 // Complete Store Type
@@ -63,6 +69,25 @@ const initialState: AssessmentState = {
   progress: 0,
   currentQuestion: null,
   totalQuestions: scenarios.length,
+  cachedResults: null,
+};
+
+// Helper function to create results
+const createAssessmentResults = (
+  scores: ScoreData,
+  answers: UserAnswer[],
+  userData: UserData | null
+): AssessmentResult | null => {
+  if (!userData) return null;
+
+  const archetype = getArchetypeByHighestScore(scores);
+
+  return {
+    totalScores: scores,
+    archetype,
+    completedAt: new Date(),
+    answers,
+  };
 };
 
 // Create the Zustand Store
@@ -72,6 +97,28 @@ export const useAssessmentStore = create<AssessmentStore>()(
       (set, get) => ({
         // Initial State
         ...initialState,
+
+        // Internal helper to update computed values
+        _updateComputedValues: () => {
+          const state = get();
+          const currentQuestion = getScenarioById(state.currentScenario);
+          const progress = calculateProgress(state.currentScenario);
+
+          set(
+            {
+              currentQuestion,
+              progress,
+            },
+            false,
+            '_updateComputedValues'
+          );
+        },
+
+        // Internal helper to create results
+        _createResults: () => {
+          const state = get();
+          return createAssessmentResults(state.scores, state.answers, state.userData);
+        },
 
         // Actions
         setUserData: (data: UserData) => {
@@ -190,10 +237,14 @@ export const useAssessmentStore = create<AssessmentStore>()(
         },
 
         completeAssessment: () => {
+          const state = get();
+          const results = createAssessmentResults(state.scores, state.answers, state.userData);
+
           set(
             {
               isComplete: true,
               progress: 100,
+              cachedResults: results,
             },
             false,
             'completeAssessment'
@@ -202,26 +253,15 @@ export const useAssessmentStore = create<AssessmentStore>()(
 
         getResults: (): AssessmentResult | null => {
           const state = get();
-
-          if (!state.isComplete || !state.userData) {
-            return null;
-          }
-
-          const archetype = getArchetypeByHighestScore(state.scores);
-
-          return {
-            totalScores: state.scores,
-            archetype,
-            completedAt: new Date(),
-            answers: state.answers,
-          };
+          return state.cachedResults;
         },
 
         resetAssessment: () => {
+          const userData = get().userData; // Preserve user data
           set(
             {
               ...initialState,
-              userData: get().userData, // Keep user data
+              userData,
             },
             false,
             'resetAssessment'
@@ -254,6 +294,7 @@ export const useAssessmentStore = create<AssessmentStore>()(
               scores: newScores,
               isComplete: false,
               progress: calculateProgress(scenarioId),
+              cachedResults: null, // Clear cached results
             },
             false,
             'resetToQuestion'
@@ -270,7 +311,21 @@ export const useAssessmentStore = create<AssessmentStore>()(
           currentScenario: state.currentScenario,
           isStarted: state.isStarted,
           isComplete: state.isComplete,
+          cachedResults: state.cachedResults,
         }),
+        // Add onRehydrateStorage to restore computed values after hydration
+        onRehydrateStorage: () => state => {
+          if (state) {
+            // Restore computed values after hydration
+            const currentQuestion = getScenarioById(state.currentScenario);
+            const progress = calculateProgress(state.currentScenario);
+
+            // Update the state with computed values
+            state.currentQuestion = currentQuestion;
+            state.progress = progress;
+            state.totalQuestions = scenarios.length;
+          }
+        },
       }
     ),
     {
@@ -279,17 +334,24 @@ export const useAssessmentStore = create<AssessmentStore>()(
   )
 );
 
-// Selector Hooks for better performance
+// ==========================================================================
+// STABLE SELECTOR HOOKS FOR ZUSTAND V5
+// ==========================================================================
+
+// Multi-value selectors using useShallow for stability
 export const useAssessmentData = () => {
-  return useAssessmentStore(state => ({
-    currentScenario: state.currentScenario,
-    currentQuestion: state.currentQuestion,
-    progress: state.progress,
-    isComplete: state.isComplete,
-    isStarted: state.isStarted,
-  }));
+  return useAssessmentStore(
+    useShallow(state => ({
+      currentScenario: state.currentScenario,
+      currentQuestion: state.currentQuestion,
+      progress: state.progress,
+      isComplete: state.isComplete,
+      isStarted: state.isStarted,
+    }))
+  );
 };
 
+// Primitive selectors (no useShallow needed)
 export const useAssessmentScores = () => {
   return useAssessmentStore(state => state.scores);
 };
@@ -302,11 +364,93 @@ export const useUserData = () => {
   return useAssessmentStore(state => state.userData);
 };
 
-// Helper hooks
+export const useCurrentScenario = () => {
+  return useAssessmentStore(state => state.currentScenario);
+};
+
+export const useCurrentQuestion = () => {
+  return useAssessmentStore(state => state.currentQuestion);
+};
+
+export const useProgress = () => {
+  return useAssessmentStore(state => state.progress);
+};
+
+export const useIsComplete = () => {
+  return useAssessmentStore(state => state.isComplete);
+};
+
+export const useIsStarted = () => {
+  return useAssessmentStore(state => state.isStarted);
+};
+
+// Results selector (returns cached result - stable reference)
+export const useAssessmentResults = () => {
+  return useAssessmentStore(state => state.cachedResults);
+};
+
+// Helper function selectors (return primitives)
 export const useCanGoBack = () => {
   return useAssessmentStore(state => state.canGoBack());
 };
 
-export const useAssessmentResults = () => {
-  return useAssessmentStore(state => state.getResults());
+// Action selectors (stable function references from Zustand)
+export const useAssessmentActions = () => {
+  return useAssessmentStore(
+    useShallow(state => ({
+      setUserData: state.setUserData,
+      startAssessment: state.startAssessment,
+      addAnswer: state.addAnswer,
+      goToNextScenario: state.goToNextScenario,
+      goToPreviousQuestion: state.goToPreviousQuestion,
+      goToScenario: state.goToScenario,
+      completeAssessment: state.completeAssessment,
+      resetAssessment: state.resetAssessment,
+      resetToQuestion: state.resetToQuestion,
+    }))
+  );
+};
+
+// ==========================================================================
+// CONVENIENCE HOOKS FOR COMMON PATTERNS
+// ==========================================================================
+
+// Combined hook for assessment page
+export const useAssessmentPage = () => {
+  return useAssessmentStore(
+    useShallow(state => ({
+      // State
+      currentScenario: state.currentScenario,
+      currentQuestion: state.currentQuestion,
+      progress: state.progress,
+      isComplete: state.isComplete,
+      isStarted: state.isStarted,
+      answers: state.answers,
+      userData: state.userData,
+
+      // Actions
+      setUserData: state.setUserData,
+      startAssessment: state.startAssessment,
+      addAnswer: state.addAnswer,
+      goToNextScenario: state.goToNextScenario,
+      goToPreviousQuestion: state.goToPreviousQuestion,
+      canGoBack: state.canGoBack,
+      resetAssessment: state.resetAssessment,
+    }))
+  );
+};
+
+// Combined hook for results page
+export const useResultsPage = () => {
+  return useAssessmentStore(
+    useShallow(state => ({
+      // State
+      results: state.cachedResults,
+      userData: state.userData,
+      isComplete: state.isComplete,
+
+      // Actions
+      resetAssessment: state.resetAssessment,
+    }))
+  );
 };

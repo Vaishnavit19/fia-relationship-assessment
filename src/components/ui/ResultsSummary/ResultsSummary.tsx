@@ -63,14 +63,14 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
     ];
 
     // Helper function to map score type to archetype ID
-  const getArchetypeIdFromType = (type: string): string => {
-    const mapping: Record<string, string> = {
-      emotional: 'heartfelt',
-      logical: 'strategic',
-      exploratory: 'spontaneous',
+    const getArchetypeIdFromType = (type: string): string => {
+      const mapping: Record<string, string> = {
+        emotional: 'heartfelt',
+        logical: 'strategic',
+        exploratory: 'spontaneous',
+      };
+      return mapping[type] || '';
     };
-    return mapping[type] || '';
-  };
 
     // Sort by score descending
     scores.sort((a, b) => b.value - a.value);
@@ -87,8 +87,6 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
 
     return allArchetypes.filter(archetype => secondaryIds.includes(archetype.id));
   }, [result, allArchetypes, showSecondaryArchetypes]);
-
-  
 
   // Get score for archetype
   const getScoreForArchetype = (archetypeId: string): number => {
@@ -130,7 +128,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
     // Specific dimension insights
     if (emotional >= 8) {
       insights.push(
-        'Your high emotional score indicates you prioritize deep connection and your partner\'s feelings when making decisions together.'
+        "Your high emotional score indicates you prioritize deep connection and your partner's feelings when making decisions together."
       );
     }
     if (logical >= 8) {
@@ -149,10 +147,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
 
   const insights = showInsights ? generateInsights() : [];
 
-  const summaryClasses = [
-    styles.resultsSummary,
-    className,
-  ].filter(Boolean).join(' ');
+  const summaryClasses = [styles.resultsSummary, className].filter(Boolean).join(' ');
 
   return (
     <div className={summaryClasses}>
@@ -160,21 +155,17 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
       <div className={styles.header}>
         <div className={styles.celebration}>
           <div className={styles.celebrationIcon}>{result.archetype.icon}</div>
-          <h1 className={styles.title}>
-            Congratulations, {userData.name}!
-          </h1>
-          <p className={styles.subtitle}>
-            You&apos;ve discovered your relationship archetype
-          </p>
+          <h1 className={styles.title}>Congratulations, {userData.name}!</h1>
+          <p className={styles.subtitle}>You&apos;ve discovered your relationship archetype</p>
         </div>
-        
+
         <div className={styles.completionInfo}>
           <div className={styles.completionBadge}>
             <Trophy size={16} />
             <span>Assessment Complete</span>
           </div>
           <div className={styles.completionDate}>
-            Completed on {result.completedAt.toLocaleDateString()}
+            Completed on {new Date(result.completedAt).toLocaleDateString()}
           </div>
         </div>
       </div>
@@ -228,10 +219,10 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
               {insights.map((insight, index) => (
                 <div key={index} className={styles.insight}>
                   <div className={styles.insightNumber}>{index + 1}</div>
-                  <div 
+                  <div
                     className={styles.insightText}
-                    dangerouslySetInnerHTML={{ 
-                      __html: insight.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                    dangerouslySetInnerHTML={{
+                      __html: insight.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'),
                     }}
                   />
                 </div>
@@ -274,17 +265,12 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
           <h2 className={styles.sectionTitle}>What&apos;s Next?</h2>
           <div className={styles.actionsGrid}>
             {enableSharing && onShare && (
-              <Button
-                variant="cta"
-                size="large"
-                onClick={onShare}
-                className={styles.actionButton}
-              >
+              <Button variant="cta" size="large" onClick={onShare} className={styles.actionButton}>
                 <Share2 size={20} />
                 Share Your Results
               </Button>
             )}
-            
+
             {onDownload && (
               <Button
                 variant="secondary"
@@ -296,7 +282,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
                 Download Report
               </Button>
             )}
-            
+
             {onRetake && (
               <Button
                 variant="secondary"
@@ -315,8 +301,8 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
       {/* Footer */}
       <div className={styles.footer}>
         <p className={styles.footerText}>
-          Understanding your relationship style is just the beginning. Use these insights to strengthen 
-          communication, plan adventures, and deepen your connection with your partner.
+          Understanding your relationship style is just the beginning. Use these insights to
+          strengthen communication, plan adventures, and deepen your connection with your partner.
         </p>
         <div className={styles.footerBranding}>
           <span>Powered by FIA Relationship Assessment</span>
