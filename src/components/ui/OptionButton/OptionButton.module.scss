@@ -1,0 +1,518 @@
+// src/components/ui/OptionButton/OptionButton.module.scss
+@use '../../../styles/mixins' as mix;
+
+.optionButton {
+  @include mix.button-base;
+  @include mix.card-interactive;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover:not(.disabled):not(.loading) {
+    border-color: vars.$primary-accent-solid;
+    transform: translateY(-1px);
+    box-shadow: vars.$shadow-card;
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+
+  &.selected {
+    border-color: vars.$primary-accent-solid;
+    box-shadow: vars.$shadow-card;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 107, 157, 0.05);
+      pointer-events: none;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: vars.$light-bg;
+
+    &:hover {
+      transform: none;
+      border-color: vars.$border-color;
+      box-shadow: none;
+    }
+  }
+
+  &.loading {
+    cursor: wait;
+    opacity: 0.8;
+  }
+}
+
+// Content Layout
+.content {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+// Letter/Identifier
+.letter {
+  flex-shrink: 0;
+  position: relative;
+  border-radius: vars.$radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: vars.$light-bg;
+  border: 2px solid vars.$border-color;
+  transition: vars.$transition-standard;
+
+  .selected & {
+    background: vars.$primary-accent-solid;
+    border-color: vars.$primary-accent-solid;
+    color: white;
+    transform: scale(1.05);
+  }
+}
+
+.letterText {
+  font-weight: vars.$font-bold;
+  transition: vars.$transition-standard;
+}
+
+.letterSelected {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  opacity: 0;
+  animation: checkIn 0.3s ease-out forwards;
+
+  @keyframes checkIn {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+// Icon Container
+.iconContainer {
+  flex-shrink: 0;
+  color: vars.$primary-accent-solid;
+  transition: vars.$transition-standard;
+
+  .selected & {
+    transform: scale(1.1);
+  }
+}
+
+// Text Content
+.textContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+  min-width: 0; // Prevent flex shrinking issues
+}
+
+.mainText {
+  font-weight: vars.$font-medium;
+  color: vars.$primary-text;
+  line-height: 1.5;
+}
+
+.description {
+  color: vars.$secondary-text;
+  line-height: 1.4;
+  font-size: vars.$font-body-sm;
+}
+
+// Selection Indicators
+.indicator {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid vars.$border-color;
+  border-radius: vars.$radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: vars.$card-bg;
+  transition: vars.$transition-standard;
+
+  .selected & {
+    background: vars.$primary-accent-solid;
+    border-color: vars.$primary-accent-solid;
+    color: white;
+  }
+}
+
+.radioSelected {
+  color: vars.$primary-accent-solid;
+  animation: slideInRight 0.3s ease-out;
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(-8px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+.highlightIndicator {
+  color: vars.$primary-accent-solid;
+  background: rgba(255, 107, 157, 0.1);
+  border-radius: vars.$radius-full;
+  padding: vars.$spacing-xs;
+  animation: popIn 0.3s ease-out;
+
+  @keyframes popIn {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+// Loading Spinner
+.loadingSpinner {
+  flex-shrink: 0;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid vars.$border-color;
+  border-top: 2px solid vars.$primary-accent-solid;
+  border-radius: vars.$radius-full;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+// Variant Styles
+.variantDefault {
+  padding: vars.$spacing-lg;
+  border-radius: vars.$radius-lg;
+
+  .letter {
+    width: 32px;
+    height: 32px;
+    font-size: vars.$font-body-sm;
+  }
+
+  .mainText {
+    font-size: vars.$font-body;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-md;
+  }
+}
+
+.variantCompact {
+  padding: vars.$spacing-md vars.$spacing-lg;
+  border-radius: vars.$radius-md;
+
+  .letter {
+    width: 28px;
+    height: 28px;
+    font-size: vars.$font-body-sm;
+  }
+
+  .mainText {
+    font-size: vars.$font-body-sm;
+  }
+
+  .description {
+    font-size: vars.$font-caption;
+  }
+}
+
+.variantCard {
+  padding: vars.$spacing-xl;
+  border-radius: vars.$radius-xl;
+  box-shadow: vars.$shadow-card;
+
+  .letter {
+    width: 36px;
+    height: 36px;
+    font-size: vars.$font-body;
+  }
+
+  .mainText {
+    font-size: vars.$font-body-lg;
+  }
+
+  &:hover:not(.disabled):not(.loading) {
+    box-shadow: vars.$shadow-card-hover;
+  }
+}
+
+.variantMinimal {
+  padding: vars.$spacing-sm vars.$spacing-md;
+  border: none;
+  background: transparent;
+  border-radius: vars.$radius-sm;
+
+  &:hover:not(.disabled):not(.loading) {
+    background: vars.$hover-bg;
+    transform: none;
+    box-shadow: none;
+  }
+
+  &.selected {
+    background: rgba(255, 107, 157, 0.1);
+    border: none;
+    box-shadow: none;
+  }
+}
+
+// Size Variants
+.sizeSmall {
+  .content {
+    gap: vars.$spacing-sm;
+  }
+
+  .letter {
+    width: 24px;
+    height: 24px;
+    font-size: vars.$font-caption;
+  }
+
+  .mainText {
+    font-size: vars.$font-body-sm;
+  }
+
+  .description {
+    font-size: vars.$font-caption;
+  }
+}
+
+.sizeMedium {
+  .content {
+    gap: vars.$spacing-md;
+  }
+
+  .letter {
+    width: 32px;
+    height: 32px;
+    font-size: vars.$font-body-sm;
+  }
+
+  .mainText {
+    font-size: vars.$font-body;
+  }
+}
+
+.sizeLarge {
+  .content {
+    gap: vars.$spacing-lg;
+  }
+
+  .letter {
+    width: 40px;
+    height: 40px;
+    font-size: vars.$font-body;
+  }
+
+  .mainText {
+    font-size: vars.$font-body-lg;
+  }
+}
+
+// Color Variants - Assessment Specific
+.colorEmotional {
+  &.selected {
+    border-color: #87ceeb;
+    
+    &::before {
+      background: rgba(135, 206, 235, 0.1);
+    }
+
+    .letter {
+      background: linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%);
+      border-color: #87ceeb;
+    }
+  }
+
+  &:hover:not(.disabled):not(.loading) {
+    border-color: #87ceeb;
+  }
+}
+
+.colorLogical {
+  &.selected {
+    border-color: #667eea;
+    
+    &::before {
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .letter {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #667eea;
+    }
+  }
+
+  &:hover:not(.disabled):not(.loading) {
+    border-color: #667eea;
+  }
+}
+
+.colorExploratory {
+  &.selected {
+    border-color: #ffb347;
+    
+    &::before {
+      background: rgba(255, 179, 71, 0.1);
+    }
+
+    .letter {
+      background: linear-gradient(135deg, #ffb347 0%, #ffd700 100%);
+      border-color: #ffb347;
+    }
+  }
+
+  &:hover:not(.disabled):not(.loading) {
+    border-color: #ffb347;
+  }
+}
+
+// Responsive Adjustments
+@include mix.mobile-only {
+  .optionButton {
+    .content {
+      gap: vars.$spacing-sm;
+    }
+  }
+
+  .variantDefault {
+    .letter {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .variantCard {
+    padding: vars.$spacing-lg;
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .optionButton {
+    background: #2d3748;
+    border-color: #4a5568;
+
+    &.selected {
+      background: #1a202c;
+    }
+  }
+
+  .letter {
+    background: #4a5568;
+    border-color: #2d3748;
+  }
+
+  .checkbox {
+    background: #4a5568;
+    border-color: #2d3748;
+  }
+}
+
+// Reduced Motion Support
+@media (prefers-reduced-motion: reduce) {
+  .optionButton {
+    transition: none;
+
+    &:hover:not(.disabled):not(.loading) {
+      transform: none;
+    }
+
+    &.selected .letter {
+      transform: none;
+    }
+  }
+
+  .letterSelected,
+  .radioSelected,
+  .highlightIndicator {
+    animation: none;
+  }
+
+  .spinner {
+    animation: none;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .optionButton {
+    border: 2px solid black;
+
+    &.selected {
+      background: yellow;
+      color: black;
+
+      .letter {
+        background: black;
+        color: white;
+      }
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .optionButton {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid black;
+
+    &.selected {
+      background: #f0f0f0;
+
+      .letter {
+        background: black;
+        color: white;
+      }
+    }
+  }
+
+  .loadingSpinner {
+    display: none;
+  }
+}

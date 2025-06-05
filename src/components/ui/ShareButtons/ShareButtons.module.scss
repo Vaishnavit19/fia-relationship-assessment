@@ -1,0 +1,595 @@
+// src/components/ui/ShareButtons/ShareButtons.module.scss
+@use '../../../styles/mixins' as mix;
+
+.shareButtons {
+  position: relative;
+  width: 100%;
+}
+
+// Header Section
+// ==========================================================================
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: vars.$spacing-lg;
+  padding-bottom: vars.$spacing-md;
+  border-bottom: 1px solid vars.$border-color;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+}
+
+.headerIcon {
+  color: vars.$primary-accent-solid;
+}
+
+.headerTitle {
+  @include mix.text-subtitle;
+  margin: 0;
+  font-weight: vars.$font-semibold;
+  color: vars.$primary-text;
+}
+
+.shareCount {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs vars.$spacing-sm;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-sm;
+}
+
+.countNumber {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-bold;
+  color: vars.$primary-text;
+}
+
+.countLabel {
+  font-size: vars.$font-caption;
+  color: vars.$secondary-text;
+}
+
+// Message Prefix
+// ==========================================================================
+.messagePrefix {
+  margin-bottom: vars.$spacing-md;
+  
+  p {
+    @include mix.text-small;
+    color: vars.$secondary-text;
+    margin: 0;
+    text-align: center;
+  }
+}
+
+// Buttons Container
+// ==========================================================================
+.buttonsContainer {
+  display: flex;
+  gap: vars.$spacing-sm;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+
+  .orientationVertical & {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .orientationHorizontal & {
+    flex-direction: row;
+    
+    @include mix.mobile-only {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+}
+
+// Share Button Base
+// ==========================================================================
+.shareButton {
+  @include mix.button-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-xs;
+  border: 2px solid transparent;
+  background: vars.$card-bg;
+  color: vars.$secondary-text;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--platform-color, vars.$border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: var(--platform-color, vars.$primary-text);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--platform-color, vars.$primary-accent-solid);
+    outline-offset: 2px;
+  }
+}
+
+.buttonIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: vars.$transition-standard;
+  
+  .shareButton:hover & {
+    color: var(--platform-color, currentColor);
+  }
+}
+
+.buttonLabel {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  white-space: nowrap;
+  transition: vars.$transition-standard;
+}
+
+// Size Variants
+// ==========================================================================
+.sizeSmall {
+  .shareButton {
+    padding: vars.$spacing-xs vars.$spacing-sm;
+    border-radius: vars.$radius-sm;
+    font-size: vars.$font-caption;
+    min-height: 32px;
+    
+    .orientationVertical & {
+      padding: vars.$spacing-sm;
+    }
+  }
+  
+  .buttonLabel {
+    font-size: vars.$font-caption;
+  }
+}
+
+.sizeMedium {
+  .shareButton {
+    padding: vars.$spacing-sm vars.$spacing-md;
+    border-radius: vars.$radius-md;
+    font-size: vars.$font-body-sm;
+    min-height: 40px;
+    
+    .orientationVertical & {
+      padding: vars.$spacing-md;
+    }
+  }
+}
+
+.sizeLarge {
+  .shareButton {
+    padding: vars.$spacing-md vars.$spacing-lg;
+    border-radius: vars.$radius-lg;
+    font-size: vars.$font-body;
+    min-height: 48px;
+    
+    .orientationVertical & {
+      padding: vars.$spacing-lg;
+    }
+  }
+  
+  .buttonLabel {
+    font-size: vars.$font-body;
+  }
+}
+
+// Variant Styles
+// ==========================================================================
+.variantDefault {
+  padding: vars.$spacing-lg;
+}
+
+.variantCompact {
+  padding: vars.$spacing-md;
+  
+  .shareButton {
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: vars.$radius-full;
+    padding: vars.$spacing-sm;
+  }
+  
+  .buttonIcon {
+    margin: 0;
+  }
+}
+
+.variantDetailed {
+  padding: vars.$spacing-xl;
+  
+  .shareButton {
+    min-width: 120px;
+    
+    @include mix.mobile-only {
+      min-width: auto;
+      flex: 1;
+    }
+  }
+}
+
+.variantFloating {
+  position: fixed;
+  bottom: vars.$spacing-base;
+  right: vars.$spacing-base;
+  z-index: 100;
+  max-width: 200px;
+  box-shadow: vars.$shadow-card-hover;
+  
+  .buttonsContainer {
+    flex-direction: column;
+    gap: vars.$spacing-xs;
+  }
+  
+  .shareButton {
+    width: 48px;
+    height: 48px;
+    border-radius: vars.$radius-full;
+    padding: 0;
+    
+    &:hover {
+      width: auto;
+      padding: 0 vars.$spacing-md;
+      border-radius: vars.$radius-lg;
+      
+      .buttonLabel {
+        display: inline-block;
+        margin-left: vars.$spacing-xs;
+        animation: slideIn 0.3s ease-out;
+      }
+    }
+  }
+  
+  .buttonLabel {
+    display: none;
+    white-space: nowrap;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @include mix.mobile-only {
+    bottom: vars.$spacing-sm;
+    right: vars.$spacing-sm;
+    max-width: 160px;
+    
+    .shareButton {
+      width: 44px;
+      height: 44px;
+      
+      &:hover {
+        width: 44px;
+        padding: 0;
+        border-radius: vars.$radius-full;
+        
+        .buttonLabel {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Platform-specific Button Styles
+// ==========================================================================
+.facebookButton {
+  --platform-color: #1877f2;
+}
+
+.twitterButton {
+  --platform-color: #1da1f2;
+}
+
+.linkedinButton {
+  --platform-color: #0077b5;
+}
+
+.emailButton {
+  --platform-color: #ea4335;
+}
+
+.whatsappButton {
+  --platform-color: #25d366;
+}
+
+.copyButton {
+  --platform-color: #6b7280;
+  
+  &.copied {
+    --platform-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    color: #10b981;
+  }
+}
+
+.downloadButton {
+  --platform-color: #8b5cf6;
+}
+
+.nativeButton {
+  --platform-color: #6b7280;
+}
+
+// Footer
+// ==========================================================================
+.footer {
+  margin-top: vars.$spacing-lg;
+  padding-top: vars.$spacing-md;
+  border-top: 1px solid vars.$border-color;
+}
+
+.footerText {
+  @include mix.text-small;
+  color: vars.$secondary-text;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+// Animation Support
+// ==========================================================================
+.animated {
+  .shareButton {
+    animation: buttonAppear 0.3s ease-out;
+    
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.1}s;
+      }
+    }
+  }
+  
+  @keyframes buttonAppear {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+// Orientation Adjustments
+// ==========================================================================
+.orientationVertical {
+  .shareButton {
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .buttonsContainer {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+.orientationHorizontal {
+  .shareButton {
+    flex-direction: column;
+    text-align: center;
+    min-width: 80px;
+    
+    .variantCompact & {
+      flex-direction: row;
+      min-width: 44px;
+    }
+    
+    .variantDetailed & {
+      flex-direction: row;
+      min-width: 120px;
+    }
+  }
+  
+  .buttonIcon {
+    margin-bottom: vars.$spacing-xs;
+    
+    .variantCompact &,
+    .variantDetailed & {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Responsive Adjustments
+// ==========================================================================
+@include mix.mobile-only {
+  .shareButtons {
+    .orientationHorizontal .buttonsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: vars.$spacing-sm;
+    }
+    
+    .shareButton {
+      min-width: auto;
+    }
+  }
+  
+  .variantDetailed {
+    padding: vars.$spacing-lg;
+    
+    .shareButton {
+      padding: vars.$spacing-sm;
+      font-size: vars.$font-body-sm;
+    }
+  }
+}
+
+// Dark Mode Support
+// ==========================================================================
+@media (prefers-color-scheme: dark) {
+  .shareButton {
+    background: rgba(45, 55, 72, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      background: rgba(45, 55, 72, 0.9);
+      border-color: var(--platform-color);
+    }
+  }
+  
+  .shareCount {
+    background: rgba(45, 55, 72, 0.6);
+  }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .shareButton {
+    border: 3px solid black;
+    background: white;
+    color: black;
+    
+    &:hover {
+      background: var(--platform-color);
+      color: white;
+    }
+    
+    &:focus-visible {
+      outline: 4px solid black;
+    }
+  }
+}
+
+// Reduced Motion
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .shareButton {
+    transition: none;
+    
+    &::before {
+      display: none;
+    }
+    
+    &:hover {
+      transform: none;
+    }
+  }
+  
+  .animated .shareButton {
+    animation: none;
+  }
+  
+  .variantFloating .shareButton .buttonLabel {
+    animation: none;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .shareButtons {
+    display: none;
+  }
+  
+  .variantFloating {
+    display: none;
+  }
+}
+
+// Accessibility Enhancements
+// ==========================================================================
+.shareButton {
+  // Ensure buttons are large enough for touch
+  min-width: 44px;
+  min-height: 44px;
+  
+  // Improve focus visibility
+  &:focus-visible {
+    z-index: 1;
+    outline-width: 3px;
+  }
+}
+
+// Loading State
+// ==========================================================================
+.shareButton:disabled {
+  position: relative;
+  
+  .buttonIcon {
+    opacity: 0.3;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+// Success State for Copy Button
+// ==========================================================================
+.copyButton.copied {
+  .buttonIcon {
+    animation: successPulse 0.6s ease-out;
+  }
+  
+  @keyframes successPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+}

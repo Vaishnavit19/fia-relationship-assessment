@@ -1,0 +1,618 @@
+// src/components/ui/ArchetypeCard/ArchetypeCard.module.scss
+@use '../../../styles/mixins' as mix;
+
+.archetypeCard {
+  position: relative;
+  overflow: hidden;
+  transition: vars.$transition-standard;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: vars.$shadow-card-hover;
+  }
+
+  &.interactive {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(139, 124, 255, 0.15);
+    }
+
+    &:focus-visible {
+      outline: 2px solid vars.$primary-accent-solid;
+      outline-offset: 2px;
+    }
+  }
+
+  &.animated {
+    animation: cardAppear 0.6s ease-out;
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  }
+}
+
+// Badges
+.primaryBadge,
+.secondaryBadge {
+  position: absolute;
+  top: vars.$spacing-md;
+  right: vars.$spacing-md;
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs vars.$spacing-sm;
+  border-radius: vars.$radius-sm;
+  font-size: vars.$font-caption;
+  font-weight: vars.$font-semibold;
+  z-index: 2;
+}
+
+.primaryBadge {
+  background: vars.$primary-accent;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+
+  svg {
+    color: white;
+  }
+}
+
+.secondaryBadge {
+  background: vars.$warning-accent;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 179, 71, 0.3);
+
+  svg {
+    color: white;
+  }
+}
+
+// Header Section
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: vars.$spacing-md;
+  margin-bottom: vars.$spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.iconContainer {
+  position: relative;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: vars.$radius-full;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: vars.$shadow-card;
+  transition: vars.$transition-standard;
+
+  .archetypeCard:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.iconOverlay {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 24px;
+  height: 24px;
+  border-radius: vars.$radius-full;
+  background: vars.$card-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: vars.$secondary-text;
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: vars.$font-subtitle;
+  font-weight: vars.$font-bold;
+  color: vars.$primary-text;
+  margin: 0 0 vars.$spacing-xs 0;
+  line-height: 1.2;
+}
+
+.title {
+  font-size: vars.$font-body-sm;
+  color: vars.$secondary-text;
+  margin: 0;
+  font-weight: vars.$font-medium;
+  line-height: 1.3;
+}
+
+// Score Container
+.scoreContainer {
+  flex-shrink: 0;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+}
+
+.scoreValue {
+  font-size: vars.$font-section;
+  font-weight: vars.$font-bold;
+  color: vars.$primary-text;
+  line-height: 1;
+
+  .maxScore {
+    font-size: vars.$font-body;
+    color: vars.$secondary-text;
+    font-weight: vars.$font-regular;
+  }
+}
+
+.scorePercentage {
+  font-size: vars.$font-body-sm;
+  color: vars.$secondary-text;
+  font-weight: vars.$font-medium;
+}
+
+// Description
+.description {
+  margin-bottom: vars.$spacing-lg;
+  position: relative;
+  z-index: 1;
+
+  p {
+    color: vars.$secondary-text;
+    font-size: vars.$font-body;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// Traits
+.traits {
+  margin-bottom: vars.$spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.traitsTitle {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-semibold;
+  color: vars.$primary-text;
+  margin: 0 0 vars.$spacing-sm 0;
+}
+
+.traitsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+}
+
+.trait {
+  display: flex;
+  align-items: flex-start;
+  gap: vars.$spacing-xs;
+  font-size: vars.$font-body-sm;
+  color: vars.$secondary-text;
+  line-height: 1.4;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: vars.$success-accent-solid;
+  }
+}
+
+// Score Bar
+.scoreBar {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.scoreTrack {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: vars.$radius-xl;
+  overflow: hidden;
+  position: relative;
+}
+
+.scoreFill {
+  height: 100%;
+  border-radius: vars.$radius-xl;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.8) 0%, 
+    rgba(255, 255, 255, 1) 100%
+  );
+  transition: vars.$transition-progress;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 100%
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
+.scoreLabel {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-semibold;
+  color: vars.$card-bg;
+  white-space: nowrap;
+}
+
+// Action Container
+.actionContainer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.actionButton {
+  min-width: 120px;
+}
+
+// Gradient Overlay
+.gradientOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  border-radius: inherit;
+  z-index: 0;
+  transition: vars.$transition-standard;
+
+  .archetypeCard:hover & {
+    opacity: 0.15;
+  }
+}
+
+// Archetype-specific styling
+.archetypeHeartfelt {
+  border-left: 4px solid #87ceeb;
+
+  .gradientOverlay {
+    background: linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%);
+  }
+
+  .iconContainer {
+    background: linear-gradient(135deg, 
+      rgba(135, 206, 235, 0.1) 0%, 
+      rgba(152, 216, 232, 0.1) 100%
+    );
+    border: 2px solid rgba(135, 206, 235, 0.2);
+  }
+
+  .iconOverlay {
+    color: #87ceeb;
+  }
+
+  &.primary {
+    background: linear-gradient(135deg, 
+      rgba(135, 206, 235, 0.05) 0%, 
+      rgba(152, 216, 232, 0.05) 100%
+    );
+    border: 2px solid #87ceeb;
+  }
+}
+
+.archetypeStrategic {
+  border-left: 4px solid #667eea;
+
+  .gradientOverlay {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .iconContainer {
+    background: linear-gradient(135deg, 
+      rgba(102, 126, 234, 0.1) 0%, 
+      rgba(118, 75, 162, 0.1) 100%
+    );
+    border: 2px solid rgba(102, 126, 234, 0.2);
+  }
+
+  .iconOverlay {
+    color: #667eea;
+  }
+
+  &.primary {
+    background: linear-gradient(135deg, 
+      rgba(102, 126, 234, 0.05) 0%, 
+      rgba(118, 75, 162, 0.05) 100%
+    );
+    border: 2px solid #667eea;
+  }
+}
+
+.archetypeSpontaneous {
+  border-left: 4px solid #ffb347;
+
+  .gradientOverlay {
+    background: linear-gradient(135deg, #ffb347 0%, #ffd700 100%);
+  }
+
+  .iconContainer {
+    background: linear-gradient(135deg, 
+      rgba(255, 179, 71, 0.1) 0%, 
+      rgba(255, 215, 0, 0.1) 100%
+    );
+    border: 2px solid rgba(255, 179, 71, 0.2);
+  }
+
+  .iconOverlay {
+    color: #ffb347;
+  }
+
+  &.primary {
+    background: linear-gradient(135deg, 
+      rgba(255, 179, 71, 0.05) 0%, 
+      rgba(255, 215, 0, 0.05) 100%
+    );
+    border: 2px solid #ffb347;
+  }
+}
+
+// Variant Styles
+.variantDefault {
+  // Uses base styling
+}
+
+.variantDetailed {
+  .description {
+    background: rgba(255, 255, 255, 0.05);
+    padding: vars.$spacing-md;
+    border-radius: vars.$radius-md;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.variantCompact {
+  .header {
+    margin-bottom: vars.$spacing-md;
+  }
+
+  .iconContainer {
+    width: 48px;
+    height: 48px;
+  }
+
+  .emoji {
+    font-size: 1.5rem;
+  }
+
+  .name {
+    font-size: vars.$font-body-lg;
+  }
+
+  .description {
+    display: none;
+  }
+
+  .traits {
+    margin-bottom: vars.$spacing-md;
+  }
+}
+
+.variantResult {
+  box-shadow: vars.$shadow-card-hover;
+  
+  &.primary {
+    box-shadow: 0 12px 40px rgba(255, 107, 157, 0.2);
+  }
+}
+
+// Size Variants
+.sizeSmall {
+  .iconContainer {
+    width: 48px;
+    height: 48px;
+  }
+
+  .emoji {
+    font-size: 1.5rem;
+  }
+
+  .name {
+    font-size: vars.$font-body-lg;
+  }
+
+  .title {
+    font-size: vars.$font-caption;
+  }
+}
+
+.sizeMedium {
+  // Uses base styling
+}
+
+.sizeLarge {
+  .iconContainer {
+    width: 80px;
+    height: 80px;
+  }
+
+  .emoji {
+    font-size: 2.5rem;
+  }
+
+  .name {
+    font-size: vars.$font-section;
+  }
+
+  .title {
+    font-size: vars.$font-body;
+  }
+}
+
+// States
+.primary {
+  transform: scale(1.02);
+  box-shadow: vars.$shadow-card-hover;
+
+  &:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+}
+
+.secondary {
+  opacity: 0.95;
+}
+
+// Responsive Adjustments
+@include mix.mobile-only {
+  .archetypeCard {
+    .header {
+      gap: vars.$spacing-sm;
+    }
+
+    .iconContainer {
+      width: 52px;
+      height: 52px;
+    }
+
+    .emoji {
+      font-size: 1.75rem;
+    }
+
+    .name {
+      font-size: vars.$font-body-lg;
+    }
+
+    .scoreValue {
+      font-size: vars.$font-subtitle;
+    }
+  }
+
+  .primaryBadge,
+  .secondaryBadge {
+    top: vars.$spacing-sm;
+    right: vars.$spacing-sm;
+    padding: 4px vars.$spacing-xs;
+    font-size: 10px;
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .archetypeCard {
+    .iconContainer {
+      background: rgba(45, 55, 72, 0.9);
+    }
+
+    .scoreTrack {
+      background: rgba(45, 55, 72, 0.5);
+    }
+  }
+}
+
+// Reduced Motion Support
+@media (prefers-reduced-motion: reduce) {
+  .archetypeCard {
+    animation: none;
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+
+    .iconContainer {
+      transition: none;
+
+      .archetypeCard:hover & {
+        transform: none;
+      }
+    }
+  }
+
+  .scoreFill::after {
+    animation: none;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .archetypeCard {
+    border: 3px solid black;
+
+    &.primary {
+      background: yellow;
+      color: black;
+    }
+  }
+
+  .iconContainer {
+    border: 2px solid black;
+  }
+
+  .trait svg {
+    color: green;
+  }
+}
+
+// Print Styles
+@media print {
+  .archetypeCard {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid black;
+
+    .gradientOverlay {
+      display: none;
+    }
+
+    .actionButton {
+      display: none;
+    }
+
+    &.animated {
+      animation: none;
+    }
+  }
+}

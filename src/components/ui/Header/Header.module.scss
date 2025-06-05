@@ -1,0 +1,335 @@
+// src/components/ui/Header/Header.module.scss
+@use '../../../styles/mixins' as mix;
+
+.header {
+  background: vars.$card-bg;
+  border-bottom: 1px solid vars.$border-color;
+  position: relative;
+  z-index: 100;
+  transition: vars.$transition-standard;
+
+  &Fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: vars.$shadow-card;
+  }
+
+  &WithProgress {
+    padding-bottom: 0;
+  }
+}
+
+.container {
+  @include mix.container;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  padding-top: vars.$spacing-lg;
+  padding-bottom: vars.$spacing-lg;
+  min-height: 70px;
+
+  @include mix.mobile-only {
+    grid-template-columns: auto 1fr auto;
+    padding-top: vars.$spacing-md;
+    padding-bottom: vars.$spacing-md;
+    min-height: 60px;
+  }
+}
+
+// Left Section - Back button or Logo
+.leftSection {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+}
+
+.backButton {
+  @include mix.button-base;
+  background: none;
+  border: none;
+  color: vars.$primary-text;
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-sm vars.$spacing-md;
+  border-radius: vars.$radius-sm;
+  font-weight: vars.$font-medium;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    background: vars.$hover-bg;
+    color: vars.$primary-accent-solid;
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xs vars.$spacing-sm;
+  }
+}
+
+.backText {
+  @include mix.mobile-only {
+    display: none;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  color: vars.$primary-text;
+  text-decoration: none;
+  font-weight: vars.$font-bold;
+  font-size: vars.$font-body-lg;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    color: vars.$primary-accent-solid;
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+    border-radius: vars.$radius-sm;
+  }
+}
+
+.logoIcon {
+  color: vars.$primary-accent-solid;
+  transition: vars.$transition-standard;
+
+  .logo:hover & {
+    transform: scale(1.1);
+  }
+}
+
+.logoText {
+  @include mix.mobile-only {
+    display: none;
+  }
+}
+
+// Center Section - Progress or Title
+.centerSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  width: 100%;
+  max-width: 400px;
+
+  @include mix.mobile-only {
+    max-width: none;
+    margin: 0 vars.$spacing-sm;
+  }
+}
+
+.pageTitle {
+  font-size: vars.$font-subtitle;
+  font-weight: vars.$font-bold;
+  color: vars.$primary-text;
+  text-align: center;
+  margin: 0;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body-lg;
+  }
+}
+
+.progressContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progressText {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$secondary-text;
+  text-align: center;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-caption;
+  }
+}
+
+.progressBar {
+  @include mix.progress-bar;
+  height: 6px;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-xl;
+  overflow: hidden;
+  position: relative;
+
+  @include mix.mobile-only {
+    height: 4px;
+  }
+}
+
+.progressFill {
+  height: 100%;
+  background: vars.$primary-accent;
+  border-radius: vars.$radius-xl;
+  transition: vars.$transition-progress;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Right Section - Navigation
+.rightSection {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-xs;
+  }
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  color: vars.$secondary-text;
+  text-decoration: none;
+  padding: vars.$spacing-sm;
+  border-radius: vars.$radius-sm;
+  font-weight: vars.$font-medium;
+  font-size: vars.$font-body-sm;
+  transition: vars.$transition-standard;
+  position: relative;
+
+  &:hover {
+    color: vars.$primary-text;
+    background: vars.$hover-bg;
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+
+  &Active {
+    color: vars.$primary-accent-solid;
+    background: rgba(255, 107, 157, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2px;
+      background: vars.$primary-accent-solid;
+      border-radius: vars.$radius-xl;
+    }
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xs;
+  }
+}
+
+.navText {
+  @include mix.mobile-only {
+    display: none;
+  }
+}
+
+// Responsive adjustments
+@include mix.mobile-only {
+  .header {
+    border-bottom: 1px solid vars.$border-color;
+  }
+
+  .container {
+    gap: vars.$spacing-xs;
+  }
+
+  // Ensure navigation icons are touch-friendly
+  .navLink {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .backButton {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
+// Dark mode support (if needed later)
+@media (prefers-color-scheme: dark) {
+  .header {
+    background: #1a202c;
+    border-bottom-color: #2d3748;
+  }
+
+  .progressBar {
+    background: #2d3748;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .progressFill::after {
+    animation: none;
+  }
+
+  .logoIcon {
+    .logo:hover & {
+      transform: none;
+    }
+  }
+
+  .logo:hover {
+    transform: none;
+  }
+}

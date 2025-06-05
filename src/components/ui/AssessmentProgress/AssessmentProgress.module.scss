@@ -1,0 +1,503 @@
+// src/components/ui/AssessmentProgress/AssessmentProgress.module.scss
+@use '../../../styles/mixins' as mix;
+
+.assessmentProgress {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+  width: 100%;
+}
+
+// Progress Section
+.progressSection {
+  width: 100%;
+}
+
+// Step Details
+.stepDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.stepInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+}
+
+.stepNumber {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$secondary-text;
+  background: vars.$light-bg;
+  padding: vars.$spacing-xs vars.$spacing-sm;
+  border-radius: vars.$radius-sm;
+  display: inline-block;
+  width: fit-content;
+}
+
+.stepTitle {
+  font-size: vars.$font-subtitle;
+  font-weight: vars.$font-semibold;
+  color: vars.$primary-text;
+  margin: 0;
+  line-height: 1.3;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body-lg;
+  }
+}
+
+.stepDescription {
+  font-size: vars.$font-body-sm;
+  color: vars.$secondary-text;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.completionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-xs;
+  align-items: flex-end;
+  text-align: right;
+
+  @include mix.mobile-only {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+}
+
+.completedCount,
+.remainingCount {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+}
+
+.completedCount {
+  color: vars.$success-accent-solid;
+}
+
+.remainingCount {
+  color: vars.$secondary-text;
+}
+
+// Step Indicators
+.stepIndicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-md 0;
+  flex-wrap: wrap;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-xs;
+  }
+}
+
+.stepIndicator {
+  @include mix.button-base;
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-xs;
+  border-radius: vars.$radius-full;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: vars.$transition-standard;
+  position: relative;
+
+  &:hover:not(.stepInaccessible):not(:disabled) {
+    background: vars.$hover-bg;
+    transform: scale(1.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+
+  &Completed {
+    .stepIndicatorContent {
+      background: vars.$success-accent-solid;
+      color: white;
+      border-color: vars.$success-accent-solid;
+    }
+  }
+
+  &Current {
+    .stepIndicatorContent {
+      background: vars.$primary-accent-solid;
+      color: white;
+      border-color: vars.$primary-accent-solid;
+      box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.3);
+    }
+  }
+
+  &Inaccessible {
+    opacity: 0.4;
+    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+      transform: none;
+    }
+  }
+}
+
+.stepIndicatorContent {
+  width: 28px;
+  height: 28px;
+  border-radius: vars.$radius-full;
+  border: 2px solid vars.$border-color;
+  background: vars.$card-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: vars.$transition-standard;
+  color: vars.$secondary-text;
+}
+
+.currentDot {
+  width: 8px;
+  height: 8px;
+  border-radius: vars.$radius-full;
+  background: currentColor;
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(0.8);
+    }
+  }
+}
+
+.stepLabel {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$primary-text;
+  white-space: nowrap;
+}
+
+// Navigation Controls
+.navigationControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: vars.$spacing-md;
+  padding-top: vars.$spacing-md;
+  border-top: 1px solid vars.$border-color;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.navigationLeft,
+.navigationRight {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+
+  @include mix.mobile-only {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.navButton {
+  min-width: 120px;
+
+  @include mix.mobile-only {
+    flex: 1;
+    min-width: auto;
+  }
+}
+
+.restartButton {
+  @include mix.mobile-only {
+    order: -1;
+    width: 100%;
+  }
+}
+
+// Quick Stats
+.quickStats {
+  display: flex;
+  justify-content: center;
+  gap: vars.$spacing-2xl;
+  padding: vars.$spacing-lg;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-md;
+  border: 1px solid vars.$border-color;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    padding: vars.$spacing-md;
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-xs;
+}
+
+.statValue {
+  font-size: vars.$font-section;
+  font-weight: vars.$font-bold;
+  color: vars.$primary-text;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-subtitle;
+  }
+}
+
+.statLabel {
+  font-size: vars.$font-body-sm;
+  color: vars.$secondary-text;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: vars.$font-medium;
+}
+
+// Variant Styles
+.variantDefault {
+  // Uses base styling
+}
+
+.variantCompact {
+  gap: vars.$spacing-md;
+
+  .stepDetails {
+    gap: vars.$spacing-sm;
+  }
+
+  .stepNumber {
+    font-size: vars.$font-caption;
+    padding: 2px vars.$spacing-xs;
+  }
+
+  .stepTitle {
+    font-size: vars.$font-body;
+  }
+
+  .stepDescription {
+    display: none;
+  }
+
+  .navigationControls {
+    padding-top: vars.$spacing-sm;
+  }
+}
+
+.variantDetailed {
+  gap: vars.$spacing-xl;
+  
+  .stepIndicators {
+    padding: vars.$spacing-lg 0;
+    background: vars.$light-bg;
+    border-radius: vars.$radius-md;
+    margin: vars.$spacing-md 0;
+  }
+}
+
+// Position Styles
+.positionTop {
+  // Default positioning
+}
+
+.positionBottom {
+  .navigationControls {
+    border-top: none;
+    border-bottom: 1px solid vars.$border-color;
+    padding-top: 0;
+    padding-bottom: vars.$spacing-md;
+    order: -1;
+  }
+}
+
+.positionSidebar {
+  max-width: 300px;
+  
+  .stepIndicators {
+    flex-direction: column;
+    align-items: stretch;
+    gap: vars.$spacing-xs;
+  }
+
+  .stepIndicator {
+    justify-content: flex-start;
+    padding: vars.$spacing-sm vars.$spacing-md;
+    border-radius: vars.$radius-md;
+    background: vars.$card-bg;
+    border: 1px solid vars.$border-color;
+
+    &:hover:not(.stepInaccessible):not(:disabled) {
+      background: vars.$hover-bg;
+      transform: none;
+      border-color: vars.$primary-accent-solid;
+    }
+
+    &Completed {
+      background: rgba(135, 206, 235, 0.1);
+      border-color: vars.$success-accent-solid;
+    }
+
+    &Current {
+      background: rgba(255, 107, 157, 0.1);
+      border-color: vars.$primary-accent-solid;
+    }
+  }
+
+  .navigationControls {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+  }
+
+  .navigationLeft,
+  .navigationRight {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// Theme Styles
+.themeRelationship {
+  .stepIndicatorContent {
+    &.stepCompleted {
+      background: #87ceeb;
+      border-color: #87ceeb;
+    }
+  }
+
+  .quickStats {
+    background: linear-gradient(135deg, 
+      rgba(255, 107, 157, 0.05) 0%, 
+      rgba(135, 206, 235, 0.05) 100%
+    );
+  }
+}
+
+.themeTravel {
+  .stepIndicatorContent {
+    &.stepCompleted {
+      background: #ffb347;
+      border-color: #ffb347;
+    }
+  }
+}
+
+// Responsive Adjustments
+@include mix.mobile-only {
+  .assessmentProgress {
+    gap: vars.$spacing-md;
+  }
+
+  .stepIndicators {
+    padding: vars.$spacing-sm 0;
+  }
+
+  .stepIndicatorContent {
+    width: 24px;
+    height: 24px;
+  }
+
+  .quickStats {
+    gap: vars.$spacing-md;
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .assessmentProgress {
+    .stepNumber {
+      background: #2d3748;
+      color: #e2e8f0;
+    }
+
+    .stepIndicatorContent {
+      background: #2d3748;
+      border-color: #4a5568;
+    }
+
+    .quickStats {
+      background: #2d3748;
+      border-color: #4a5568;
+    }
+  }
+}
+
+// Reduced Motion Support
+@media (prefers-reduced-motion: reduce) {
+  .currentDot {
+    animation: none;
+  }
+
+  .stepIndicator {
+    transition: none;
+
+    &:hover:not(.stepInaccessible):not(:disabled) {
+      transform: none;
+    }
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .stepIndicator {
+    &Completed .stepIndicatorContent {
+      background: green;
+      border-color: green;
+      color: white;
+    }
+
+    &Current .stepIndicatorContent {
+      background: blue;
+      border-color: blue;
+      color: white;
+    }
+  }
+
+  .quickStats {
+    border: 2px solid black;
+  }
+}
+
+// Print Styles
+@media print {
+  .assessmentProgress {
+    page-break-inside: avoid;
+  }
+
+  .navigationControls {
+    display: none;
+  }
+
+  .stepIndicators {
+    display: none;
+  }
+
+  .quickStats {
+    background: white;
+    border: 1px solid black;
+  }
+}

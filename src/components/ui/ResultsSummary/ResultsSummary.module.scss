@@ -1,0 +1,478 @@
+// src/components/ui/ResultsSummary/ResultsSummary.module.scss
+@use '../../../styles/mixins' as mix;
+
+.resultsSummary {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: vars.$spacing-2xl;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-base;
+    gap: vars.$spacing-2xl;
+  }
+}
+
+// Header Section
+// ==========================================================================
+.header {
+  text-align: center;
+  position: relative;
+  padding: vars.$spacing-3xl vars.$spacing-2xl;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 157, 0.05) 0%,
+    rgba(102, 126, 234, 0.05) 50%,
+    rgba(255, 179, 71, 0.05) 100%
+  );
+  border-radius: vars.$radius-xl;
+  border: 1px solid vars.$border-color;
+  overflow: hidden;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl vars.$spacing-lg;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,107,157,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(102,126,234,0.1)"/><circle cx="30" cy="70" r="1" fill="rgba(255,179,71,0.1)"/><circle cx="70" cy="80" r="2.5" fill="rgba(255,107,157,0.1)"/></svg>');
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.celebration {
+  margin-bottom: vars.$spacing-xl;
+}
+
+.celebrationIcon {
+  font-size: 4rem;
+  margin-bottom: vars.$spacing-md;
+  display: inline-block;
+  animation: celebrationBounce 2s infinite;
+
+  @include mix.mobile-only {
+    font-size: 3rem;
+  }
+}
+
+.title {
+  @include mix.text-hero;
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-sm;
+  background: linear-gradient(135deg, vars.$primary-accent-solid, vars.$secondary-accent-solid);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-main;
+  }
+}
+
+.subtitle {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  margin: 0;
+}
+
+.completionInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: vars.$spacing-lg;
+  flex-wrap: wrap;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.completionBadge {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-sm vars.$spacing-md;
+  background: vars.$success-accent;
+  color: white;
+  border-radius: vars.$radius-sm;
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-semibold;
+  box-shadow: vars.$shadow-card;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.completionDate {
+  @include mix.text-small;
+  color: vars.$subtle-text;
+  font-style: italic;
+}
+
+// Section Titles
+// ==========================================================================
+.sectionTitle {
+  @include mix.text-title;
+  color: vars.$primary-text;
+  margin-bottom: vars.$spacing-xl;
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  text-align: center;
+  justify-content: center;
+
+  @include mix.mobile-only {
+    @include mix.text-subtitle;
+    margin-bottom: vars.$spacing-lg;
+  }
+
+  svg {
+    color: vars.$primary-accent-solid;
+    flex-shrink: 0;
+  }
+}
+
+// Primary Section
+// ==========================================================================
+.primarySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Scores Section
+// ==========================================================================
+.scoresSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Insights Section
+// ==========================================================================
+.insightsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.insightsCard {
+  width: 100%;
+  max-width: 800px;
+}
+
+.insightsList {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.insight {
+  display: flex;
+  gap: vars.$spacing-md;
+  align-items: flex-start;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-sm;
+  }
+}
+
+.insightNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: vars.$primary-accent;
+  color: white;
+  border-radius: vars.$radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: vars.$font-bold;
+  font-size: vars.$font-body-sm;
+  box-shadow: vars.$shadow-card;
+
+  @include mix.mobile-only {
+    width: 28px;
+    height: 28px;
+    font-size: vars.$font-caption;
+  }
+}
+
+.insightText {
+  flex: 1;
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  line-height: 1.6;
+
+  strong {
+    color: vars.$primary-text;
+    font-weight: vars.$font-semibold;
+  }
+
+  @include mix.mobile-only {
+    @include mix.text-small;
+  }
+}
+
+// Secondary Section
+// ==========================================================================
+.secondarySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.secondaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: vars.$spacing-lg;
+  width: 100%;
+  max-width: 800px;
+
+  @include mix.mobile-only {
+    grid-template-columns: 1fr;
+    gap: vars.$spacing-md;
+  }
+}
+
+// Actions Section
+// ==========================================================================
+.actionsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: vars.$spacing-2xl;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-xl;
+  border: 1px solid vars.$border-color;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-lg;
+  }
+}
+
+.actionsGrid {
+  display: flex;
+  gap: vars.$spacing-lg;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-md;
+  }
+}
+
+.actionButton {
+  min-width: 180px;
+  justify-content: center;
+
+  @include mix.mobile-only {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+// Footer
+// ==========================================================================
+.footer {
+  text-align: center;
+  padding-top: vars.$spacing-xl;
+  border-top: 1px solid vars.$border-color;
+}
+
+.footerText {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  margin-bottom: vars.$spacing-md;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+
+  @include mix.mobile-only {
+    @include mix.text-small;
+  }
+}
+
+.footerBranding {
+  @include mix.text-small;
+  color: vars.$subtle-text;
+  font-style: italic;
+}
+
+// Animations
+// ==========================================================================
+@keyframes celebrationBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-10px) scale(1.05);
+  }
+  60% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Section entrance animations
+.primarySection {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.scoresSection {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.insightsSection {
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.secondarySection {
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.actionsSection {
+  animation: fadeInUp 0.8s ease-out 1.0s both;
+}
+
+// Responsive Adjustments
+// ==========================================================================
+@include mix.tablet-only {
+  .resultsSummary {
+    padding: vars.$spacing-xl;
+  }
+
+  .header {
+    padding: vars.$spacing-2xl vars.$spacing-xl;
+  }
+
+  .actionsGrid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .actionButton {
+    max-width: 300px;
+  }
+}
+
+// Accessibility & Reduced Motion
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .celebrationIcon {
+    animation: none;
+  }
+
+  .primarySection,
+  .scoresSection,
+  .insightsSection,
+  .secondarySection,
+  .actionsSection {
+    animation: none;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .resultsSummary {
+    max-width: none;
+    padding: 0;
+    gap: vars.$spacing-lg;
+  }
+
+  .header {
+    background: none;
+    border: 1px solid black;
+    page-break-inside: avoid;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .celebrationIcon {
+    animation: none;
+  }
+
+  .actionsSection {
+    display: none;
+  }
+
+  .primarySection,
+  .scoresSection,
+  .insightsSection,
+  .secondarySection {
+    page-break-inside: avoid;
+    animation: none;
+  }
+
+  .sectionTitle {
+    color: black;
+
+    svg {
+      color: black;
+    }
+  }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .header {
+    background: white;
+    border: 3px solid black;
+  }
+
+  .title {
+    background: none;
+    -webkit-text-fill-color: black;
+    color: black;
+  }
+
+  .completionBadge {
+    background: black;
+    color: white;
+    border: 2px solid black;
+  }
+
+  .insightNumber {
+    background: black;
+    color: white;
+    border: 2px solid black;
+  }
+
+  .actionsSection {
+    background: white;
+    border: 2px solid black;
+  }
+}

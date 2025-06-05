@@ -39,6 +39,9 @@ importers:
       '@next/eslint-plugin-next':
         specifier: ^15.3.3
         version: 15.3.3
+      '@storybook/addon-actions':
+        specifier: ^9.0.4
+        version: 9.0.4
       '@storybook/addon-links':
         specifier: ^9.0.4
         version: 9.0.4(react@19.1.0)(storybook@9.0.4(@testing-library/dom@10.4.0)(prettier@3.5.3))
@@ -1208,6 +1211,9 @@ packages:
 
   '@rushstack/eslint-patch@1.11.0':
     resolution: {integrity: sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==}
+
+  '@storybook/addon-actions@9.0.4':
+    resolution: {integrity: sha512-YSwFj0j4GZuMu4/1AqwuQN1X3S49YYYBGGv9RRAZTWhsuX9YZ7IxggzhQDFkuVIdmV4WFFKOBKa8BoHU3VhULQ==}
 
   '@storybook/addon-links@9.0.4':
     resolution: {integrity: sha512-lvO/8wOEmhybxWBNIVbyNLy4cBYIaMFct7Mz6Yw0SxvEJoglktJt7gBAknbMN36XFJxj4bAnnPglP55s4wf7sg==}
@@ -5261,6 +5267,8 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@rushstack/eslint-patch@1.11.0': {}
+
+  '@storybook/addon-actions@9.0.4': {}
 
   '@storybook/addon-links@9.0.4(react@19.1.0)(storybook@9.0.4(@testing-library/dom@10.4.0)(prettier@3.5.3))':
     dependencies:

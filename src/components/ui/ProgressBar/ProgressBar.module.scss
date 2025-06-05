@@ -1,0 +1,335 @@
+// src/components/ui/ProgressBar/ProgressBar.module.scss
+@use '../../../styles/mixins' as mix;
+
+.progressContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-sm;
+}
+
+// Progress Info Section
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: vars.$spacing-sm;
+}
+
+.progressLabel {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$primary-text;
+}
+
+.progressText {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$secondary-text;
+}
+
+.percentage {
+  color: vars.$primary-text;
+  font-weight: vars.$font-semibold;
+}
+
+.steps {
+  color: vars.$secondary-text;
+}
+
+// Progress Track
+.progressTrack {
+  position: relative;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-xl;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: vars.$radius-xl;
+  transition: vars.$transition-progress;
+  position: relative;
+  overflow: hidden;
+}
+
+// Shimmer Animation
+.shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Size Variants
+.sizeSmall {
+  .progressTrack {
+    height: 4px;
+  }
+  
+  .progressLabel,
+  .progressText {
+    font-size: vars.$font-caption;
+  }
+  
+  .stepDot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+.sizeMedium {
+  .progressTrack {
+    height: 8px;
+  }
+  
+  .progressLabel,
+  .progressText {
+    font-size: vars.$font-body-sm;
+  }
+  
+  .stepDot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.sizeLarge {
+  .progressTrack {
+    height: 12px;
+  }
+  
+  .progressLabel,
+  .progressText {
+    font-size: vars.$font-body;
+  }
+  
+  .stepDot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+// Color Variants
+.variantPrimary {
+  .progressFill {
+    background: vars.$primary-accent;
+  }
+}
+
+.variantSuccess {
+  .progressFill {
+    background: vars.$success-accent;
+  }
+}
+
+.variantWarning {
+  .progressFill {
+    background: vars.$warning-accent;
+  }
+}
+
+// Assessment-specific variants
+.variantEmotional {
+  .progressFill {
+    background: linear-gradient(135deg, #87ceeb 0%, #98d8e8 100%);
+  }
+  
+  .stepCompleted,
+  .stepCurrent {
+    background: #87ceeb;
+  }
+}
+
+.variantLogical {
+  .progressFill {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  .stepCompleted,
+  .stepCurrent {
+    background: #667eea;
+  }
+}
+
+.variantExploratory {
+  .progressFill {
+    background: linear-gradient(135deg, #ffb347 0%, #ffd700 100%);
+  }
+  
+  .stepCompleted,
+  .stepCurrent {
+    background: #ffb347;
+  }
+}
+
+// Step Indicators
+.stepIndicators {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  margin-top: vars.$spacing-xs;
+}
+
+.stepDot {
+  border-radius: vars.$radius-full;
+  background: vars.$border-color;
+  transition: vars.$transition-standard;
+  position: relative;
+  
+  &Completed {
+    background: vars.$primary-accent-solid;
+    transform: scale(1.1);
+  }
+  
+  &Current {
+    background: vars.$primary-accent-solid;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.3);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: vars.$radius-full;
+      background: vars.$primary-accent-solid;
+      opacity: 0.3;
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.1;
+  }
+}
+
+// Animation Control
+.animated {
+  .progressFill {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      opacity: 0.8;
+    }
+  }
+  
+  .shimmer {
+    display: block;
+  }
+}
+
+// Responsive adjustments
+@include mix.mobile-only {
+  .progressInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: vars.$spacing-xs;
+  }
+  
+  .progressText {
+    align-self: flex-end;
+  }
+  
+  .stepIndicators {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .progressTrack {
+    background: #2d3748;
+  }
+  
+  .stepDot {
+    background: #4a5568;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+  
+  .shimmer {
+    animation: none;
+  }
+  
+  .stepCurrent {
+    &::after {
+      animation: none;
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .progressTrack {
+    border: 2px solid black;
+  }
+  
+  .progressFill {
+    background: black !important;
+  }
+  
+  .stepDot {
+    border: 2px solid black;
+    
+    &Completed,
+    &Current {
+      background: black;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .progressContainer {
+    page-break-inside: avoid;
+  }
+  
+  .shimmer {
+    display: none;
+  }
+  
+  .stepCurrent::after {
+    display: none;
+  }
+}

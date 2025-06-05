@@ -1,0 +1,505 @@
+// src/components/ui/Modal/Modal.module.scss
+@use '../../../styles/mixins' as mix;
+
+// Overlay
+// ==========================================================================
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(45, 55, 72, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: vars.$spacing-base;
+  opacity: 0;
+  animation: overlayFadeIn 0.3s ease-out forwards;
+
+  @keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-sm;
+    align-items: flex-end;
+  }
+}
+
+// Modal Container
+// ==========================================================================
+.modal {
+  position: relative;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9) translateY(20px);
+  opacity: 0;
+  
+  &.animated {
+    animation: modalSlideIn 0.3s ease-out 0.1s forwards;
+  }
+
+  &:not(.animated) {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      transform: scale(0.9) translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @include mix.mobile-only {
+    max-height: 85vh;
+    transform: translateY(100%);
+    
+    &.animated {
+      animation: modalSlideUp 0.3s ease-out forwards;
+    }
+
+    &:not(.animated) {
+      transform: translateY(0);
+    }
+
+    @keyframes modalSlideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  }
+}
+
+// Size Variants
+// ==========================================================================
+.sizeSmall {
+  max-width: 400px;
+
+  @include mix.mobile-only {
+    max-width: 100%;
+  }
+}
+
+.sizeMedium {
+  max-width: 600px;
+
+  @include mix.mobile-only {
+    max-width: 100%;
+  }
+}
+
+.sizeLarge {
+  max-width: 800px;
+
+  @include mix.mobile-only {
+    max-width: 100%;
+  }
+}
+
+.sizeFullscreen {
+  max-width: 95vw;
+  max-height: 95vh;
+
+  @include mix.mobile-only {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
+
+// Modal Card
+// ==========================================================================
+.modalCard {
+  width: 100%;
+  height: 100%;
+  max-height: inherit;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-shadow: vars.$shadow-card-hover;
+
+  @include mix.mobile-only {
+    border-radius: vars.$radius-lg vars.$radius-lg 0 0;
+  }
+}
+
+// Header
+// ==========================================================================
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: vars.$spacing-lg vars.$spacing-xl;
+  border-bottom: 1px solid vars.$border-color;
+  flex-shrink: 0;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-md vars.$spacing-lg;
+  }
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+  flex: 1;
+  min-width: 0;
+}
+
+.iconContainer {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: vars.$radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .variantWarning & {
+    background: rgba(255, 179, 71, 0.1);
+    color: vars.$warning-accent-solid;
+  }
+  
+  .variantError & {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+  
+  .variantSuccess & {
+    background: rgba(135, 206, 235, 0.1);
+    color: vars.$success-accent-solid;
+  }
+  
+  .variantInfo & {
+    background: rgba(102, 126, 234, 0.1);
+    color: vars.$secondary-accent-solid;
+  }
+}
+
+.title {
+  @include mix.text-subtitle;
+  margin: 0;
+  font-weight: vars.$font-semibold;
+  color: vars.$primary-text;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body-lg;
+  }
+}
+
+.closeButton {
+  @include mix.button-base;
+  width: 36px;
+  height: 36px;
+  border-radius: vars.$radius-sm;
+  background: transparent;
+  color: vars.$secondary-text;
+  padding: 0;
+  flex-shrink: 0;
+  
+  &:hover:not(:disabled) {
+    background: vars.$hover-bg;
+    color: vars.$primary-text;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+}
+
+// Content
+// ==========================================================================
+.content {
+  flex: 1;
+  padding: vars.$spacing-xl;
+  overflow-y: auto;
+  
+  @include mix.mobile-only {
+    padding: vars.$spacing-lg;
+  }
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: vars.$light-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: vars.$border-color;
+    border-radius: vars.$radius-sm;
+    
+    &:hover {
+      background: vars.$hover-border;
+    }
+  }
+}
+
+// Loading State
+// ==========================================================================
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-md;
+  padding: vars.$spacing-2xl;
+  text-align: center;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid vars.$border-color;
+  border-top: 3px solid vars.$primary-accent-solid;
+  border-radius: vars.$radius-full;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+.loadingText {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  margin: 0;
+}
+
+.loading {
+  pointer-events: none;
+}
+
+// Actions
+// ==========================================================================
+.actions {
+  display: flex;
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-lg vars.$spacing-xl;
+  border-top: 1px solid vars.$border-color;
+  flex-shrink: 0;
+  justify-content: flex-end;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-md vars.$spacing-lg;
+    flex-direction: column-reverse;
+    gap: vars.$spacing-xs;
+  }
+}
+
+.primaryAction {
+  @include mix.mobile-only {
+    width: 100%;
+  }
+}
+
+.secondaryAction {
+  @include mix.mobile-only {
+    width: 100%;
+  }
+}
+
+// Confirmation Message
+// ==========================================================================
+.confirmationMessage {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  margin: 0;
+  line-height: 1.6;
+  text-align: center;
+}
+
+// Variant Styles
+// ==========================================================================
+.variantDefault {
+  // Uses base styling
+}
+
+.variantConfirmation {
+  .modalCard {
+    border-top: 4px solid vars.$secondary-accent-solid;
+  }
+}
+
+.variantWarning {
+  .modalCard {
+    border-top: 4px solid vars.$warning-accent-solid;
+  }
+  
+  .title {
+    color: vars.$warning-accent-solid;
+  }
+}
+
+.variantError {
+  .modalCard {
+    border-top: 4px solid #ef4444;
+  }
+  
+  .title {
+    color: #ef4444;
+  }
+}
+
+.variantSuccess {
+  .modalCard {
+    border-top: 4px solid vars.$success-accent-solid;
+  }
+  
+  .title {
+    color: vars.$success-accent-solid;
+  }
+}
+
+.variantInfo {
+  .modalCard {
+    border-top: 4px solid vars.$secondary-accent-solid;
+  }
+  
+  .title {
+    color: vars.$secondary-accent-solid;
+  }
+}
+
+// Accessibility & States
+// ==========================================================================
+
+// Focus management
+.modal:focus {
+  outline: none;
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .modalCard {
+    border: 3px solid black;
+  }
+  
+  .closeButton {
+    border: 2px solid black;
+    
+    &:hover {
+      background: black;
+      color: white;
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .modal {
+    animation: none;
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  
+  .loadingSpinner {
+    animation: none;
+    border-top-color: vars.$border-color;
+  }
+}
+
+// Print styles
+@media print {
+  .overlay {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+  }
+  
+  .modal {
+    transform: none;
+    opacity: 1;
+    max-height: none;
+    box-shadow: none;
+    border: 1px solid black;
+    page-break-inside: avoid;
+  }
+  
+  .header {
+    border-bottom: 2px solid black;
+  }
+  
+  .actions {
+    display: none;
+  }
+  
+  .closeButton {
+    display: none;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .loadingSpinner {
+    border-color: #4a5568;
+    border-top-color: vars.$primary-accent-solid;
+  }
+}
+
+// Animation performance optimization
+.modal {
+  will-change: transform, opacity;
+}
+
+.overlay {
+  will-change: opacity;
+}
+
+// Smooth scrolling for content
+.content {
+  scroll-behavior: smooth;
+}
+
+// Focus indicators
+.modalCard *:focus-visible {
+  outline: 2px solid vars.$primary-accent-solid;
+  outline-offset: 2px;
+}
+
+// Button styling within modal
+.actions button {
+  min-width: 100px;
+  
+  @include mix.mobile-only {
+    min-width: auto;
+  }
+}

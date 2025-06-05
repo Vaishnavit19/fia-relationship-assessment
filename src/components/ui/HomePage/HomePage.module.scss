@@ -1,0 +1,780 @@
+// src/components/ui/HomePage/HomePage.module.scss
+@use '../../../styles/mixins' as mix;
+
+.homePage {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+// Hero Section
+// ==========================================================================
+.hero {
+  @include mix.container;
+  padding-top: vars.$spacing-3xl;
+  padding-bottom: vars.$spacing-3xl;
+  position: relative;
+  z-index: 2;
+
+  @include mix.mobile-only {
+    padding-top: vars.$spacing-2xl;
+    padding-bottom: vars.$spacing-2xl;
+  }
+}
+
+.heroContent {
+  @include mix.grid-container;
+  @include mix.grid-columns(2);
+  align-items: center;
+  gap: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    @include mix.grid-columns(1);
+    gap: vars.$spacing-2xl;
+    text-align: center;
+  }
+
+  @include mix.tablet-only {
+    gap: vars.$spacing-2xl;
+  }
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.heroTitle {
+  @include mix.text-hero;
+  margin: 0;
+  line-height: 1.1;
+
+  @include mix.mobile-only {
+    font-size: 2.5rem;
+  }
+
+  @include mix.tablet-only {
+    font-size: 2.75rem;
+  }
+}
+
+.gradientText {
+  background: vars.$primary-accent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+}
+
+.heroSubtitle {
+  @include mix.text-body;
+  font-size: vars.$font-body-lg;
+  color: vars.$secondary-text;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 90%;
+
+  @include mix.mobile-only {
+    max-width: 100%;
+    font-size: vars.$font-body;
+  }
+}
+
+// CTA Container
+// ==========================================================================
+.ctaContainer {
+  display: flex;
+  gap: vars.$spacing-md;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    width: 100%;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.primaryCta {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  @include mix.mobile-only {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+// Features
+// ==========================================================================
+.features {
+  display: flex;
+  gap: vars.$spacing-xl;
+  margin-top: vars.$spacing-lg;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-md;
+  }
+
+  @include mix.tablet-only {
+    gap: vars.$spacing-lg;
+  }
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  
+  @include mix.mobile-only {
+    justify-content: center;
+  }
+}
+
+.featureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: vars.$radius-full;
+  background: rgba(255, 107, 157, 0.1);
+  color: vars.$primary-accent-solid;
+  flex-shrink: 0;
+}
+
+.featureContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.featureTitle {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-semibold;
+  color: vars.$primary-text;
+  margin: 0;
+}
+
+.featureDescription {
+  font-size: vars.$font-caption;
+  color: vars.$secondary-text;
+  margin: 0;
+  line-height: 1.4;
+}
+
+// Hero Visual
+// ==========================================================================
+.heroVisual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include mix.mobile-only {
+    margin-top: vars.$spacing-lg;
+    order: -1;
+  }
+}
+
+.visualContainer {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  
+  @include mix.mobile-only {
+    width: 250px;
+    height: 250px;
+  }
+
+  @include mix.tablet-only {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+.floatingIcon {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: vars.$radius-full;
+  background: vars.$card-bg;
+  box-shadow: vars.$shadow-card;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    background: var(--archetype-color);
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  @include mix.mobile-only {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.floating1 {
+  top: 20px;
+  left: 50px;
+  animation-name: float1;
+  animation-delay: 0s;
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(10px, -10px) rotate(5deg); }
+    66% { transform: translate(-5px, 10px) rotate(-3deg); }
+  }
+}
+
+.floating2 {
+  top: 80px;
+  right: 30px;
+  animation-name: float2;
+  animation-delay: 1s;
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-8px, 12px) rotate(-5deg); }
+    66% { transform: translate(12px, -5px) rotate(3deg); }
+  }
+}
+
+.floating3 {
+  bottom: 60px;
+  left: 30px;
+  animation-name: float3;
+  animation-delay: 2s;
+
+  @keyframes float3 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(12px, 8px) rotate(4deg); }
+    66% { transform: translate(-10px, -12px) rotate(-6deg); }
+  }
+}
+
+.archetypeEmoji {
+  font-size: 1.5rem;
+  line-height: 1;
+
+  @include mix.mobile-only {
+    font-size: 1.25rem;
+  }
+}
+
+.centralVisual {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: vars.$radius-full;
+  background: vars.$secondary-accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: vars.$shadow-card-hover;
+  animation: centralPulse 2s ease-in-out infinite;
+
+  @keyframes centralPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  @include mix.mobile-only {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.innerCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: vars.$radius-full;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+
+  @include mix.mobile-only {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.centralIcon {
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+
+  @include mix.mobile-only {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// Section Styling
+// ==========================================================================
+.howItWorks,
+.archetypesPreview,
+.benefits {
+  @include mix.container;
+  padding-top: vars.$spacing-3xl;
+  padding-bottom: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    padding-top: vars.$spacing-2xl;
+    padding-bottom: vars.$spacing-2xl;
+  }
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    margin-bottom: vars.$spacing-xl;
+  }
+}
+
+.sectionTitle {
+  @include mix.text-title;
+  margin: 0 0 vars.$spacing-sm 0;
+}
+
+.sectionSubtitle {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// How It Works Steps
+// ==========================================================================
+.steps {
+  display: flex;
+  justify-content: space-between;
+  gap: vars.$spacing-xl;
+  position: relative;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+    gap: vars.$spacing-lg;
+  }
+
+  @include mix.tablet-only {
+    gap: vars.$spacing-lg;
+  }
+
+  // Connection line (desktop only)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 60px;
+    right: 60px;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      vars.$primary-accent-solid 0%,
+      vars.$secondary-accent-solid 50%,
+      vars.$warning-accent-solid 100%
+    );
+    z-index: 0;
+
+    @include mix.tablet-up {
+      display: block;
+    }
+
+    @include mix.mobile-only {
+      display: none;
+    }
+  }
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.stepNumber {
+  width: 60px;
+  height: 60px;
+  border-radius: vars.$radius-full;
+  background: vars.$secondary-accent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: vars.$font-subtitle;
+  font-weight: vars.$font-bold;
+  margin: 0 auto vars.$spacing-md auto;
+  box-shadow: vars.$shadow-button;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    background: vars.$secondary-accent;
+    opacity: 0.2;
+    z-index: -1;
+    animation: numberPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes numberPulse {
+    0%, 100% { transform: scale(1); opacity: 0.2; }
+    50% { transform: scale(1.2); opacity: 0.1; }
+  }
+}
+
+.stepContent {
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.stepTitle {
+  @include mix.text-subtitle;
+  margin: 0 0 vars.$spacing-xs 0;
+  font-size: vars.$font-body-lg;
+}
+
+.stepDescription {
+  @include mix.text-small;
+  margin: 0;
+  line-height: 1.5;
+}
+
+// Archetype Cards Preview
+// ==========================================================================
+.archetypeCards {
+  @include mix.grid-container;
+  @include mix.grid-columns(3);
+  gap: vars.$spacing-xl;
+
+  @include mix.mobile-only {
+    @include mix.grid-columns(1);
+    gap: vars.$spacing-lg;
+  }
+
+  @include mix.tablet-only {
+    gap: vars.$spacing-lg;
+  }
+}
+
+.archetypeCard {
+  text-align: center;
+  padding: vars.$spacing-xl;
+  transition: vars.$transition-standard;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: vars.$shadow-card-hover;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-lg;
+  }
+}
+
+.archetypeHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$spacing-md;
+  margin-bottom: vars.$spacing-md;
+}
+
+.archetypeIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: vars.$radius-full;
+  background: vars.$card-bg;
+  border: 4px solid var(--archetype-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: vars.$shadow-card;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+    background: var(--archetype-color);
+    opacity: 0.1;
+    z-index: -1;
+  }
+
+  .archetypeEmoji {
+    font-size: 2rem;
+  }
+
+  @include mix.mobile-only {
+    width: 70px;
+    height: 70px;
+    
+    .archetypeEmoji {
+      font-size: 1.75rem;
+    }
+  }
+}
+
+.archetypeName {
+  @include mix.text-subtitle;
+  margin: 0;
+  font-size: vars.$font-body-lg;
+  font-weight: vars.$font-semibold;
+}
+
+.archetypeDescription {
+  @include mix.text-small;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.learnMoreContainer {
+  text-align: center;
+  margin-top: vars.$spacing-xl;
+}
+
+// Benefits Section
+// ==========================================================================
+.benefitsCard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-lg;
+  }
+}
+
+.benefitsList {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: vars.$spacing-sm;
+}
+
+.benefitIcon {
+  color: vars.$success-accent-solid;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.benefitText {
+  @include mix.text-body;
+  color: vars.$secondary-text;
+  line-height: 1.6;
+}
+
+// Final CTA Section
+// ==========================================================================
+.finalCta {
+  @include mix.container;
+  padding-top: vars.$spacing-2xl;
+  padding-bottom: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    padding-bottom: vars.$spacing-2xl;
+  }
+}
+
+.ctaCard {
+  background: vars.$secondary-accent;
+  color: white;
+  text-align: center;
+  padding: vars.$spacing-3xl;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
+    animation: ctaShimmer 4s ease-in-out infinite;
+  }
+
+  @keyframes ctaShimmer {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl vars.$spacing-lg;
+  }
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  @include mix.text-title;
+  color: white;
+  margin: 0 0 vars.$spacing-md 0;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-subtitle;
+  }
+}
+
+.ctaDescription {
+  @include mix.text-body;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 vars.$spacing-xl 0;
+  line-height: 1.6;
+}
+
+.finalCtaButton {
+  background: white;
+  color: vars.$secondary-accent-solid;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Reduced Motion Support
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .gradientText {
+    animation: none;
+  }
+
+  .floatingIcon {
+    animation: none;
+  }
+
+  .centralVisual {
+    animation: none;
+  }
+
+  .stepNumber::after {
+    animation: none;
+  }
+
+  .ctaCard::before {
+    animation: none;
+  }
+
+  .primaryCta::before {
+    transition: none;
+  }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .heroTitle {
+    color: black;
+  }
+
+  .gradientText {
+    background: black;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .floatingIcon {
+    border: 3px solid black;
+  }
+
+  .centralVisual {
+    background: black;
+    color: white;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .homePage {
+    * {
+      box-shadow: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .heroVisual,
+    .ctaContainer,
+    .finalCta {
+      display: none;
+    }
+
+    .hero {
+      page-break-after: always;
+    }
+
+    .archetypeCards {
+      break-inside: avoid;
+    }
+  }
+}

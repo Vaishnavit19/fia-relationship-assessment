@@ -1,0 +1,231 @@
+// src/components/ui/PageLayout/PageLayout.module.scss
+@use '../../../styles/mixins' as mix;
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: vars.$bg-gradient;
+
+  &FixedHeader {
+    padding-top: 70px; // Account for fixed header height
+
+    @include mix.mobile-only {
+      padding-top: 60px;
+    }
+  }
+
+  &Centered {
+    justify-content: center;
+  }
+}
+
+// Background variants
+.backgroundLight {
+  background: vars.$light-bg;
+}
+
+.backgroundGradient {
+  background: vars.$bg-gradient;
+}
+
+// Main content area
+.main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &Padded {
+    padding: vars.$spacing-2xl vars.$spacing-base;
+
+    @include mix.tablet-up {
+      padding: vars.$spacing-2xl vars.$spacing-xl;
+    }
+
+    @include mix.mobile-only {
+      padding: vars.$spacing-lg vars.$spacing-base;
+    }
+  }
+
+  &Centered {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+// Max width constraints
+.maxWidthSm {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.maxWidthMd {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.maxWidthLg {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.maxWidthXl {
+  max-width: vars.$container-max-width;
+  margin: 0 auto;
+}
+
+.maxWidthFull {
+  max-width: none;
+}
+
+// Assessment-specific layouts
+.assessmentLayout {
+  .main {
+    background: vars.$card-bg;
+    margin: vars.$spacing-lg;
+    border-radius: vars.$radius-xl;
+    box-shadow: vars.$shadow-card;
+
+    @include mix.mobile-only {
+      margin: vars.$spacing-sm;
+      border-radius: vars.$radius-lg;
+    }
+  }
+}
+
+.resultsLayout {
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 157, 0.05) 0%, 
+    rgba(102, 126, 234, 0.05) 50%, 
+    rgba(255, 179, 71, 0.05) 100%
+  );
+
+  .main {
+    background: transparent;
+  }
+}
+
+// Content spacing utilities
+.contentSection {
+  margin-bottom: vars.$spacing-2xl;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @include mix.mobile-only {
+    margin-bottom: vars.$spacing-xl;
+  }
+}
+
+.contentGrid {
+  display: grid;
+  gap: vars.$spacing-xl;
+
+  &TwoColumn {
+    grid-template-columns: 1fr 1fr;
+
+    @include mix.mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &ThreeColumn {
+    grid-template-columns: repeat(3, 1fr);
+
+    @include mix.tablet-only {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mix.mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Loading state
+.layoutLoading {
+  .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+}
+
+// Error state
+.layoutError {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    text-align: center;
+    gap: vars.$spacing-lg;
+  }
+}
+
+// Responsive adjustments
+@include mix.mobile-only {
+  .layout {
+    &FixedHeader {
+      padding-top: 60px;
+    }
+  }
+
+  .maxWidthSm,
+  .maxWidthMd,
+  .maxWidthLg,
+  .maxWidthXl {
+    margin: 0 vars.$spacing-sm;
+    max-width: none;
+  }
+}
+
+// Print styles
+@media print {
+  .layout {
+    background: white;
+    min-height: auto;
+  }
+
+  .layoutFixedHeader {
+    padding-top: 0;
+  }
+
+  .main {
+    &Padded {
+      padding: vars.$spacing-md;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .layout {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .layout {
+    background: white;
+  }
+
+  .backgroundLight,
+  .backgroundGradient {
+    background: white;
+  }
+
+  .main {
+    border: 2px solid black;
+  }
+}

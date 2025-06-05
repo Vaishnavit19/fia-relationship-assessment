@@ -1,0 +1,401 @@
+// src/components/ui/NavigationControls/NavigationControls.module.scss
+@use '../../../styles/mixins' as mix;
+
+.navigationControls {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+  width: 100%;
+  padding: vars.$spacing-lg 0;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-sm;
+    padding: vars.$spacing-md 0;
+  }
+}
+
+// Left, Center, Right sections
+.leftActions,
+.centerContent,
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+}
+
+.leftActions {
+  justify-content: flex-start;
+}
+
+.centerContent {
+  justify-content: center;
+  flex: 1;
+}
+
+.rightActions {
+  justify-content: flex-end;
+}
+
+// Button Styling
+.previousButton,
+.nextButton,
+.customAction {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+  position: relative;
+  white-space: nowrap;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-xs;
+    
+    // Hide text on mobile for compact display
+    .variantCompact & {
+      span:not(.shortcut) {
+        display: none;
+      }
+    }
+  }
+}
+
+.shortcut {
+  background: vars.$light-bg;
+  color: vars.$secondary-text;
+  padding: 2px vars.$spacing-xs;
+  border-radius: vars.$radius-sm;
+  font-size: vars.$font-caption;
+  font-weight: vars.$font-medium;
+  margin-left: vars.$spacing-xs;
+  border: 1px solid vars.$border-color;
+}
+
+// Progress Info
+.progressInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: vars.$spacing-xs vars.$spacing-md;
+  background: vars.$light-bg;
+  border-radius: vars.$radius-sm;
+  border: 1px solid vars.$border-color;
+}
+
+.progressText {
+  font-size: vars.$font-body-sm;
+  font-weight: vars.$font-medium;
+  color: vars.$secondary-text;
+}
+
+// Variant Styles
+.variantDefault {
+  // Uses base styling
+}
+
+.variantCompact {
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-md 0;
+
+  .leftActions,
+  .rightActions {
+    gap: vars.$spacing-xs;
+  }
+
+  .progressInfo {
+    padding: vars.$spacing-xs vars.$spacing-sm;
+  }
+
+  .progressText {
+    font-size: vars.$font-caption;
+  }
+}
+
+.variantSpaced {
+  gap: vars.$spacing-lg;
+  padding: vars.$spacing-xl 0;
+
+  .leftActions,
+  .centerContent,
+  .rightActions {
+    gap: vars.$spacing-md;
+  }
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-md;
+    padding: vars.$spacing-lg 0;
+  }
+}
+
+.variantMinimal {
+  gap: vars.$spacing-xs;
+  padding: vars.$spacing-sm 0;
+
+  .leftActions,
+  .rightActions {
+    gap: vars.$spacing-xs;
+  }
+
+  .centerContent {
+    display: none;
+  }
+
+  .shortcut {
+    display: none;
+  }
+}
+
+// Alignment Styles
+.alignmentLeft {
+  justify-content: flex-start;
+
+  .centerContent,
+  .rightActions {
+    display: none;
+  }
+}
+
+.alignmentCenter {
+  justify-content: center;
+
+  .leftActions,
+  .rightActions {
+    display: none;
+  }
+}
+
+.alignmentRight {
+  justify-content: flex-end;
+
+  .leftActions,
+  .centerContent {
+    display: none;
+  }
+}
+
+.alignmentSpacebetween {
+  justify-content: space-between;
+
+  .centerContent {
+    flex: 0;
+  }
+}
+
+// Context-specific styling
+.contextAssessment {
+  border-top: 1px solid vars.$border-color;
+  background: rgba(255, 107, 157, 0.02);
+  border-radius: vars.$radius-md;
+  padding: vars.$spacing-lg;
+  margin-top: vars.$spacing-lg;
+
+  .nextButton {
+    background: vars.$primary-accent;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(255, 107, 157, 0.3);
+    }
+  }
+
+  .progressText {
+    color: vars.$primary-accent-solid;
+    font-weight: vars.$font-semibold;
+  }
+}
+
+.contextForm {
+  border-top: 1px solid vars.$border-color;
+  padding-top: vars.$spacing-lg;
+  margin-top: vars.$spacing-lg;
+
+  .nextButton {
+    min-width: 120px;
+  }
+}
+
+.contextWizard {
+  background: vars.$light-bg;
+  border: 1px solid vars.$border-color;
+  border-radius: vars.$radius-lg;
+  padding: vars.$spacing-lg vars.$spacing-xl;
+  box-shadow: vars.$shadow-card;
+
+  .progressInfo {
+    background: vars.$card-bg;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.contextGeneral {
+  // Uses base styling
+}
+
+// Responsive behavior
+@include mix.mobile-only {
+  .navigationControls {
+    flex-wrap: wrap;
+    
+    &.variantSpaced {
+      .leftActions,
+      .rightActions {
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .centerContent {
+        order: -1;
+        width: 100%;
+        margin-bottom: vars.$spacing-sm;
+      }
+    }
+  }
+
+  .previousButton,
+  .nextButton {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+
+    .variantMinimal & {
+      flex: 0;
+    }
+  }
+
+  .customAction {
+    .variantCompact & {
+      padding: vars.$spacing-xs;
+    }
+  }
+
+  // Stack navigation on very small screens
+  @media (max-width: 480px) {
+    .navigationControls {
+      &:not(.variantMinimal) {
+        flex-direction: column;
+        gap: vars.$spacing-sm;
+        
+        .leftActions,
+        .rightActions {
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .centerContent {
+          order: -1;
+        }
+      }
+    }
+  }
+}
+
+// Focus and Interaction States
+.previousButton:focus-visible,
+.nextButton:focus-visible,
+.customAction:focus-visible {
+  outline: 2px solid vars.$primary-accent-solid;
+  outline-offset: 2px;
+}
+
+// Loading state adjustments
+.previousButton[disabled],
+.nextButton[disabled],
+.customAction[disabled] {
+  .shortcut {
+    opacity: 0.5;
+  }
+}
+
+// Animation enhancements
+.navigationControls {
+  animation: slideUp 0.4s ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Hover enhancements for buttons
+.previousButton:hover:not(:disabled),
+.nextButton:hover:not(:disabled),
+.customAction:hover:not(:disabled) {
+  .shortcut {
+    background: vars.$primary-accent-solid;
+    color: white;
+    transform: scale(1.05);
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .contextAssessment {
+    background: rgba(255, 107, 157, 0.05);
+    border-color: #2d3748;
+  }
+
+  .contextWizard {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+
+  .progressInfo {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+
+  .shortcut {
+    background: #4a5568;
+    border-color: #2d3748;
+    color: #e2e8f0;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .navigationControls {
+    border: 2px solid black;
+  }
+
+  .previousButton,
+  .nextButton,
+  .customAction {
+    border: 2px solid black;
+  }
+
+  .shortcut {
+    border: 2px solid black;
+    background: white;
+    color: black;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .navigationControls {
+    animation: none;
+  }
+
+  .previousButton:hover:not(:disabled),
+  .nextButton:hover:not(:disabled),
+  .customAction:hover:not(:disabled) {
+    .shortcut {
+      transform: none;
+    }
+  }
+
+  .nextButton:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+// Print styles
+@media print {
+  .navigationControls {
+    display: none;
+  }
+}
