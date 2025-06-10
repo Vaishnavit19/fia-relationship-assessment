@@ -1,0 +1,1101 @@
+// src/components/pages/TabbedResultsPage/TabbedResultsPage.module.scss
+
+// ==========================================================================
+// TABBED RESULTS PAGE STYLES
+// ==========================================================================
+
+.tabbedResultsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 0 auto;
+  max-width: 1400px;
+  min-height: calc(100vh - 120px);
+  padding: 24px;
+
+  @media (width <= 768px) {
+    gap: 24px;
+    padding: 16px;
+  }
+}
+
+// ==========================================================================
+// HEADER SECTION
+// ==========================================================================
+
+.resultsHeader {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.headerContent {
+  h1 {
+    background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+    background-clip: text;
+    color: transparent;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+
+    @media (width <= 768px) {
+      font-size: 24px;
+    }
+  }
+
+  p {
+    color: #718096;
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 600px;
+
+    strong {
+      color: #2d3748;
+      font-weight: 600;
+    }
+
+    @media (width <= 768px) {
+      font-size: 16px;
+    }
+  }
+}
+
+// ==========================================================================
+// TAB NAVIGATION
+// ==========================================================================
+
+.tabNavigation {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.tabList {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+
+  @media (width <= 768px) {
+    max-width: 480px;
+    width: 100%;
+  }
+}
+
+.tab {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #718096;
+  cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  font-weight: 500;
+  gap: 8px;
+  padding: 12px 20px;
+  position: relative;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #f7fafc;
+    color: #4a5568;
+  }
+
+  &.active {
+    background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+    box-shadow: 0 2px 8px rgb(102 126 234 / 30%);
+    color: white;
+    font-weight: 600;
+
+    .tabIcon {
+      opacity: 1;
+    }
+
+    .tabBadge {
+      background: rgb(255 255 255 / 20%);
+      color: white;
+    }
+  }
+
+  @media (width <= 768px) {
+    flex: 1;
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
+
+.tabIcon {
+  height: 18px;
+  opacity: 0.7;
+  width: 18px;
+}
+
+.tabBadge {
+  background: #edf2f7;
+  border-radius: 12px;
+  color: #4a5568;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  transition: all 0.2s ease;
+}
+
+// ==========================================================================
+// TAB CONTENT AREA
+// ==========================================================================
+
+.tabContent {
+  animation: fadeIn 0.3s ease-in-out;
+  min-height: 600px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================================================
+// LOADING STATE
+// ==========================================================================
+
+.loadingContainer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+
+  p {
+    color: #718096;
+    font-size: 16px;
+  }
+}
+
+// ==========================================================================
+// ARCHETYPES TAB STYLES
+// ==========================================================================
+
+.archetypesTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.topArchetypeCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  border: 2px solid #e2e8f0;
+}
+
+.topArchetypeContent {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  padding: 8px;
+
+  @media (width <= 768px) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+.archetypeIconContainer {
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 16px;
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  min-width: 80px;
+  width: 80px;
+}
+
+.archetypeEmoji {
+  font-size: 36px;
+}
+
+.archetypeInfo {
+  flex: 1;
+
+  h2 {
+    color: #2d3748;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  @media (width <= 768px) {
+    h2 {
+      font-size: 24px;
+    }
+  }
+}
+
+.archetypeDescription {
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.confidenceScore {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.confidenceLabel {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confidenceValue {
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 16px;
+}
+
+// Archetype Rankings
+.rankingsCard {
+  .cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .cardIcon {
+      color: #667eea;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.archetypeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.archetypeItem {
+  align-items: center;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+    transform: translateY(-1px);
+  }
+
+  &.selected {
+    background: linear-gradient(135deg, rgb(255 107 157 / 10%) 0%, rgb(102 126 234 / 10%) 100%);
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgb(102 126 234 / 15%);
+  }
+}
+
+.archetypeRank {
+  align-items: center;
+  background: #667eea;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  font-size: 14px;
+  font-weight: 700;
+  height: 32px;
+  justify-content: center;
+  min-width: 32px;
+}
+
+.archetypeDetails {
+  flex: 1;
+}
+
+.archetypeHeader {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.archetypeIcon {
+  font-size: 20px;
+}
+
+.archetypeName {
+  color: #2d3748;
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.archetypeScore {
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 12px;
+}
+
+.archetypeTraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.trait {
+  background: #e2e8f0;
+  border-radius: 6px;
+  color: #4a5568;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+}
+
+// Archetype Details
+.archetypeDetailsCard {
+  .cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .cardIcon {
+      color: #ff6b9d;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.archetypeDetailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detailsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+
+  @media (width <= 768px) {
+    gap: 16px;
+    grid-template-columns: 1fr;
+  }
+}
+
+.detailSection {
+  h4 {
+    color: #2d3748;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      background: #f8fafc;
+      border-left: 3px solid #667eea;
+      color: #4a5568;
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      padding: 8px 12px;
+    }
+  }
+}
+
+.compatibilitySection {
+  h4 {
+    color: #2d3748;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  p {
+    background: linear-gradient(135deg, rgb(255 107 157 / 10%) 0%, rgb(102 126 234 / 10%) 100%);
+    border-radius: 8px;
+    color: #2d3748;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 16px;
+  }
+}
+
+// Score Breakdown
+.scoresCard {
+  .cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .cardIcon {
+      color: #48bb78;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.scoresGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.scoreItem {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.scoreHeader {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scoreIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.scoreLabel {
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.scoreValue {
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.scoreBar {
+  background: #e2e8f0;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.scoreFill {
+  background: linear-gradient(90deg, #ff6b9d 0%, #667eea 100%);
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+// ==========================================================================
+// VULNERABILITIES TAB STYLES
+// ==========================================================================
+
+.vulnerabilitiesTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.vulnerabilityOverviewCard {
+  .cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .cardIcon {
+      color: #ed8936;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.overviewContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.overviewStats {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.statItem {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.statValue {
+  color: #2d3748;
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.overviewMessage {
+  align-items: flex-start;
+  background: rgb(237 137 54 / 10%);
+  border-left: 4px solid #ed8936;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+
+  .overviewIcon {
+    color: #ed8936;
+    flex-shrink: 0;
+    height: 18px;
+    margin-top: 2px;
+    width: 18px;
+  }
+
+  p {
+    color: #2d3748;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// Persona Cards Grid
+.personaCardsGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.personaCard {
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+    transform: translateY(-2px);
+  }
+
+  &.selected {
+    border-color: #ed8936;
+    box-shadow: 0 4px 12px rgb(237 137 54 / 20%);
+  }
+}
+
+.personaHeader {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px;
+}
+
+.personaTitle {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  h4 {
+    color: #2d3748;
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.riskBadge {
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  text-transform: uppercase;
+
+  &.high {
+    background: rgb(245 101 101 / 20%);
+    color: #c53030;
+  }
+
+  &.medium {
+    background: rgb(237 137 54 / 20%);
+    color: #dd6b20;
+  }
+
+  &.low {
+    background: rgb(72 187 120 / 20%);
+    color: #2f855a;
+  }
+}
+
+.personaSubtitle {
+  color: #718096;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.personaContent {
+  padding: 16px;
+}
+
+.personaDescription {
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.personaTraits {
+  margin-bottom: 16px;
+
+  h5 {
+    color: #2d3748;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      color: #4a5568;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      padding-left: 12px;
+      position: relative;
+
+      &::before {
+        color: #ed8936;
+        content: '•';
+        font-weight: bold;
+        left: 0;
+        position: absolute;
+      }
+    }
+  }
+}
+
+.popCultureRef {
+  background: #f7fafc;
+  border-radius: 6px;
+  color: #4a5568;
+  font-size: 13px;
+  padding: 8px;
+
+  strong {
+    color: #2d3748;
+    font-weight: 600;
+  }
+
+  em {
+    color: #718096;
+    font-style: italic;
+  }
+}
+
+.personaActions {
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 16px;
+}
+
+.expandedContent {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px;
+}
+
+.redFlagsSection,
+.tacticsSection,
+.protectionSection {
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h5 {
+    color: #2d3748;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      color: #4a5568;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      padding-left: 16px;
+      position: relative;
+
+      &::before {
+        font-size: 12px;
+        left: 0;
+        position: absolute;
+        top: 1px;
+      }
+    }
+  }
+}
+
+.redFlagsSection ul li::before {
+  content: '🚩';
+}
+
+.tacticsSection ul li::before {
+  content: '⚠️';
+}
+
+.protectionSection ul li::before {
+  content: '🛡️';
+}
+
+// Educational Content
+.educationalCard {
+  .cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .cardIcon {
+      color: #48bb78;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.insightsGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.insightItem {
+  align-items: flex-start;
+  background: rgb(72 187 120 / 10%);
+  border-left: 4px solid #48bb78;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+
+  .insightIcon {
+    color: #48bb78;
+    flex-shrink: 0;
+    height: 16px;
+    margin-top: 2px;
+    width: 16px;
+  }
+
+  p {
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+// ==========================================================================
+// ATTRACTION PATTERNS TAB STYLES
+// ==========================================================================
+
+.attractionPatternsTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.comingSoonCard {
+  background: linear-gradient(135deg, rgb(102 126 234 / 5%) 0%, rgb(255 107 157 / 5%) 100%);
+  border: 2px dashed #cbd5e0;
+  text-align: center;
+}
+
+.comingSoonContent {
+  padding: 40px 20px;
+
+  .comingSoonIcon {
+    color: #667eea;
+    height: 48px;
+    margin: 0 auto 24px;
+    width: 48px;
+  }
+
+  h3 {
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  > p {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+  }
+}
+
+.featuresGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-bottom: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+}
+
+.feature {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  text-align: left;
+
+  .featureIcon {
+    background: linear-gradient(135deg, #667eea 0%, #ff6b9d 100%);
+    border-radius: 8px;
+    color: white;
+    flex-shrink: 0;
+    height: 40px;
+    padding: 8px;
+    width: 40px;
+  }
+
+  div {
+    flex: 1;
+
+    h4 {
+      color: #2d3748;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: #718096;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+    }
+  }
+}
+
+.comingSoonActions {
+  display: flex;
+  justify-content: center;
+}
+
+// ==========================================================================
+// ACTION BUTTONS
+// ==========================================================================
+
+.actionsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.primaryActions {
+  display: flex;
+  justify-content: center;
+}
+
+.continueButton {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.secondaryActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+
+  @media (width <= 768px) {
+    flex-direction: column;
+  }
+}
+
+// ==========================================================================
+// DEBUG CARD
+// ==========================================================================
+
+.debugCard {
+  background: #1a202c;
+  border: 1px solid #4a5568;
+  margin-top: 32px;
+
+  h4 {
+    color: #e2e8f0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  pre {
+    background: #2d3748;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    max-height: 400px;
+    overflow: auto;
+    padding: 16px;
+    white-space: pre-wrap;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE UTILITIES
+// ==========================================================================
+
+@media (width <= 1024px) {
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scoresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (width <= 768px) {
+  .tabbedResultsContainer {
+    padding: 12px;
+  }
+
+  .resultsHeader .headerContent h1 {
+    font-size: 24px;
+  }
+
+  .tab {
+    font-size: 13px;
+    padding: 8px 10px;
+
+    span:not(.tabBadge) {
+      display: none;
+    }
+  }
+
+  .topArchetypeContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .archetypeInfo h2 {
+    font-size: 22px;
+  }
+
+  .personaCardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .secondaryActions {
+    flex-direction: column;
+  }
+}

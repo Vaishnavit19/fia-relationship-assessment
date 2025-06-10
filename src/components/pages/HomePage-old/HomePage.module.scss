@@ -1,0 +1,609 @@
+// src/components/pages/HomePage/HomePage.module.scss
+@use '../../../styles/mixins' as mix;
+
+.homepage {
+  min-height: 100vh;
+}
+
+// Hero Section
+// ==========================================================================
+.hero {
+  background: vars.$bg-gradient;
+  overflow: hidden;
+  padding: vars.$spacing-3xl 0;
+  position: relative;
+
+  &::before {
+    background: radial-gradient(
+      ellipse 800px 600px at 50% 0%,
+      rgb(255 107 157 / 5%) 0%,
+      transparent 50%
+    );
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl 0;
+  }
+}
+
+.heroContent {
+  @include mix.grid-container;
+
+  align-items: center;
+  gap: vars.$spacing-3xl;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  z-index: 1;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-2xl;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+.heroText {
+  max-width: 600px;
+
+  @include mix.mobile-only {
+    max-width: none;
+  }
+}
+
+.heroTitle {
+  @include mix.text-hero;
+
+  line-height: 1.1;
+  margin-bottom: vars.$spacing-lg;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-main;
+    margin-bottom: vars.$spacing-md;
+  }
+}
+
+.highlightText {
+  animation: gradient-shift 3s ease-in-out infinite;
+  background: vars.$primary-accent;
+  background-clip: text;
+  background-size: 200% 200%;
+  -webkit-text-fill-color: transparent;
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+}
+
+.heroSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-lg;
+  line-height: 1.6;
+  margin-bottom: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body;
+    margin-bottom: vars.$spacing-xl;
+  }
+}
+
+.heroActions {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+}
+
+.continueSection {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+}
+
+.welcomeBack {
+  background: rgb(255 107 157 / 10%);
+  border-left: 4px solid vars.$primary-accent-solid;
+  border-radius: vars.$radius-sm;
+  color: vars.$primary-text;
+  font-weight: vars.$font-medium;
+  margin: 0;
+  padding: vars.$spacing-sm vars.$spacing-md;
+}
+
+.actionButtons {
+  display: flex;
+  gap: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    flex-direction: column;
+  }
+}
+
+.primaryAction {
+  min-width: 220px;
+
+  @include mix.mobile-only {
+    width: 100%;
+  }
+}
+
+.assessmentStats {
+  border-top: 1px solid vars.$border-color;
+  display: flex;
+  gap: vars.$spacing-xl;
+  padding-top: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    justify-content: center;
+  }
+}
+
+.stat {
+  align-items: center;
+  color: vars.$secondary-text;
+  display: flex;
+  flex-direction: column;
+  font-size: vars.$font-body-sm;
+  text-align: center;
+  
+  strong {
+    color: vars.$primary-text;
+    display: block;
+    font-size: vars.$font-body-lg;
+    font-weight: vars.$font-bold;
+    margin-bottom: 2px;
+  }
+
+  @include mix.mobile-only {
+    font-size: vars.$font-caption;
+    
+    strong {
+      font-size: vars.$font-body;
+    }
+  }
+}
+
+// Hero Visual
+// ==========================================================================
+.heroVisual {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  @include mix.mobile-only {
+    order: -1;
+  }
+}
+
+.archetypePreview {
+  display: grid;
+  gap: vars.$spacing-md;
+  grid-template-columns: 1fr;
+  max-width: 300px;
+  width: 100%;
+}
+
+.archetypeCard {
+  @include mix.card-small;
+
+  animation: float-in 0.8s ease-out;
+  animation-delay: var(--animation-delay);
+  animation-fill-mode: both;
+  border-left: 4px solid var(--archetype-color);
+  text-align: center;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-4px);
+  }
+
+  @keyframes float-in {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.archetypeIcon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: vars.$spacing-sm;
+}
+
+.archetypeName {
+  color: vars.$primary-text;
+  font-size: vars.$font-body;
+  font-weight: vars.$font-semibold;
+  margin: 0 0 vars.$spacing-xs 0;
+}
+
+.archetypeDesc {
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-sm;
+  line-height: 1.4;
+  margin: 0;
+}
+
+// Features Section
+// ==========================================================================
+.features {
+  background: vars.$card-bg;
+  padding: vars.$spacing-3xl 0;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl 0;
+  }
+}
+
+.sectionHeader {
+  margin-bottom: vars.$spacing-3xl;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  text-align: center;
+
+  @include mix.mobile-only {
+    margin-bottom: vars.$spacing-2xl;
+  }
+}
+
+.sectionTitle {
+  @include mix.text-title;
+
+  margin-bottom: vars.$spacing-md;
+}
+
+.sectionSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-lg;
+  margin: 0;
+}
+
+.featuresGrid {
+  @include mix.grid-container;
+
+  gap: vars.$spacing-xl;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+.featureIcon {
+  background: vars.$primary-accent;
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-accent;
+  color: white;
+  height: 60px;
+  margin: 0 auto vars.$spacing-lg auto;
+  width: 60px;
+  @include mix.flex-center;
+}
+
+.featureTitle {
+  @include mix.text-subtitle;
+
+  margin-bottom: vars.$spacing-sm;
+}
+
+.featureDescription {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Archetypes Section
+// ==========================================================================
+.archetypes {
+  background: vars.$light-bg;
+  padding: vars.$spacing-3xl 0;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl 0;
+  }
+}
+
+.archetypesGrid {
+  @include mix.grid-container;
+
+  gap: vars.$spacing-xl;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+.archetypeHeader {
+  margin-bottom: vars.$spacing-lg;
+}
+
+.archetypeIconLarge {
+  background: linear-gradient(135deg, 
+    rgb(255 255 255 / 90%) 0%, 
+    rgb(255 255 255 / 70%) 100%
+  );
+  border: 3px solid var(--archetype-color);
+  border-radius: vars.$radius-full;
+  box-shadow: vars.$shadow-card;
+  font-size: 2.5rem;
+  height: 80px;
+  margin: 0 auto vars.$spacing-md auto;
+  position: relative;
+  width: 80px;
+  @include mix.flex-center;
+
+  &::after {
+    animation: rotate 4s linear infinite;
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      var(--archetype-color) 0%,
+      transparent 50%,
+      var(--archetype-color) 100%
+    );
+    border-radius: vars.$radius-full;
+    content: '';
+    inset: -6px;
+    opacity: 0.3;
+    position: absolute;
+    z-index: -1;
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+}
+
+.archetypeTitle {
+  @include mix.text-subtitle;
+
+  margin: 0;
+}
+
+.archetypeOverviewDesc {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// CTA Section
+// ==========================================================================
+.cta {
+  background: vars.$bg-gradient;
+  padding: vars.$spacing-3xl 0;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl 0;
+  }
+}
+
+.ctaCard {
+  background: vars.$card-bg;
+  overflow: hidden;
+  padding: vars.$spacing-3xl;
+  position: relative;
+  text-align: center;
+
+  &::before {
+    background: vars.$primary-accent;
+    border-radius: inherit;
+    content: '';
+    inset: 0;
+    opacity: 0.02;
+    position: absolute;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl;
+  }
+}
+
+.ctaContent {
+  margin: 0 auto;
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaTitle {
+  @include mix.text-title;
+
+  margin-bottom: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-section;
+  }
+}
+
+.ctaSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: vars.$font-body-lg;
+  line-height: 1.6;
+  margin-bottom: vars.$spacing-2xl;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body;
+    margin-bottom: vars.$spacing-xl;
+  }
+}
+
+.ctaButton {
+  min-width: 280px;
+
+  @include mix.mobile-only {
+    width: 100%;
+  }
+}
+
+// Responsive Adjustments
+// ==========================================================================
+@include mix.mobile-only {
+  .heroContent {
+    text-align: center;
+  }
+
+  .featuresGrid,
+  .archetypesGrid {
+    margin: 0 auto;
+    max-width: 400px;
+  }
+}
+
+// Animation Enhancements
+// ==========================================================================
+.featureCard,
+.archetypeOverviewCard {
+  animation: fade-in-up 0.6s ease-out;
+  animation-fill-mode: both;
+
+  @for $i from 1 through 6 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 0.1}s;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.featureCard {
+  border: 2px solid transparent;
+  padding: vars.$spacing-2xl;
+  text-align: center;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    border-color: rgb(255 107 157 / 20%);
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-2px);
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl;
+  }
+}
+
+.archetypeOverviewCard {
+  border: 2px solid transparent;
+  padding: vars.$spacing-2xl;
+  text-align: center;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-3px);
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-xl;
+  }
+}
+
+// Reduced Motion Support
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  .highlightText {
+    animation: none;
+    background: vars.$primary-accent-solid;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .archetypeCard,
+  .featureCard,
+  .archetypeOverviewCard {
+    animation: none;
+  }
+
+  .archetypeIconLarge::after {
+    animation: none;
+  }
+
+  // * {
+  //   transition: none !important;
+  // }
+}
+
+// High Contrast Mode
+// ==========================================================================
+@media (prefers-contrast: high) {
+  .heroTitle {
+    color: black;
+  }
+
+  .highlightText {
+    background: none;
+    color: #06c;
+    text-decoration: underline;
+    -webkit-text-fill-color: initial;
+  }
+
+  .featureCard,
+  .archetypeOverviewCard {
+    border: 2px solid black;
+  }
+
+  .featureIcon {
+    background: #06c;
+    color: white;
+  }
+}
+
+// Print Styles
+// ==========================================================================
+@media print {
+  .hero {
+    background: white;
+    padding: vars.$spacing-lg 0;
+  }
+
+  .heroActions,
+  .ctaButton {
+    display: none;
+  }
+
+  .featureIcon {
+    background: white;
+    border: 2px solid black;
+    color: black;
+  }
+}

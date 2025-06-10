@@ -1,16 +1,16 @@
 {
   "app": {
     "name": "FIA Relationship Assessment",
-    "version": "1.0.0",
-    "description": "Discover your relationship style through travel scenarios",
+    "version": "2.0.0",
+    "description": "Advanced relationship assessment using dynamic travel scenarios and vulnerability awareness",
     "author": "FIA",
     "website": "https://fia-relationship-assessment.com"
   },
   "assessment": {
-    "totalScenarios": 7,
-    "maxScore": 12,
-    "timeEstimate": "5-7 minutes",
-    "resultTypes": 3
+    "totalScenarios": "20+",
+    "maxScore": 30,
+    "timeEstimate": "8-12 minutes",
+    "resultTypes": 8
   },
   "ui": {
     "animationDuration": 300,
@@ -23,8 +23,8 @@
   "features": {
     "emailCollection": true,
     "socialSharing": true,
-    "resultsPersistence": false,
-    "analytics": false
+    "resultsPersistence": true,
+    "analytics": true
   },
   "contact": {
     "supportEmail": "support@fia-relationship-assessment.com",

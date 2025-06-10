@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "description": "Scoring profiles for 8 Extended Archetypes mapped to 3-dimensional assessment scores",
+    "dimensions": ["logical", "emotional", "exploratory"],
+    "maxScore": 20,
+    "calculationMethod": "mathematical_proximity_distance"
+  },
+  "scoringProfiles": [
+    {
+      "archetypeId": "intellectual",
+      "name": "The Intellectual or Analyst",
+      "targetScores": {
+        "logical": 9,
+        "emotional": 2,
+        "exploratory": 6
+      },
+      "totalScore": 17,
+      "percentages": {
+        "logical": 52.94,
+        "emotional": 11.76,
+        "exploratory": 35.29
+      },
+      "dominantDimension": "logical",
+      "description": "Highly analytical with focus on logic and reasoning over emotional responses"
+    },
+    {
+      "archetypeId": "achiever",
+      "name": "The Achiever",
+      "targetScores": {
+        "logical": 8,
+        "emotional": 4,
+        "exploratory": 5
+      },
+      "totalScore": 17,
+      "percentages": {
+        "logical": 47.06,
+        "emotional": 23.53,
+        "exploratory": 29.41
+      },
+      "dominantDimension": "logical",
+      "description": "Goal-oriented with balanced approach to logical planning and some emotional consideration"
+    },
+    {
+      "archetypeId": "leader",
+      "name": "The Leader or Ruler",
+      "targetScores": {
+        "logical": 7,
+        "emotional": 6,
+        "exploratory": 5
+      },
+      "totalScore": 18,
+      "percentages": {
+        "logical": 38.89,
+        "emotional": 33.33,
+        "exploratory": 27.78
+      },
+      "dominantDimension": "logical",
+      "description": "Balanced approach with slight logical preference, strong emotional intelligence"
+    },
+    {
+      "archetypeId": "explorer",
+      "name": "The Explorer",
+      "targetScores": {
+        "logical": 3,
+        "emotional": 5,
+        "exploratory": 10
+      },
+      "totalScore": 18,
+      "percentages": {
+        "logical": 16.67,
+        "emotional": 27.78,
+        "exploratory": 55.56
+      },
+      "dominantDimension": "exploratory",
+      "description": "Adventure-focused with high spontaneity and moderate emotional engagement"
+    },
+    {
+      "archetypeId": "rebel",
+      "name": "The Rebel",
+      "targetScores": {
+        "logical": 4,
+        "emotional": 6,
+        "exploratory": 9
+      },
+      "totalScore": 19,
+      "percentages": {
+        "logical": 21.05,
+        "emotional": 31.58,
+        "exploratory": 47.37
+      },
+      "dominantDimension": "exploratory",
+      "description": "Non-conformist with high exploratory drive and significant emotional component"
+    },
+    {
+      "archetypeId": "peacemaker",
+      "name": "The Peacemaker",
+      "targetScores": {
+        "logical": 5,
+        "emotional": 8,
+        "exploratory": 3
+      },
+      "totalScore": 16,
+      "percentages": {
+        "logical": 31.25,
+        "emotional": 50.00,
+        "exploratory": 18.75
+      },
+      "dominantDimension": "emotional",
+      "description": "Harmony-focused with strong emotional prioritization over adventure-seeking"
+    },
+    {
+      "archetypeId": "dreamer",
+      "name": "The Dreamer",
+      "targetScores": {
+        "logical": 2,
+        "emotional": 9,
+        "exploratory": 8
+      },
+      "totalScore": 19,
+      "percentages": {
+        "logical": 10.53,
+        "emotional": 47.37,
+        "exploratory": 42.11
+      },
+      "dominantDimension": "emotional",
+      "description": "Idealistic with strong emotional drive and high exploratory tendencies"
+    },
+    {
+      "archetypeId": "caregiver",
+      "name": "The Caregiver",
+      "targetScores": {
+        "logical": 3,
+        "emotional": 10,
+        "exploratory": 2
+      },
+      "totalScore": 15,
+      "percentages": {
+        "logical": 20.00,
+        "emotional": 66.67,
+        "exploratory": 13.33
+      },
+      "dominantDimension": "emotional",
+      "description": "Nurturing-focused with highest emotional scores and minimal exploratory drive"
+    }
+  ],
+  "distanceCalculation": {
+    "formula": "sqrt((user_logical - target_logical)² + (user_emotional - target_emotional)² + (user_exploratory - target_exploratory)²)",
+    "confidenceCalculation": "100 - (distance * confidence_multiplier)",
+    "confidenceMultiplier": 5,
+    "tieThreshold": 1,
+    "minConfidence": 30,
+    "maxConfidence": 95
+  },
+  "usageInstructions": {
+    "proximityMatching": "Calculate Euclidean distance between user scores and each archetype's target scores",
+    "ranking": "Rank archetypes by closest distance (smallest distance = best match)",
+    "displayTop": 3,
+    "expandToTop5": "If top 3 distances are very close (within 2 points)",
+    "tieHandling": "Show identical percentages for archetypes with same distance"
+  }
+}

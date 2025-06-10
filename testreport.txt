@@ -1,0 +1,126 @@
+  
+    🔍 Discovering available extended scenarios...
+
+    📊 Found 18 available scenarios: [1, 2, 3.1, 3.2, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2]
+
+    📋 Questionnaire Structure:
+
+      Start: 1
+
+      End scenarios: []
+
+      Branching points: [2, 3.1, 3.2, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2]
+
+    🔍 Generating realistic questionnaire paths...
+
+    🔍 Discovering questionnaire structure...
+
+    📊 Structure: Start=1, End scenarios=[], Branching points=[2, 3.1, 3.2, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2]
+
+    Path Pure_Logical: Scenario 7.5 not found, ending path  
+    Path Pure_Exploratory: Scenario 7.3 not found, ending path  
+    Path Paris_Emotional: Scenario 7.4 not found, ending path  
+    Path Paris_Logical: Scenario 7.5 not found, ending path  
+    Path London_Exploratory: Scenario 7.3 not found, ending path  
+    Path Paris_Exploratory: Scenario 7.6 not found, ending path  
+    Path Balanced_Mix_1: Scenario 7.6 not found, ending path  
+    Path Balanced_Mix_2: Scenario 7.3 not found, ending path  
+    Path Emotional_Dominant_2: Scenario 7.4 not found, ending path  
+    Path Logical_Dominant_1: Scenario 7.4 not found, ending path  
+    Path Random_6: Scenario 7.4 not found, ending path
+
+    📊 Generated 31 test paths
+
+    ✅ Valid paths: 31
+
+    ❌ Invalid paths: 0
+
+    📈 Success rate: 100.0%
+
+    
+    📈 COMPREHENSIVE PATH ANALYSIS RESULTS:
+
+    
+    📊 Question Count Distribution:
+
+      6 questions: 11 paths (35.5%)
+
+      9 questions: 20 paths (64.5%)
+
+    
+    🎯 Archetype Distribution:
+
+      The Caregiver: 8 (25.8%)
+
+      The Explorer: 5 (16.1%)
+
+      The Peacemaker: 5 (16.1%)
+
+      The Leader or Ruler: 3 (9.7%)
+
+      The Dreamer: 3 (9.7%)
+
+      The Rebel: 3 (9.7%)
+
+      The Intellectual or Analyst: 2 (6.5%)
+
+      The Achiever: 2 (6.5%)
+
+    
+    📊 Score Distribution:
+
+      emotional: 1-16 (avg: 7.2)
+
+      logical: 1-9 (avg: 3.8)
+
+      exploratory: 0-10 (avg: 3.9)
+
+    
+    ✅ All realistic questionnaire paths validated successfully!
+
+    📏 Testing path length distribution...
+
+    🔍 Discovering questionnaire structure...
+
+    📊 Structure: Start=1, End scenarios=[], Branching points=[2, 3.1, 3.2, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2]
+
+    Path Pure_Logical: Scenario 7.5 not found, ending path  
+    Path Pure_Exploratory: Scenario 7.3 not found, ending path  
+    Path Paris_Emotional: Scenario 7.4 not found, ending path  
+    Path Paris_Logical: Scenario 7.5 not found, ending path  
+    Path London_Exploratory: Scenario 7.3 not found, ending path  
+    Path Paris_Exploratory: Scenario 7.6 not found, ending path  
+    Path Balanced_Mix_1: Scenario 7.6 not found, ending path  
+    Path Balanced_Mix_2: Scenario 7.3 not found, ending path  
+    Path Emotional_Dominant_2: Scenario 7.4 not found, ending path  
+    Path Logical_Dominant_1: Scenario 7.4 not found, ending path  
+    Path Random_6: Scenario 7.5 not found, ending path
+
+    Path Random_10: Scenario 7.6 not found, ending path
+
+    📊 Actual Path Length Distribution:
+
+      Min: 6 questions
+
+      Max: 9 questions
+
+      Average: 7.8 questions
+
+    📈 Length Distribution:
+
+      6 questions: 12 paths
+
+      9 questions: 19 paths
+
+    🌿 Testing specific path flows...
+
+    ✅ London Emotional Path: London path, wait together, 9 questions, 8 branches
+
+    Path Paris Logical Path: Scenario 7.4 not found, ending path  
+    ✅ Paris Logical Path: Paris path, go solo, 6 questions, 5 branches
+
+    ✅ London Exploratory Path: London path, go solo, 9 questions, 8 branches
+
+      
+    
+

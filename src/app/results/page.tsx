@@ -1,18 +1,19 @@
 // src/app/results/page.tsx
 // ==========================================================================
-// RESULTS PAGE - RESULTS DISPLAY ROUTE
+// RESULTS PAGE - TABBED RESULTS INTERFACE ROUTE
 // ==========================================================================
 
 import { Metadata } from 'next';
 
-import { ResultsPage } from '@/components/pages/ResultsPage';
+import TabbedResultsPage from '@/components/pages/TabbedResultsPage/TabbedResultsPage';
 
 export const metadata: Metadata = {
-  title: 'Your Results | FIA Relationship Assessment',
-  description: 'Discover your relationship archetype and understand your partnership style through detailed results.',
-  robots: 'noindex, nofollow', // Don't index results pages
+  title: 'Results | FIA Relationship Assessment',
+  description:
+    'Your comprehensive relationship assessment results including archetypes, vulnerability patterns, and attraction insights.',
+  robots: 'noindex, nofollow', // Don't index results pages for privacy
 };
 
 export default function Page() {
-  return <ResultsPage />;
+  return <TabbedResultsPage initialTab="archetypes" showAnalytics={true} />;
 }

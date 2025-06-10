@@ -1,0 +1,467 @@
+{
+  "metadata": {
+    "title": "Attraction Persona Cards - Enhanced",
+    "description": "17 manipulative personality types with archetype vulnerability mappings",
+    "totalPersonas": 17,
+    "usageInstructions": {
+      "selectionMethod": "weighted_hybrid_based_on_confidence_gaps",
+      "cardLimits": {
+        "minimum": 3,
+        "maximum": 8
+      },
+      "confidenceGapRules": {
+        "largeGap": {
+          "description": "Top archetype significantly higher than others",
+          "distribution": "5 primary + 1 secondary archetype personas"
+        },
+        "mediumGap": {
+          "description": "Moderate difference between top archetypes",
+          "distribution": "4 primary + 2 secondary archetype personas"
+        },
+        "smallGap": {
+          "description": "Close scores between top archetypes",
+          "distribution": "3 primary + 3 secondary archetype personas"
+        }
+      }
+    }
+  },
+  "personas": [
+    {
+      "id": "puppet_master",
+      "persona": "The Puppet Master",
+      "title": "THE CHARMING MANIPULATOR",
+      "characters": ["Loki", "Light Yagami", "Klaus Mikaelson", "Azula"],
+      "why": "They're intense, dramatic, and say things like \"no one really gets me.\" You're like \"I do.\"",
+      "plotTwist": "They're not being vulnerable. They're being strategic.",
+      "blindSpot": "You think you're healing them. You're just stuck in Season 6 of their emotional drama.",
+      "punchline": "You met Loki. Thought it was love. It was a plot twist.",
+      "vulnerableArchetypes": ["caregiver", "dreamer", "intellectual"],
+      "manipulatorTypes": [
+        "Emotional Predator / Puppet Master",
+        "The Charismatic",
+        "The Seducer"
+      ],
+      "psychologicalTactics": [
+        "Strategic vulnerability displays",
+        "Emotional complexity as bait",
+        "Dramatic intensity to hook empathy"
+      ]
+    },
+    {
+      "id": "intimidator",
+      "persona": "The Intimidator",
+      "title": "THE POWERHOUSE PARTNER",
+      "characters": [
+        "Gustavo Fring (Breaking Bad)",
+        "Logan Roy (Succession)",
+        "Erwin Smith (Attack on Titan)",
+        "Severus Snape (Harry Potter)"
+      ],
+      "why": "You like confidence, control, and people who take charge. You think they're strong enough to protect you—and maybe fix you too.",
+      "plotTwist": "They're not protecting you. They're managing you.",
+      "blindSpot": "You confuse intensity for safety. But control isn't care.",
+      "punchline": "You saw leadership. Turns out, it was just domination in a nice coat.",
+      "vulnerableArchetypes": ["peacemaker", "caregiver", "achiever"],
+      "manipulatorTypes": [
+        "The Drill Sergeant",
+        "The Terrorist",
+        "The Demand Man"
+      ],
+      "psychologicalTactics": [
+        "Authority assertion through intimidation",
+        "Control disguised as protection",
+        "Power dynamics exploitation"
+      ]
+    },
+    {
+      "id": "drill_sergeant",
+      "persona": "The Drill Sergeant",
+      "title": "THE RULEBOOK ROMANTIC",
+      "characters": [
+        "Captain Holt (Brooklyn Nine-Nine)",
+        "Coach Carter (Coach Carter)",
+        "Major Kuldeep Singh (Uri: The Surgical Strike)",
+        "Captain Levi (Attack on Titan)"
+      ],
+      "why": "You love structure. Rules make you feel safe. And when they say 'discipline is love'—you believe it.",
+      "plotTwist": "It's not structure. It's control dressed up in duty.",
+      "blindSpot": "You mistake rigidity for reliability. But love shouldn't feel like a training camp.",
+      "punchline": "You thought it was devotion. It was just daily inspection with hugs.",
+      "vulnerableArchetypes": ["achiever", "peacemaker", "leader"],
+      "manipulatorTypes": [
+        "The Drill Sergeant",
+        "The Demand Man",
+        "Rambo"
+      ],
+      "psychologicalTactics": [
+        "Structure as control mechanism",
+        "Discipline disguised as care",
+        "Military-style emotional management"
+      ]
+    },
+    {
+      "id": "suspicious_strategist",
+      "persona": "The Suspicious Strategist",
+      "title": "THE CALCULATING GENIUS",
+      "characters": [
+        "Light Yagami (Death Note)",
+        "Joe Goldberg (You)",
+        "L (Death Note)",
+        "Sherlock Holmes (BBC Sherlock)"
+      ],
+      "why": "You admire intelligence. You love people who notice everything and always stay five steps ahead.",
+      "plotTwist": "They're not reading your mind—they're reading your weaknesses.",
+      "blindSpot": "You think their paranoia is 'depth'. It's actually distrust on loop.",
+      "punchline": "You called it sharp thinking. It was just surveillance with a crush.",
+      "vulnerableArchetypes": ["intellectual", "achiever", "leader"],
+      "manipulatorTypes": [
+        "Master of Everything",
+        "The Water Torturer",
+        "Dr. Jekyll/Mr. Hyde"
+      ],
+      "psychologicalTactics": [
+        "Intelligence as manipulation tool",
+        "Strategic information gathering",
+        "Calculated emotional responses"
+      ]
+    },
+    {
+      "id": "master_of_everything",
+      "persona": "Master of Everything",
+      "title": "THE WALKING TED TALK",
+      "characters": [
+        "Tony Stark (Iron Man / MCU)",
+        "Light Yagami (Death Note)",
+        "Sherlock Holmes (BBC Sherlock)",
+        "Grand Admiral Thrawn (Star Wars: Rebels)"
+      ],
+      "why": "You love brilliance. You're drawn to people who seem like they have all the answers.",
+      "plotTwist": "They're not sharing wisdom. They're building a fanbase—with you as audience #1.",
+      "blindSpot": "You confuse charisma with character. Intelligence ≠ emotional safety.",
+      "punchline": "You thought you met a genius. You met a god complex in a hoodie.",
+      "vulnerableArchetypes": ["intellectual", "achiever", "leader"],
+      "manipulatorTypes": [
+        "Master of Everything",
+        "The Charismatic",
+        "Mr. Always Right"
+      ],
+      "psychologicalTactics": [
+        "Intellectual superiority complex",
+        "Knowledge as power tool",
+        "Expertise used for dominance"
+      ]
+    },
+    {
+      "id": "subtle_saboteur",
+      "persona": "The Subtle Saboteur",
+      "title": "THE SILENT HEARTBREAKER",
+      "characters": [
+        "Tom (500 Days of Summer)",
+        "George (Gaslight)",
+        "Amy Dunne (Gone Girl)",
+        "Petyr Baelish aka Littlefinger (Game of Thrones)"
+      ],
+      "why": "They're soft, supportive, and say all the right things—at first.",
+      "plotTwist": "They don't break hearts loudly. They do it with compliments and tiny cuts.",
+      "blindSpot": "You think kindness = goodness. Sometimes it's just strategy with a smile.",
+      "punchline": "You thought it was love. It was a slow leak to your self-esteem.",
+      "vulnerableArchetypes": ["caregiver", "peacemaker", "dreamer"],
+      "manipulatorTypes": [
+        "The Water Torturer",
+        "The Subtle Saboteur",
+        "The Nitpicker"
+      ],
+      "psychologicalTactics": [
+        "Passive-aggressive undermining",
+        "Subtle emotional manipulation",
+        "Kindness as strategic weapon"
+      ]
+    },
+    {
+      "id": "clinger",
+      "persona": "The Clinger",
+      "title": "THE OVERLOVER",
+      "characters": [
+        "Geet (Jab We Met)",
+        "Gollum (The Lord of the Rings)",
+        "Charlie (The Perks of Being a Wallflower)",
+        "Joe Goldberg (You)"
+      ],
+      "why": "You love big emotions and loyal hearts. They text first, second, third—and cry if you don't reply.",
+      "plotTwist": "They don't need love. They need a 24/7 emotional support hotline.",
+      "blindSpot": "You think it's devotion. It's actually anxiety with a cute smile.",
+      "punchline": "You thought it was passion. It was panic with heart emojis.",
+      "vulnerableArchetypes": ["caregiver", "peacemaker", "dreamer"],
+      "manipulatorTypes": [
+        "The Clinger",
+        "The Demand Man",
+        "The Parental Seeker"
+      ],
+      "psychologicalTactics": [
+        "Emotional overwhelming",
+        "Dependency as control",
+        "Anxiety disguised as devotion"
+      ]
+    },
+    {
+      "id": "addict",
+      "persona": "The Addict",
+      "title": "THE BEAUTIFUL MESS",
+      "characters": [
+        "Rue Bennett (Euphoria)",
+        "Jesse Pinkman (Breaking Bad)",
+        "Jim Morrison (real life)",
+        "Rockstar Jordan (Rockstar)"
+      ],
+      "why": "They're deep, broken, poetic. You want to be their peace in the chaos.",
+      "plotTwist": "They don't want peace. They want to feel something—anything.",
+      "blindSpot": "You think love will fix them. It won't. Especially not yours alone.",
+      "punchline": "You thought you were the cure. You were just another hit.",
+      "vulnerableArchetypes": ["caregiver", "explorer", "dreamer"],
+      "manipulatorTypes": [
+        "The Addict",
+        "The Perpetual Victim",
+        "The Player"
+      ],
+      "psychologicalTactics": [
+        "Chaos as emotional bait",
+        "Brokenness as attraction",
+        "Self-destruction as manipulation"
+      ]
+    },
+    {
+      "id": "freewheeler",
+      "persona": "The Freewheeler",
+      "title": "THE CHAOS SIREN",
+      "characters": [
+        "Ferris Bueller (Ferris Bueller's Day Off)",
+        "Jack Sparrow (Pirates of the Caribbean)",
+        "Imran (Zindagi Na Milegi Dobara)",
+        "Vikram (Tamasha)"
+      ],
+      "why": "They're fun. Spontaneous. Never boring. You confuse unpredictability with passion.",
+      "plotTwist": "They love the ride—not the passenger.",
+      "blindSpot": "You think you're soulmates. They think you're optional.",
+      "punchline": "You packed for forever. They forgot you in the itinerary.",
+      "vulnerableArchetypes": ["explorer", "rebel", "dreamer"],
+      "manipulatorTypes": [
+        "The Player",
+        "The Future Faker",
+        "The Rake"
+      ],
+      "psychologicalTactics": [
+        "Spontaneity as avoidance",
+        "Adventure without commitment",
+        "Excitement over stability"
+      ]
+    },
+    {
+      "id": "thinker",
+      "persona": "The Thinker",
+      "title": "THE BRILLIANT LONER",
+      "characters": [
+        "Sherlock Holmes (Sherlock)",
+        "Light Yagami (Death Note)",
+        "Professor Bhaisaab (3 Idiots)",
+        "Spock (Star Trek)"
+      ],
+      "why": "Smart is sexy. You love their mind, their mystery, their quiet storm.",
+      "plotTwist": "They're not emotionally deep. They're emotionally unavailable—with excellent vocabulary.",
+      "blindSpot": "You think you're cracking their shell. They don't even know there is one.",
+      "punchline": "You fell for the brain. Forgot to check for the heart.",
+      "vulnerableArchetypes": ["intellectual", "achiever", "dreamer"],
+      "manipulatorTypes": [
+        "The Emotionally Distant",
+        "Master of Everything",
+        "The Sensitive Guy"
+      ],
+      "psychologicalTactics": [
+        "Intelligence as emotional shield",
+        "Mystery as manipulation",
+        "Aloofness as attraction"
+      ]
+    },
+    {
+      "id": "emotional_invalidator",
+      "persona": "The Emotional Invalidator",
+      "title": "THE SHRUGGER",
+      "characters": [
+        "Sheldon Cooper (The Big Bang Theory)",
+        "Rick Sanchez (Rick and Morty)",
+        "Don Draper (Mad Men)",
+        "Wednesday Addams (Wednesday)"
+      ],
+      "why": "You admire logic, sarcasm, and cool-headed confidence.",
+      "plotTwist": "They don't validate feelings. They debate them.",
+      "blindSpot": "You think they'll understand you eventually. They think emotions are malware.",
+      "punchline": "You shared your soul. They asked if you were done yet.",
+      "vulnerableArchetypes": ["intellectual", "achiever", "peacemaker"],
+      "manipulatorTypes": [
+        "The Emotional Invalidator",
+        "Mr. Always Right",
+        "The Water Torturer"
+      ],
+      "psychologicalTactics": [
+        "Logic used to dismiss emotions",
+        "Intellectual superiority over feelings",
+        "Emotional minimization as control"
+      ]
+    },
+    {
+      "id": "emotionally_distant",
+      "persona": "The Emotionally Distant",
+      "title": "THE ICEBERG",
+      "characters": [
+        "Mr. Darcy (Pride & Prejudice)",
+        "Don Draper (Mad Men)",
+        "Batman (The Dark Knight)",
+        "Gojo Satoru (Jujutsu Kaisen)"
+      ],
+      "why": "You love mystery. You want someone who's deep, calm, and hard to reach.",
+      "plotTwist": "They're not deep. They're just not showing up.",
+      "blindSpot": "You think still waters run deep. But these waters never text back.",
+      "punchline": "You fell for the mystery. Turns out it was just absence.",
+      "vulnerableArchetypes": ["achiever", "explorer", "intellectual"],
+      "manipulatorTypes": [
+        "The Emotionally Distant",
+        "The Water Torturer",
+        "The Player"
+      ],
+      "psychologicalTactics": [
+        "Emotional unavailability as challenge",
+        "Distance as control mechanism",
+        "Mystery as manipulation tool"
+      ]
+    },
+    {
+      "id": "perpetual_victim",
+      "persona": "The Perpetual Victim",
+      "title": "THE TRAGIC HERO",
+      "characters": [
+        "BoJack Horseman (BoJack Horseman)",
+        "Eeyore (Winnie the Pooh)",
+        "Werther (The Sorrows of Young Werther)",
+        "Rue Bennett (Euphoria)"
+      ],
+      "why": "You're compassionate. You want to help, to rescue, to love someone back to life.",
+      "plotTwist": "They don't want change. They want sympathy—on tap.",
+      "blindSpot": "You think you're their lifeline. But they keep pulling you under.",
+      "punchline": "You brought the life raft. They popped it with feelings.",
+      "vulnerableArchetypes": ["caregiver", "achiever", "peacemaker"],
+      "manipulatorTypes": [
+        "The Perpetual Victim",
+        "The Sensitive Guy",
+        "The Demand Man"
+      ],
+      "psychologicalTactics": [
+        "Constant victimhood for attention",
+        "Guilt manipulation through suffering",
+        "Helplessness as control strategy"
+      ]
+    },
+    {
+      "id": "parental_seeker",
+      "persona": "The Parental Seeker",
+      "title": "THE GROWN CHILD",
+      "characters": [
+        "Shinji Ikari (Neon Genesis Evangelion)",
+        "Tom Hansen (500 Days of Summer)",
+        "Greg Heffley (Diary of a Wimpy Kid)",
+        "Michael Scott (The Office)"
+      ],
+      "why": "They're cute, lost, and need so much love. You want to take care of them—maybe too much.",
+      "plotTwist": "They're not looking for a partner. They're looking for a replacement parent.",
+      "blindSpot": "You think you're nurturing. But now you're making their appointments too.",
+      "punchline": "You signed up for love. You ended up packing emotional lunchboxes.",
+      "vulnerableArchetypes": ["caregiver", "peacemaker", "leader"],
+      "manipulatorTypes": [
+        "The Parental Seeker",
+        "The Clinger",
+        "The Sensitive Guy"
+      ],
+      "psychologicalTactics": [
+        "Infantilization as control",
+        "Dependency cultivation",
+        "Helplessness as attraction"
+      ]
+    },
+    {
+      "id": "rake",
+      "persona": "The Rake",
+      "title": "THE DANGEROUS CHARMER",
+      "characters": [
+        "Damon Salvatore (The Vampire Diaries)",
+        "Chuck Bass (Gossip Girl)",
+        "James Bond (007 Series)",
+        "Casanova (Historical Figure)"
+      ],
+      "why": "They're smooth, magnetic, and just the right amount of broken. You love the rush.",
+      "plotTwist": "They don't want connection. They want conquest.",
+      "blindSpot": "You think you're the exception. You're actually chapter 12.",
+      "punchline": "You called it chemistry. They called it Tuesday.",
+      "vulnerableArchetypes": ["explorer", "rebel", "dreamer"],
+      "manipulatorTypes": [
+        "The Rake",
+        "The Player",
+        "The Seducer"
+      ],
+      "psychologicalTactics": [
+        "Seduction as primary strategy",
+        "Charm used for conquest",
+        "Romance without commitment"
+      ]
+    },
+    {
+      "id": "future_faker",
+      "persona": "The Future Faker",
+      "title": "THE CASTLE BUILDER",
+      "characters": [
+        "Ted Mosby (How I Met Your Mother)",
+        "Nate (Euphoria)",
+        "Christian (Moulin Rouge!)",
+        "Tommy Shelby (Peaky Blinders)"
+      ],
+      "why": "They say all the right things. Future vacations, babies, matching tattoos—you melt.",
+      "plotTwist": "They dream big, but disappear when it's time to act.",
+      "blindSpot": "You confuse words with plans. Dreams with dates.",
+      "punchline": "You packed your bags. They were just daydreaming.",
+      "vulnerableArchetypes": ["dreamer", "achiever", "explorer"],
+      "manipulatorTypes": [
+        "The Future Faker",
+        "The Ideal Lover",
+        "The Charmer"
+      ],
+      "psychologicalTactics": [
+        "False future promises",
+        "Fantasy creation without follow-through",
+        "Hope manipulation"
+      ]
+    },
+    {
+      "id": "self_obsessed",
+      "persona": "The Self-Obsessed",
+      "title": "THE HUMAN MIRROR",
+      "characters": [
+        "Regina George (Mean Girls)",
+        "Tony Stark (Iron Man)",
+        "Barney Stinson (How I Met Your Mother)",
+        "Miranda Priestly (The Devil Wears Prada)"
+      ],
+      "why": "They're confident, sparkly, and totally magnetic. You love the shine.",
+      "plotTwist": "They don't see you. They just love how you reflect them.",
+      "blindSpot": "You think you're part of their world. You're just in their highlight reel.",
+      "punchline": "You fell for the glam. Turns out, it was a one-person show.",
+      "vulnerableArchetypes": ["achiever", "leader", "rebel"],
+      "manipulatorTypes": [
+        "The Self-Obsessed",
+        "The Charismatic",
+        "Master of Everything"
+      ],
+      "psychologicalTactics": [
+        "Narcissistic charm as bait",
+        "Using others as ego mirrors",
+        "Confidence masking exploitation"
+      ]
+    }
+  ]
+}

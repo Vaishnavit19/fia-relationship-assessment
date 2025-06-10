@@ -1,0 +1,516 @@
+{
+  "archetypes": [
+    {
+      "id": "achiever",
+      "name": "The Achiever",
+      "title": "Success-Driven Perfectionist",
+      "description": "Highly driven to succeed with lofty goals, often at any cost. Success-oriented with self-worth tied to achievements.",
+      "traits": [
+        "Ambitious - Sets lofty goals and determined to achieve them",
+        "Competitive - Strong desire to outperform others, seeking recognition",
+        "Highly Organized - Well-structured and meticulous in planning",
+        "Success-Oriented - Self-identity tied to professional achievements",
+        "Recognition-Seeking - Deep desire for external validation",
+        "Hardworking - Known for strong work ethic and long hours",
+        "Focused - Exceptional ability to concentrate on goals",
+        "Dedicated - High levels of dedication and persistence",
+        "Perfectionistic - Strives for perfection, overly critical",
+        "Risk-Taking - Willing to take calculated risks for success",
+        "Results-Driven - Focus on outcomes and achievements",
+        "Confident - High levels of self-confidence in abilities",
+        "Influential - Charisma and persuasive skills",
+        "Resilient - Strong capacity to recover from setbacks",
+        "Status-Conscious - Aware of status and reputation",
+        "Analytical - Logical and excels in problem-solving",
+        "Strategic - Forward-thinking and adept at planning"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "The Nitpicker",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Targets perfectionism and fear of failure, using criticism to undermine confidence while posing as 'improvement'"
+        },
+        {
+          "manipulatorType": "The Water Torturer", 
+          "source": "Lundy Bancroft",
+          "vulnerability": "Uses subtle, manipulative communication to draw Achiever into trying to 'solve' complex behaviors"
+        },
+        {
+          "manipulatorType": "The Perpetual Victim",
+          "source": "Lundy Bancroft", 
+          "vulnerability": "Appeals to Achiever's sense of responsibility and drive, leveraging guilt and obligation"
+        },
+        {
+          "manipulatorType": "The Drill Sergeant",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Employs commanding presence that appeals to need for structure, which becomes controlling"
+        },
+        {
+          "manipulatorType": "The Emotionally Distant",
+          "source": "Nathalie Lue",
+          "vulnerability": "Creates challenge to 'win them over,' playing into competitive nature"
+        },
+        {
+          "manipulatorType": "The Future Faker",
+          "source": "Nathalie Lue", 
+          "vulnerability": "Exploits goal-oriented mindset with false promises of shared, successful future"
+        },
+        {
+          "manipulatorType": "The Self-Obsessed",
+          "source": "Generic",
+          "vulnerability": "Uses charm and grandiose promises of success to attract Achiever as partner in goals"
+        },
+        {
+          "manipulatorType": "The Charismatic",
+          "source": "Robert Greene",
+          "vulnerability": "Leverages charm and inspiration with allure of shared success and recognition"
+        },
+        {
+          "manipulatorType": "The Seducer",
+          "source": "Robert Greene",
+          "vulnerability": "Utilizes flattery and promises of excitement and recognition"
+        }
+      ]
+    },
+    {
+      "id": "intellectual",
+      "name": "The Intellectual or Analyst",
+      "title": "Analytical Knowledge Seeker",
+      "description": "Possesses highly analytical approach to life, with insatiable curiosity and deep thirst for knowledge.",
+      "traits": [
+        "Analytical Mindset - Highly analytical approach, examining information thoroughly",
+        "Curiosity for Knowledge - Insatiable curiosity and deep thirst for knowledge",
+        "Logical and Rational Thinking - Relies on logic and reasoned arguments over emotions",
+        "Critical Thinking Skills - Skilled in questioning assumptions and challenging wisdom",
+        "Introspective and Reflective - Spends significant time in self-reflection and contemplation",
+        "Detail-Oriented - Eye for detail and meticulous in work, striving for accuracy",
+        "Independent Learners - Self-motivated learners pursuing knowledge for its own sake",
+        "Problem-Solving Orientation - Naturally inclined to solve complex problems and puzzles",
+        "Reserved and Thoughtful - May appear reserved, thinking deeply before speaking",
+        "Passion for Specific Subjects - Deep absorption in topics of interest"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Master of Everything",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Challenges intellect through debates, insisting on being correct to appeal to logical reasoning"
+        },
+        {
+          "manipulatorType": "Emotional Predator / Puppet Master",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Targets emotional depth and analytical mind with complex emotional scenarios"
+        },
+        {
+          "manipulatorType": "Dr. Jekyll/Mr. Hyde",
+          "source": "Lundy Bancroft & Donald Dutton",
+          "vulnerability": "Intrigues analytical nature with inconsistent behavior, inviting rationalization"
+        },
+        {
+          "manipulatorType": "Man With a Hidden Life",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Feeds curiosity with partial truths and secrets, manipulating inquisitive mind"
+        },
+        {
+          "manipulatorType": "The Sensitive Guy",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Appeals to intellectual empathy by presenting complex emotional issues to analyze"
+        },
+        {
+          "manipulatorType": "The Charismatic",
+          "source": "Robert Greene",
+          "vulnerability": "Draws in intellectual curiosity through persuasive discussions and debates"
+        },
+        {
+          "manipulatorType": "The Seducer",
+          "source": "Robert Greene",
+          "vulnerability": "Employs intellectual and emotional seduction, stimulating mind and emotions"
+        },
+        {
+          "manipulatorType": "The Demand Man",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Exploits problem-solving nature by demanding constant attention and solutions"
+        }
+      ]
+    },
+    {
+      "id": "leader",
+      "name": "The Leader or Ruler",
+      "title": "Confident Decision Maker",
+      "description": "Strong sense of self-assurance with natural ability to make decisions and lead others effectively.",
+      "traits": [
+        "Confidence - Strong sense of self-assurance and belief in abilities",
+        "Decisiveness - Known for making decisions efficiently under pressure",
+        "Assertiveness - Able to express views clearly while respecting others",
+        "Responsibility - Strong sense of duty towards groups they lead",
+        "Visionary - Clear vision for future, forward-thinking and inspiring",
+        "Charisma - Natural charisma that attracts and motivates others",
+        "Influence - Ability to influence and persuade, guiding toward common goals",
+        "Emotional Intelligence - High level understanding and managing emotions",
+        "Problem-Solving Skills - Adept at identifying problems and strategic solutions",
+        "Adaptability - Can adapt to changing circumstances effectively",
+        "Integrity - Strong sense of ethics, setting moral example",
+        "Communication Skills - Excellent at conveying ideas clearly and persuasively",
+        "Inspiring - Ability to inspire and motivate those around them",
+        "Strategic Thinking - Plans for long-term and anticipates challenges"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Master of Everything",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Drawn to leadership qualities; challenges authority to assert dominance in power struggle"
+        },
+        {
+          "manipulatorType": "The Water Torturer",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Attracted to assertive nature; uses passive-aggressive tactics to undermine confidence"
+        },
+        {
+          "manipulatorType": "The Charismatic",
+          "source": "Robert Greene",
+          "vulnerability": "Uses charisma to influence and manipulate, gaining power by association"
+        },
+        {
+          "manipulatorType": "The Drill Sergeant",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Sees strength as challenge; seeks to dominate and control to assert own power"
+        },
+        {
+          "manipulatorType": "The Self-Obsessed",
+          "source": "Generic",
+          "vulnerability": "Drawn to leadership position and status; exploits influence for personal gain"
+        },
+        {
+          "manipulatorType": "The Ideal Lover",
+          "source": "Robert Greene",
+          "vulnerability": "Feigns admiration for leadership qualities, manipulating for their own ends"
+        },
+        {
+          "manipulatorType": "The Rake",
+          "source": "Robert Greene",
+          "vulnerability": "Seduces with charm and boldness, viewing authority as conquest or ego boost"
+        },
+        {
+          "manipulatorType": "The Subtle Saboteur",
+          "source": "Generic",
+          "vulnerability": "Attracted to decision-making ability; uses passive-aggression to undermine leadership"
+        }
+      ]
+    },
+    {
+      "id": "explorer",
+      "name": "The Explorer",
+      "title": "Adventurous Thrill Seeker",
+      "description": "Driven by desire for new and diverse experiences, often seen as thrill-seeker who relishes novel situations.",
+      "traits": [
+        "Craving for New Experiences - Driven to explore and engage with diverse experiences",
+        "Energetic - High levels of energy and enthusiasm for exciting activities",
+        "Spontaneity - Known for spontaneous nature, acting on impulse rather than planning",
+        "Fearlessness - Exhibits fearless attitude, willing to take risks others avoid",
+        "Love for Excitement - Consistent search for excitement, thrives in dynamic environments",
+        "Flexibility and Adaptability - Very adaptable, adjusts to new environments with ease",
+        "Independence - Values independence, prefers following own path over conformity",
+        "Curiosity - Strong sense of curiosity drives exploration of unknown",
+        "Openness - Generally open-minded, willing to consider new ideas and perspectives",
+        "Resilience - Displays resilience, bouncing back from setbacks in pursuits"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Emotional Predator / Puppet Master",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Exploits adventurous spirit by offering intense emotional experiences and thrills"
+        },
+        {
+          "manipulatorType": "Dr. Jekyll/Mr. Hyde",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Shifts unpredictably between charming and dangerous, preying on attraction to dynamic situations"
+        },
+        {
+          "manipulatorType": "The Addict",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Targets inclination for excitement and risk, drawing into chaotic, high-adrenaline world"
+        },
+        {
+          "manipulatorType": "The Player",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Thrives on short-term, high-intensity encounters appealing to spontaneous nature"
+        },
+        {
+          "manipulatorType": "The Future Faker",
+          "source": "Nathalie Lue",
+          "vulnerability": "Makes grand promises about future adventures, exploiting forward-looking optimism"
+        },
+        {
+          "manipulatorType": "The Rake",
+          "source": "Robert Greene",
+          "vulnerability": "Uses adventurous, seductive approach tailored to fun-loving, thrill-seeking nature"
+        },
+        {
+          "manipulatorType": "The Charismatic",
+          "source": "Robert Greene",
+          "vulnerability": "Draws in with charisma and exciting opportunities, leveraging openness to new experiences"
+        },
+        {
+          "manipulatorType": "The Seducer",
+          "source": "Robert Greene",
+          "vulnerability": "Crafts seductive, adventurous narrative playing into love for excitement and exploration"
+        },
+        {
+          "manipulatorType": "The Emotionally Distant",
+          "source": "Nathalie Lue",
+          "vulnerability": "Presents as elusive and mysterious, fitting pattern of seeking unexplored territories"
+        }
+      ]
+    },
+    {
+      "id": "peacemaker",
+      "name": "The Peacemaker",
+      "title": "Harmony-Seeking Mediator",
+      "description": "Naturally inclined towards maintaining harmony and balance, prioritizing peace over conflict.",
+      "traits": [
+        "Harmony-Seeking - Naturally inclined towards maintaining harmony and balance",
+        "Conflict-Averse - Avoids confrontations, struggles with assertiveness",
+        "Empathetic - Highly empathetic, understanding and sharing others' feelings",
+        "Diplomatic - Natural talent for diplomacy, mediating disputes effectively",
+        "Accommodating - Willing to put own needs aside to accommodate others",
+        "Patient - Exhibits high level of patience with complex interpersonal dynamics",
+        "Supportive - Typically supportive and nurturing, providing calming presence",
+        "Non-Judgmental - Accepting and non-judgmental, serving as confidant",
+        "Indecisive - Can be indecisive to avoid choices that might upset others",
+        "Adaptable - Generally adaptable and flexible to maintain peace",
+        "Passive - May exhibit passive behavior to avoid conflict-causing stands",
+        "Good Listeners - Excellent listeners, providing sympathetic ear",
+        "Dislike of Imposition - Don't want to impose views, prefer consensus-driven approach",
+        "Desire for Inner Peace - Seek both external harmony and internal peace",
+        "Avoidance of Personal Conflicts - May avoid dealing with own internal conflicts",
+        "Tendency to Minimize Problems - Might downplay problems to avoid discomfort",
+        "Dislike of Change - Resistant to change if it threatens stability",
+        "Tendency to Yield - Often yield to avoid conflict, even against best interest",
+        "Compassionate - Genuinely caring and compassionate, seeking best for others"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "The Drill Sergeant",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Exploits aversion to conflict by asserting authority through commanding, intimidating demeanor"
+        },
+        {
+          "manipulatorType": "The Terrorist",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Uses intimidation and threats, knowing Peacemaker will avoid confrontation and placate"
+        },
+        {
+          "manipulatorType": "The Demand Man",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Insists on having needs met, overwhelming accommodating nature"
+        },
+        {
+          "manipulatorType": "The Rake",
+          "source": "Robert Greene",
+          "vulnerability": "Employs bold, seductive charisma creating dynamic where Peacemaker maintains peace at own expense"
+        },
+        {
+          "manipulatorType": "Rambo",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Leverages overt aggression, drawing Peacemaker into cycles of conflict and forced reconciliation"
+        },
+        {
+          "manipulatorType": "The Water Torturer",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Uses calm yet manipulative tactics exploiting conflict-aversion, questioning own perceptions"
+        }
+      ]
+    },
+    {
+      "id": "dreamer",
+      "name": "The Dreamer",
+      "title": "Visionary Idealist",
+      "description": "Driven by strong vision and ideals, often having lofty goals and aspiring to make significant impact.",
+      "traits": [
+        "Visionary and Idealistic - Driven by strong sense of vision and ideals",
+        "Optimistic - Generally positive outlook, seeing best in people and situations",
+        "Creative - Possesses creative and imaginative mind, thinking outside the box",
+        "Introspective - Spends time reflecting on thoughts and feelings",
+        "Emotionally Sensitive - Feels emotions deeply, empathetic towards others",
+        "Ideal-Driven - Actions guided by ideals and values rather than practical considerations",
+        "Possibility-Oriented - Focuses on what could be rather than what is",
+        "Disillusionment Prone - May experience disillusionment when reality doesn't align with ideals",
+        "Open to Emotional Manipulation - Optimistic nature can make susceptible to manipulation",
+        "Seeker of Meaning - Constantly seeks meaning and purpose in life"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Emotional Predator / Puppet Master",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Exploits emotional depth and capacity for dreaming by promising to fulfill fantasies"
+        },
+        {
+          "manipulatorType": "The Future Faker",
+          "source": "Nathalie Lue",
+          "vulnerability": "Paints picture of bright shared future aligning with dreams, never intending follow-through"
+        },
+        {
+          "manipulatorType": "The Ideal Lover",
+          "source": "Robert Greene",
+          "vulnerability": "Plays into fantasies and idealistic views of love by presenting as perfect partner"
+        },
+        {
+          "manipulatorType": "The Charmer",
+          "source": "Robert Greene",
+          "vulnerability": "Sways with charismatic, engaging personality appealing to optimistic outlook"
+        },
+        {
+          "manipulatorType": "The Seducer",
+          "source": "Robert Greene",
+          "vulnerability": "Appeals to imaginative, romantic side using allure and enchantment"
+        },
+        {
+          "manipulatorType": "The Sensitive Guy",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Portrays as sensitive and misunderstood, tapping into compassionate nature"
+        }
+      ]
+    },
+    {
+      "id": "rebel",
+      "name": "The Rebel",
+      "title": "Independent Non-Conformist",
+      "description": "Values independence highly, resisting conformity to societal norms and challenging established ways.",
+      "traits": [
+        "Independent - Values independence highly, seeks autonomy in actions and decisions",
+        "Non-conformist - Resists conforming to societal norms, questions traditional ways",
+        "Questioning Authority - Naturally skeptical of authority figures and systems",
+        "Strong Sense of Justice - Well-developed sense of justice and fairness",
+        "Creative and Innovative - Thinks outside box, brings new and unconventional ideas",
+        "Risk-Taking - More willing to take risks, especially for beliefs or new experiences",
+        "Adventurous - Seeks adventure and new experiences, not afraid of unknown",
+        "Passionate - Intensely passionate and dedicated when committed to cause",
+        "Disdain for Rules - Dislikes strict rules, prefers freedom to operate",
+        "Strong-Willed - Very strong-willed and determined, not easily swayed",
+        "Charismatic and Persuasive - Natural charisma and ability to persuade others",
+        "Embrace Change - Thrives in environments of change and uncertainty",
+        "Unpredictable - Non-conformist nature can make them seem unpredictable",
+        "Critical Thinker - Doesn't accept information at face value, seeks deeper understanding",
+        "Emotionally Resilient - Emotional resilience to face opposition or criticism",
+        "Idealistic - Driven by idealism, striving for vision of what is right",
+        "Motivated by Principle - More motivated by principle than personal gain"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Mr. Always Right",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Attracted to rebellious nature as challenge, using need to be right to undermine confidence"
+        },
+        {
+          "manipulatorType": "The Drill Sergeant",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Drawn to resistance to authority, seeing taming rebellious streak as way to assert control"
+        },
+        {
+          "manipulatorType": "The Player",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Sees adventurous, unconventional spirit as exciting conquest"
+        },
+        {
+          "manipulatorType": "The Rake",
+          "source": "Robert Greene",
+          "vulnerability": "Enticed by rebellious energy for thrill and drama, finding challenge seductive"
+        },
+        {
+          "manipulatorType": "The Future Faker",
+          "source": "Nathalie Lue",
+          "vulnerability": "Exploits desire for authenticity by pretending to offer deep, meaningful connection"
+        },
+        {
+          "manipulatorType": "The Seducer",
+          "source": "Robert Greene",
+          "vulnerability": "Uses desire for novelty and excitement, leveraging rebelliousness for manipulation"
+        },
+        {
+          "manipulatorType": "The Self-Obsessed",
+          "source": "Generic",
+          "vulnerability": "Targets independent spirit as opportunity to break down barriers and assert dominance"
+        },
+        {
+          "manipulatorType": "The Water Torturer",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Attracted to rebelliousness as challenge to remain calm while subtly controlling"
+        }
+      ]
+    },
+    {
+      "id": "caregiver",
+      "name": "The Caregiver",
+      "title": "Nurturing Self-Sacrificer",
+      "description": "High degree of empathy, deeply attuned to others' needs with inherent desire to care and nurture.",
+      "traits": [
+        "Empathetic - High degree of empathy, deeply attuned to emotions and needs of others",
+        "Nurturing - Inherent desire to care for and nurture others, putting others' needs first",
+        "Self-Sacrificing - Willing to make personal sacrifices for benefit of those they care for",
+        "Altruistic - Genuine concern for welfare of others, involved in helping activities",
+        "Compassionate - Deep sense of compassion and understanding towards others in need",
+        "Supportive - Often the one others turn to for support, comfort, and help",
+        "Responsible - Strong sense of duty and responsibility towards those they care for",
+        "Patient - High levels of patience when dealing with others' problems and needs",
+        "Dependable - Seen as reliable and trustworthy, others depend on them for support",
+        "Generous - Generous with time, resources, and emotional support",
+        "Loyal - Fiercely loyal to those they care about, going to great lengths to protect",
+        "Non-Confrontational - Tends to avoid conflicts, preferring harmony and peace",
+        "Harmonizing - Plays role of mediator, seeking to resolve disputes",
+        "People-Pleaser - Strives to please others, sometimes at expense of own needs",
+        "Guilt-Prone - Can easily feel guilty if they believe they haven't met others' expectations",
+        "Emotionally Sensitive - Sensitive to emotional nuances, affected by others' moods",
+        "Sacrificial - May neglect own needs and well-being in effort to care for others",
+        "Trusting - Tends to trust others easily, sometimes to a fault",
+        "Idealistic - May have idealistic views about helping and caring for others",
+        "Inclined to Overextension - Often overextends in efforts to help, leading to burnout"
+      ],
+      "vulnerabilities": [
+        {
+          "manipulatorType": "Emotional Predator / Puppet Master",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Preys on compassionate nature by feigning vulnerability or emotional turmoil"
+        },
+        {
+          "manipulatorType": "The Perpetual Victim",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Constantly portrays themselves as victim to elicit attention and support"
+        },
+        {
+          "manipulatorType": "The Parental Seeker",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Plays into maternal instincts by presenting as someone in need of nurturing"
+        },
+        {
+          "manipulatorType": "The Addict",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Exploits desire to help and heal by enabling addiction or manipulating support"
+        },
+        {
+          "manipulatorType": "The Sensitive Guy",
+          "source": "Lundy Bancroft",
+          "vulnerability": "Presents as sensitive and misunderstood, requiring care and understanding"
+        },
+        {
+          "manipulatorType": "The Clinger",
+          "source": "Sandra L. Brown",
+          "vulnerability": "Overly dependent and clings for support, knowing caregiver unlikely to push away"
+        },
+        {
+          "manipulatorType": "The Subtle Saboteur",
+          "source": "Generic",
+          "vulnerability": "Uses indirect hostility, relying on caregiving nature to avoid direct confrontation"
+        },
+        {
+          "manipulatorType": "The Self-Obsessed",
+          "source": "Generic",
+          "vulnerability": "Seeks admiration and attention, exploiting caring nature for validation"
+        },
+        {
+          "manipulatorType": "The Charmer",
+          "source": "Robert Greene",
+          "vulnerability": "Employs charm and charisma to exploit kindness and empathy"
+        }
+      ]
+    }
+  ]
+}

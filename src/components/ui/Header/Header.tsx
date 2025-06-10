@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { useAssessmentData } from '@/lib/store';
+import { useEnhancedAssessmentData } from '@/lib/store';
 
 import styles from './Header.module.scss';
 
@@ -47,18 +47,21 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   // Always call hooks unconditionally - React Hook rules
   const pathname = usePathname();
-  const assessmentData = useAssessmentData();
+  const assessmentData = useEnhancedAssessmentData();
 
   // Use overrides if provided (for Storybook), otherwise use hook data
   const currentPathname = pathnameOverride ?? pathname ?? '/';
-  const progress = progressOverride ?? assessmentData.progress ?? 0;
+  const progress = progressOverride ?? assessmentData.estimatedProgress ?? 0;
   const isStarted = isStartedOverride ?? assessmentData.isStarted ?? false;
   const isComplete = isCompleteOverride ?? assessmentData.isComplete ?? false;
 
   // Auto-detect if we should show progress based on current route
   const shouldShowProgress =
     showProgress === 'auto'
-      ? isStarted && !isComplete && ((currentPathname?.includes('/assessment') ?? false) || (currentPathname?.includes('/results') ?? false))
+      ? isStarted &&
+        !isComplete &&
+        ((currentPathname?.includes('/assessment') ?? false) ||
+          (currentPathname?.includes('/results') ?? false))
       : showProgress;
 
   // Auto-detect if we should show back button
@@ -101,9 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <Link href="/" className={styles.logo}>
               <Heart size={24} className={styles.logoIcon} />
-              <span className={styles.logoText}>
-                {title ?? 'FIA Assessment'}
-              </span>
+              <span className={styles.logoText}>{title ?? 'FIA Assessment'}</span>
             </Link>
           )}
         </div>
@@ -113,9 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
           {shouldShowProgress ? (
             <div className={styles.progressContainer}>
               <div className={styles.progressInfo}>
-                <span className={styles.progressText}>
-                  {Math.round(progress)}% Complete
-                </span>
+                <span className={styles.progressText}>{Math.round(progress)}% Complete</span>
               </div>
               <div className={styles.progressBar}>
                 <div
@@ -130,9 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
           ) : (
-            <h1 className={styles.pageTitle}>
-              {title ?? 'Relationship Assessment'}
-            </h1>
+            <h1 className={styles.pageTitle}>{title ?? 'Relationship Assessment'}</h1>
           )}
         </div>
 
