@@ -296,12 +296,20 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   };
 
   const handleRetakeAssessment = () => {
-    resetAssessment();
-    router.push('/assessment');
+    // resetAssessment();
+    // router.push('/assessment');
+    // Chatbot link here
+    window.open(
+      'https://6848340aa0a2233a0e0a63e9--partner-assessment-tool.netlify.app/',
+      '_blank',
+      'noopener,noreferrer'
+    );
   };
 
   const handleGoHome = () => {
-    router.push('/');
+    // router.push('/');
+    // Feedback form link here
+    window.open('https://forms.gle/L6Qc6VcHtYCmBZ2v6', '_blank', 'noopener,noreferrer');
   };
 
   const handleDownloadResults = async () => {
@@ -1017,14 +1025,14 @@ Total Questions Answered: ${answers?.length || 0}
       </div>
 
       <div className={styles.secondaryActions}>
-        <Button variant="outline" onClick={handleRetakeAssessment}>
-          <RefreshCw />
-          Retake Assessment
+        <Button variant="cta" onClick={handleRetakeAssessment}>
+          {/* <RefreshCw /> */}
+          Go to Chatbot
         </Button>
 
-        <Button variant="outline" onClick={handleGoHome}>
-          <Home />
-          Back to Home
+        <Button variant="cta" onClick={handleGoHome}>
+          {/* <Home /> */}
+          Feedback Form
         </Button>
       </div>
     </div>
