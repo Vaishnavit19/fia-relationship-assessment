@@ -230,10 +230,19 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   // COMPUTED VALUES
   // ==========================================================================
 
-  const assessmentResult = useMemo(
-    () => getEnhancedAssessmentResult(),
-    [getEnhancedAssessmentResult]
-  );
+  const assessmentResult = useMemo(() => {
+    // Only memoize if we have the actual data dependencies
+    if (!archetypeResults || !answers || !scores) {
+      return null;
+    }
+
+    try {
+      return getEnhancedAssessmentResult();
+    } catch (error) {
+      console.warn('Failed to get assessment result:', error);
+      return null;
+    }
+  }, [archetypeResults, answers, scores, getEnhancedAssessmentResult]);
 
   const resultsSummary = useMemo(() => {
     return safeGenerateResultsSummary(assessmentResult);
@@ -475,7 +484,7 @@ Total Questions Answered: ${answers?.length || 0}
             <div className={styles.successNotice}>
               <CheckCircle />
               <span>
-                ✅ Results successfully generated! Your primary archetype is{' '}
+                Results successfully generated! Your primary archetype is{' '}
                 <strong>{formattedResults.topMatches[0].archetype.name}</strong>
               </span>
             </div>
@@ -602,7 +611,7 @@ Total Questions Answered: ${answers?.length || 0}
             </Card>
           )}
 
-          <Card className={styles.confidenceExplanation}>
+          {/* <Card className={styles.confidenceExplanation}>
             <button
               className={styles.confidenceToggle}
               onClick={() => setShowConfidenceDetails(!showConfidenceDetails)}
@@ -631,7 +640,7 @@ Total Questions Answered: ${answers?.length || 0}
                 </ul>
               </div>
             )}
-          </Card>
+          </Card> */}
         </div>
       );
     }

@@ -457,7 +457,7 @@ export const HomePage: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className={styles.cta}>
+        {/* <section className={styles.cta}>
           <div className="container">
             <Card variant="elevated" className={styles.ctaCard}>
               <div className={styles.ctaContent}>
@@ -496,7 +496,7 @@ export const HomePage: React.FC = () => {
               </div>
             </Card>
           </div>
-        </section>
+        </section> */}
       </div>
     </PageLayout>
   );

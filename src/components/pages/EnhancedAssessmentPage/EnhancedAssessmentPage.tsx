@@ -303,22 +303,18 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
   // ==========================================================================
 
   const renderProgressSection = () => (
-    <div className={styles.progressSection}>
-      <ProgressBar
-        current={estimatedProgress}
-        total={100}
-        showPercentage
-        className={styles.progressBar}
-      />
-      <div className={styles.progressText}>
-        <span>{Math.round(estimatedProgress)}% Complete</span>
-        {debug && userPath && (
-          <small className={styles.debugInfo}>
-            Path Steps: {userPath.totalSteps} | Branching: {userPath.branchingPoints}
-          </small>
-        )}
-      </div>
-    </div>
+    // <div className={styles.progressSection}>
+    //   {/* <ProgressBar current={estimatedProgress} total={100} className={styles.progressBar} /> */}
+    //   <div className={styles.progressText}>
+    //     <span>{Math.round(estimatedProgress)}% Complete</span>
+    //     {debug && userPath && (
+    //       <small className={styles.debugInfo}>
+    //         Path Steps: {userPath.totalSteps} | Branching: {userPath.branchingPoints}
+    //       </small>
+    //     )}
+    //   </div>
+    // </div>
+    <></>
   );
 
   const renderScenarioHeader = () => {
@@ -551,14 +547,14 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
         <div className={`${styles.assessmentPage} ${className}`}>
           <div className={styles.welcomeContainer}>
             <Card className={styles.welcomeCard}>
-              <div className={styles.welcomeContent}>
+              {/* <div className={styles.welcomeContent}>
                 <h1>Enhanced Relationship Assessment</h1>
                 <p>
                   Discover your partnership style and vulnerability patterns through travel
                   scenarios. This assessment takes about 8-12 minutes and provides personalized
                   insights across multiple dimensions of relationship dynamics.
                 </p>
-              </div>
+              </div> */}
 
               <UserInfoForm onSubmit={handleUserSubmit} loading={isLoading} error={error} />
             </Card>

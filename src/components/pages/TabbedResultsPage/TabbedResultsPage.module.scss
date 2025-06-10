@@ -647,6 +647,7 @@
 
 // Persona Cards Grid
 .personaCardsGrid {
+  align-items: start;
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1327,3 +1328,16 @@
     color: #38a169;
   }
 }
+
+.successNotice, .tiesNotice {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tabContent {
+  > div {
+    display: grid;
+  gap: 1rem;
+}}
+
