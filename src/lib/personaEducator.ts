@@ -69,20 +69,22 @@ export const generatePersonaEducationContent = (
  */
 export const generateOverviewMessage = (selection: PersonaSelection): string => {
   const personaCount = selection.selectedPersonas.length;
-  const primaryArchetype = selection.primaryArchetype.archetype.name;
+  const primaryArchetype = selection.primaryArchetype; // This is already a string
 
   let message = `Based on your ${primaryArchetype} personality profile, we've identified ${personaCount} manipulation patterns you should be aware of. `;
 
   switch (selection.selectionReason) {
-    case 'largeGap':
+    case 'large_gap':
       message += `Your personality traits are quite pronounced, making certain manipulation tactics more predictable. This focused awareness can be your strength.`;
       break;
-    case 'mediumGap':
-      message += `You show a blend of personality traits, creating varied vulnerability patterns. This diversity requires broader awareness but also provides natural resilience.`;
+    case 'medium_gap':
+      message += `You show a blend of personality traits, creating varied vulnerability patterns. This comprehensive awareness helps you stay alert to different manipulation styles.`;
       break;
-    case 'smallGap':
-      message += `Your balanced personality creates complex vulnerability patterns across multiple manipulation styles. This requires comprehensive awareness but also offers multiple paths to recognition.`;
+    case 'small_gap':
+      message += `Your personality shows complex, nuanced traits. While this makes you adaptable, it also means you should be aware of a broader range of manipulation tactics.`;
       break;
+    default:
+      message += `Understanding these patterns can help you build healthier, more authentic relationships.`;
   }
 
   return message;
@@ -220,53 +222,92 @@ export const generateProtectionStrategies = (selection: PersonaSelection): strin
 };
 
 /**
- * Get protection strategies for specific archetype
+ * Get protection strategies for specific archetype - FIXED VERSION
+ * Now accepts archetype name (string) instead of ArchetypeMatch object
  */
-export const getArchetypeProtectionStrategies = (archetype: ArchetypeMatch): string[] => {
+export const getArchetypeProtectionStrategies = (archetypeName: string): string[] => {
   const strategies: Record<string, string[]> = {
     caregiver: [
       'Set clear boundaries about what help you can realistically provide',
       'Ask yourself: "Am I helping them grow or enabling dependency?"',
-      "Trust your instincts if someone's problems seem designed to hook your empathy",
-    ],
-    dreamer: [
-      'Distinguish between shared dreams and one person doing all the dreaming',
-      'Look for partners who support your vision rather than hijack it',
-      'Watch for people who use your idealism to manipulate your emotions',
-    ],
-    intellectual: [
-      'Remember that emotional intelligence matters as much as intellectual connection',
-      'Be wary of partners who use intellectual debates to avoid emotional intimacy',
-      "Don't let someone's complexity blind you to their treatment of you",
-    ],
-    peacemaker: [
-      'Practice saying no and expressing disagreement in low-stakes situations',
-      'Remember that healthy relationships include conflict resolution, not conflict avoidance',
-      "Your desire for harmony shouldn't come at the expense of your boundaries",
-    ],
-    explorer: [
-      'Distinguish between exciting adventure and manufactured drama',
-      'Ensure your partner adds to your adventures rather than becoming one',
-      'Be cautious of people who confuse unpredictability with passion',
+      'Remember: You cannot love someone into mental health',
+      'Notice when someone seems to create crises to get your attention',
+      'Trust is earned through consistent actions, not dramatic stories',
     ],
     achiever: [
-      'Look for partners who support your goals rather than compete with them',
-      'Be cautious of people who use your ambition to manipulate your choices',
-      'Success in relationships requires emotional intelligence, not just achievement',
+      'Success with the wrong person is still failure in your personal life',
+      "Someone who truly supports you won't undermine your goals or confidence",
+      'Healthy competition builds you up - manipulation tears you down',
+      "Real partnerships celebrate your wins, they don't minimize them",
+      'If someone makes you feel like you have to prove your worth, question the relationship',
     ],
-    leader: [
-      'Healthy relationships are partnerships, not power struggles',
-      'Be wary of partners who either submit completely or constantly challenge your authority',
-      'Look for someone who complements your leadership rather than competes with it',
+    explorer: [
+      'Real adventures are planned together, not used to manipulate you',
+      'Spontaneity should feel exciting, not chaotic or unsafe',
+      'Someone who truly shares your love of exploration respects your boundaries',
+      'Healthy excitement builds over time - manipulation creates artificial urgency',
+      'Trust your instincts about safety, even in exciting situations',
     ],
     rebel: [
-      'Ensure your partner appreciates your authenticity rather than trying to tame it',
-      'Be cautious of people who use your non-conformity to isolate you from support systems',
-      'Rebellion should be principled, not reactive to manipulation',
+      "Someone who truly values your independence won't try to control you",
+      'Healthy relationships challenge you to grow, not to conform',
+      "Your strong will is a strength - don't let anyone make you doubt it",
+      "Real partners support your authenticity, they don't try to tame you",
+      'Question anyone who tries to use your rebellious nature against you',
+    ],
+    dreamer: [
+      'Shared dreams should be built together, not used to manipulate you',
+      'Real love supports your visions while staying grounded in reality',
+      "Someone who truly cares about your dreams won't make false promises",
+      'Healthy optimism includes realistic planning, not just fantasy',
+      'Trust your intuition when something feels too good to be true',
+    ],
+    intellectual: [
+      'Real intellectual connection includes emotional intelligence',
+      "Someone who truly values your mind won't try to outsmart or belittle you",
+      'Healthy debate builds understanding - manipulation creates confusion',
+      'Trust your analytical skills even in emotional situations',
+      'Question anyone who tries to make you doubt your own perceptions',
+    ],
+    leader: [
+      'Real partnership means sharing leadership, not competing for control',
+      "Someone who respects your leadership abilities won't try to undermine them",
+      "Healthy relationships support your confidence, they don't chip away at it",
+      'Trust your judgment - you became a leader for good reasons',
+      'Question anyone who tries to make major decisions without consulting you',
+    ],
+    peacemaker: [
+      'Healthy peace comes from mutual respect, not from avoiding all conflict',
+      "Someone who truly values harmony won't exploit your desire for peace",
+      "Your conflict-avoidance is not weakness, but don't let others weaponize it",
+      'Real love sometimes requires difficult conversations',
+      'Trust that you deserve relationships that feel genuinely peaceful',
     ],
   };
 
-  return strategies[archetype.archetype.id] || [];
+  // Convert archetype name to lowercase for matching
+  const archetypeKey = archetypeName.toLowerCase().replace(/\s+/g, '').replace('the', '');
+
+  // Try exact match first
+  if (strategies[archetypeKey]) {
+    return strategies[archetypeKey];
+  }
+
+  // Try partial matches for compound names
+  for (const [key, strategyList] of Object.entries(strategies)) {
+    if (archetypeKey.includes(key) || key.includes(archetypeKey)) {
+      return strategyList;
+    }
+  }
+
+  // Fallback to general strategies
+  return [
+    'Trust your instincts about people and relationships',
+    'Healthy relationships should enhance your life, not drain it',
+    'Set and maintain clear boundaries about what behavior you will accept',
+    'Real love is consistent and respectful, not dramatic and chaotic',
+    'You deserve relationships that bring out the best in you',
+  ];
 };
 
 /**

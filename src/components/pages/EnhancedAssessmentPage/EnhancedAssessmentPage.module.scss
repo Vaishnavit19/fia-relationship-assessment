@@ -1,21 +1,122 @@
-// src/components/pages/EnhancedAssessmentPage/EnhancedAssessmentPage.module.scss
+// Complete SCSS styles for EnhancedAssessmentPage.module.scss with multi-select support
 
 // ==========================================================================
-// ENHANCED ASSESSMENT QUESTIONNAIRE STYLES
+// BASE LAYOUT AND CONTAINERS
 // ==========================================================================
+
+.assessmentPage {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  // min-height: 100vh;
+  padding: 20px;
+  
+  // Ensure proper centering on all screen sizes
+  @media (width <= 768px) {
+    align-items: flex-start;
+    padding: 16px;
+    padding-top: 32px;
+  }
+}
 
 .questionnaireContainer {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  margin: 0 auto;
+  gap: 24px;
   max-width: 800px;
-  min-height: calc(100vh - 120px);
-  padding: 24px;
+  width: 100%;
+  
+  // Ensure the container doesn't exceed viewport width
+  @media (width <= 800px) {
+    max-width: 100%;
+  }
+}
 
-  @media (width <= 768px) {
-    gap: 24px;
-    padding: 16px;
+.welcomeContainer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 80vh;
+  width: 100%;
+}
+
+.welcomeCard {
+  max-width: 500px;
+  padding: 32px;
+  width: 100%;
+}
+
+.welcomeContent {
+  margin-bottom: 24px;
+  text-align: center;
+
+  h1 {
+    color: #2d3748;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #718096;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+.completionContainer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 80vh;
+  width: 100%;
+}
+
+.completionCard {
+  max-width: 400px;
+  padding: 32px;
+  text-align: center;
+  width: 100%;
+}
+
+.completionContent {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h2 {
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #718096;
+    font-size: 16px;
+  }
+}
+
+.completionIcon {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  border-radius: 50%;
+  color: white;
+  height: 48px;
+  padding: 12px;
+  width: 48px;
+}
+
+.completionProgress {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+
+  span {
+    color: #718096;
+    font-size: 14px;
   }
 }
 
@@ -24,51 +125,32 @@
 // ==========================================================================
 
 .progressSection {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+  padding: 20px;
 }
 
-.progressHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.progressBar {
+  margin-bottom: 12px;
 }
 
 .progressText {
   align-items: center;
   display: flex;
   justify-content: space-between;
-}
 
-.stepCount {
-  color: #2d3748;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.progressPercentage {
-  color: #718096;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.progressBar {
-  border-radius: 4px;
-  height: 8px;
+  span {
+    color: #2d3748;
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 
 .debugInfo {
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 8px 12px;
-  
-  small {
-    color: #4a5568;
-    font-family: 'SF Mono', Monaco, Consolas, monospace;
-    font-size: 12px;
-  }
+  color: #a0aec0;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 12px;
 }
 
 // ==========================================================================
@@ -76,122 +158,123 @@
 // ==========================================================================
 
 .scenarioHeader {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+  padding: 20px;
 }
 
 .scenarioMeta {
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  color: white;
   display: flex;
-  font-size: 14px;
-  font-weight: 500;
   gap: 12px;
-  padding: 8px 16px;
 }
 
 .scenarioIcon {
-  height: 16px;
-  opacity: 0.9;
-  width: 16px;
+  color: #667eea;
+  height: 20px;
+  width: 20px;
+}
+
+.scenarioInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scenarioNumber {
+  color: #2d3748;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .scenarioContext {
-  align-items: center;
-  display: flex;
-  gap: 8px;
+  color: #718096;
+  font-size: 14px;
 }
 
-.city, .location {
+.multiSelectBadge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
   font-weight: 600;
-  opacity: 1;
-}
-
-.situation {
-  font-size: 13px;
-  opacity: 0.8;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  text-transform: uppercase;
 }
 
 // ==========================================================================
 // SCENARIO CONTENT
 // ==========================================================================
 
-.scenarioCard {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 5%);
-  transition: all 0.2s ease;
-  
-  &:hover {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 8%);
-  }
+.mainContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.scenarioContent {
-  padding: 32px;
-
-  @media (width <= 768px) {
-    padding: 24px;
-  }
+.scenarioCard {
+  padding: 24px;
 }
 
 .scenarioText {
-  color: #2d3748;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 32px;
-  text-align: center;
+  margin-bottom: 24px;
 
-  @media (width <= 768px) {
+  h2 {
+    color: #2d3748;
     font-size: 20px;
-    margin-bottom: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 12px;
   }
 }
 
+.multiSelectInstructions {
+  color: #718096;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 8px;
+  text-align: center;
+}
+
 // ==========================================================================
-// OPTIONS
+// OPTIONS SECTION
 // ==========================================================================
 
 .optionsContainer {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .optionButton {
   align-items: flex-start;
-  background: #f8fafc;
+  background: #fff;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   cursor: pointer;
   display: flex;
   gap: 16px;
-  padding: 20px;
+  padding: 16px;
   text-align: left;
   transition: all 0.2s ease;
   width: 100%;
 
-  &:hover {
-    background: #edf2f7;
-    border-color: #cbd5e0;
+  &:hover:not(:disabled, .selected) {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgb(102 126 234 / 15%);
     transform: translateY(-1px);
   }
 
   &.selected {
-    background: linear-gradient(135deg, #ff6b9d 0%, #ff8a9b 100%);
-    border-color: #ff6b9d;
-    box-shadow: 0 4px 12px rgb(255 107 157 / 30%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px #667eea, 0 4px 12px rgb(102 126 234 / 25%);
     color: white;
-    
-    .optionLetter {
-      background: rgb(255 255 255 / 20%);
-      color: white;
-    }
+    transform: translateY(-1px);
   }
 
   &:disabled {
@@ -200,37 +283,29 @@
     transform: none;
   }
 
-  @media (width <= 768px) {
-    gap: 12px;
-    padding: 16px;
+  &:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
   }
 }
 
 .optionLetter {
   align-items: center;
-  background: #fff;
-  border: 2px solid #e2e8f0;
+  background: #f7fafc;
   border-radius: 50%;
   color: #4a5568;
   display: flex;
   flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 700;
-  height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  height: 32px;
   justify-content: center;
-  transition: all 0.2s ease;
-  width: 40px;
+  width: 32px;
 
-  @media (width <= 768px) {
-    font-size: 14px;
-    height: 36px;
-    width: 36px;
+  .selected & {
+    background: rgb(255 255 255 / 20%);
+    color: white;
   }
-}
-
-.checkIcon {
-  height: 20px;
-  width: 20px;
 }
 
 .optionContent {
@@ -267,6 +342,99 @@
       color: rgb(255 255 255 / 80%);
     }
   }
+}
+
+.checkIcon {
+  animation: checkIn 0.2s ease-out;
+  color: white;
+  height: 18px;
+  width: 18px;
+}
+
+@keyframes checkIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ==========================================================================
+// MULTI-SELECT STATUS
+// ==========================================================================
+
+.multiSelectStatus {
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
+.selectionCounter {
+  align-items: center;
+  border-radius: 20px;
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 6px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+
+  &.valid {
+    background: rgb(72 187 120 / 10%);
+    border: 1px solid #48bb78;
+    color: #38a169;
+  }
+
+  &.invalid {
+    background: rgb(245 101 101 / 10%);
+    border: 1px solid #f56565;
+    color: #e53e3e;
+  }
+}
+
+.validIcon {
+  color: #38a169;
+  height: 16px;
+  width: 16px;
+}
+
+// ==========================================================================
+// ERROR HANDLING
+// ==========================================================================
+
+.errorBanner {
+  align-items: center;
+  background: rgb(245 101 101 / 10%);
+  border: 1px solid #f56565;
+  border-radius: 8px;
+  color: #e53e3e;
+  display: flex;
+  font-size: 14px;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px 16px;
+}
+
+.errorMessage {
+  align-items: center;
+  color: #e53e3e;
+  display: flex;
+  font-size: 14px;
+  gap: 6px;
+  text-align: center;
+}
+
+.errorIcon {
+  height: 16px;
+  width: 16px;
 }
 
 // ==========================================================================
@@ -345,146 +513,187 @@
 }
 
 // ==========================================================================
-// MAIN CONTENT LAYOUT
-// ==========================================================================
-
-.mainContent {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 24px;
-}
-
-// ==========================================================================
 // DEBUG SCORES
 // ==========================================================================
 
 .scoresCard {
-  background: #f7fafc;
+  background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
 
   h4 {
     color: #2d3748;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    margin: 0 0 16px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
   }
 }
 
 .scoresGrid {
   display: grid;
-  gap: 16px;
+  gap: 8px;
   grid-template-columns: repeat(3, 1fr);
-
-  @media (width <= 480px) {
-    gap: 12px;
-    grid-template-columns: 1fr;
-  }
 }
 
 .scoreItem {
   align-items: center;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
 }
 
 .scoreLabel {
   color: #718096;
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 
 .scoreValue {
-  color: #2d3748;
-  font-size: 24px;
-  font-weight: 700;
+  background: #667eea;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px;
 }
 
-// ==========================================================================
-// ERROR STATES
-// ==========================================================================
-
-.errorCard {
-  background: #fed7d7;
-  border: 1px solid #feb2b2;
-  border-radius: 12px;
-}
-
-.errorContent {
-  padding: 24px;
-  text-align: center;
-
-  h3 {
-    color: #c53030;
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 8px;
-  }
+.debugInfo {
+  border-top: 1px solid #e2e8f0;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
 
   p {
-    color: #9c4221;
-    font-size: 14px;
-    margin: 0;
+    color: #718096;
+    margin: 4px 0;
   }
 }
 
 // ==========================================================================
-// COMPLETION STATE
+// LOADING STATES
 // ==========================================================================
 
-.completionContainer {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  min-height: 400px;
-}
-
-.completionCard {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgb(0 0 0 / 10%);
-  max-width: 400px;
-  width: 100%;
-}
-
-.completionContent {
+.loadingContainer {
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 48px 32px;
-  text-align: center;
+  height: 200px;
+  justify-content: center;
+}
 
-  @media (width <= 768px) {
-    padding: 32px 24px;
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  border-top: 2px solid #667eea;
+  height: 32px;
+  width: 32px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// ==========================================================================
+// RESPONSIVE DESIGN
+// ==========================================================================
+
+@media (width <= 768px) {
+  .questionnaireContainer {
+    gap: 16px;
+  }
+
+  .scenarioHeader,
+  .progressSection {
+    padding: 16px;
+  }
+
+  .scenarioCard {
+    padding: 20px;
+  }
+
+  .multiSelectStatus {
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .selectionCounter {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .multiSelectBadge {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .multiSelectInstructions {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .scenarioMeta {
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .multiSelectBadge {
+      order: 3;
+      width: 100%;
+    }
+  }
+
+  .optionButton {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .optionLetter {
+    font-size: 12px;
+    height: 28px;
+    width: 28px;
+  }
+  
+  // Ensure buttons stack properly on mobile
+  .navigationSection {
+    flex-direction: column;
+    gap: 12px;
+    
+    .backButton,
+    .nextButton {
+      justify-content: center;
+      width: 100%;
+    }
   }
 }
 
-.completionIcon {
-  background: #c6f6d5;
-  border-radius: 50%;
-  color: #48bb78;
-  height: 48px;
-  padding: 12px;
-  width: 48px;
+// ==========================================================================
+// ACCESSIBILITY
+// ==========================================================================
+
+@media (prefers-contrast: high) {
+  .optionButton.selected {
+    border: 3px solid currentcolor;
+  }
+  
+  .selectionCounter.valid {
+    border: 2px solid #38a169;
+  }
+  
+  .selectionCounter.invalid {
+    border: 2px solid #e53e3e;
+  }
 }
 
-.completionContent h2 {
-  color: #2d3748;
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.completionContent p {
-  color: #718096;
-  font-size: 16px;
-  line-height: 1.5;
-  margin: 0;
+@media (prefers-reduced-motion: reduce) {
+  .checkIcon,
+  .optionButton,
+  .loadingSpinner {
+    animation: none;
+    transition: none;
+  }
 }

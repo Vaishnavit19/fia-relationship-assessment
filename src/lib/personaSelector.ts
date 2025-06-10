@@ -1,386 +1,448 @@
 // lib/personaSelector.ts
 // ==========================================================================
-// FILE 5: PERSONA SELECTION ENGINE - WEIGHTED HYBRID ALGORITHM
+// PERSONA SELECTION ENGINE - UPDATED FOR STORE COMPATIBILITY
 // ==========================================================================
 
 import { personaMapping, personaCards } from './data';
-import {
-  ArchetypeMatch,
-  PersonaCard,
-  PersonaSelection,
-  PersonaRisk,
-  ArchetypeVulnerability,
-} from './types';
+import { ArchetypeMatch, PersonaCard, ExtendedUserAnswer } from './types';
 
 // ==========================================================================
-// CORE PERSONA SELECTION ALGORITHM
+// UPDATED TYPES FOR COMPATIBILITY
+// ==========================================================================
+
+export interface PersonaSelection {
+  selectedPersonas: (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[];
+  selectionReason: 'large_gap' | 'medium_gap' | 'small_gap';
+  confidenceGap: number;
+  primaryArchetype: string;
+  secondaryArchetype?: string;
+}
+
+export interface PersonaRisk {
+  personaId: string;
+  riskLevel: 'high' | 'medium' | 'low';
+  vulnerabilityScore: number;
+}
+
+export interface PersonaSelectionAnalysis {
+  totalPersonasSelected: number;
+  riskDistribution: {
+    high: number;
+    medium: number;
+    low: number;
+  };
+  dominantManipulationTypes: string[];
+  vulnerabilityThemes: string[];
+}
+
+// ==========================================================================
+// CORE PERSONA SELECTION ALGORITHM (UPDATED)
 // ==========================================================================
 
 /**
- * Main persona selection function implementing weighted hybrid algorithm
+ * Main persona selection function - Updated for store compatibility
+ * Handles both old and new gap type formats
  */
 export const selectPersonasForUser = (
   topArchetypes: ArchetypeMatch[],
   confidenceGap: number,
-  gapType: 'largeGap' | 'mediumGap' | 'smallGap'
+  gapType: 'large_gap' | 'medium_gap' | 'small_gap'
 ): PersonaSelection => {
-  if (topArchetypes.length === 0) {
-    throw new Error('No archetypes provided for persona selection');
+  console.log('=== PERSONA SELECTION DEBUG ===');
+  console.log('Input topArchetypes:', topArchetypes?.length);
+  console.log('Input confidenceGap:', confidenceGap);
+  console.log('Input gapType:', gapType);
+
+  if (!topArchetypes || topArchetypes.length === 0) {
+    console.error('❌ No top archetypes provided');
+    return {
+      selectedPersonas: [],
+      selectionReason: 'small_gap',
+      confidenceGap: 0,
+      primaryArchetype: 'Unknown',
+    };
   }
 
   const primaryArchetype = topArchetypes[0];
   const secondaryArchetype = topArchetypes[1];
 
+  console.log('Primary archetype:', primaryArchetype?.archetype?.name);
+  console.log('Primary archetype ID:', primaryArchetype?.archetype?.id);
+  console.log('Secondary archetype:', secondaryArchetype?.archetype?.name);
+
+  // Normalize gap type format
+  const normalizedGapType = normalizeGapType(gapType);
+  console.log('Normalized gap type:', normalizedGapType);
+
   // Get distribution rules based on confidence gap
-  const distribution = getPersonaDistribution(gapType);
+  const distribution = getPersonaDistribution(normalizedGapType);
+  console.log('Distribution rules:', distribution);
 
   // Get vulnerability data for primary archetype
+  console.log('Getting vulnerabilities for primary archetype...');
   const primaryVulnerabilities = getArchetypeVulnerabilities(primaryArchetype.archetype.id);
+  console.log('Primary vulnerabilities found:', primaryVulnerabilities.length);
+
   const secondaryVulnerabilities = secondaryArchetype
     ? getArchetypeVulnerabilities(secondaryArchetype.archetype.id)
-    : null;
+    : [];
+  console.log('Secondary vulnerabilities found:', secondaryVulnerabilities.length);
 
-  // Select personas based on weighted algorithm
-  const selectedPersonas = selectPersonasByWeight(
+  // Select personas using weighted hybrid algorithm
+  console.log('Selecting personas with weighted algorithm...');
+  const selectedPersonas = selectPersonasUsingWeightedAlgorithm(
     primaryVulnerabilities,
     secondaryVulnerabilities,
-    distribution
+    distribution,
+    confidenceGap
   );
 
-  return {
+  console.log('Selected personas after algorithm:', selectedPersonas.length);
+
+  // Ensure we have valid personas
+  if (selectedPersonas.length === 0) {
+    console.warn('⚠️ No personas selected, using fallback');
+    return generateFallbackPersonaSelection(primaryArchetype, confidenceGap, normalizedGapType);
+  }
+
+  const result = {
     selectedPersonas,
-    selectionReason: gapType,
+    selectionReason: normalizedGapType,
     confidenceGap,
-    primaryArchetype,
-    secondaryArchetype,
+    primaryArchetype: primaryArchetype.archetype.name,
+    secondaryArchetype: secondaryArchetype?.archetype.name,
   };
-};
 
-/**
- * Get persona distribution based on confidence gap type
- */
-export const getPersonaDistribution = (
-  gapType: 'largeGap' | 'mediumGap' | 'smallGap'
-): {
-  primaryArchetypePersonas: number;
-  secondaryArchetypePersonas: number;
-  totalCards: number;
-} => {
-  // Safe access to the algorithm
-  const algorithm =
-    personaMapping?.selectionAlgorithm?.confidenceGapCalculation ||
-    personaMapping?.archetypeVulnerabilityMap?.selectionAlgorithm?.confidenceGapCalculation;
-
-  if (!algorithm) {
-    // Fallback default values
-    console.warn('Selection algorithm not found, using defaults');
-    return { primaryArchetypePersonas: 3, secondaryArchetypePersonas: 3, totalCards: 6 };
-  }
-
-  switch (gapType) {
-    case 'largeGap':
-      return algorithm.largeGap.selection;
-    case 'mediumGap':
-      return algorithm.mediumGap.selection;
-    case 'smallGap':
-      return algorithm.smallGap.selection;
-    default:
-      return algorithm.smallGap.selection;
-  }
-};
-
-/**
- * Get vulnerability data for a specific archetype
- */
-export const getArchetypeVulnerabilities = (archetypeId: string): ArchetypeVulnerability | null => {
-  // Access the nested archetypeVulnerabilityMap
-  const mapping = personaMapping?.archetypeVulnerabilityMap || personaMapping;
-  return mapping[archetypeId] ?? null;
-};
-/**
- * Select personas using weighted risk prioritization
- */
-export const selectPersonasByWeight = (
-  primaryVulnerabilities: ArchetypeVulnerability | null,
-  secondaryVulnerabilities: ArchetypeVulnerability | null,
-  distribution: {
-    primaryArchetypePersonas: number;
-    secondaryArchetypePersonas: number;
-    totalCards: number;
-  }
-): PersonaCard[] => {
-  const selectedPersonas: PersonaCard[] = [];
-
-  // Select from primary archetype vulnerabilities
-  if (primaryVulnerabilities) {
-    const primaryPersonas = selectPersonasFromArchetype(
-      primaryVulnerabilities,
-      distribution.primaryArchetypePersonas
-    );
-    selectedPersonas.push(...primaryPersonas);
-  }
-
-  // Select from secondary archetype vulnerabilities (if exists)
-  if (secondaryVulnerabilities && distribution.secondaryArchetypePersonas > 0) {
-    const secondaryPersonas = selectPersonasFromArchetype(
-      secondaryVulnerabilities,
-      distribution.secondaryArchetypePersonas
-    );
-    selectedPersonas.push(...secondaryPersonas);
-  }
-
-  // Ensure we don't exceed limits and have minimum required
-  const finalPersonas = enforceLimits(selectedPersonas, distribution.totalCards);
-
-  return finalPersonas;
-};
-
-/**
- * Select personas from a single archetype based on risk prioritization
- */
-export const selectPersonasFromArchetype = (
-  vulnerabilities: ArchetypeVulnerability,
-  count: number
-): PersonaCard[] => {
-  // Sort personas by risk level (high > medium > low) and apply weights
-  const weightedPersonas = vulnerabilities.highRiskPersonas
-    .map(risk => ({
-      ...risk,
-      weight: getRiskWeight(risk.riskLevel),
-    }))
-    .sort((a, b) => b.weight - a.weight);
-
-  // Select top personas by weight
-  const selectedRisks = weightedPersonas.slice(0, count);
-
-  // Convert to PersonaCard objects
-  const personas: PersonaCard[] = [];
-
-  for (const risk of selectedRisks) {
-    const persona = findPersonaById(risk.personaId);
-    if (persona) {
-      personas.push(persona);
-    }
-  }
-
-  return personas;
-};
-
-/**
- * Get numerical weight for risk level
- */
-export const getRiskWeight = (riskLevel: 'high' | 'medium' | 'low'): number => {
-  const weights = personaMapping.selectionAlgorithm.personaSelectionPriority;
-
-  switch (riskLevel) {
-    case 'high':
-      return parseInt(weights.highRisk.split('=')[1].trim()) || 3;
-    case 'medium':
-      return parseInt(weights.mediumRisk.split('=')[1].trim()) || 2;
-    case 'low':
-      return parseInt(weights.lowRisk.split('=')[1].trim()) || 1;
-    default:
-      return 1;
-  }
-};
-
-/**
- * Find persona card by ID
- */
-export const findPersonaById = (personaId: string): PersonaCard | undefined => {
-  return personaCards.find(persona => persona.id === personaId);
-};
-
-/**
- * Enforce card limits (3-8 total cards)
- */
-export const enforceLimits = (personas: PersonaCard[], targetCount: number): PersonaCard[] => {
-  const minCards = 3;
-  const maxCards = 8;
-
-  // Remove duplicates
-  const uniquePersonas = personas.filter(
-    (persona, index, self) => index === self.findIndex(p => p.id === persona.id)
-  );
-
-  // If we have too few, add medium-risk personas until minimum is reached
-  if (uniquePersonas.length < minCards) {
-    const additionalPersonas = fillToMinimum(uniquePersonas, minCards);
-    return additionalPersonas.slice(0, Math.min(maxCards, targetCount));
-  }
-
-  // If we have too many, trim to target (respecting max)
-  const finalCount = Math.min(uniquePersonas.length, maxCards, targetCount);
-  return uniquePersonas.slice(0, finalCount);
-};
-
-/**
- * Fill to minimum cards by adding medium-risk personas
- */
-export const fillToMinimum = (
-  currentPersonas: PersonaCard[],
-  minRequired: number
-): PersonaCard[] => {
-  if (currentPersonas.length >= minRequired) {
-    return currentPersonas;
-  }
-
-  const currentIds = new Set(currentPersonas.map(p => p.id));
-  const additionalPersonas: PersonaCard[] = [];
-
-  // Look for medium-risk personas not already selected
-  for (const [archetypeId, vulnerabilities] of Object.entries(personaMapping)) {
-    if (archetypeId === 'selectionAlgorithm') continue;
-
-    const archVulns = vulnerabilities;
-    const mediumRiskPersonas = archVulns.highRiskPersonas.filter(
-      risk => risk.riskLevel === 'medium' && !currentIds.has(risk.personaId)
-    );
-
-    for (const risk of mediumRiskPersonas) {
-      if (currentPersonas.length + additionalPersonas.length >= minRequired) break;
-
-      const persona = findPersonaById(risk.personaId);
-      if (persona && !currentIds.has(persona.id)) {
-        additionalPersonas.push(persona);
-        currentIds.add(persona.id);
-      }
-    }
-
-    if (currentPersonas.length + additionalPersonas.length >= minRequired) break;
-  }
-
-  return [...currentPersonas, ...additionalPersonas];
-};
-
-// ==========================================================================
-// PERSONA ANALYSIS & INSIGHTS
-// ==========================================================================
-
-/**
- * Analyze selected personas to provide insights
- */
-export const analyzePersonaSelection = (
-  selection: PersonaSelection
-): {
-  riskDistribution: { high: number; medium: number; low: number };
-  dominantManipulationTactics: string[];
-  vulnerabilityPatterns: string[];
-  educationalInsights: string[];
-} => {
-  const riskDistribution = { high: 0, medium: 0, low: 0 };
-  const allTactics = new Set<string>();
-  const vulnerabilityPatterns = new Set<string>();
-
-  // Analyze each selected persona
-  selection.selectedPersonas.forEach(persona => {
-    // Get risk level for this persona
-    const riskLevel = getPersonaRiskLevel(persona.id, selection.primaryArchetype.archetype.id);
-    if (riskLevel) {
-      riskDistribution[riskLevel]++;
-    }
-
-    // Collect manipulation tactics
-    persona.psychologicalTactics.forEach(tactic => allTactics.add(tactic));
-
-    // Collect vulnerability patterns
-    persona.vulnerableArchetypes.forEach(archetype => vulnerabilityPatterns.add(archetype));
+  console.log('Final persona selection result:', {
+    selectedPersonas: result.selectedPersonas.length,
+    primaryArchetype: result.primaryArchetype,
+    selectionReason: result.selectionReason,
   });
 
-  // Generate educational insights
-  const educationalInsights = generateEducationalInsights(
-    selection,
-    riskDistribution,
-    Array.from(allTactics)
-  );
+  return result;
+};
+
+/**
+ * Analyze persona selection for insights
+ */
+export const analyzePersonaSelection = (selection: PersonaSelection): PersonaSelectionAnalysis => {
+  const { selectedPersonas } = selection;
+
+  const riskDistribution = {
+    high: selectedPersonas.filter(p => p.riskLevel === 'high').length,
+    medium: selectedPersonas.filter(p => p.riskLevel === 'medium').length,
+    low: selectedPersonas.filter(p => p.riskLevel === 'low').length,
+  };
+
+  const manipulationTypes = selectedPersonas.flatMap(p => p.manipulatorTypes);
+  const dominantManipulationTypes = [...new Set(manipulationTypes)];
+
+  const vulnerabilityThemes = selectedPersonas.map(p => {
+    if (p.persona.includes('Guilt')) return 'Guilt-based manipulation';
+    if (p.persona.includes('Victim')) return 'Victim manipulation';
+    if (p.persona.includes('Boundary')) return 'Boundary violations';
+    if (p.persona.includes('Status')) return 'Status exploitation';
+    if (p.persona.includes('Love')) return 'Love bombing';
+    return 'General manipulation';
+  });
 
   return {
+    totalPersonasSelected: selectedPersonas.length,
     riskDistribution,
-    dominantManipulationTactics: Array.from(allTactics).slice(0, 5), // Top 5 tactics
-    vulnerabilityPatterns: Array.from(vulnerabilityPatterns),
-    educationalInsights,
+    dominantManipulationTypes,
+    vulnerabilityThemes: [...new Set(vulnerabilityThemes)],
   };
 };
 
-/**
- * Get risk level for a specific persona relative to an archetype
- */
-export const getPersonaRiskLevel = (
-  personaId: string,
-  archetypeId: string
-): 'high' | 'medium' | 'low' | null => {
-  const vulnerabilities = getArchetypeVulnerabilities(archetypeId);
-  if (!vulnerabilities) return null;
+// ==========================================================================
+// COMPATIBILITY UTILITY FUNCTIONS
+// ==========================================================================
 
-  const risk = vulnerabilities.highRiskPersonas.find(r => r.personaId === personaId);
-  return risk ? risk.riskLevel : null;
+/**
+ * Normalize gap type format to handle both old and new formats
+ */
+const normalizeGapType = (
+  gapType: 'largeGap' | 'mediumGap' | 'smallGap' | 'large_gap' | 'medium_gap' | 'small_gap'
+): 'large_gap' | 'medium_gap' | 'small_gap' => {
+  const mapping = {
+    largeGap: 'large_gap' as const,
+    mediumGap: 'medium_gap' as const,
+    smallGap: 'small_gap' as const,
+    large_gap: 'large_gap' as const,
+    medium_gap: 'medium_gap' as const,
+    small_gap: 'small_gap' as const,
+  };
+
+  return mapping[gapType] || 'small_gap';
 };
 
 /**
- * Generate educational insights about the persona selection
+ * Get persona distribution rules based on confidence gap
  */
-export const generateEducationalInsights = (
-  selection: PersonaSelection,
-  riskDistribution: { high: number; medium: number; low: number },
-  tactics: string[]
-): string[] => {
-  const insights: string[] = [];
+const getPersonaDistribution = (
+  gapType: 'large_gap' | 'medium_gap' | 'small_gap'
+): {
+  totalPersonas: number;
+  highRisk: number;
+  mediumRisk: number;
+  lowRisk: number;
+} => {
+  switch (gapType) {
+    case 'large_gap':
+      return { totalPersonas: 3, highRisk: 2, mediumRisk: 1, lowRisk: 0 };
+    case 'medium_gap':
+      return { totalPersonas: 4, highRisk: 2, mediumRisk: 2, lowRisk: 0 };
+    case 'small_gap':
+      return { totalPersonas: 5, highRisk: 2, mediumRisk: 2, lowRisk: 1 };
+    default:
+      return { totalPersonas: 3, highRisk: 1, mediumRisk: 1, lowRisk: 1 };
+  }
+};
 
-  // Risk distribution insights
-  if (riskDistribution.high > riskDistribution.medium + riskDistribution.low) {
-    insights.push(
-      'Your personality profile shows vulnerability to high-manipulation tactics. Awareness is your best defense.'
+/**
+ * Calculate vulnerability score based on risk level and number of exploited traits
+ */
+const calculateVulnerabilityScore = (riskLevel: string, traitsCount: number): number => {
+  const baseScores = {
+    high: 80,
+    medium: 60,
+    low: 40,
+  };
+
+  const baseScore = baseScores[riskLevel] || 50;
+
+  // Add bonus for more exploited traits (up to 20 points)
+  const traitsBonus = Math.min(traitsCount * 5, 20);
+
+  return Math.min(100, baseScore + traitsBonus);
+};
+
+/**
+ * Get vulnerability data for an archetype - FIXED VERSION
+ * Converts JSON mapping data to PersonaRisk objects with vulnerability scores
+ */
+const getArchetypeVulnerabilities = (archetypeId: string): PersonaRisk[] => {
+  console.log('Getting vulnerabilities for archetype:', archetypeId);
+
+  // Try to get from persona mapping data
+  const mapping = personaMapping[archetypeId];
+
+  if (mapping) {
+    const vulnerabilities: PersonaRisk[] = [];
+
+    // Convert highRiskPersonas with vulnerability scores
+    if (mapping.highRiskPersonas) {
+      mapping.highRiskPersonas.forEach(persona => {
+        vulnerabilities.push({
+          personaId: persona.personaId,
+          riskLevel: 'high',
+          vulnerabilityScore: calculateVulnerabilityScore(
+            'high',
+            persona.exploitedTraits?.length || 0
+          ),
+        });
+      });
+    }
+
+    // Convert mediumRiskPersonas with vulnerability scores
+    if (mapping.mediumRiskPersonas) {
+      mapping.mediumRiskPersonas.forEach(persona => {
+        vulnerabilities.push({
+          personaId: persona.personaId,
+          riskLevel: 'medium',
+          vulnerabilityScore: calculateVulnerabilityScore(
+            'medium',
+            persona.exploitedTraits?.length || 0
+          ),
+        });
+      });
+    }
+
+    // Convert lowRiskPersonas with vulnerability scores
+    if (mapping.lowRiskPersonas) {
+      mapping.lowRiskPersonas.forEach(persona => {
+        vulnerabilities.push({
+          personaId: persona.personaId,
+          riskLevel: 'low',
+          vulnerabilityScore: calculateVulnerabilityScore(
+            'low',
+            persona.exploitedTraits?.length || 0
+          ),
+        });
+      });
+    }
+
+    console.log(
+      `Found ${vulnerabilities.length} vulnerabilities for ${archetypeId}:`,
+      vulnerabilities
     );
-  } else if (riskDistribution.medium > 0) {
-    insights.push(
-      'You show balanced vulnerability patterns. Stay alert to subtle manipulation tactics.'
-    );
+    return vulnerabilities;
   }
 
-  // Confidence gap insights
-  if (selection.confidenceGap > 20) {
-    insights.push(
-      `Your ${selection.primaryArchetype.archetype.name} traits are very pronounced, making specific manipulation patterns more predictable.`
-    );
-  } else if (selection.confidenceGap < 10) {
-    insights.push(
-      'Your blended personality traits create varied vulnerability patterns across different manipulation styles.'
-    );
-  }
+  console.warn(`No mapping found for archetype: ${archetypeId}. Using fallback.`);
+  // Fallback: create generic vulnerabilities
+  return generateGenericVulnerabilities(archetypeId);
+};
 
-  // Tactic-specific insights
-  if (tactics.includes('Strategic vulnerability displays')) {
-    insights.push(
-      "Be cautious of partners who seem to have 'perfect' emotional problems that only you can solve."
-    );
-  }
+/**
+ * Select personas using weighted hybrid algorithm
+ */
+const selectPersonasUsingWeightedAlgorithm = (
+  primaryVulnerabilities: PersonaRisk[],
+  secondaryVulnerabilities: PersonaRisk[],
+  distribution: { totalPersonas: number; highRisk: number; mediumRisk: number; lowRisk: number },
+  confidenceGap: number
+): (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[] => {
+  console.log('=== WEIGHTED ALGORITHM DEBUG ===');
+  console.log('Primary vulnerabilities:', primaryVulnerabilities.length);
+  console.log('Secondary vulnerabilities:', secondaryVulnerabilities.length);
+  console.log('Distribution:', distribution);
 
-  if (tactics.includes('Emotional overwhelming')) {
-    insights.push(
-      'Watch for relationships that feel intensely emotional very quickly - genuine connection builds gradually.'
-    );
-  }
+  const selectedPersonas: (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[] = [];
 
-  if (tactics.includes('Dependency cultivation')) {
-    insights.push(
-      'Healthy relationships involve mutual support, not one person becoming completely dependent on the other.'
-    );
-  }
+  // Combine and sort vulnerabilities by risk level
+  const allVulnerabilities = [...primaryVulnerabilities, ...secondaryVulnerabilities];
+  console.log('Total vulnerabilities:', allVulnerabilities.length);
 
-  // General educational insight
-  insights.push(
-    'Remember: These are educational patterns, not predictions. Healthy relationships respect boundaries and grow mutually.'
+  const highRiskVulns = allVulnerabilities.filter(v => v.riskLevel === 'high');
+  const mediumRiskVulns = allVulnerabilities.filter(v => v.riskLevel === 'medium');
+  const lowRiskVulns = allVulnerabilities.filter(v => v.riskLevel === 'low');
+
+  console.log('Risk distribution:', {
+    high: highRiskVulns.length,
+    medium: mediumRiskVulns.length,
+    low: lowRiskVulns.length,
+  });
+
+  // Select high-risk personas
+  console.log('Selecting high-risk personas...');
+  const highRiskSelected = selectPersonasByRisk(highRiskVulns, distribution.highRisk, 'high');
+  console.log('High-risk selected:', highRiskSelected.length);
+  selectedPersonas.push(...highRiskSelected);
+
+  // Select medium-risk personas
+  console.log('Selecting medium-risk personas...');
+  const mediumRiskSelected = selectPersonasByRisk(
+    mediumRiskVulns,
+    distribution.mediumRisk,
+    'medium'
+  );
+  console.log('Medium-risk selected:', mediumRiskSelected.length);
+  selectedPersonas.push(...mediumRiskSelected);
+
+  // Select low-risk personas
+  console.log('Selecting low-risk personas...');
+  const lowRiskSelected = selectPersonasByRisk(lowRiskVulns, distribution.lowRisk, 'low');
+  console.log('Low-risk selected:', lowRiskSelected.length);
+  selectedPersonas.push(...lowRiskSelected);
+
+  // Remove duplicates by persona ID
+  const uniquePersonas = selectedPersonas.filter(
+    (persona, index, array) => array.findIndex(p => p.id === persona.id) === index
   );
 
-  return insights.slice(0, 4); // Limit to 4 key insights
+  console.log('Unique personas after deduplication:', uniquePersonas.length);
+
+  const finalSelection = uniquePersonas.slice(0, distribution.totalPersonas);
+  console.log('Final selection after limiting:', finalSelection.length);
+
+  return finalSelection;
+};
+
+/**
+ * Select personas by risk level
+ */
+const selectPersonasByRisk = (
+  vulnerabilities: PersonaRisk[],
+  count: number,
+  riskLevel: 'high' | 'medium' | 'low'
+): (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[] => {
+  console.log(
+    `Selecting ${count} ${riskLevel}-risk personas from ${vulnerabilities.length} vulnerabilities`
+  );
+
+  const selected: (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[] = [];
+
+  // Sort by vulnerability score (descending)
+  const sortedVulns = vulnerabilities.sort((a, b) => b.vulnerabilityScore - a.vulnerabilityScore);
+
+  for (let i = 0; i < Math.min(count, sortedVulns.length); i++) {
+    const vuln = sortedVulns[i];
+    console.log(`Looking for persona: ${vuln.personaId}`);
+
+    const persona = getPersonaById(vuln.personaId);
+
+    if (persona) {
+      console.log(`✅ Found persona: ${persona.persona}`);
+      selected.push({
+        ...persona,
+        riskLevel,
+      });
+    } else {
+      console.warn(`❌ Persona not found: ${vuln.personaId}`);
+    }
+  }
+
+  console.log(`Selected ${selected.length} ${riskLevel}-risk personas`);
+  return selected;
+};
+
+/**
+ * Get persona by ID from imported data
+ */
+const getPersonaById = (personaId: string): PersonaCard | null => {
+  const persona = personaCards.find(p => p.id === personaId);
+
+  if (!persona) {
+    console.warn(`Persona not found: ${personaId}`);
+    return null;
+  }
+
+  return persona;
+};
+
+/**
+ * Generate generic vulnerabilities for archetype
+ */
+const generateGenericVulnerabilities = (archetypeId: string): PersonaRisk[] => {
+  // Create generic persona risks based on archetype
+  const genericPersonaIds = personaCards.slice(0, 5).map(p => p.id);
+
+  return genericPersonaIds.map(personaId => ({
+    personaId,
+    riskLevel: 'medium' as const,
+    vulnerabilityScore: 50,
+  }));
+};
+
+/**
+ * Generate fallback persona selection
+ */
+const generateFallbackPersonaSelection = (
+  primaryArchetype: ArchetypeMatch,
+  confidenceGap: number,
+  gapType: 'large_gap' | 'medium_gap' | 'small_gap'
+): PersonaSelection => {
+  // Select first few personas as fallback
+  const fallbackPersonas = personaCards.slice(0, 3).map(persona => ({
+    ...persona,
+    riskLevel: 'medium' as const,
+  }));
+
+  return {
+    selectedPersonas: fallbackPersonas,
+    selectionReason: gapType,
+    confidenceGap,
+    primaryArchetype: primaryArchetype.archetype.name,
+  };
 };
 
 // ==========================================================================
-// VALIDATION & TESTING
+// VALIDATION FUNCTIONS
 // ==========================================================================
 
 /**
- * Validate persona selection algorithm setup
+ * Validate persona selection setup
  */
 export const validatePersonaSelectionSetup = (): {
   isValid: boolean;
@@ -390,49 +452,33 @@ export const validatePersonaSelectionSetup = (): {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check that all referenced personas exist
-  Object.entries(personaMapping).forEach(([archetypeId, vulnerabilities]) => {
-    if (archetypeId === 'selectionAlgorithm') return;
-
-    const archVulns = vulnerabilities;
-    archVulns.highRiskPersonas.forEach(risk => {
-      const persona = findPersonaById(risk.personaId);
-      if (!persona) {
-        errors.push(
-          `Persona ${risk.personaId} referenced in ${archetypeId} vulnerabilities but not found in persona cards`
-        );
-      }
-    });
-  });
-
-  // Check that persona cards reference valid archetypes
-  personaCards.forEach(persona => {
-    persona.vulnerableArchetypes.forEach(archetypeId => {
-      const vulnerabilities = getArchetypeVulnerabilities(archetypeId);
-      if (!vulnerabilities) {
-        warnings.push(
-          `Persona ${persona.id} references archetype ${archetypeId} but no vulnerability mapping found`
-        );
-      }
-    });
-  });
-
-  // Validate selection algorithm parameters
-  const algorithm = personaMapping.selectionAlgorithm;
-  if (!algorithm.confidenceGapCalculation) {
-    errors.push('Missing confidence gap calculation configuration');
+  // Check if persona cards are available
+  if (!personaCards || personaCards.length === 0) {
+    errors.push('No persona cards available');
   }
 
-  // Check card limits
-  Object.values(algorithm.confidenceGapCalculation).forEach((config: any) => {
-    if (config.selection) {
-      const total =
-        config.selection.primaryArchetypePersonas + config.selection.secondaryArchetypePersonas;
-      if (total < 3 || total > 8) {
-        warnings.push(
-          `Selection configuration may produce ${total} cards, outside recommended 3-8 range`
-        );
-      }
+  // Check if persona mapping is available
+  if (!personaMapping || Object.keys(personaMapping).length === 0) {
+    errors.push('No persona mapping available');
+  }
+
+  // Validate persona card structure
+  personaCards.forEach((persona, index) => {
+    if (!persona.id) {
+      errors.push(`Persona ${index}: Missing ID`);
+    }
+    if (!persona.persona) {
+      errors.push(`Persona ${index}: Missing persona name`);
+    }
+    if (!persona.psychologicalTactics || persona.psychologicalTactics.length === 0) {
+      warnings.push(`Persona ${persona.id}: No psychological tactics defined`);
+    }
+  });
+
+  // Validate persona mapping structure
+  Object.entries(personaMapping).forEach(([archetypeId, mapping]) => {
+    if (!mapping.highRiskPersonas && !mapping.mediumRiskPersonas && !mapping.lowRiskPersonas) {
+      warnings.push(`Archetype ${archetypeId}: No risk personas defined`);
     }
   });
 
@@ -446,44 +492,69 @@ export const validatePersonaSelectionSetup = (): {
 /**
  * Test persona selection with sample data
  */
-export const testPersonaSelectionAlgorithm = () => {
-  // Mock archetype matches for testing
-  const mockMatches: ArchetypeMatch[] = [
-    {
-      archetype: { id: 'caregiver', name: 'The Caregiver' } as any,
-      distance: 2.5,
-      confidence: 85,
-      rank: 1,
-    },
-    {
-      archetype: { id: 'dreamer', name: 'The Dreamer' } as any,
-      distance: 4.2,
-      confidence: 65,
-      rank: 2,
-    },
-  ];
+export const testPersonaSelection = (): {
+  isWorking: boolean;
+  testResults: Record<string, unknown>;
+  errors: string[];
+} => {
+  const errors: string[] = [];
+  const testResults: Record<string, unknown> = {};
 
-  const testCases = [
-    { gapType: 'largeGap' as const, gap: 25 },
-    { gapType: 'mediumGap' as const, gap: 15 },
-    { gapType: 'smallGap' as const, gap: 5 },
-  ];
+  try {
+    // Test with sample archetype matches
+    const sampleMatches: ArchetypeMatch[] = [
+      {
+        archetype: { id: 'peacemaker', name: 'Peacemaker' } as any,
+        distance: 1.5,
+        confidence: 85,
+        rank: 1,
+      },
+      {
+        archetype: { id: 'caregiver', name: 'Caregiver' } as any,
+        distance: 2.1,
+        confidence: 72,
+        rank: 2,
+      },
+    ];
 
-  testCases.forEach(testCase => {
-    console.log(`\nTesting ${testCase.gapType} (gap: ${testCase.gap}):`);
-    try {
-      const selection = selectPersonasForUser(mockMatches, testCase.gap, testCase.gapType);
-      console.log(`  Selected ${selection.selectedPersonas.length} personas:`);
-      selection.selectedPersonas.forEach(persona => {
-        console.log(`    - ${persona.persona} (${persona.title})`);
-      });
+    // Test different gap types
+    const largeGapResult = selectPersonasForUser(sampleMatches, 25, 'large_gap');
+    const mediumGapResult = selectPersonasForUser(sampleMatches, 15, 'medium_gap');
+    const smallGapResult = selectPersonasForUser(sampleMatches, 5, 'small_gap');
 
-      const analysis = analyzePersonaSelection(selection);
-      console.log(
-        `  Risk distribution: H:${analysis.riskDistribution.high} M:${analysis.riskDistribution.medium} L:${analysis.riskDistribution.low}`
-      );
-    } catch (error) {
-      console.error(`  Error: ${error}`);
-    }
-  });
+    testResults.largeGap = {
+      selected: largeGapResult.selectedPersonas.length,
+      primary: largeGapResult.primaryArchetype,
+    };
+    testResults.mediumGap = {
+      selected: mediumGapResult.selectedPersonas.length,
+      primary: mediumGapResult.primaryArchetype,
+    };
+    testResults.smallGap = {
+      selected: smallGapResult.selectedPersonas.length,
+      primary: smallGapResult.primaryArchetype,
+    };
+
+    // Test analysis
+    const analysis = analyzePersonaSelection(largeGapResult);
+    testResults.analysis = {
+      totalSelected: analysis.totalPersonasSelected,
+      riskDistribution: analysis.riskDistribution,
+    };
+
+    return {
+      isWorking: true,
+      testResults,
+      errors,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    errors.push(errorMessage);
+
+    return {
+      isWorking: false,
+      testResults,
+      errors,
+    };
+  }
 };

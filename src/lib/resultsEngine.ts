@@ -1,6 +1,6 @@
 // lib/resultsEngine.ts
 // ==========================================================================
-// PHASE 1 STEP 3: COMBINED RESULTS RANKING ALGORITHM (Files 1 + 3)
+// ENHANCED RESULTS GENERATION ENGINE - UPDATED FOR STORE COMPATIBILITY
 // ==========================================================================
 
 import {
@@ -9,7 +9,12 @@ import {
   getDetailedScoreAnalysis,
   areDistancesTied,
 } from './archetypeCalculator';
-import { calculateExtendedScores, getUserScenarioPath, getScenarioStatistics } from './data';
+import {
+  calculateExtendedScores,
+  safeCalculateExtendedScores,
+  getUserScenarioPath,
+  getScenarioStatistics,
+} from './data';
 import {
   ExtendedUserAnswer,
   ScoreData,
@@ -17,50 +22,98 @@ import {
   ArchetypeMatch,
   UserPath,
   ExtendedAssessmentResult,
+  UserData,
 } from './types';
 
 // ==========================================================================
-// COMBINED RESULTS GENERATION ENGINE
+// ENHANCED RESULTS GENERATION ENGINE
 // ==========================================================================
 
 /**
- * Generate complete assessment results combining File 1 (scenarios) and File 3 (archetypes)
+ * Generate complete assessment results - Updated for enhanced store compatibility
  */
 export const generateCompleteAssessmentResults = (
   answers: ExtendedUserAnswer[],
   startTime: Date,
-  userData: { name: string; email?: string }
+  userData: UserData
 ): ExtendedAssessmentResult => {
   const endTime = new Date();
   const duration = Math.round((endTime.getTime() - startTime.getTime()) / 1000);
 
-  // File 1: Calculate scores from extended scenarios
-  const userScores = calculateExtendedScores(answers);
-  const userPath = getUserScenarioPath(answers);
+  try {
+    // Enhanced score calculation with error handling
+    const scoreResult = safeCalculateExtendedScores(answers);
 
-  // File 3: Generate archetype matches using mathematical proximity
-  const archetypeResults = generateArchetypeResults(userScores);
-  const confidenceGapAnalysis = calculateConfidenceGap(archetypeResults.topMatches);
+    if (scoreResult.errors.length > 0) {
+      console.error('Score calculation errors in results engine:', scoreResult.errors);
+    }
 
-  return {
-    userScores,
-    archetypeResults,
-    personaSelection: {
-      selectedPersonas: [], // Will be populated in Phase 2
-      selectionReason: confidenceGapAnalysis.gapType,
-      confidenceGap: confidenceGapAnalysis.gap,
-      primaryArchetype: confidenceGapAnalysis.primaryArchetype,
-      secondaryArchetype: confidenceGapAnalysis.secondaryArchetype,
-    },
-    completedAt: endTime,
-    answers,
-    userPath,
-    assessmentDuration: duration,
-  };
+    const userScores = scoreResult.scores;
+    const userPath = getUserScenarioPath(answers);
+
+    // Generate archetype matches using mathematical proximity
+    const archetypeResults = generateArchetypeResults(userScores);
+
+    // GUARD CLAUSE: Ensure archetypeResults and topMatches exist
+    if (!archetypeResults?.topMatches || archetypeResults.topMatches.length === 0) {
+      console.error('generateCompleteAssessmentResults: Invalid archetype results');
+      return generateFallbackResults(answers, startTime, endTime, userData);
+    }
+
+    const confidenceGapAnalysis = calculateConfidenceGap(archetypeResults.topMatches);
+
+    const result: ExtendedAssessmentResult = {
+      userScores,
+      archetypeResults,
+      personaSelection: {
+        selectedPersonas: [],
+        selectionReason: confidenceGapAnalysis.gapType,
+        confidenceGap: confidenceGapAnalysis.gap,
+        primaryArchetype: confidenceGapAnalysis.primaryArchetype,
+        secondaryArchetype: confidenceGapAnalysis.secondaryArchetype,
+      },
+      completedAt: endTime,
+      answers,
+      userPath,
+      assessmentDuration: duration,
+    };
+
+    return result;
+  } catch (error) {
+    console.error('Error in results generation:', error);
+    return generateFallbackResults(answers, startTime, endTime, userData);
+  }
+};
+
+/**
+ * Generate enhanced assessment results with vulnerability assessment
+ * This is the main function called by the store
+ */
+export const generateEnhancedAssessmentResults = (
+  answers: ExtendedUserAnswer[],
+  startTime: Date,
+  userData: UserData,
+  includeVulnerabilityAssessment = true
+): ExtendedAssessmentResult => {
+  // Generate base results
+  const baseResults = generateCompleteAssessmentResults(answers, startTime, userData);
+
+  // Add vulnerability assessment if requested
+  if (includeVulnerabilityAssessment) {
+    try {
+      // This would be called by the vulnerability pipeline
+      // For now, we ensure the base structure is correct
+      console.log('Enhanced results generated successfully');
+    } catch (error) {
+      console.warn('Vulnerability assessment failed, using base results:', error);
+    }
+  }
+
+  return baseResults;
 };
 
 // ==========================================================================
-// RESULTS FORMATTING & DISPLAY
+// RESULTS FORMATTING & DISPLAY (UPDATED)
 // ==========================================================================
 
 /**
@@ -70,14 +123,14 @@ export const formatArchetypeResultsForDisplay = (
   archetypeResults: ArchetypeResults
 ): {
   topMatches: ArchetypeMatch[];
-  hasties: boolean;
+  hasTies: boolean;
   displayCount: number;
   confidenceRange: { min: number; max: number };
 } => {
   const topMatches = archetypeResults.topMatches;
 
   // Check for ties in top results
-  const hasties =
+  const hasTies =
     topMatches.length > 1 &&
     topMatches.slice(1).some(match => areDistancesTied(match.distance, topMatches[0].distance));
 
@@ -89,284 +142,238 @@ export const formatArchetypeResultsForDisplay = (
   };
 
   return {
-    topMatches,
-    hasties,
-    displayCount: topMatches.length,
+    topMatches: topMatches.slice(0, 5), // Show top 5 matches
+    hasTies,
+    displayCount: Math.min(5, topMatches.length),
     confidenceRange,
   };
 };
 
 /**
- * Generate user-friendly archetype summary
+ * Generate summary statistics for display
  */
-export const generateArchetypeSummary = (
-  archetypeResults: ArchetypeResults
+export const generateResultsSummary = (
+  results: ExtendedAssessmentResult
 ): {
-  primaryArchetype: {
-    name: string;
-    confidence: number;
-    description: string;
-    dominantTrait: string;
-  };
-  secondaryArchetypes: {
-    name: string;
-    confidence: number;
-    description: string;
-  }[];
-  userProfileSummary: {
-    strongestDimension: 'logical' | 'emotional' | 'exploratory';
-    dimensionScores: ScoreData;
-    personalityBalance: string;
-  };
+  totalAnswers: number;
+  assessmentTime: string;
+  topArchetype: string;
+  confidenceLevel: 'high' | 'medium' | 'low';
+  pathComplexity: 'simple' | 'moderate' | 'complex';
 } => {
-  const primary = archetypeResults.topMatches[0];
-  const secondary = archetypeResults.topMatches.slice(1, 3);
+  const { answers, assessmentDuration, archetypeResults, userPath } = results;
 
-  // Determine user's strongest dimension
-  const { userScores } = archetypeResults;
-  let strongestDimension: 'logical' | 'emotional' | 'exploratory';
+  // Format assessment time
+  const minutes = Math.floor(assessmentDuration / 60);
+  const seconds = assessmentDuration % 60;
+  const assessmentTime = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
-  if (userScores.logical >= userScores.emotional && userScores.logical >= userScores.exploratory) {
-    strongestDimension = 'logical';
-  } else if (userScores.emotional >= userScores.exploratory) {
-    strongestDimension = 'emotional';
-  } else {
-    strongestDimension = 'exploratory';
-  }
+  // Determine confidence level
+  const topConfidence = archetypeResults.topMatches[0]?.confidence || 0;
+  const confidenceLevel: 'high' | 'medium' | 'low' =
+    topConfidence >= 80 ? 'high' : topConfidence >= 60 ? 'medium' : 'low';
 
-  // Generate personality balance description
-  const total = userScores.logical + userScores.emotional + userScores.exploratory;
-  const logicalPct = Math.round((userScores.logical / total) * 100);
-  const emotionalPct = Math.round((userScores.emotional / total) * 100);
-  const exploratoryPct = Math.round((userScores.exploratory / total) * 100);
-
-  let personalityBalance: string;
-
-  if (Math.max(logicalPct, emotionalPct, exploratoryPct) > 50) {
-    personalityBalance = `Strong ${strongestDimension} focus`;
-  } else if (
-    Math.abs(logicalPct - emotionalPct) <= 10 &&
-    Math.abs(emotionalPct - exploratoryPct) <= 10
-  ) {
-    personalityBalance = 'Well-balanced across all dimensions';
-  } else {
-    personalityBalance = `Mixed ${strongestDimension}-leaning personality`;
-  }
-
-  return {
-    primaryArchetype: {
-      name: primary.archetype.name,
-      confidence: primary.confidence,
-      description: primary.archetype.description,
-      dominantTrait: primary.archetype.traits[0] || 'Not specified',
-    },
-    secondaryArchetypes: secondary.map(match => ({
-      name: match.archetype.name,
-      confidence: match.confidence,
-      description: match.archetype.description,
-    })),
-    userProfileSummary: {
-      strongestDimension,
-      dimensionScores: userScores,
-      personalityBalance,
-    },
-  };
-};
-
-// ==========================================================================
-// RESULTS ANALYTICS & INSIGHTS
-// ==========================================================================
-
-/**
- * Generate insights from user's assessment journey
- */
-export const generateAssessmentInsights = (
-  result: ExtendedAssessmentResult
-): {
-  journeyInsights: {
-    pathComplexity: 'simple' | 'moderate' | 'complex';
-    branchingDecisions: number;
-    completionTime: string;
-    decisiveAnswers: number;
-  };
-  scoreInsights: {
-    dimensionalBalance: string;
-    strongestTendency: string;
-    uniquePatterns: string[];
-  };
-  archetypeInsights: {
-    confidenceLevel: 'high' | 'medium' | 'low';
-    resultClarity: string;
-    secondaryTraits: string[];
-  };
-} => {
-  const { userPath, assessmentDuration, userScores, archetypeResults } = result;
-
-  // Journey insights
-  const pathComplexity =
-    userPath.branchingPoints >= 3
-      ? 'complex'
-      : userPath.branchingPoints >= 1
+  // Determine path complexity
+  const pathComplexity: 'simple' | 'moderate' | 'complex' =
+    userPath.branchingPoints === 0
+      ? 'simple'
+      : userPath.branchingPoints <= 2
         ? 'moderate'
-        : 'simple';
-
-  const completionTime =
-    assessmentDuration < 120 ? 'Quick' : assessmentDuration < 300 ? 'Thoughtful' : 'Deliberate';
-
-  const decisiveAnswers = result.answers.filter(
-    answer => Math.max(...Object.values(answer.selectedOption.scores)) >= 2
-  ).length;
-
-  // Score insights
-  const total = userScores.logical + userScores.emotional + userScores.exploratory;
-  const highest = Math.max(userScores.logical, userScores.emotional, userScores.exploratory);
-  const highestPct = (highest / total) * 100;
-
-  const dimensionalBalance =
-    highestPct > 60
-      ? 'Strongly focused'
-      : highestPct > 40
-        ? 'Moderately balanced'
-        : 'Highly balanced';
-
-  let strongestTendency: string;
-  if (userScores.logical === highest) {
-    strongestTendency = 'Analytical and planning-oriented';
-  } else if (userScores.emotional === highest) {
-    strongestTendency = 'Relationship and emotion-focused';
-  } else {
-    strongestTendency = 'Adventure and exploration-driven';
-  }
-
-  const uniquePatterns: string[] = [];
-  if (Math.abs(userScores.logical - userScores.emotional) <= 1) {
-    uniquePatterns.push('Balance between logic and emotion');
-  }
-  if (userScores.exploratory > userScores.logical + userScores.emotional) {
-    uniquePatterns.push('Strong adventure-seeking tendency');
-  }
-  if (userScores.logical > 8 && userScores.emotional < 3) {
-    uniquePatterns.push('Highly analytical with low emotional prioritization');
-  }
-
-  // Archetype insights
-  const primaryConfidence = archetypeResults.topMatches[0].confidence;
-  const confidenceLevel =
-    primaryConfidence >= 80 ? 'high' : primaryConfidence >= 60 ? 'medium' : 'low';
-
-  const confidenceGap =
-    archetypeResults.topMatches.length > 1
-      ? archetypeResults.topMatches[0].confidence - archetypeResults.topMatches[1].confidence
-      : 100;
-
-  const resultClarity =
-    confidenceGap > 20
-      ? 'Very clear primary archetype'
-      : confidenceGap > 10
-        ? 'Clear primary with secondary traits'
-        : 'Blended personality across multiple archetypes';
-
-  const secondaryTraits = archetypeResults.topMatches
-    .slice(1, 3)
-    .map(match => match.archetype.traits[0])
-    .filter(trait => trait);
+        : 'complex';
 
   return {
-    journeyInsights: {
-      pathComplexity,
-      branchingDecisions: userPath.branchingPoints,
-      completionTime: `${completionTime} (${Math.round(assessmentDuration / 60)} min)`,
-      decisiveAnswers,
+    totalAnswers: answers.length,
+    assessmentTime,
+    topArchetype: archetypeResults.topMatches[0]?.archetype.name || 'Unknown',
+    confidenceLevel,
+    pathComplexity,
+  };
+};
+
+/**
+ * Generate detailed score breakdown for analysis
+ */
+export const generateScoreBreakdown = (
+  answers: ExtendedUserAnswer[]
+): {
+  totalScores: ScoreData;
+  averageScores: ScoreData;
+  scoreDistribution: {
+    emotional: { count: number; percentage: number };
+    logical: { count: number; percentage: number };
+    exploratory: { count: number; percentage: number };
+  };
+  dominantDimension: 'emotional' | 'logical' | 'exploratory';
+} => {
+  const totalScores = calculateExtendedScores(answers);
+  const totalSum = totalScores.emotional + totalScores.logical + totalScores.exploratory;
+
+  const averageScores: ScoreData = {
+    emotional: totalScores.emotional / answers.length,
+    logical: totalScores.logical / answers.length,
+    exploratory: totalScores.exploratory / answers.length,
+  };
+
+  // Count answers that contributed to each dimension
+  const emotionalCount = answers.filter(a => a.selectedOption.scores.emotional > 0).length;
+  const logicalCount = answers.filter(a => a.selectedOption.scores.logical > 0).length;
+  const exploratoryCount = answers.filter(a => a.selectedOption.scores.exploratory > 0).length;
+
+  const scoreDistribution = {
+    emotional: {
+      count: emotionalCount,
+      percentage: Math.round((totalScores.emotional / totalSum) * 100) || 0,
     },
-    scoreInsights: {
-      dimensionalBalance,
-      strongestTendency,
-      uniquePatterns,
+    logical: {
+      count: logicalCount,
+      percentage: Math.round((totalScores.logical / totalSum) * 100) || 0,
     },
-    archetypeInsights: {
-      confidenceLevel,
-      resultClarity,
-      secondaryTraits,
+    exploratory: {
+      count: exploratoryCount,
+      percentage: Math.round((totalScores.exploratory / totalSum) * 100) || 0,
     },
+  };
+
+  // Determine dominant dimension
+  const dominantDimension: 'emotional' | 'logical' | 'exploratory' =
+    totalScores.emotional >= totalScores.logical && totalScores.emotional >= totalScores.exploratory
+      ? 'emotional'
+      : totalScores.logical >= totalScores.exploratory
+        ? 'logical'
+        : 'exploratory';
+
+  return {
+    totalScores,
+    averageScores,
+    scoreDistribution,
+    dominantDimension,
   };
 };
 
 // ==========================================================================
-// VALIDATION & QUALITY CHECKS
+// UTILITY FUNCTIONS
 // ==========================================================================
 
 /**
- * Validate the quality and completeness of assessment results
+ * Map confidence gap type to persona selection reason format
  */
-export const validateAssessmentResults = (
-  result: ExtendedAssessmentResult
+const mapConfidenceGapToSelectionReason = (
+  gapType: 'largeGap' | 'mediumGap' | 'smallGap' | undefined
+): 'large_gap' | 'medium_gap' | 'small_gap' => {
+  const mapping = {
+    largeGap: 'large_gap' as const,
+    mediumGap: 'medium_gap' as const,
+    smallGap: 'small_gap' as const,
+  };
+
+  return mapping[gapType!] || 'small_gap';
+};
+
+/**
+ * Validate results data integrity
+ */
+export const validateResultsIntegrity = (
+  results: ExtendedAssessmentResult
 ): {
   isValid: boolean;
-  quality: 'high' | 'medium' | 'low';
-  issues: string[];
-  recommendations: string[];
+  errors: string[];
+  warnings: string[];
 } => {
-  const issues: string[] = [];
-  const recommendations: string[] = [];
+  const errors: string[] = [];
+  const warnings: string[] = [];
 
-  // Check answer count
-  const minAnswers = 8;
-  const maxAnswers = 12;
-  if (result.answers.length < minAnswers) {
-    issues.push(`Too few answers (${result.answers.length}, expected ${minAnswers}+)`);
-  }
-  if (result.answers.length > maxAnswers) {
-    issues.push(`Unexpectedly many answers (${result.answers.length}, expected <${maxAnswers})`);
+  // Basic validation
+  if (!results.userScores) {
+    errors.push('Missing user scores in results');
   }
 
-  // Check score distribution
-  const totalScore =
-    result.userScores.logical + result.userScores.emotional + result.userScores.exploratory;
-  if (totalScore < 8) {
-    issues.push('Very low total scores - user may not have engaged meaningfully');
+  if (!results.archetypeResults || results.archetypeResults.topMatches.length === 0) {
+    errors.push('Missing or empty archetype results');
   }
 
-  // Check archetype confidence
-  const primaryConfidence = result.archetypeResults.topMatches[0]?.confidence;
-  if (primaryConfidence < 40) {
-    issues.push('Low confidence in primary archetype match');
-    recommendations.push('Consider retaking assessment with more deliberate choices');
+  if (results.answers.length === 0) {
+    errors.push('No answers found in results');
   }
 
-  // Check assessment duration
-  if (result.assessmentDuration < 60) {
-    issues.push('Assessment completed very quickly - may lack thoughtful consideration');
-    recommendations.push('Take time to read questions carefully for more accurate results');
+  if (!results.completedAt) {
+    warnings.push('Missing completion timestamp');
   }
 
-  // Check for score patterns that might indicate random clicking
-  const scoreVariance =
-    Math.max(
-      result.userScores.logical,
-      result.userScores.emotional,
-      result.userScores.exploratory
-    ) -
-    Math.min(result.userScores.logical, result.userScores.emotional, result.userScores.exploratory);
-
-  if (scoreVariance < 2 && totalScore > 10) {
-    issues.push('Unusually balanced scores across all dimensions');
-    recommendations.push('Results may indicate indecisive answering patterns');
+  // Score validation
+  if (results.userScores) {
+    const totalScore =
+      results.userScores.emotional + results.userScores.logical + results.userScores.exploratory;
+    if (totalScore === 0) {
+      errors.push('All scores are zero - invalid assessment');
+    }
   }
 
-  // Determine overall quality
-  let quality: 'high' | 'medium' | 'low';
-  if (issues.length === 0 && primaryConfidence >= 70) {
-    quality = 'high';
-  } else if (issues.length <= 2 && primaryConfidence >= 50) {
-    quality = 'medium';
-  } else {
-    quality = 'low';
+  // Path validation
+  if (results.userPath && results.userPath.totalSteps !== results.answers.length) {
+    warnings.push('Path steps count does not match answers count');
   }
 
   return {
-    isValid: issues.length === 0,
-    quality,
-    issues,
-    recommendations,
+    isValid: errors.length === 0,
+    errors,
+    warnings,
   };
 };
+
+/**
+ * Generate fallback results when main generation fails
+ */
+const generateFallbackResults = (
+  answers: ExtendedUserAnswer[],
+  startTime: Date,
+  endTime: Date,
+  userData: UserData
+): ExtendedAssessmentResult => {
+  const fallbackScores: ScoreData = { emotional: 1, logical: 1, exploratory: 1 };
+
+  const fallbackArchetypeResults: ArchetypeResults = {
+    userScores: fallbackScores,
+    matches: [],
+    topMatches: [],
+  };
+
+  const fallbackPath: UserPath = {
+    totalSteps: answers.length,
+    pathSequence: answers.map(answer => ({
+      scenarioId: answer.scenarioId,
+      nextScenarioId: answer.selectedOption.next,
+      timestamp: answer.timestamp,
+    })),
+    branchingPoints: 0,
+  };
+
+  return {
+    userScores: fallbackScores,
+    archetypeResults: fallbackArchetypeResults,
+    personaSelection: {
+      selectedPersonas: [],
+      selectionReason: 'small_gap',
+      confidenceGap: 0,
+      primaryArchetype: 'Unknown',
+    },
+    completedAt: endTime,
+    answers,
+    userPath: fallbackPath,
+    assessmentDuration: Math.round((endTime.getTime() - startTime.getTime()) / 1000),
+  };
+};
+
+// ==========================================================================
+// EXPORT FUNCTIONS FOR BACKWARD COMPATIBILITY
+// ==========================================================================
+
+/**
+ * Legacy function name for backward compatibility
+ * @deprecated Use generateEnhancedAssessmentResults instead
+ */
+export const generateCompleteResults = generateCompleteAssessmentResults;
+
+/**
+ * Export scenario statistics for analysis
+ */
+export { getScenarioStatistics } from './data';

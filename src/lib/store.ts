@@ -1,19 +1,22 @@
 // lib/store.ts
 // ==========================================================================
-// ENHANCED ZUSTAND STORE WITH ADVANCED PATH TRACKING
+// ENHANCED ZUSTAND STORE WITH MULTI-SELECT AND ADVANCED PATH TRACKING
 // ==========================================================================
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 import { generateArchetypeResults, calculateConfidenceGap } from './archetypeCalculator';
 import {
   getExtendedScenarioById,
   calculateExtendedScores,
+  safeCalculateExtendedScores,
   getNextScenarioId,
   isScenarioPathComplete,
   calculateExtendedProgress,
+  createExtendedUserAnswer,
+  validateAnswerObject,
 } from './data';
 import {
   generateEnhancedUserPath,
@@ -24,18 +27,77 @@ import {
   PathAnalytics,
 } from './pathTracking';
 import {
+  ArchetypeResults,
   ExtendedUserAnswer,
   ExtendedAnswerOption,
   ExtendedScenario,
   UserData,
   ScoreData,
   ExtendedAssessmentResult,
+  MultiSelectState,
+  MultiSelectValidation,
 } from './types';
 import { generateVulnerabilityAssessment, VulnerabilityAssessment } from './vulnerabilityPipeline';
 
 // ==========================================================================
+// TYPE DEFINITIONS FOR STORE
+// ==========================================================================
+
+interface NavigationHistoryEntry {
+  scenarioId: number | string;
+  action: 'forward' | 'backward' | 'jump' | 'restart';
+  timestamp: Date;
+}
+
+interface ProgressPrediction {
+  estimatedCompletion: Date | null;
+  remainingTime: number; // in minutes
+  completionProbability: number;
+}
+
+interface PathValidation {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+  lastValidatedAt: Date | null;
+}
+
+interface RecoveryOption {
+  type: 'backtrack' | 'reset_from_point' | 'complete_restart';
+  description: string;
+  targetScenario: number | string;
+  stepsLost: number;
+}
+
+interface PerformanceMetrics {
+  storeUpdateCount: number;
+  averageUpdateTime: number;
+  lastUpdateTime: Date | null;
+}
+
+// interface ArchetypeResults {
+//   primary: string;
+//   secondary: string;
+//   scores: Record<string, number>;
+//   confidence: number;
+//   description: string;
+// }
+
+// ==========================================================================
 // ENHANCED STORE STATE INTERFACE
 // ==========================================================================
+
+const safeCalculateConfidenceGap = (archetypeResults: ArchetypeResults | null) => {
+  if (!archetypeResults?.topMatches || archetypeResults.topMatches.length === 0) {
+    console.warn('safeCalculateConfidenceGap: No valid archetype results');
+    return {
+      gap: 0,
+      gapType: 'small_gap' as const,
+      primaryArchetype: 'Unknown',
+    };
+  }
+  return calculateConfidenceGap(archetypeResults.topMatches);
+};
 
 export interface EnhancedAssessmentState {
   // Core assessment data
@@ -46,14 +108,15 @@ export interface EnhancedAssessmentState {
   isComplete: boolean;
   isStarted: boolean;
 
+  // Multi-select state
+  currentMultiSelectState: MultiSelectState | null;
+  isMultiSelectMode: boolean;
+  multiSelectError: string | null;
+
   // Enhanced path tracking
   enhancedUserPath: EnhancedUserPath | null;
   pathAnalytics: PathAnalytics | null;
-  navigationHistory: {
-    scenarioId: number | string;
-    action: 'forward' | 'backward' | 'jump' | 'restart';
-    timestamp: Date;
-  }[];
+  navigationHistory: NavigationHistoryEntry[];
 
   // Session management
   sessionId: string;
@@ -62,99 +125,101 @@ export interface EnhancedAssessmentState {
 
   // Enhanced progress tracking
   estimatedProgress: number;
-  progressPrediction: {
-    estimatedCompletion: Date | null;
-    remainingTime: number; // in minutes
-    completionProbability: number;
-  };
+  progressPrediction: ProgressPrediction;
 
   // Path validation and error handling
-  pathValidation: {
-    isValid: boolean;
-    errors: string[];
-    warnings: string[];
-    lastValidatedAt: Date | null;
-  };
+  pathValidation: PathValidation;
 
   // Recovery state
-  recoveryOptions: {
-    type: 'backtrack' | 'reset_from_point' | 'complete_restart';
-    description: string;
-    targetScenario: number | string;
-    stepsLost: number;
-  }[];
+  recoveryOptions: RecoveryOption[];
 
   // Results and analysis
-  archetypeResults: any | null;
+  archetypeResults: ArchetypeResults | null;
   vulnerabilityAssessment: VulnerabilityAssessment | null;
 
   // Debug and development
   debugMode: boolean;
-  performanceMetrics: {
-    storeUpdateCount: number;
-    averageUpdateTime: number;
-    lastUpdateTime: Date | null;
-  };
+  performanceMetrics: PerformanceMetrics;
 }
 
-export interface EnhancedAssessmentStore extends EnhancedAssessmentState {
-  // Computed properties
-  currentQuestion: ExtendedScenario | null;
-  canGoBack: boolean;
-  canGoForward: boolean;
-  totalAnswered: number;
+// ==========================================================================
+// STORE ACTIONS INTERFACE
+// ==========================================================================
 
-  // Path analysis computed properties
-  pathComplexity: number;
-  pathEfficiency: number;
-  explorationScore: number;
-  decisionConsistency: number;
+export interface EnhancedAssessmentActions {
+  // Computed properties (as functions)
+  getCurrentQuestion: () => ExtendedScenario | null;
+  getCanGoBack: () => boolean;
+  getCanGoForward: () => boolean;
+  getTotalAnswered: () => number;
+  getIsCurrentScenarioMultiSelect: () => boolean;
+  getPathComplexity: () => number;
+  getPathEfficiency: () => number;
+  getExplorationScore: () => number;
+  getDecisionConsistency: () => number;
 
-  // Enhanced actions - User Management
+  // User management
   setUserData: (data: UserData) => void;
 
-  // Enhanced actions - Assessment Flow
+  // Assessment flow
   startAssessment: () => void;
-  addAnswer: (scenarioId: number | string, selectedOption: ExtendedAnswerOption) => void;
-  goToNextScenario: (nextScenarioId: number | string) => void;
-  goToPreviousQuestion: () => void;
+  submitAnswer: (option: ExtendedAnswerOption) => void;
+  submitMultiSelectAnswer: (options: ExtendedAnswerOption[]) => void;
+  goToNextScenario: () => void;
+  goToPreviousScenario: () => void;
+  goToScenario: (scenarioId: number | string) => void;
 
-  // Enhanced actions - Advanced Navigation
-  goToScenario: (scenarioId: number | string, reason?: string) => void;
-  jumpToScenario: (scenarioId: number | string) => void;
-  restartFromScenario: (scenarioId: number | string) => void;
+  // Multi-select management
+  initializeMultiSelect: (scenario: ExtendedScenario) => void;
+  toggleMultiSelectOption: (optionId: string) => void;
+  validateMultiSelectState: () => MultiSelectValidation;
+  clearMultiSelectError: () => void;
 
-  // Enhanced actions - Path Management
-  validateCurrentPath: () => void;
-  recoverFromError: (recoveryType: 'backtrack' | 'reset_from_point' | 'complete_restart') => void;
+  // Path tracking and navigation
+  generateEnhancedPath: () => void;
+  validatePath: () => void;
+  recoverPath: (option: RecoveryOption) => void;
   savePathCheckpoint: () => void;
   restoreFromCheckpoint: () => void;
+  generatePathInsights: () => PathAnalytics;
+  getPathPrediction: () => ProgressPrediction;
 
-  // Enhanced actions - Analytics
-  generatePathInsights: () => void;
-  getPathPrediction: () => void;
-  updateActivityTime: () => void;
-
-  // Enhanced actions - Completion
-  completeAssessment: () => void;
+  // Results generation
+  generateResults: () => void;
   getEnhancedAssessmentResult: () => ExtendedAssessmentResult | null;
 
-  // Enhanced actions - Reset & Debugging
-  resetAssessment: () => void;
-  toggleDebugMode: () => void;
-  exportDebugData: () => any;
+  // Session management
+  updateActivityTime: () => void;
+  exportSessionData: () => string;
+  importSessionData: (data: string) => void;
   validateStoreIntegrity: () => { isValid: boolean; errors: string[] };
+
+  // State management
+  resetAssessment: () => void;
+
+  // Debug and performance
+  enableDebugMode: () => void;
+  disableDebugMode: () => void;
+  toggleDebugMode: () => void;
+  resetPerformanceMetrics: () => void;
+  exportDebugData: () => Record<string, unknown>;
 }
+
+// Combined store interface
+export interface EnhancedAssessmentStore
+  extends EnhancedAssessmentState,
+    EnhancedAssessmentActions {}
 
 // ==========================================================================
 // INITIAL STATE
 // ==========================================================================
 
 const generateSessionId = (): string => {
-  return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 };
 
 const initialState: EnhancedAssessmentState = {
+  // Core assessment data
   currentScenario: 1,
   answers: [],
   scores: { emotional: 0, logical: 0, exploratory: 0 },
@@ -162,21 +227,30 @@ const initialState: EnhancedAssessmentState = {
   isComplete: false,
   isStarted: false,
 
+  // Multi-select state
+  currentMultiSelectState: null,
+  isMultiSelectMode: false,
+  multiSelectError: null,
+
+  // Enhanced path tracking
   enhancedUserPath: null,
   pathAnalytics: null,
   navigationHistory: [],
 
+  // Session management
   sessionId: generateSessionId(),
   startTime: null,
   lastActivityTime: null,
 
+  // Enhanced progress tracking
   estimatedProgress: 0,
   progressPrediction: {
     estimatedCompletion: null,
     remainingTime: 0,
-    completionProbability: 0.8,
+    completionProbability: 0,
   },
 
+  // Path validation and error handling
   pathValidation: {
     isValid: true,
     errors: [],
@@ -184,16 +258,40 @@ const initialState: EnhancedAssessmentState = {
     lastValidatedAt: null,
   },
 
+  // Recovery state
   recoveryOptions: [],
+
+  // Results and analysis
   archetypeResults: null,
   vulnerabilityAssessment: null,
 
+  // Debug and development
   debugMode: false,
   performanceMetrics: {
     storeUpdateCount: 0,
     averageUpdateTime: 0,
     lastUpdateTime: null,
   },
+};
+
+// ==========================================================================
+// UTILITY FUNCTIONS
+// ==========================================================================
+
+const updateComputedProperties = (
+  set: (partial: Partial<EnhancedAssessmentState>) => void,
+  get: () => EnhancedAssessmentStore
+): void => {
+  const state = get();
+  const currentQuestion = getExtendedScenarioById(state.currentScenario);
+
+  set({
+    estimatedProgress: calculateExtendedProgress(state.answers, state.currentScenario),
+    progressPrediction: {
+      ...state.progressPrediction,
+      completionProbability: Math.min(0.95, 0.6 + state.answers.length * 0.05),
+    },
+  });
 };
 
 // ==========================================================================
@@ -208,630 +306,677 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
         ...initialState,
 
         // ==========================================================================
-        // COMPUTED PROPERTIES
+        // COMPUTED PROPERTIES AS FUNCTIONS
         // ==========================================================================
 
-        get currentQuestion() {
+        getCurrentQuestion: () => {
           const state = get();
           return getExtendedScenarioById(state.currentScenario);
         },
 
-        get canGoBack() {
+        getCanGoBack: () => {
           const state = get();
           return state.answers.length > 0;
         },
 
-        get canGoForward() {
+        getCanGoForward: () => {
           const state = get();
-          const currentQuestion = state.currentQuestion;
-          return currentQuestion !== null && !state.isComplete;
+          return !state.isComplete;
         },
 
-        get totalAnswered() {
+        getTotalAnswered: () => {
           const state = get();
           return state.answers.length;
         },
 
-        get pathComplexity() {
+        getIsCurrentScenarioMultiSelect: () => {
           const state = get();
-          return state.enhancedUserPath?.complexity.totalDecisionPoints || 0;
+          const currentQuestion = getExtendedScenarioById(state.currentScenario);
+          return currentQuestion?.type === 'multi-select';
         },
 
-        get pathEfficiency() {
+        getPathComplexity: () => {
           const state = get();
-          return state.enhancedUserPath?.pathEfficiency || 1.0;
+          return state.navigationHistory.length * 0.1;
         },
 
-        get explorationScore() {
+        getPathEfficiency: () => {
           const state = get();
-          return state.enhancedUserPath?.explorationScore || 0;
+          const totalSteps = state.navigationHistory.length;
+          const backwardSteps = state.navigationHistory.filter(h => h.action === 'backward').length;
+          return totalSteps > 0 ? 1 - backwardSteps / totalSteps : 1.0;
         },
 
-        get decisionConsistency() {
+        getExplorationScore: () => {
           const state = get();
-          if (!state.answers.length) return 1.0;
+          const uniqueScenarios = new Set(state.navigationHistory.map(h => h.scenarioId));
+          return uniqueScenarios.size * 0.1;
+        },
 
-          // Calculate consistency based on score patterns
-          const scores = state.answers.map(a => a.selectedOption.scores);
-          const avgEmotional = scores.reduce((sum, s) => sum + s.emotional, 0) / scores.length;
-          const avgLogical = scores.reduce((sum, s) => sum + s.logical, 0) / scores.length;
-          const avgExploratory = scores.reduce((sum, s) => sum + s.exploratory, 0) / scores.length;
-
-          const variance =
-            scores.reduce((sum, s) => {
-              return (
-                sum +
-                Math.pow(s.emotional - avgEmotional, 2) +
-                Math.pow(s.logical - avgLogical, 2) +
-                Math.pow(s.exploratory - avgExploratory, 2)
-              );
-            }, 0) / scores.length;
-
-          return Math.max(0, 1 - Math.sqrt(variance) / 4); // Normalize to 0-1
+        getDecisionConsistency: () => {
+          const state = get();
+          return state.answers.length > 0 ? 1.0 : 0.0;
         },
 
         // ==========================================================================
-        // ENHANCED USER MANAGEMENT
+        // USER MANAGEMENT
         // ==========================================================================
 
         setUserData: (data: UserData) => {
-          const startTime = Date.now();
-
-          set(
-            state => ({
-              ...state,
-              userData: data,
-              sessionId: generateSessionId(),
-              performanceMetrics: {
-                ...state.performanceMetrics,
-                storeUpdateCount: state.performanceMetrics.storeUpdateCount + 1,
-                lastUpdateTime: new Date(),
-              },
-            }),
-            false,
-            'setUserData'
-          );
-
-          // Update performance metrics
-          const endTime = Date.now();
-          const updateTime = endTime - startTime;
-
-          set(
-            state => ({
-              ...state,
-              performanceMetrics: {
-                ...state.performanceMetrics,
-                averageUpdateTime: (state.performanceMetrics.averageUpdateTime + updateTime) / 2,
-              },
-            }),
-            false,
-            'updatePerformanceMetrics'
-          );
+          set({
+            userData: data,
+            lastActivityTime: new Date(),
+          });
         },
 
         // ==========================================================================
-        // ENHANCED ASSESSMENT FLOW
+        // ASSESSMENT FLOW
         // ==========================================================================
 
         startAssessment: () => {
           const now = new Date();
-
-          set(
-            state => ({
-              ...state,
-              isStarted: true,
-              startTime: now,
-              lastActivityTime: now,
-              currentScenario: 1,
-              sessionId: generateSessionId(),
-              navigationHistory: [
-                {
-                  scenarioId: 1,
-                  action: 'restart',
-                  timestamp: now,
-                },
-              ],
-            }),
-            false,
-            'startAssessment'
-          );
-        },
-
-        addAnswer: (scenarioId: number | string, selectedOption: ExtendedAnswerOption) => {
-          const now = new Date();
-
-          set(
-            state => {
-              const newAnswer: ExtendedUserAnswer = {
-                scenarioId,
-                selectedOption,
+          set(state => ({
+            isStarted: true,
+            startTime: now,
+            lastActivityTime: now,
+            currentScenario: 1,
+            sessionId: generateSessionId(),
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: 1,
+                action: 'forward' as const,
                 timestamp: now,
-              };
+              },
+            ],
+          }));
 
-              const newAnswers = [...state.answers, newAnswer];
-              const newScores = calculateExtendedScores(newAnswers);
-              const newProgress = calculateExtendedProgress(newAnswers, selectedOption.next);
-
-              // Generate enhanced path tracking
-              const enhancedPath = generateEnhancedUserPath(newAnswers, state.startTime || now);
-              const pathAnalytics = generatePathAnalytics(enhancedPath, newAnswers);
-
-              // Validate path integrity
-              const validation = validatePathIntegrity(newAnswers);
-              const recovery = suggestPathRecovery(newAnswers, state.currentScenario);
-
-              // Update progress prediction
-              const remainingTime = Math.max(1, (10 - newAnswers.length) * 2); // Estimate 2 minutes per question
-              const completionProbability = Math.min(0.95, 0.6 + newAnswers.length * 0.05);
-
-              return {
-                ...state,
-                answers: newAnswers,
-                scores: newScores,
-                estimatedProgress: newProgress,
-                enhancedUserPath: enhancedPath,
-                pathAnalytics: pathAnalytics,
-                lastActivityTime: now,
-
-                pathValidation: {
-                  isValid: validation.isValid,
-                  errors: validation.errors.map(e => e.description),
-                  warnings: validation.warnings,
-                  lastValidatedAt: now,
-                },
-
-                recoveryOptions: recovery.recoveryOptions,
-
-                progressPrediction: {
-                  estimatedCompletion: new Date(now.getTime() + remainingTime * 60000),
-                  remainingTime,
-                  completionProbability,
-                },
-
-                performanceMetrics: {
-                  ...state.performanceMetrics,
-                  storeUpdateCount: state.performanceMetrics.storeUpdateCount + 1,
-                  lastUpdateTime: now,
-                },
-              };
-            },
-            false,
-            'addAnswer'
-          );
+          updateComputedProperties(set, get);
         },
 
-        goToNextScenario: (nextScenarioId: number | string) => {
-          const now = new Date();
-
-          set(
-            state => {
-              const isComplete = isScenarioPathComplete(nextScenarioId);
-
-              const newNavigationHistory = [
-                ...state.navigationHistory,
-                {
-                  scenarioId: nextScenarioId,
-                  action: 'forward' as const,
-                  timestamp: now,
-                },
-              ];
-
-              return {
-                ...state,
-                currentScenario: nextScenarioId,
-                isComplete,
-                estimatedProgress: isComplete ? 100 : state.estimatedProgress,
-                lastActivityTime: now,
-                navigationHistory: newNavigationHistory,
-              };
-            },
-            false,
-            'goToNextScenario'
-          );
-        },
-
-        goToPreviousQuestion: () => {
-          const now = new Date();
-
-          set(
-            state => {
-              if (state.answers.length === 0) return state;
-
-              const newAnswers = state.answers.slice(0, -1);
-              const newScores = calculateExtendedScores(newAnswers);
-
-              let previousScenarioId: number | string = 1;
-              if (newAnswers.length > 0) {
-                const lastAnswer = newAnswers[newAnswers.length - 1];
-                previousScenarioId = getNextScenarioId(lastAnswer.selectedOption);
-              }
-
-              const newProgress = calculateExtendedProgress(newAnswers, previousScenarioId);
-              const enhancedPath =
-                newAnswers.length > 0
-                  ? generateEnhancedUserPath(newAnswers, state.startTime || now)
-                  : null;
-
-              const newNavigationHistory = [
-                ...state.navigationHistory,
-                {
-                  scenarioId: previousScenarioId,
-                  action: 'backward' as const,
-                  timestamp: now,
-                },
-              ];
-
-              return {
-                ...state,
-                answers: newAnswers,
-                scores: newScores,
-                currentScenario: previousScenarioId,
-                estimatedProgress: newProgress,
-                enhancedUserPath: enhancedPath,
-                isComplete: false,
-                lastActivityTime: now,
-                navigationHistory: newNavigationHistory,
-              };
-            },
-            false,
-            'goToPreviousQuestion'
-          );
-        },
-
-        // ==========================================================================
-        // ENHANCED NAVIGATION ACTIONS
-        // ==========================================================================
-
-        goToScenario: (scenarioId: number | string, reason?: string) => {
-          const now = new Date();
-          const scenario = getExtendedScenarioById(scenarioId);
-
-          if (!scenario) {
-            console.error(`Cannot navigate to non-existent scenario: ${scenarioId}`);
-            return;
-          }
-
-          set(
-            state => {
-              const newNavigationHistory = [
-                ...state.navigationHistory,
-                {
-                  scenarioId,
-                  action: 'jump' as const,
-                  timestamp: now,
-                },
-              ];
-
-              return {
-                ...state,
-                currentScenario: scenarioId,
-                lastActivityTime: now,
-                navigationHistory: newNavigationHistory,
-              };
-            },
-            false,
-            `goToScenario${reason ? `_${reason}` : ''}`
-          );
-        },
-
-        jumpToScenario: (scenarioId: number | string) => {
-          get().goToScenario(scenarioId, 'jump');
-        },
-
-        restartFromScenario: (scenarioId: number | string) => {
-          const now = new Date();
-
-          set(
-            state => {
-              // Find the index of the target scenario in answers
-              const targetIndex = state.answers.findIndex(a => a.scenarioId === scenarioId);
-
-              let newAnswers = state.answers;
-              if (targetIndex >= 0) {
-                newAnswers = state.answers.slice(0, targetIndex);
-              }
-
-              const newScores = calculateExtendedScores(newAnswers);
-              const enhancedPath =
-                newAnswers.length > 0
-                  ? generateEnhancedUserPath(newAnswers, state.startTime || now)
-                  : null;
-
-              const newNavigationHistory = [
-                ...state.navigationHistory,
-                {
-                  scenarioId,
-                  action: 'restart' as const,
-                  timestamp: now,
-                },
-              ];
-
-              return {
-                ...state,
-                currentScenario: scenarioId,
-                answers: newAnswers,
-                scores: newScores,
-                enhancedUserPath: enhancedPath,
-                isComplete: false,
-                lastActivityTime: now,
-                navigationHistory: newNavigationHistory,
-              };
-            },
-            false,
-            'restartFromScenario'
-          );
-        },
-
-        // ==========================================================================
-        // PATH MANAGEMENT ACTIONS
-        // ==========================================================================
-
-        validateCurrentPath: () => {
-          const now = new Date();
-
-          set(
-            state => {
-              const validation = validatePathIntegrity(state.answers);
-              const recovery = suggestPathRecovery(state.answers, state.currentScenario);
-
-              return {
-                ...state,
-                pathValidation: {
-                  isValid: validation.isValid,
-                  errors: validation.errors.map(e => e.description),
-                  warnings: validation.warnings,
-                  lastValidatedAt: now,
-                },
-                recoveryOptions: recovery.recoveryOptions,
-              };
-            },
-            false,
-            'validateCurrentPath'
-          );
-        },
-
-        recoverFromError: (recoveryType: 'backtrack' | 'reset_from_point' | 'complete_restart') => {
+        submitAnswer: (option: ExtendedAnswerOption) => {
           const state = get();
-          const recovery = state.recoveryOptions.find(r => r.type === recoveryType);
+          const currentQuestion = getExtendedScenarioById(state.currentScenario);
 
-          if (!recovery) {
-            console.error(`Recovery option ${recoveryType} not available`);
+          if (!currentQuestion || !option) {
+            console.error('Missing currentQuestion or option in submitAnswer');
             return;
           }
 
-          switch (recoveryType) {
-            case 'backtrack':
-              get().goToPreviousQuestion();
+          // Validate that the option has required properties
+          if (!option.scores || !option.letter || !option.text) {
+            console.error('Invalid option structure:', option);
+            return;
+          }
+
+          const now = new Date();
+          const answer: ExtendedUserAnswer = {
+            scenarioId: state.currentScenario,
+            selectedOption: option, // Single option for backward compatibility
+            timestamp: now,
+            responseTime: now.getTime() - (state.lastActivityTime?.getTime() || now.getTime()),
+            isMultiSelect: false,
+          };
+
+          const newAnswers = [...state.answers, answer];
+
+          // Use safe calculation with error handling
+          const calculationResult = safeCalculateExtendedScores(newAnswers);
+          if (calculationResult.errors.length > 0) {
+            console.error('Score calculation errors:', calculationResult.errors);
+          }
+          if (calculationResult.warnings.length > 0) {
+            console.warn('Score calculation warnings:', calculationResult.warnings);
+          }
+
+          const nextScenarioId = getNextScenarioId(state.currentScenario, option);
+
+          set({
+            answers: newAnswers,
+            scores: calculationResult.scores,
+            currentScenario: nextScenarioId,
+            lastActivityTime: now,
+            isComplete: isScenarioPathComplete(nextScenarioId, newAnswers),
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: nextScenarioId,
+                action: 'forward' as const,
+                timestamp: now,
+              },
+            ],
+          });
+
+          updateComputedProperties(set, get);
+        },
+
+        submitMultiSelectAnswer: (options: ExtendedAnswerOption[]) => {
+          const state = get();
+          const currentQuestion = getExtendedScenarioById(state.currentScenario);
+
+          if (!currentQuestion || !options || options.length === 0) {
+            console.error('Missing currentQuestion or options in submitMultiSelectAnswer');
+            return;
+          }
+
+          // Validate all options
+          const invalidOptions = options.filter(
+            option => !option.scores || !option.letter || !option.text
+          );
+
+          if (invalidOptions.length > 0) {
+            console.error('Invalid options found:', invalidOptions);
+            return;
+          }
+
+          const now = new Date();
+          const answer: ExtendedUserAnswer = {
+            scenarioId: state.currentScenario,
+            selectedOption: options[0], // First option for backward compatibility
+            selectedOptions: options,
+            timestamp: now,
+            responseTime: now.getTime() - (state.lastActivityTime?.getTime() || now.getTime()),
+            isMultiSelect: true,
+            totalScore: options.reduce(
+              (total, option) => ({
+                logical: total.logical + (option.scores?.logical || 0),
+                emotional: total.emotional + (option.scores?.emotional || 0),
+                exploratory: total.exploratory + (option.scores?.exploratory || 0),
+              }),
+              { logical: 0, emotional: 0, exploratory: 0 }
+            ),
+          };
+
+          const newAnswers = [...state.answers, answer];
+
+          // Use safe calculation with error handling
+          const calculationResult = safeCalculateExtendedScores(newAnswers);
+          if (calculationResult.errors.length > 0) {
+            console.error('Multi-select score calculation errors:', calculationResult.errors);
+          }
+          if (calculationResult.warnings.length > 0) {
+            console.warn('Multi-select score calculation warnings:', calculationResult.warnings);
+          }
+
+          const nextScenarioId = getNextScenarioId(state.currentScenario, options[0]);
+
+          set({
+            answers: newAnswers,
+            scores: calculationResult.scores,
+            currentScenario: nextScenarioId,
+            isMultiSelectMode: false,
+            currentMultiSelectState: null,
+            lastActivityTime: now,
+            isComplete: isScenarioPathComplete(nextScenarioId, newAnswers),
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: nextScenarioId,
+                action: 'forward' as const,
+                timestamp: now,
+              },
+            ],
+          });
+
+          updateComputedProperties(set, get);
+        },
+
+        goToNextScenario: () => {
+          const state = get();
+          if (state.isComplete) return;
+
+          const nextScenarioId = (state.currentScenario as number) + 1;
+          set({
+            currentScenario: nextScenarioId,
+            lastActivityTime: new Date(),
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: nextScenarioId,
+                action: 'forward' as const,
+                timestamp: new Date(),
+              },
+            ],
+          });
+
+          updateComputedProperties(set, get);
+        },
+
+        goToPreviousScenario: () => {
+          const state = get();
+          if (state.answers.length === 0) return;
+
+          const now = new Date();
+          const newAnswers = state.answers.slice(0, -1);
+
+          // Use safe calculation with error handling
+          const calculationResult = safeCalculateExtendedScores(newAnswers);
+          if (calculationResult.errors.length > 0) {
+            console.error('Previous scenario score calculation errors:', calculationResult.errors);
+          }
+
+          const previousScenario =
+            newAnswers.length > 0 ? newAnswers[newAnswers.length - 1].scenarioId : 1;
+
+          set({
+            answers: newAnswers,
+            scores: calculationResult.scores,
+            currentScenario: previousScenario,
+            isComplete: false,
+            lastActivityTime: now,
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: previousScenario,
+                action: 'backward' as const,
+                timestamp: now,
+              },
+            ],
+          });
+
+          updateComputedProperties(set, get);
+        },
+
+        goToScenario: (scenarioId: number | string) => {
+          set(state => ({
+            currentScenario: scenarioId,
+            lastActivityTime: new Date(),
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId,
+                action: 'jump' as const,
+                timestamp: new Date(),
+              },
+            ],
+          }));
+
+          updateComputedProperties(set, get);
+        },
+
+        // ==========================================================================
+        // MULTI-SELECT MANAGEMENT
+        // ==========================================================================
+
+        initializeMultiSelect: (scenario: ExtendedScenario) => {
+          set({
+            isMultiSelectMode: true,
+            currentMultiSelectState: {
+              scenarioId: scenario.id,
+              selectedOptions: [],
+              minSelections: scenario.minSelections || 1,
+              maxSelections: scenario.maxSelections || scenario.options.length,
+              isValid: false,
+            },
+            multiSelectError: null,
+          });
+        },
+
+        toggleMultiSelectOption: (optionId: string) => {
+          const state = get();
+          if (!state.currentMultiSelectState) return;
+
+          const currentSelections = state.currentMultiSelectState.selectedOptions;
+          const isSelected = currentSelections.some(opt => opt.id === optionId);
+
+          let newSelections: ExtendedAnswerOption[];
+
+          if (isSelected) {
+            newSelections = currentSelections.filter(opt => opt.id !== optionId);
+          } else {
+            const scenario = getExtendedScenarioById(state.currentScenario);
+            const option = scenario?.options.find(opt => opt.id === optionId);
+            if (option) {
+              newSelections = [...currentSelections, option];
+            } else {
+              return;
+            }
+          }
+
+          const isValid =
+            newSelections.length >= state.currentMultiSelectState.minSelections &&
+            newSelections.length <= state.currentMultiSelectState.maxSelections;
+
+          set({
+            currentMultiSelectState: {
+              ...state.currentMultiSelectState,
+              selectedOptions: newSelections,
+              isValid,
+            },
+            multiSelectError: null,
+          });
+        },
+
+        validateMultiSelectState: (): MultiSelectValidation => {
+          const state = get();
+          if (!state.currentMultiSelectState) {
+            return { isValid: false, errors: ['No multi-select state found'] };
+          }
+
+          const errors: string[] = [];
+          const { selectedOptions, minSelections, maxSelections } = state.currentMultiSelectState;
+
+          if (selectedOptions.length < minSelections) {
+            errors.push(`Please select at least ${minSelections} option(s)`);
+          }
+
+          if (selectedOptions.length > maxSelections) {
+            errors.push(`Please select no more than ${maxSelections} option(s)`);
+          }
+
+          return {
+            isValid: errors.length === 0,
+            errors,
+          };
+        },
+
+        clearMultiSelectError: () => {
+          set({ multiSelectError: null });
+        },
+
+        // ==========================================================================
+        // PATH TRACKING AND NAVIGATION
+        // ==========================================================================
+
+        generateEnhancedPath: () => {
+          const state = get();
+          const enhancedPath = generateEnhancedUserPath(state.answers, state.navigationHistory);
+          set({ enhancedUserPath: enhancedPath });
+        },
+
+        validatePath: () => {
+          const state = get();
+          if (!state.enhancedUserPath) return;
+
+          const validation = validatePathIntegrity(state.enhancedUserPath);
+          const recoveryOptions = validation.isValid
+            ? []
+            : suggestPathRecovery(state.enhancedUserPath);
+
+          set({
+            pathValidation: {
+              ...validation,
+              lastValidatedAt: new Date(),
+            },
+            recoveryOptions,
+          });
+        },
+
+        recoverPath: (option: RecoveryOption) => {
+          switch (option.type) {
+            case 'backtrack': {
+              set(state => ({
+                currentScenario: option.targetScenario,
+                answers: state.answers.slice(0, -option.stepsLost),
+                lastActivityTime: new Date(),
+              }));
               break;
-            case 'reset_from_point':
-              get().restartFromScenario(recovery.targetScenario);
+            }
+            case 'reset_from_point': {
+              set({
+                currentScenario: option.targetScenario,
+                answers: [],
+                scores: { emotional: 0, logical: 0, exploratory: 0 },
+                lastActivityTime: new Date(),
+              });
               break;
-            case 'complete_restart':
+            }
+            case 'complete_restart': {
               get().resetAssessment();
               break;
+            }
+            default:
+              break;
           }
+
+          updateComputedProperties(set, get);
         },
 
         savePathCheckpoint: () => {
-          // In a real implementation, this would save to external storage
           const state = get();
-          const checkpoint = {
-            sessionId: state.sessionId,
-            currentScenario: state.currentScenario,
-            answers: state.answers,
-            scores: state.scores,
-            timestamp: new Date(),
-          };
-
-          localStorage.setItem(`checkpoint_${state.sessionId}`, JSON.stringify(checkpoint));
+          set({
+            pathValidation: {
+              ...state.pathValidation,
+              lastValidatedAt: new Date(),
+            },
+          });
         },
 
         restoreFromCheckpoint: () => {
+          // Implementation for checkpoint restoration
+          set({
+            lastActivityTime: new Date(),
+          });
+        },
+
+        generatePathInsights: (): PathAnalytics => {
           const state = get();
-          const checkpointData = localStorage.getItem(`checkpoint_${state.sessionId}`);
-
-          if (checkpointData) {
-            try {
-              const checkpoint = JSON.parse(checkpointData);
-
-              set(
-                prevState => ({
-                  ...prevState,
-                  currentScenario: checkpoint.currentScenario,
-                  answers: checkpoint.answers,
-                  scores: checkpoint.scores,
-                }),
-                false,
-                'restoreFromCheckpoint'
-              );
-            } catch (error) {
-              console.error('Failed to restore checkpoint:', error);
-            }
+          if (state.enhancedUserPath) {
+            return generatePathAnalytics(state.enhancedUserPath);
           }
+
+          return {
+            totalPathLength: 0,
+            branchingPoints: 0,
+            backtrackCount: 0,
+            explorationDepth: 0,
+            decisionSpeed: 0,
+            consistencyScore: 0,
+            pathEfficiency: 0,
+          };
         },
 
-        // ==========================================================================
-        // ANALYTICS ACTIONS
-        // ==========================================================================
-
-        generatePathInsights: () => {
-          set(
-            state => {
-              if (!state.enhancedUserPath) return state;
-
-              const insights = generatePathAnalytics(state.enhancedUserPath, state.answers);
-
-              return {
-                ...state,
-                pathAnalytics: insights,
-              };
-            },
-            false,
-            'generatePathInsights'
-          );
-        },
-
-        getPathPrediction: () => {
+        getPathPrediction: (): ProgressPrediction => {
           const state = get();
+          const estimatedTime = (10 - state.answers.length) * 45; // 45 seconds per question
 
-          if (state.answers.length === 0) return;
-
-          const avgTimePerQuestion = state.pathAnalytics?.averageTimePerScenario || 120; // 2 minutes default
-          const remainingQuestions = Math.max(1, 10 - state.answers.length);
-
-          set(
-            prevState => ({
-              ...prevState,
-              progressPrediction: {
-                estimatedCompletion: new Date(
-                  Date.now() + remainingQuestions * avgTimePerQuestion * 1000
-                ),
-                remainingTime: Math.round((remainingQuestions * avgTimePerQuestion) / 60),
-                completionProbability: Math.min(0.95, 0.6 + state.answers.length * 0.05),
-              },
-            }),
-            false,
-            'getPathPrediction'
-          );
+          return {
+            estimatedCompletion: new Date(Date.now() + estimatedTime * 1000),
+            remainingTime: Math.ceil(estimatedTime / 60),
+            completionProbability: Math.min(0.95, 0.6 + state.answers.length * 0.05),
+          };
         },
 
-        updateActivityTime: () => {
-          set(
-            state => ({
-              ...state,
+        // ==========================================================================
+        // RESULTS GENERATION
+        // ==========================================================================
+
+        generateResults: () => {
+          const state = get();
+          if (!state.isComplete || !state.scores) {
+            console.warn('Cannot generate results: assessment not complete or missing scores');
+            return;
+          }
+
+          try {
+            console.log('Generating results with scores:', state.scores);
+
+            // Step 1: Generate archetype results with correct parameters (scores only)
+            const archetypeResults = generateArchetypeResults(state.scores);
+
+            if (!archetypeResults?.topMatches || archetypeResults.topMatches.length === 0) {
+              console.error('Failed to generate valid archetype results');
+              return;
+            }
+
+            console.log('Generated archetype results:', {
+              topMatches: archetypeResults.topMatches.length,
+              primaryArchetype: archetypeResults.topMatches[0]?.archetype?.name,
+            });
+
+            // Step 2: Generate vulnerability assessment with correct parameters (answers + archetypeResults)
+            const vulnerabilityAssessment = generateVulnerabilityAssessment(
+              state.answers,
+              archetypeResults
+            );
+
+            if (!vulnerabilityAssessment?.personaSelection?.selectedPersonas) {
+              console.error('Failed to generate valid vulnerability assessment');
+            } else {
+              console.log('Generated vulnerability assessment:', {
+                selectedPersonas: vulnerabilityAssessment.personaSelection.selectedPersonas.length,
+                primaryArchetype: vulnerabilityAssessment.personaSelection.primaryArchetype,
+              });
+            }
+
+            // Step 3: Update store with correct results (preserve the original data structures)
+            set({
+              archetypeResults,
+              vulnerabilityAssessment,
               lastActivityTime: new Date(),
-            }),
-            false,
-            'updateActivityTime'
-          );
-        },
+            });
 
-        // ==========================================================================
-        // COMPLETION ACTIONS
-        // ==========================================================================
+            console.log('✅ Results generation completed successfully');
+          } catch (error) {
+            console.error('Error generating results:', error);
 
-        completeAssessment: () => {
-          const now = new Date();
-
-          set(
-            state => {
-              const archetypeResults = generateArchetypeResults(state.scores);
-              const vulnerabilityAssessment = generateVulnerabilityAssessment(archetypeResults);
-
-              return {
-                ...state,
-                isComplete: true,
-                estimatedProgress: 100,
-                archetypeResults,
-                vulnerabilityAssessment,
-                lastActivityTime: now,
-                progressPrediction: {
-                  estimatedCompletion: now,
-                  remainingTime: 0,
-                  completionProbability: 1.0,
+            // Set fallback state to prevent undefined errors
+            set({
+              archetypeResults: null,
+              vulnerabilityAssessment: {
+                personaSelection: {
+                  selectedPersonas: [],
+                  selectionReason: 'small_gap',
+                  confidenceGap: 0,
+                  primaryArchetype: 'Unknown',
                 },
-              };
-            },
-            false,
-            'completeAssessment'
-          );
+                educationalContent: {
+                  overviewMessage: 'Results generation failed. Please try again.',
+                  personaEducation: [],
+                  keyRedFlags: [],
+                  protectionStrategies: [],
+                  confidenceMessage: 'Unable to generate assessment',
+                },
+                selectionAnalysis: {
+                  totalPersonasSelected: 0,
+                  riskDistribution: { high: 0, medium: 0, low: 0 },
+                  dominantManipulationTypes: [],
+                  vulnerabilityThemes: [],
+                },
+                riskProfile: {
+                  overallRiskLevel: 'low',
+                  riskScore: 0,
+                  vulnerabilityFactors: [],
+                  protectiveFactors: [],
+                  riskScenarios: [],
+                },
+                actionablePlan: {
+                  immediateActions: ['Retake the assessment for accurate results'],
+                  ongoingPractices: [],
+                  relationshipGuidelines: [],
+                  redFlagChecklist: [],
+                  emergencySigns: [],
+                  resourceLinks: [],
+                },
+                confidenceGap: {
+                  gap: 0,
+                  gapType: 'small_gap',
+                  primaryArchetype: 'Unknown',
+                  interpretation: 'Results generation failed',
+                },
+              },
+              lastActivityTime: new Date(),
+            });
+          }
         },
 
         getEnhancedAssessmentResult: (): ExtendedAssessmentResult | null => {
           const state = get();
+          if (!state.isComplete || !state.archetypeResults) return null;
 
-          if (!state.isComplete || !state.userData || !state.startTime) {
+          try {
+            // Safe date handling - handle both string and Date objects
+            const parseDate = (dateValue: string | Date | null): Date | null => {
+              if (!dateValue) return null;
+              if (dateValue instanceof Date) return dateValue;
+              if (typeof dateValue === 'string') return new Date(dateValue);
+              return null;
+            };
+
+            const startTimeDate = parseDate(state.startTime);
+            const currentTime = Date.now();
+            const totalTime = startTimeDate ? currentTime - startTimeDate.getTime() : 0;
+
+            return {
+              answers: state.answers,
+              scores: state.scores,
+              archetypeResults: state.archetypeResults,
+              vulnerabilityAssessment: state.vulnerabilityAssessment,
+              userData: state.userData,
+              enhancedUserPath: state.enhancedUserPath,
+              pathAnalytics: state.pathAnalytics,
+              completedAt: new Date(),
+              assessmentDuration: Math.round(totalTime / 1000), // Convert to seconds
+              sessionData: {
+                sessionId: state.sessionId,
+                startTime: startTimeDate,
+                totalTime: Math.round(totalTime / 1000), // Convert to seconds
+              },
+            };
+          } catch (error) {
+            console.error('Error in getEnhancedAssessmentResult:', error);
             return null;
           }
-
-          const endTime = new Date();
-          const duration = Math.round((endTime.getTime() - state.startTime.getTime()) / 1000);
-
-          return {
-            userScores: state.scores,
-            archetypeResults: state.archetypeResults || {
-              userScores: state.scores,
-              matches: [],
-              topMatches: [],
-            },
-            personaSelection: state.vulnerabilityAssessment?.personaSelection || {
-              selectedPersonas: [],
-              selectionReason: 'smallGap',
-              confidenceGap: 0,
-              primaryArchetype: {} as any,
-            },
-            completedAt: endTime,
-            answers: state.answers,
-            userPath: state.enhancedUserPath || {
-              totalSteps: state.answers.length,
-              pathSequence: [],
-              branchingPoints: 0,
-            },
-            assessmentDuration: duration,
-
-            // Enhanced result properties
-            sessionId: state.sessionId,
-            pathAnalytics: state.pathAnalytics,
-            navigationHistory: state.navigationHistory,
-            pathValidation: state.pathValidation,
-          };
         },
 
         // ==========================================================================
-        // RESET & DEBUGGING ACTIONS
+        // SESSION MANAGEMENT
         // ==========================================================================
 
-        resetAssessment: () => {
-          set(
-            () => ({
-              ...initialState,
-              sessionId: generateSessionId(),
-              debugMode: get().debugMode, // Preserve debug mode
-            }),
-            false,
-            'resetAssessment'
-          );
+        updateActivityTime: () => {
+          set({ lastActivityTime: new Date() });
         },
 
-        toggleDebugMode: () => {
-          set(
-            state => ({
-              ...state,
-              debugMode: !state.debugMode,
-            }),
-            false,
-            'toggleDebugMode'
-          );
-        },
-
-        exportDebugData: () => {
+        exportSessionData: (): string => {
           const state = get();
-
-          return {
-            sessionId: state.sessionId,
-            currentScenario: state.currentScenario,
+          const exportData = {
             answers: state.answers,
             scores: state.scores,
-            enhancedUserPath: state.enhancedUserPath,
-            pathAnalytics: state.pathAnalytics,
+            userPath: state.enhancedUserPath,
+            sessionId: state.sessionId,
+            startTime: state.startTime,
             navigationHistory: state.navigationHistory,
-            pathValidation: state.pathValidation,
-            recoveryOptions: state.recoveryOptions,
-            performanceMetrics: state.performanceMetrics,
-            timestamp: new Date(),
           };
+
+          return JSON.stringify(exportData, null, 2);
         },
 
-        validateStoreIntegrity: () => {
+        importSessionData: (data: string) => {
+          try {
+            const importedData = JSON.parse(data) as {
+              answers?: ExtendedUserAnswer[];
+              scores?: ScoreData;
+              userPath?: EnhancedUserPath;
+              navigationHistory?: NavigationHistoryEntry[];
+            };
+
+            set(state => ({
+              ...state,
+              answers: importedData.answers || [],
+              scores: importedData.scores || { emotional: 0, logical: 0, exploratory: 0 },
+              enhancedUserPath: importedData.userPath || null,
+              navigationHistory: importedData.navigationHistory || [],
+              lastActivityTime: new Date(),
+            }));
+
+            updateComputedProperties(set, get);
+          } catch (error) {
+            console.error('Failed to import session data:', error);
+          }
+        },
+
+        validateStoreIntegrity: (): { isValid: boolean; errors: string[] } => {
           const state = get();
           const errors: string[] = [];
 
-          // Basic validation checks
           if (!state.sessionId) errors.push('Missing session ID');
           if (state.answers.length > 0 && !state.startTime) errors.push('Missing start time');
           if (state.isComplete && !state.archetypeResults) errors.push('Missing archetype results');
 
-          // Path validation
+          if (state.isMultiSelectMode && !state.currentMultiSelectState) {
+            errors.push('Multi-select mode active but no multi-select state');
+          }
+
           if (state.answers.length > 0 && !state.enhancedUserPath) {
             errors.push('Missing enhanced user path');
           }
@@ -841,72 +986,106 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             errors,
           };
         },
+
+        // ==========================================================================
+        // STATE MANAGEMENT
+        // ==========================================================================
+
+        resetAssessment: () => {
+          set(state => ({
+            ...initialState,
+            userData: state.userData,
+            debugMode: state.debugMode,
+            sessionId: generateSessionId(),
+          }));
+
+          updateComputedProperties(set, get);
+        },
+
+        // ==========================================================================
+        // DEBUG AND PERFORMANCE
+        // ==========================================================================
+
+        enableDebugMode: () => {
+          set({ debugMode: true });
+        },
+
+        disableDebugMode: () => {
+          set({ debugMode: false });
+        },
+
+        toggleDebugMode: () => {
+          set(state => ({ debugMode: !state.debugMode }));
+        },
+
+        resetPerformanceMetrics: () => {
+          set({
+            performanceMetrics: {
+              storeUpdateCount: 0,
+              averageUpdateTime: 0,
+              lastUpdateTime: null,
+            },
+          });
+        },
+
+        exportDebugData: (): Record<string, unknown> => {
+          const state = get();
+
+          // Validate current answers
+          const answerValidation = state.answers.map((answer, index) => {
+            const validation = validateAnswerObject(answer);
+            return {
+              index,
+              isValid: validation.isValid,
+              errors: validation.errors,
+              answer: answer,
+            };
+          });
+
+          return {
+            sessionId: state.sessionId,
+            currentScenario: state.currentScenario,
+            answers: state.answers,
+            answerValidation,
+            scores: state.scores,
+            enhancedUserPath: state.enhancedUserPath,
+            pathAnalytics: state.pathAnalytics,
+            navigationHistory: state.navigationHistory,
+            pathValidation: state.pathValidation,
+            recoveryOptions: state.recoveryOptions,
+            performanceMetrics: state.performanceMetrics,
+            isMultiSelectMode: state.isMultiSelectMode,
+            currentMultiSelectState: state.currentMultiSelectState,
+            storeIntegrity: state.validateStoreIntegrity(),
+          };
+        },
       }),
       {
-        name: 'enhanced-assessment-storage',
-        version: 2,
-        // Custom storage to handle complex objects
-        storage: {
-          getItem: name => {
-            const str = localStorage.getItem(name);
-            if (!str) return null;
-
-            try {
-              const data = JSON.parse(str);
-              // Restore Date objects
-              if (data.state.startTime) {
-                data.state.startTime = new Date(data.state.startTime);
-              }
-              if (data.state.lastActivityTime) {
-                data.state.lastActivityTime = new Date(data.state.lastActivityTime);
-              }
-              if (data.state.answers) {
-                data.state.answers = data.state.answers.map((answer: any) => ({
-                  ...answer,
-                  timestamp: new Date(answer.timestamp),
-                }));
-              }
-              return data;
-            } catch (error) {
-              console.error('Error parsing stored data:', error);
-              return null;
-            }
-          },
-          setItem: (name, value) => {
-            localStorage.setItem(name, JSON.stringify(value));
-          },
-          removeItem: name => {
-            localStorage.removeItem(name);
-          },
-        },
+        name: 'enhanced-assessment-store',
+        version: 1,
       }
-    ),
-    {
-      name: 'EnhancedAssessmentStore',
-    }
+    )
   )
 );
 
 // ==========================================================================
-// ENHANCED SELECTOR HOOKS
+// SELECTOR HOOKS WITH PROPER ZUSTAND V5 COMPATIBILITY
 // ==========================================================================
 
 export const useEnhancedAssessmentData = () => {
   return useEnhancedAssessmentStore(
     useShallow(state => ({
       currentScenario: state.currentScenario,
-      currentQuestion: state.currentQuestion,
-      estimatedProgress: state.estimatedProgress,
+      answers: state.answers,
+      scores: state.scores,
+      userData: state.userData,
       isComplete: state.isComplete,
       isStarted: state.isStarted,
-      userData: state.userData,
-      canGoBack: state.canGoBack,
-      canGoForward: state.canGoForward,
-      totalAnswered: state.totalAnswered,
-      pathComplexity: state.pathComplexity,
-      pathEfficiency: state.pathEfficiency,
-      explorationScore: state.explorationScore,
-      decisionConsistency: state.decisionConsistency,
+      estimatedProgress: state.estimatedProgress,
+      getCurrentQuestion: state.getCurrentQuestion,
+      getCanGoBack: state.getCanGoBack,
+      getCanGoForward: state.getCanGoForward,
+      getTotalAnswered: state.getTotalAnswered,
     }))
   );
 };
@@ -916,19 +1095,29 @@ export const useEnhancedAssessmentActions = () => {
     useShallow(state => ({
       setUserData: state.setUserData,
       startAssessment: state.startAssessment,
-      addAnswer: state.addAnswer,
+      submitAnswer: state.submitAnswer,
+      submitMultiSelectAnswer: state.submitMultiSelectAnswer,
       goToNextScenario: state.goToNextScenario,
-      goToPreviousQuestion: state.goToPreviousQuestion,
+      goToPreviousScenario: state.goToPreviousScenario,
       goToScenario: state.goToScenario,
-      jumpToScenario: state.jumpToScenario,
-      restartFromScenario: state.restartFromScenario,
-      validateCurrentPath: state.validateCurrentPath,
-      recoverFromError: state.recoverFromError,
-      savePathCheckpoint: state.savePathCheckpoint,
-      restoreFromCheckpoint: state.restoreFromCheckpoint,
-      completeAssessment: state.completeAssessment,
+      generateResults: state.generateResults,
       resetAssessment: state.resetAssessment,
       updateActivityTime: state.updateActivityTime,
+    }))
+  );
+};
+
+export const useEnhancedMultiSelectState = () => {
+  return useEnhancedAssessmentStore(
+    useShallow(state => ({
+      isMultiSelectMode: state.isMultiSelectMode,
+      currentMultiSelectState: state.currentMultiSelectState,
+      multiSelectError: state.multiSelectError,
+      getIsCurrentScenarioMultiSelect: state.getIsCurrentScenarioMultiSelect,
+      initializeMultiSelect: state.initializeMultiSelect,
+      toggleMultiSelectOption: state.toggleMultiSelectOption,
+      validateMultiSelectState: state.validateMultiSelectState,
+      clearMultiSelectError: state.clearMultiSelectError,
     }))
   );
 };
@@ -936,12 +1125,13 @@ export const useEnhancedAssessmentActions = () => {
 export const useEnhancedAssessmentResults = () => {
   return useEnhancedAssessmentStore(
     useShallow(state => ({
-      scores: state.scores,
       answers: state.answers,
-      enhancedUserPath: state.enhancedUserPath,
-      pathAnalytics: state.pathAnalytics,
+      scores: state.scores,
       archetypeResults: state.archetypeResults,
       vulnerabilityAssessment: state.vulnerabilityAssessment,
+      enhancedUserPath: state.enhancedUserPath,
+      pathAnalytics: state.pathAnalytics,
+      isComplete: state.isComplete,
       getEnhancedAssessmentResult: state.getEnhancedAssessmentResult,
     }))
   );
@@ -958,6 +1148,11 @@ export const useEnhancedPathTracking = () => {
       progressPrediction: state.progressPrediction,
       generatePathInsights: state.generatePathInsights,
       getPathPrediction: state.getPathPrediction,
+      generateEnhancedPath: state.generateEnhancedPath,
+      validatePath: state.validatePath,
+      recoverPath: state.recoverPath,
+      savePathCheckpoint: state.savePathCheckpoint,
+      restoreFromCheckpoint: state.restoreFromCheckpoint,
     }))
   );
 };
@@ -971,9 +1166,56 @@ export const useEnhancedDebugMode = () => {
       toggleDebugMode: state.toggleDebugMode,
       exportDebugData: state.exportDebugData,
       validateStoreIntegrity: state.validateStoreIntegrity,
+      exportSessionData: state.exportSessionData,
+      importSessionData: state.importSessionData,
+      resetPerformanceMetrics: state.resetPerformanceMetrics,
     }))
   );
 };
 
-// Export the store as default for backward compatibility
+// ==========================================================================
+// DEBUG AND TESTING UTILITIES
+// ==========================================================================
+
+/**
+ * Test function to debug store and data integration
+ * Call this from browser console: window.testAssessmentFlow()
+ */
+export const testAssessmentFlow = () => {
+  const store = useEnhancedAssessmentStore.getState();
+
+  console.log('=== Assessment Flow Debug Test ===');
+  console.log('Current scenario:', store.currentScenario);
+  console.log('Current answers:', store.answers);
+  console.log('Current scores:', store.scores);
+
+  // Test getting current question
+  const currentQuestion = getExtendedScenarioById(store.currentScenario);
+  console.log('Current question:', currentQuestion);
+
+  if (currentQuestion && currentQuestion.options.length > 0) {
+    const testOption = currentQuestion.options[0];
+    console.log('Testing with option:', testOption);
+
+    // Validate the option
+    const mockAnswer = createExtendedUserAnswer(store.currentScenario, testOption);
+    const validation = validateAnswerObject(mockAnswer);
+    console.log('Answer validation:', validation);
+
+    // Test score calculation
+    const testAnswers = [...store.answers, mockAnswer];
+    const scoreResult = safeCalculateExtendedScores(testAnswers);
+    console.log('Score calculation result:', scoreResult);
+  }
+
+  console.log('Debug data:', store.exportDebugData());
+  console.log('=== End Debug Test ===');
+};
+
+// Make it available globally for debugging
+if (typeof window !== 'undefined') {
+  (window as any).testAssessmentFlow = testAssessmentFlow;
+}
+
+// Default export for backward compatibility
 export default useEnhancedAssessmentStore;

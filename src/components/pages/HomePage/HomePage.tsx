@@ -44,17 +44,18 @@ export const HomePage: React.FC = () => {
     // Reset any previous assessment data
     resetAssessment();
     // Route to auth page instead of directly to assessment
-    router.push('/auth');
+    router.push('/assessment');
   };
 
   const handleContinueAssessment = () => {
     // If user is already authenticated, go directly to assessment
     // Otherwise, go to auth page
-    if (userData?.name) {
-      router.push('/assessment');
-    } else {
-      router.push('/auth');
-    }
+    // if (userData?.name) {
+    //   router.push('/assessment');
+    // } else {
+    //   router.push('/auth');
+    // }
+    router.push('/assessment');
   };
 
   const features = [
@@ -243,7 +244,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className={styles.heroVisual}>
+              {/* <div className={styles.heroVisual}>
                 <div className={styles.archetypePreview}>
                   {archetypes.slice(0, 4).map((archetype, index) => (
                     <div
@@ -262,7 +263,7 @@ export const HomePage: React.FC = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

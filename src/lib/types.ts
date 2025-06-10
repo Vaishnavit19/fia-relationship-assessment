@@ -1,6 +1,7 @@
 // lib/types.ts
 // ==========================================================================
 // EXTENDED TYPESCRIPT TYPES AND INTERFACES - COMPLETE REPLACEMENT
+// Updated to support multi-select scenarios and metadata structure
 // ==========================================================================
 
 // ==========================================================================
@@ -24,12 +25,38 @@ export interface ExtendedScenario {
   id: number | string; // Support for branching IDs
   text: string;
   options: ExtendedAnswerOption[];
+  minSelection?: number; // NEW: For multi-select scenarios (e.g., "Pick exactly 2 activities")
 }
 
 export interface ExtendedUserAnswer {
   scenarioId: number | string;
-  selectedOption: ExtendedAnswerOption;
+  selectedOption: ExtendedAnswerOption; // Single selection (for backward compatibility)
+  selectedOptions?: ExtendedAnswerOption[]; // NEW: Multiple selections for minSelection scenarios
   timestamp: Date;
+  isMultiSelect?: boolean; // NEW: Flag to indicate multi-select scenario
+  totalScore?: ScoreData; // NEW: Combined scores for multi-select scenarios
+}
+
+// ==========================================================================
+// SCENARIO DATA STRUCTURE WITH METADATA
+// ==========================================================================
+
+export interface ScenarioMetadata {
+  title: string;
+  description: string;
+  totalScenarios: number;
+  averageQuestions: number;
+  maxQuestions: number;
+  minQuestions: number;
+  multiSelectScenarios: number;
+  branchingPoints: number;
+  scoringDimensions: string[];
+  version: string;
+}
+
+export interface ExtendedScenariosData {
+  metadata: ScenarioMetadata;
+  scenarios: ExtendedScenario[];
 }
 
 // ==========================================================================
@@ -105,70 +132,29 @@ export interface PersonaCard {
 export interface PersonaRisk {
   personaId: string;
   riskLevel: 'high' | 'medium' | 'low';
-  exploitedTraits: string[];
-  manipulationMethods: string[];
+  vulnerabilityScore: number;
 }
 
-export interface ArchetypeVulnerability {
-  archetypeId: string;
-  archetypeName: string;
-  primaryVulnerabilities: string[];
-  highRiskPersonas: PersonaRisk[];
-}
-
-export interface PersonaArchetypeMapping {
-  [archetypeId: string]: ArchetypeVulnerability;
-  selectionAlgorithm: {
-    weightedHybridRules: {
-      step1: string;
-      step2: string;
-      step3: string;
-      step4: string;
-    };
-    confidenceGapCalculation: {
-      largeGap: {
-        threshold: string;
-        selection: {
-          primaryArchetypePersonas: number;
-          secondaryArchetypePersonas: number;
-          totalCards: number;
-        };
-      };
-      mediumGap: {
-        threshold: string;
-        selection: {
-          primaryArchetypePersonas: number;
-          secondaryArchetypePersonas: number;
-          totalCards: number;
-        };
-      };
-      smallGap: {
-        threshold: string;
-        selection: {
-          primaryArchetypePersonas: number;
-          secondaryArchetypePersonas: number;
-          totalCards: number;
-        };
-      };
-    };
-    personaSelectionPriority: {
-      highRisk: string;
-      mediumRisk: string;
-      lowRisk: string;
-    };
-  };
-}
+export type PersonaArchetypeMapping = Record<
+  string,
+  {
+    highRiskPersonas: PersonaRisk[];
+    mediumRiskPersonas: PersonaRisk[];
+    lowRiskPersonas: PersonaRisk[];
+    totalVulnerabilityScore: number;
+  }
+>;
 
 export interface PersonaSelection {
-  selectedPersonas: PersonaCard[];
-  selectionReason: 'largeGap' | 'mediumGap' | 'smallGap';
+  selectedPersonas: (PersonaCard & { riskLevel: 'high' | 'medium' | 'low' })[];
+  selectionReason: 'large_gap' | 'medium_gap' | 'small_gap';
   confidenceGap: number;
-  primaryArchetype: ArchetypeMatch;
-  secondaryArchetype?: ArchetypeMatch;
+  primaryArchetype: string;
+  secondaryArchetype?: string;
 }
 
 // ==========================================================================
-// ASSESSMENT FLOW TYPES
+// ENHANCED USER PATH AND ANALYTICS
 // ==========================================================================
 
 export interface UserPath {
@@ -180,26 +166,51 @@ export interface UserPath {
   branchingPoints: number;
 }
 
+export interface UserData {
+  name: string;
+  email?: string;
+  age?: number;
+  relationshipStatus?: string;
+}
+
 export interface ExtendedAssessmentResult {
-  // Core Results
   userScores: ScoreData;
   archetypeResults: ArchetypeResults;
   personaSelection: PersonaSelection;
-
-  // Metadata
   completedAt: Date;
   answers: ExtendedUserAnswer[];
   userPath: UserPath;
   assessmentDuration: number; // in seconds
 }
 
-export interface UserData {
-  name: string;
-  email?: string;
+export interface VulnerabilityAssessment {
+  riskLevel: 'high' | 'medium' | 'low';
+  topVulnerabilities: string[];
+  recommendedPersonas: PersonaCard[];
+  educationalInsights: string[];
+  protectionStrategies: string[];
+  personaSelection: PersonaSelection;
 }
 
 // ==========================================================================
-// STORE STATE TYPES
+// MULTI-SELECT SUPPORT TYPES
+// ==========================================================================
+
+export interface MultiSelectState {
+  selectedOptions: ExtendedAnswerOption[];
+  requiredSelections: number;
+  isComplete: boolean;
+  combinedScores: ScoreData;
+}
+
+export interface MultiSelectValidation {
+  isValid: boolean;
+  errors: string[];
+  missingSelections: number;
+}
+
+// ==========================================================================
+// STORE STATE TYPES (UPDATED FOR MULTI-SELECT)
 // ==========================================================================
 
 export interface ExtendedAssessmentState {
@@ -210,6 +221,10 @@ export interface ExtendedAssessmentState {
   userData: UserData | null;
   isComplete: boolean;
   isStarted: boolean;
+
+  // Multi-select state
+  currentMultiSelectState: MultiSelectState | null;
+  isMultiSelectMode: boolean;
 
   // Extended state
   userPath: UserPath | null;
@@ -222,7 +237,7 @@ export interface ExtendedAssessmentState {
 }
 
 // ==========================================================================
-// COMPONENT PROP TYPES
+// COMPONENT PROP TYPES (UPDATED FOR MULTI-SELECT)
 // ==========================================================================
 
 export interface ExtendedProgressBarProps {
@@ -233,10 +248,12 @@ export interface ExtendedProgressBarProps {
 
 export interface ExtendedQuestionCardProps {
   scenario: ExtendedScenario;
-  onAnswer: (option: ExtendedAnswerOption) => void;
+  onAnswer: (option: ExtendedAnswerOption | ExtendedAnswerOption[]) => void; // Updated for multi-select
   selectedOption?: ExtendedAnswerOption;
+  selectedOptions?: ExtendedAnswerOption[]; // NEW: For multi-select scenarios
   canGoBack: boolean;
   onGoBack: () => void;
+  multiSelectState?: MultiSelectState; // NEW: Multi-select state
 }
 
 export interface ArchetypeResultsProps {
@@ -262,12 +279,29 @@ export interface VulnerabilityCardProps {
 }
 
 // ==========================================================================
+// MULTI-SELECT SPECIFIC COMPONENT PROPS
+// ==========================================================================
+
+export interface MultiSelectQuestionCardProps extends ExtendedQuestionCardProps {
+  minSelection: number;
+  onMultiSelectComplete: (selectedOptions: ExtendedAnswerOption[]) => void;
+  multiSelectError?: string;
+}
+
+export interface MultiSelectProgressProps {
+  selected: number;
+  required: number;
+  options: ExtendedAnswerOption[];
+}
+
+// ==========================================================================
 // API AND UTILITY TYPES
 // ==========================================================================
 
 export interface ScenarioValidationResult {
   isValid: boolean;
   errors: string[];
+  warnings?: string[];
 }
 
 export interface AssessmentAnalytics {
@@ -276,6 +310,32 @@ export interface AssessmentAnalytics {
   mostCommonPath: string[];
   archetypeDistribution: Record<string, number>;
   dropoffPoints: Record<string, number>;
+  multiSelectCompletionRate: number; // NEW: Multi-select scenario completion rate
+}
+
+export interface MultiSelectAnalytics {
+  scenarioId: number | string;
+  averageSelections: number;
+  mostPopularCombinations: {
+    options: string[];
+    frequency: number;
+  }[];
+  dropoffRate: number;
+}
+
+// ==========================================================================
+// SCORING AND CALCULATION TYPES (UPDATED)
+// ==========================================================================
+
+export interface ScoreCalculationOptions {
+  includeMultiSelect: boolean;
+  weightMultiSelectScores?: boolean;
+  multiSelectWeight?: number;
+}
+
+export interface ExtendedScoreData extends ScoreData {
+  multiSelectContribution?: ScoreData; // NEW: Separate tracking of multi-select scores
+  singleSelectContribution?: ScoreData; // NEW: Separate tracking of single-select scores
 }
 
 // ==========================================================================
@@ -284,10 +344,10 @@ export interface AssessmentAnalytics {
 
 // Keep these for reference but mark as deprecated
 /** @deprecated Use ExtendedScenario instead */
-export interface Scenario extends ExtendedScenario {}
+// export interface Scenario extends ExtendedScenario {}
 
-/** @deprecated Use ExtendedUserAnswer instead */
-export interface UserAnswer extends ExtendedUserAnswer {}
+// /** @deprecated Use ExtendedUserAnswer instead */
+// export interface UserAnswer extends ExtendedUserAnswer {}
 
 /** @deprecated Use ExtendedAssessmentResult instead */
 export interface AssessmentResult {
@@ -303,3 +363,73 @@ export interface RelationshipArchetype extends ExtendedArchetype {
   color?: string;
   gradient?: string;
 }
+
+// ==========================================================================
+// VALIDATION AND ERROR HANDLING TYPES
+// ==========================================================================
+
+export interface ValidationError {
+  type: 'missing_selection' | 'invalid_option' | 'scenario_not_found' | 'multi_select_incomplete';
+  message: string;
+  scenarioId?: number | string;
+  optionLetter?: string;
+}
+
+export interface AssessmentValidation {
+  isValid: boolean;
+  errors: ValidationError[];
+  canProceed: boolean;
+  completionPercentage: number;
+}
+
+// ==========================================================================
+// NAVIGATION AND FLOW CONTROL TYPES
+// ==========================================================================
+
+export interface NavigationState {
+  canGoBack: boolean;
+  canGoForward: boolean;
+  isAtStart: boolean;
+  isAtEnd: boolean;
+  currentScenarioType: 'single_select' | 'multi_select' | 'completion';
+}
+
+export interface FlowControlActions {
+  goToNext: () => void;
+  goToPrevious: () => void;
+  goToScenario: (id: number | string) => void;
+  resetAssessment: () => void;
+  completeAssessment: () => void;
+}
+
+// ==========================================================================
+// EXPORT GROUPINGS FOR CONVENIENCE
+// ==========================================================================
+
+// Core assessment types
+export type CoreAssessmentTypes =
+  | ExtendedScenario
+  | ExtendedAnswerOption
+  | ExtendedUserAnswer
+  | ScoreData;
+
+// Multi-select related types
+export type MultiSelectTypes =
+  | MultiSelectState
+  | MultiSelectValidation
+  | MultiSelectQuestionCardProps
+  | MultiSelectProgressProps;
+
+// Results and analysis types
+export type ResultsTypes =
+  | ArchetypeResults
+  | PersonaSelection
+  | VulnerabilityAssessment
+  | ExtendedAssessmentResult;
+
+// Component prop types
+export type ComponentPropTypes =
+  | ExtendedQuestionCardProps
+  | PersonaCardProps
+  | VulnerabilityCardProps
+  | ArchetypeResultsProps;

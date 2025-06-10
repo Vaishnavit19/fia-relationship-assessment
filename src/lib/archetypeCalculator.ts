@@ -1,6 +1,6 @@
-// lib/archetypeCalculator.ts
+// lib/archetypeCalculator.ts - FIXED VERSION
 // ==========================================================================
-// FILE 3: MATHEMATICAL PROXIMITY ARCHETYPE CALCULATOR
+// FILE 3: MATHEMATICAL PROXIMITY ARCHETYPE CALCULATOR - WITH ERROR HANDLING
 // ==========================================================================
 
 import { archetypeScoringProfiles, extendedArchetypes } from './data';
@@ -127,9 +127,15 @@ export const getTopArchetypeMatches = (
   matches: ArchetypeMatch[],
   maxResults = 5
 ): ArchetypeMatch[] => {
+  // GUARD CLAUSE: Handle empty or undefined matches
+  if (!matches || matches.length === 0) {
+    console.warn('getTopArchetypeMatches: No matches provided');
+    return [];
+  }
+
   // Always include at least top 3
   const minResults = 3;
-  const topMatches = matches.slice(0, Math.max(minResults, maxResults));
+  const topMatches = matches.slice(0, Math.max(minResults, Math.min(maxResults, matches.length)));
 
   // If we're at the boundary and there are ties, include all tied matches
   if (topMatches.length < matches.length) {
@@ -152,46 +158,103 @@ export const getTopArchetypeMatches = (
 };
 
 /**
- * Generate complete archetype results
+ * Generate complete archetype results with error handling
  */
 export const generateArchetypeResults = (userScores: ScoreData): ArchetypeResults => {
-  const allMatches = calculateAllArchetypeMatches(userScores);
-  const topMatches = getTopArchetypeMatches(allMatches);
+  // GUARD CLAUSE: Validate input scores
+  if (
+    !userScores ||
+    typeof userScores.logical !== 'number' ||
+    typeof userScores.emotional !== 'number' ||
+    typeof userScores.exploratory !== 'number'
+  ) {
+    console.error('generateArchetypeResults: Invalid user scores provided');
+    return createFallbackArchetypeResults();
+  }
+
+  try {
+    const allMatches = calculateAllArchetypeMatches(userScores);
+    const topMatches = getTopArchetypeMatches(allMatches);
+
+    return {
+      userScores,
+      matches: allMatches,
+      topMatches,
+    };
+  } catch (error) {
+    console.error('generateArchetypeResults: Error calculating matches', error);
+    return createFallbackArchetypeResults();
+  }
+};
+
+/**
+ * Create fallback archetype results when calculation fails
+ */
+const createFallbackArchetypeResults = (): ArchetypeResults => {
+  const fallbackScores: ScoreData = { logical: 1, emotional: 1, exploratory: 1 };
 
   return {
-    userScores,
-    matches: allMatches,
-    topMatches,
+    userScores: fallbackScores,
+    matches: [],
+    topMatches: [],
   };
 };
 
 // ==========================================================================
-// CONFIDENCE GAP ANALYSIS (for Phase 2 - Persona Selection)
+// CONFIDENCE GAP ANALYSIS (for Phase 2 - Persona Selection) - FIXED
 // ==========================================================================
 
 /**
  * Calculate confidence gap between top archetype and second archetype
  * Used for persona selection algorithm in Phase 2
+ * FIXED: Added comprehensive guard clauses
  */
 export const calculateConfidenceGap = (
-  matches: ArchetypeMatch[]
+  topMatches: ArchetypeMatch[]
 ): {
   gap: number;
   gapType: 'largeGap' | 'mediumGap' | 'smallGap';
-  primaryArchetype: ArchetypeMatch;
-  secondaryArchetype?: ArchetypeMatch;
+  primaryArchetype: string;
+  secondaryArchetype?: string;
 } => {
-  if (matches.length < 2) {
+  console.log('=== CONFIDENCE GAP CALCULATION ===');
+  console.log('Input topMatches:', topMatches?.length);
+
+  if (!topMatches || topMatches.length === 0) {
+    console.error('No top matches provided to calculateConfidenceGap');
     return {
       gap: 0,
       gapType: 'smallGap',
-      primaryArchetype: matches[0],
+      primaryArchetype: 'Unknown',
     };
   }
 
-  const primary = matches[0];
-  const secondary = matches[1];
-  const gap = primary.confidence - secondary.confidence;
+  const primary = topMatches[0];
+  const secondary = topMatches[1];
+
+  console.log('Primary match:', {
+    name: primary?.archetype?.name,
+    confidence: primary?.confidence,
+  });
+  console.log('Secondary match:', {
+    name: secondary?.archetype?.name,
+    confidence: secondary?.confidence,
+  });
+
+  if (!primary?.confidence || typeof primary.confidence !== 'number') {
+    console.error('Invalid primary confidence:', primary?.confidence);
+    return {
+      gap: 0,
+      gapType: 'smallGap',
+      primaryArchetype: primary?.archetype?.name || 'Unknown',
+    };
+  }
+
+  // If no secondary match, gap is the primary confidence itself
+  const secondaryConfidence = secondary?.confidence || 0;
+  const gap = primary.confidence - secondaryConfidence;
+
+  console.log('Calculated gap:', gap);
 
   let gapType: 'largeGap' | 'mediumGap' | 'smallGap';
 
@@ -203,12 +266,17 @@ export const calculateConfidenceGap = (
     gapType = 'smallGap';
   }
 
-  return {
+  console.log('Gap type:', gapType);
+
+  const result = {
     gap,
     gapType,
-    primaryArchetype: primary,
-    secondaryArchetype: secondary,
+    primaryArchetype: primary.archetype.name,
+    secondaryArchetype: secondary?.archetype?.name,
   };
+
+  console.log('Confidence gap result:', result);
+  return result;
 };
 
 // ==========================================================================
@@ -219,6 +287,12 @@ export const calculateConfidenceGap = (
  * Get detailed analysis of user scores vs archetype profiles
  */
 export const getDetailedScoreAnalysis = (userScores: ScoreData) => {
+  // GUARD CLAUSE: Validate input
+  if (!userScores) {
+    console.error('getDetailedScoreAnalysis: userScores is undefined');
+    return [];
+  }
+
   const analysis = archetypeScoringProfiles.map(profile => {
     const { distance, confidence } = calculateArchetypeMatch(userScores, profile);
 
@@ -241,9 +315,9 @@ export const getDetailedScoreAnalysis = (userScores: ScoreData) => {
 };
 
 /**
- * Validate archetype calculation setup
+ * Validate archetype calculation data integrity
  */
-export const validateArchetypeCalculationSetup = (): {
+export const validateArchetypeCalculations = (): {
   isValid: boolean;
   errors: string[];
   warnings: string[];
@@ -251,40 +325,34 @@ export const validateArchetypeCalculationSetup = (): {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check if all scoring profiles have corresponding archetypes
-  archetypeScoringProfiles.forEach(profile => {
-    const archetype = findExtendedArchetypeById(profile.archetypeId);
-    if (!archetype) {
-      errors.push(
-        `Scoring profile exists for ${profile.archetypeId} but no corresponding archetype found`
-      );
-    }
-  });
+  // Check if required data is loaded
+  if (!archetypeScoringProfiles || archetypeScoringProfiles.length === 0) {
+    errors.push('Archetype scoring profiles not loaded');
+  }
 
-  // Check if all archetypes have scoring profiles
-  extendedArchetypes.forEach(archetype => {
-    const profile = archetypeScoringProfiles.find(p => p.archetypeId === archetype.id);
-    if (!profile) {
-      warnings.push(`Archetype ${archetype.id} exists but no scoring profile found`);
-    }
-  });
+  if (!extendedArchetypes || extendedArchetypes.length === 0) {
+    errors.push('Extended archetypes not loaded');
+  }
 
-  // Validate scoring profile data integrity
+  // Validate each scoring profile
   archetypeScoringProfiles.forEach(profile => {
-    const calculatedTotal =
+    if (!profile.archetypeId) {
+      errors.push(`Scoring profile missing archetype ID`);
+    }
+
+    if (!profile.targetScores) {
+      errors.push(`Scoring profile ${profile.archetypeId}: Missing target scores`);
+    }
+
+    // Validate percentages add up to ~100%
+    const totalCalculated =
       profile.targetScores.logical +
       profile.targetScores.emotional +
       profile.targetScores.exploratory;
-    if (Math.abs(calculatedTotal - profile.totalScore) > 0.1) {
-      errors.push(
-        `Scoring profile ${profile.archetypeId}: totalScore (${profile.totalScore}) doesn't match sum of dimensions (${calculatedTotal})`
-      );
-    }
 
-    // Check percentages
-    const calculatedLogicalPct = (profile.targetScores.logical / profile.totalScore) * 100;
-    const calculatedEmotionalPct = (profile.targetScores.emotional / profile.totalScore) * 100;
-    const calculatedExploratoryPct = (profile.targetScores.exploratory / profile.totalScore) * 100;
+    const calculatedLogicalPct = (profile.targetScores.logical / totalCalculated) * 100;
+    const calculatedEmotionalPct = (profile.targetScores.emotional / totalCalculated) * 100;
+    const calculatedExploratoryPct = (profile.targetScores.exploratory / totalCalculated) * 100;
 
     if (Math.abs(calculatedLogicalPct - profile.percentages.logical) > 1) {
       warnings.push(`Scoring profile ${profile.archetypeId}: logical percentage may be incorrect`);

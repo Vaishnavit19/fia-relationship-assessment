@@ -18,18 +18,45 @@ import {
   ChevronRight,
   Eye,
   Lightbulb,
+  Clock,
+  CheckCircle,
+  Star,
+  Award,
+  Brain,
+  Film,
+  BookOpen,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
-import { generateEducationalContent } from '../../../lib/personaEducator';
-import { formatArchetypeResultsForDisplay } from '../../../lib/resultsEngine';
 import {
+  generateArchetypeResults,
+  validateArchetypeCalculations,
+} from '../../../lib/archetypeCalculator';
+import { archetypeScoringProfiles, extendedArchetypes } from '../../../lib/data';
+import {
+  extractKeyRedFlags,
+  generateEducationalContent,
+  convertTacticToRedFlag,
+  convertManipulatorTypeToRedFlag,
+} from '../../../lib/personaEducator';
+import {
+  formatArchetypeResultsForDisplay,
+  generateResultsSummary,
+} from '../../../lib/resultsEngine';
+import useEnhancedAssessmentStore, {
   useEnhancedAssessmentData,
   useEnhancedAssessmentActions,
   useEnhancedAssessmentResults,
 } from '../../../lib/store';
-import { ArchetypeMatch, PersonaCard, PersonaEducationContent } from '../../../lib/types';
+import {
+  ArchetypeMatch,
+  PersonaCard,
+  PersonaEducationContent,
+  ExtendedAssessmentResult,
+  VulnerabilityAssessment,
+} from '../../../lib/types';
+import { generateVulnerabilityAssessment } from '../../../lib/vulnerabilityPipeline';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { LoadingSpinner } from '../../ui/LoadingSpinner';
@@ -50,6 +77,65 @@ export interface TabbedResultsPageProps {
 
 type TabType = 'archetypes' | 'vulnerabilities' | 'patterns';
 
+// ==========================================================================
+// HELPER FUNCTIONS FOR RED FLAGS AND PROTECTION
+// ==========================================================================
+
+const getPersonaRedFlags = (persona: PersonaCard): string[] => {
+  const redFlags: string[] = [];
+
+  // Convert psychological tactics to red flags
+  persona.psychologicalTactics?.forEach(tactic => {
+    const flag = convertTacticToRedFlag(tactic);
+    if (flag) redFlags.push(flag);
+  });
+
+  // Convert manipulator types to red flags
+  persona.manipulatorTypes?.forEach(type => {
+    const flag = convertManipulatorTypeToRedFlag(type);
+    if (flag) redFlags.push(flag);
+  });
+
+  // If no specific flags, create generic ones
+  if (redFlags.length === 0) {
+    redFlags.push(
+      `🚩 Watch for patterns involving ${persona.psychologicalTactics?.[0] || 'manipulation'}`
+    );
+  }
+
+  return redFlags;
+};
+
+const getPersonaProtectionStrategies = (persona: PersonaCard): string[] => {
+  const strategies: string[] = [];
+
+  // Generate strategies based on blind spot
+  if (persona.blindSpot?.includes('healing')) {
+    strategies.push('You cannot fix another person - they must want to change themselves');
+  }
+
+  if (persona.blindSpot?.includes('safety') || persona.blindSpot?.includes('control')) {
+    strategies.push(
+      'Control and protection are different - one builds trust, the other destroys it'
+    );
+  }
+
+  if (persona.blindSpot?.includes('passion') || persona.blindSpot?.includes('intensity')) {
+    strategies.push('Real passion builds over time - instant intensity is often manipulation');
+  }
+
+  if (persona.blindSpot?.includes('devotion') || persona.blindSpot?.includes('anxiety')) {
+    strategies.push('Love and anxiety are different emotions - healthy love feels peaceful');
+  }
+
+  // Add general strategies
+  strategies.push('Trust your instincts - if something feels wrong, it probably is');
+  strategies.push("Keep your support network strong - don't let anyone isolate you");
+  strategies.push("Set clear boundaries about what behavior you will and won't accept");
+
+  return strategies.slice(0, 5); // Limit to 5 strategies
+};
+
 export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   initialTab = 'archetypes',
   debug = false,
@@ -62,9 +148,10 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   // STORE STATE & COMPUTED VALUES
   // ==========================================================================
 
-  const { isComplete, estimatedProgress, totalAnswered, userData } = useEnhancedAssessmentData();
+  const { isComplete, estimatedProgress, userData, getTotalAnswered, getCurrentQuestion } =
+    useEnhancedAssessmentData();
 
-  const { resetAssessment } = useEnhancedAssessmentActions();
+  const { resetAssessment, generateResults } = useEnhancedAssessmentActions();
 
   const {
     scores,
@@ -75,6 +162,10 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
     vulnerabilityAssessment,
     getEnhancedAssessmentResult,
   } = useEnhancedAssessmentResults();
+
+  // Get additional state values directly from store for error handling
+  const startTime = useEnhancedAssessmentStore(state => state.startTime);
+  const sessionId = useEnhancedAssessmentStore(state => state.sessionId);
 
   // ==========================================================================
   // LOCAL STATE
@@ -87,70 +178,177 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   const [showConfidenceDetails, setShowConfidenceDetails] = useState(false);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [isDownloading, setIsDownloading] = useState(false);
-  const [educationalContent, setEducationalContent] = useState<any>(null);
+  const [educationalContent, setEducationalContent] = useState<PersonaEducationContent | null>(
+    null
+  );
+
+  const formattedResults = useMemo(() => {
+    if (!archetypeResults) return null;
+    try {
+      return formatArchetypeResultsForDisplay(archetypeResults);
+    } catch (error) {
+      return null;
+    }
+  }, [archetypeResults]);
+
+  const primaryArchetype = formattedResults?.topMatches?.[0] || null;
+  const secondaryArchetype = formattedResults?.topMatches?.[1] || null;
+
+  const selectedPersonas = vulnerabilityAssessment?.personaSelection?.selectedPersonas || [];
+
+  // ==========================================================================
+  // SAFE UTILITY FUNCTIONS
+  // ==========================================================================
+
+  /**
+   * Safe wrapper for generateResultsSummary to handle null archetypeResults
+   */
+  const safeGenerateResultsSummary = (assessmentResult: any) => {
+    if (!assessmentResult) return null;
+
+    try {
+      return generateResultsSummary(assessmentResult);
+    } catch (error) {
+      // Create a basic summary manually if the function fails
+      if (assessmentResult.answers && assessmentResult.assessmentDuration !== undefined) {
+        const minutes = Math.floor(assessmentResult.assessmentDuration / 60000); // Convert ms to minutes
+        const seconds = Math.floor((assessmentResult.assessmentDuration % 60000) / 1000);
+        const assessmentTime = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+        return {
+          totalQuestions: assessmentResult.answers.length,
+          assessmentTime,
+          primaryArchetype: primaryArchetype?.archetype.name || 'Unknown',
+          confidence: primaryArchetype?.confidence || 0,
+        };
+      }
+      return null;
+    }
+  };
 
   // ==========================================================================
   // COMPUTED VALUES
   // ==========================================================================
 
-  const formattedResults = archetypeResults
-    ? formatArchetypeResultsForDisplay(archetypeResults)
-    : null;
+  const assessmentResult = useMemo(
+    () => getEnhancedAssessmentResult(),
+    [getEnhancedAssessmentResult]
+  );
 
-  const assessmentResult = getEnhancedAssessmentResult();
+  const resultsSummary = useMemo(() => {
+    return safeGenerateResultsSummary(assessmentResult);
+  }, [assessmentResult]);
 
   // ==========================================================================
-  // EFFECTS
+  // INITIALIZATION LOGIC
   // ==========================================================================
 
   useEffect(() => {
-    const checkAssessmentData = () => {
-      // Check if assessment is complete AND has actual data
+    const initializeResults = async () => {
       if (!isComplete) {
-        console.log('Assessment not complete, redirecting to assessment');
-        router.replace('/assessment');
+        router.push('/assessment');
         return;
       }
 
-      // Check if we have the necessary data
-      if (!answers || answers.length === 0) {
-        console.log('No assessment answers found, redirecting to assessment');
-        router.replace('/assessment');
-        return;
-      }
+      try {
+        // Generate results if they don't exist
+        if (!archetypeResults && scores) {
+          await generateResults();
+        }
 
-      // Check if we have results data
-      if (!archetypeResults && !scores) {
-        console.log('No results data available, redirecting to assessment');
-        router.replace('/assessment');
-        return;
-      }
+        // Generate educational content for primary archetype
+        if (primaryArchetype && !educationalContent) {
+          try {
+            const content = generateEducationalContent(primaryArchetype);
+            setEducationalContent(content);
+          } catch (error) {
+            // Silently handle educational content generation errors
+          }
+        }
 
-      // If we get here, we have valid data
-      setIsLoading(false);
+        // Vulnerability assessment should be handled by the store during generateResults()
+        // No manual generation needed here
+      } catch (error) {
+        // Handle initialization errors silently
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    // Add a small delay to ensure store is hydrated
-    const timer = setTimeout(checkAssessmentData, 100);
-    return () => clearTimeout(timer);
-  }, [isComplete, answers, archetypeResults, scores, router]);
-
-  // Generate educational content when vulnerability assessment is available
-  useEffect(() => {
-    if (vulnerabilityAssessment?.personaSelection?.selectedPersonas?.length) {
-      const content = generateEducationalContent(vulnerabilityAssessment.personaSelection);
-      setEducationalContent(content);
-    }
-  }, [vulnerabilityAssessment]);
+    initializeResults();
+  }, [
+    isComplete,
+    router,
+    archetypeResults,
+    scores,
+    generateResults,
+    primaryArchetype,
+    educationalContent,
+    vulnerabilityAssessment,
+  ]);
 
   // ==========================================================================
-  // HANDLERS
+  // EVENT HANDLERS
   // ==========================================================================
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
-    setSelectedArchetype(null);
-    setSelectedPersona(null);
+  };
+
+  const handleRetakeAssessment = () => {
+    resetAssessment();
+    router.push('/assessment');
+  };
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
+  const handleDownloadResults = async () => {
+    if (!assessmentResult) return;
+
+    setIsDownloading(true);
+    try {
+      // Create a simple text summary for download
+      const summary = `
+RELATIONSHIP ASSESSMENT RESULTS
+===============================
+
+Assessment Completed: ${new Date().toLocaleDateString()}
+
+PRIMARY ARCHETYPE: ${primaryArchetype?.archetype.name || 'Unknown'}
+Confidence: ${primaryArchetype?.confidence.toFixed(1) || 'N/A'}%
+
+${primaryArchetype?.archetype.description || ''}
+
+SECONDARY ARCHETYPE: ${secondaryArchetype?.archetype.name || 'Unknown'}
+Confidence: ${secondaryArchetype?.confidence.toFixed(1) || 'N/A'}%
+
+${secondaryArchetype?.archetype.description || ''}
+
+SCORES:
+- Logical: ${scores?.logical || 'N/A'}
+- Emotional: ${scores?.emotional || 'N/A'}
+- Exploratory: ${scores?.exploratory || 'N/A'}
+
+Total Questions Answered: ${answers?.length || 0}
+      `.trim();
+
+      // Create and download the file
+      const blob = new Blob([summary], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relationship-assessment-results-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      // Handle download errors silently
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handleArchetypeSelect = (archetype: ArchetypeMatch) => {
@@ -173,96 +371,35 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
     setExpandedCards(newExpanded);
   };
 
-  const toggleCardExpansion = (cardId: string) => {
-    handleExpandCard(cardId);
-  };
-
-  const handleDownloadResults = async () => {
-    setIsDownloading(true);
-    try {
-      // Create downloadable content
-      const resultsData = {
-        userData,
-        archetypeResults: formattedResults,
-        vulnerabilityAssessment,
-        pathAnalytics,
-        timestamp: new Date().toISOString(),
-      };
-
-      const blob = new Blob([JSON.stringify(resultsData, null, 2)], {
-        type: 'application/json',
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `fia-assessment-results-${Date.now()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading results:', error);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  const handleShareResults = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'My Relationship Assessment Results',
-        text: `I discovered my relationship archetype through this comprehensive assessment!`,
-        url: window.location.href,
-      });
-    } else {
-      // Fallback to clipboard
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
-  const handleRetakeAssessment = () => {
-    resetAssessment();
-    router.push('/assessment');
-  };
-
   // ==========================================================================
-  // RENDER METHODS
+  // RENDER FUNCTIONS
   // ==========================================================================
 
   const renderLoadingState = () => (
     <div className={styles.loadingContainer}>
-      <Card className={styles.loadingCard}>
-        <div className={styles.loadingContent}>
-          <LoadingSpinner size="lg" />
-          <h2>Processing Your Results...</h2>
-          <p>Loading your comprehensive results...</p>
-          <div className={styles.loadingDetails}>
-            <div className={styles.progressItem}>
-              <Trophy />
-              <span>Determining archetype matches</span>
-            </div>
-            <div className={styles.progressItem}>
-              <Shield />
-              <span>Assessing vulnerability patterns</span>
-            </div>
-            <div className={styles.progressItem}>
-              <Heart />
-              <span>Generating attraction insights</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+      <LoadingSpinner size="lg" />
+      <h2>Analyzing Your Results...</h2>
+      <p>We're processing your assessment responses and generating personalized insights.</p>
     </div>
   );
 
   const renderHeader = () => (
     <div className={styles.resultsHeader}>
       <div className={styles.headerContent}>
-        <h1>Your Comprehensive Relationship Assessment</h1>
-        <p>
-          Hello <strong>{userData?.name || 'there'}</strong>! Explore your results across three key
-          areas: personality archetypes, vulnerability awareness, and attraction patterns.
-        </p>
+        <div className={styles.headerText}>
+          <h1>Your Relationship Assessment Results</h1>
+          <p>
+            Explore your results across three key areas: personality archetypes, vulnerability
+            awareness, and attraction patterns.
+            {resultsSummary && (
+              <>
+                {' '}
+                You completed <strong>{resultsSummary.totalQuestions} questions</strong> in{' '}
+                <strong>{resultsSummary.assessmentTime}</strong>.
+              </>
+            )}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -276,8 +413,10 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
         >
           <Trophy />
           <span>Archetypes</span>
-          {formattedResults?.topMatches?.length && (
+          {formattedResults?.topMatches ? (
             <span className={styles.tabBadge}>{formattedResults.topMatches.length}</span>
+          ) : (
+            <span className={styles.tabBadge}>...</span>
           )}
         </button>
 
@@ -287,10 +426,12 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
         >
           <Shield />
           <span>Vulnerabilities</span>
-          {vulnerabilityAssessment?.personaSelection?.selectedPersonas?.length && (
-            <span className={styles.tabBadge}>
-              {vulnerabilityAssessment.personaSelection.selectedPersonas.length}
-            </span>
+          {selectedPersonas.length > 0 ? (
+            <span className={styles.tabBadge}>{selectedPersonas.length}</span>
+          ) : archetypeResults ? (
+            <span className={styles.tabBadge}>⏳</span>
+          ) : (
+            <span className={styles.tabBadge}>...</span>
           )}
         </button>
 
@@ -307,303 +448,583 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   );
 
   const renderArchetypesTab = () => {
-    if (!formattedResults?.topMatches || formattedResults.topMatches.length === 0) {
+    // Check if archetypeResults exists but has wrong structure
+    const hasInvalidArchetypeResults = archetypeResults && !archetypeResults.topMatches;
+    const hasValidArchetypeResults =
+      archetypeResults?.topMatches && archetypeResults.topMatches.length > 0;
+
+    // SUCCESS STATE: Show proper archetype results if available
+    if (hasValidArchetypeResults && formattedResults?.topMatches) {
       return (
-        <Card className={styles.noDataCard}>
-          <AlertTriangle />
-          <h3>No Archetype Results Available</h3>
-          <p>Unable to calculate archetype matches. Please retake the assessment.</p>
-          <Button onClick={handleRetakeAssessment}>Retake Assessment</Button>
-        </Card>
-      );
-    }
+        <div className={styles.archetypesContent}>
+          <div className={styles.archetypesHeader}>
+            <h2>Your Personality Archetypes</h2>
+            <p>
+              Based on your responses, here are your top archetype matches ranked by mathematical
+              proximity to your personality profile.
+            </p>
 
-    const topArchetype = formattedResults.topMatches[0];
-
-    return (
-      <div className={styles.archetypesContent}>
-        <Card className={styles.topArchetypeCard}>
-          <div className={styles.topArchetypeContent}>
-            <div className={styles.archetypeIcon}>
-              <Trophy />
+            <div className={styles.successNotice}>
+              <CheckCircle />
+              <span>
+                ✅ Results successfully generated! Your primary archetype is{' '}
+                <strong>{formattedResults.topMatches[0].archetype.name}</strong>
+              </span>
             </div>
-            <div className={styles.archetypeInfo}>
-              <h2>Your Primary Archetype</h2>
-              <h3>{topArchetype.archetype.name}</h3>
-              <p>{topArchetype.archetype.description}</p>
-              <div className={styles.confidenceScore}>
-                <span className={styles.scoreLabel}>Confidence:</span>
-                <span className={styles.scoreValue}>{topArchetype.confidence}%</span>
+
+            {formattedResults.hasTies && (
+              <div className={styles.tiesNotice}>
+                <Info />
+                <span>Close matches detected - multiple archetypes show similar affinity</span>
               </div>
-            </div>
+            )}
           </div>
-        </Card>
 
-        <div className={styles.allArchetypesSection}>
-          <h3>All Archetype Matches</h3>
-          <div className={styles.archetypesGrid}>
-            {formattedResults.topMatches.map((archetype, index) => (
+          <div className={styles.archetypesList}>
+            {formattedResults.topMatches.map((match, index) => (
               <Card
-                key={archetype.archetype.id}
+                key={match.archetype.id}
                 className={`${styles.archetypeCard} ${
-                  selectedArchetype?.archetype.id === archetype.archetype.id ? styles.selected : ''
+                  selectedArchetype?.archetype.id === match.archetype.id ? styles.selected : ''
                 }`}
-                onClick={() => handleArchetypeSelect(archetype)}
+                onClick={() => handleArchetypeSelect(match)}
               >
-                <div className={styles.archetypeRank}>#{index + 1}</div>
-                <h4>{archetype.archetype.name}</h4>
-                <p>{archetype.archetype.shortDescription || archetype.archetype.description}</p>
-                <div className={styles.archetypeScore}>
-                  <div className={styles.scoreBar}>
-                    <div
-                      className={styles.scoreFill}
-                      style={{ width: `${archetype.confidence}%` }}
-                    />
+                <div className={styles.archetypeHeader}>
+                  <div className={styles.archetypeRank}>
+                    {index === 0 ? (
+                      <Trophy className={styles.primaryIcon} />
+                    ) : index === 1 ? (
+                      <Award className={styles.secondaryIcon} />
+                    ) : (
+                      <span className={styles.rankNumber}>{index + 1}</span>
+                    )}
                   </div>
-                  <span>{archetype.confidence}%</span>
+
+                  <div className={styles.archetypeInfo}>
+                    <h4 className={styles.archetypeName}>{match.archetype.name}</h4>
+                    <p className={styles.archetypeTitle}>{match.archetype.title}</p>
+                  </div>
+
+                  <div className={styles.confidenceSection}>
+                    <div className={styles.confidenceBar}>
+                      <div
+                        className={styles.confidenceProgress}
+                        style={{ width: `${match.confidence}%` }}
+                      />
+                    </div>
+                    <span className={styles.confidenceValue}>{match.confidence}%</span>
+                  </div>
+
+                  <ChevronRight className={styles.selectIcon} />
+
+                  {debug && (
+                    <div className={styles.debugInfo}>
+                      <small>Distance: {match.distance.toFixed(2)}</small>
+                    </div>
+                  )}
                 </div>
               </Card>
             ))}
           </div>
-        </div>
 
-        {selectedArchetype && (
-          <Card className={styles.archetypeDetails}>
-            <h4>{selectedArchetype.archetype.name} - Detailed Insights</h4>
-            <p>{selectedArchetype.archetype.description}</p>
-            <div className={styles.detailsGrid}>
-              <div>
-                <h5>Strengths</h5>
+          {/* Archetype Expansion Content */}
+          {selectedArchetype && (
+            <Card className={styles.detailsCard}>
+              <div className={styles.detailsHeader}>
+                <div className={styles.archetypeIcon}>
+                  <Brain />
+                </div>
+                <div className={styles.archetypeHeading}>
+                  <h2>{selectedArchetype.archetype.name}</h2>
+                  <p className={styles.archetypeSubtitle}>{selectedArchetype.archetype.title}</p>
+                  <div className={styles.confidenceBadge}>
+                    {selectedArchetype.confidence}% Match
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.archetypeDescription}>
+                <p>{selectedArchetype.archetype.description}</p>
+              </div>
+
+              <div className={styles.traitsSection}>
+                <h4>Key Traits</h4>
+                <div className={styles.traitsList}>
+                  {selectedArchetype.archetype.traits.map((trait, index) => {
+                    // Split trait on " - " to get title and description
+                    const [title, description] = trait.split(' - ');
+                    return (
+                      <div key={index} className={styles.traitItem}>
+                        <strong>{title}</strong>
+                        {description && <span> - {description}</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {selectedArchetype.archetype.vulnerabilities && (
+                <div className={styles.vulnerabilitiesPreview}>
+                  <h4>Awareness Areas</h4>
+                  <p className={styles.vulnerabilityHint}>
+                    Understanding these patterns helps you recognize potential relationship
+                    dynamics:
+                  </p>
+                  <div className={styles.vulnerabilitiesList}>
+                    {selectedArchetype.archetype.vulnerabilities.slice(0, 4).map((vuln, index) => (
+                      <div key={index} className={styles.vulnerabilityItem}>
+                        <AlertTriangle className={styles.vulnIcon} />
+                        <div>
+                          <strong>{vuln.manipulatorType}</strong>
+                          <p>{vuln.vulnerability}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveTab('vulnerabilities')}
+                    className={styles.seeMoreButton}
+                  >
+                    See Complete Vulnerability Assessment
+                    <ChevronRight />
+                  </Button>
+                </div>
+              )}
+            </Card>
+          )}
+
+          <Card className={styles.confidenceExplanation}>
+            <button
+              className={styles.confidenceToggle}
+              onClick={() => setShowConfidenceDetails(!showConfidenceDetails)}
+            >
+              <Target className={styles.confidenceIcon} />
+              How are confidence scores calculated?
+            </button>
+
+            {showConfidenceDetails && (
+              <div className={styles.confidenceDetails}>
+                <p>
+                  Confidence scores are calculated using mathematical proximity analysis. Your
+                  responses are compared to each archetype's ideal profile using Euclidean distance
+                  calculations across emotional, logical, and exploratory dimensions.
+                </p>
                 <ul>
-                  {selectedArchetype.archetype.strengths?.map((strength, index) => (
-                    <li key={index}>{strength}</li>
-                  )) || <li>No specific strengths defined</li>}
+                  <li>
+                    <strong>Higher scores</strong> indicate closer alignment with that archetype
+                  </li>
+                  <li>
+                    <strong>Close scores</strong> suggest balanced personality traits
+                  </li>
+                  <li>
+                    <strong>Large gaps</strong> indicate strong archetype alignment
+                  </li>
                 </ul>
               </div>
-              <div>
-                <h5>Growth Areas</h5>
-                <ul>
-                  {selectedArchetype.archetype.challenges?.map((challenge, index) => (
-                    <li key={index}>{challenge}</li>
-                  )) || <li>No specific challenges defined</li>}
-                </ul>
+            )}
+          </Card>
+        </div>
+      );
+    }
+
+    // PROCESSING STATE: Show when we have scores but are generating archetypes
+    if (scores && !archetypeResults && !hasInvalidArchetypeResults) {
+      return (
+        <div className={styles.archetypesContent}>
+          <Card className={styles.scoresCard}>
+            <h3>Your Assessment Scores</h3>
+            <div className={styles.scoresSummary}>
+              <div className={styles.scoresGrid}>
+                <div className={styles.scoreItem}>
+                  <Brain />
+                  <div>
+                    <div className={styles.scoreLabel}>Logical</div>
+                    <div className={styles.scoreValue}>{scores.logical}</div>
+                  </div>
+                </div>
+                <div className={styles.scoreItem}>
+                  <Heart />
+                  <div>
+                    <div className={styles.scoreLabel}>Emotional</div>
+                    <div className={styles.scoreValue}>{scores.emotional}</div>
+                  </div>
+                </div>
+                <div className={styles.scoreItem}>
+                  <Target />
+                  <div>
+                    <div className={styles.scoreLabel}>Exploratory</div>
+                    <div className={styles.scoreValue}>{scores.exploratory}</div>
+                  </div>
+                </div>
               </div>
+
+              <span className={styles.dominantNote}>
+                Your dominant style is{' '}
+                <strong>
+                  {scores.exploratory > scores.emotional && scores.exploratory > scores.logical
+                    ? 'Exploratory'
+                    : scores.logical > scores.emotional
+                      ? 'Logical'
+                      : 'Emotional'}
+                </strong>{' '}
+                (
+                {Math.round(
+                  (Math.max(scores.logical, scores.emotional, scores.exploratory) /
+                    (scores.logical + scores.emotional + scores.exploratory)) *
+                    100
+                )}
+                %)
+              </span>
+              {scores.exploratory > 20 && (
+                <div className={styles.archetypePrediction}>
+                  <Lightbulb />
+                  <span>
+                    <strong>Predicted Primary Archetype:</strong> The Explorer
+                    <br />
+                    <small>
+                      Your high exploratory score ({scores.exploratory}) strongly suggests
+                      adventure-seeking personality
+                    </small>
+                  </span>
+                </div>
+              )}
             </div>
           </Card>
-        )}
+
+          {!archetypeResults && !hasInvalidArchetypeResults && (
+            <Card className={styles.processingCard}>
+              <LoadingSpinner />
+              <h4>Calculating Your Archetype Matches</h4>
+              <p>
+                We're analyzing your responses to determine your personality archetype matches...
+              </p>
+            </Card>
+          )}
+        </div>
+      );
+    }
+
+    // FALLBACK STATES: Handle various error conditions
+    if (hasInvalidArchetypeResults) {
+      return (
+        <div className={styles.errorState}>
+          <AlertTriangle />
+          <h3>Results Processing Issue</h3>
+          <p>
+            Your archetype results were generated but have an unexpected format. This is likely a
+            temporary processing issue.
+          </p>
+          <Button onClick={() => generateResults()}>Regenerate Results</Button>
+        </div>
+      );
+    }
+
+    if (!archetypeResults && scores) {
+      return (
+        <div className={styles.processingState}>
+          <LoadingSpinner />
+          <h3>Generating Your Archetype Results</h3>
+          <p>We're analyzing your responses to determine your personality archetypes...</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.emptyState}>
+        <AlertTriangle />
+        <h3>No Archetype Results Available</h3>
+        <p>We couldn't generate your archetype results. Please try retaking the assessment.</p>
+        <Button onClick={handleRetakeAssessment}>Retake Assessment</Button>
       </div>
     );
   };
 
   const renderVulnerabilitiesTab = () => {
-    if (!educationalContent?.personaEducation?.length) {
+    // Show processing state if we're generating results
+    if (!vulnerabilityAssessment && archetypeResults) {
+      return (
+        <div className={styles.vulnerabilitiesContent}>
+          <div className={styles.vulnerabilitiesHeader}>
+            <h2>Vulnerability Assessment</h2>
+            <p>Generating your personalized vulnerability awareness profile...</p>
+          </div>
+
+          <Card className={styles.processingCard}>
+            <LoadingSpinner />
+            <h4>Analyzing Your Vulnerability Patterns</h4>
+            <p>
+              We're selecting the most relevant manipulation patterns based on your archetype
+              profile...
+            </p>
+          </Card>
+        </div>
+      );
+    }
+
+    if (!selectedPersonas || selectedPersonas.length === 0) {
       return (
         <Card className={styles.noDataCard}>
           <Shield />
-          <h3>Vulnerability Assessment Unavailable</h3>
-          <p>Vulnerability patterns could not be determined from your responses.</p>
-          <Button onClick={handleRetakeAssessment}>Retake Assessment</Button>
+          <h3>No Vulnerability Assessment Available</h3>
+          <p>
+            Vulnerability assessment could not be generated.
+            {!archetypeResults
+              ? ' Archetype results are required first.'
+              : ' This may be due to incomplete data processing.'}
+          </p>
+          {!archetypeResults && (
+            <Button onClick={() => setActiveTab('archetypes')}>
+              Complete Archetype Analysis First
+            </Button>
+          )}
         </Card>
       );
     }
 
+    // Generate comprehensive red flags from all personas
+    const allRedFlags = extractKeyRedFlags(selectedPersonas);
+
     return (
       <div className={styles.vulnerabilitiesContent}>
-        <Card className={styles.vulnerabilityIntro}>
-          <div className={styles.introHeader}>
-            <Shield />
-            <div>
-              <h2>Vulnerability Awareness</h2>
+        <div className={styles.vulnerabilitiesHeader}>
+          <h2>Your Vulnerability Profile</h2>
+          <p>
+            Based on your {primaryArchetype?.archetype.name || 'personality'} profile, we've
+            identified {selectedPersonas.length} manipulation patterns you should be aware of.
+            Knowledge of these patterns helps you recognize and avoid potentially harmful
+            situations.
+          </p>
+        </div>
+
+        {/* Overview Card with Stats */}
+        <Card className={styles.vulnerabilityOverviewCard}>
+          <div className={styles.cardHeader}>
+            <Shield className={styles.cardIcon} />
+            <h3>Assessment Overview</h3>
+          </div>
+
+          <div className={styles.overviewContent}>
+            <div className={styles.overviewStats}>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{selectedPersonas.length}</span>
+                <span className={styles.statLabel}>Risk Patterns</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{allRedFlags.length}</span>
+                <span className={styles.statLabel}>Red Flags</span>
+              </div>
+            </div>
+
+            <div className={styles.overviewMessage}>
+              <AlertTriangle className={styles.overviewIcon} />
               <p>
-                Based on your archetype profile, here are{' '}
-                {educationalContent.personaEducation.length} personality types you should be
-                particularly aware of in relationships.
+                Your personality shows complex traits that create multiple vulnerability points.
+                This comprehensive awareness helps you recognize manipulation across different
+                contexts.
               </p>
             </div>
           </div>
         </Card>
 
+        {/* Key Red Flags Summary */}
+        <Card className={styles.redFlagsCard}>
+          <div className={styles.cardHeader}>
+            <AlertTriangle className={styles.cardIcon} />
+            <h3>Key Red Flags to Recognize</h3>
+          </div>
+
+          <div className={styles.redFlagsList}>
+            {allRedFlags.slice(0, 8).map((flag, index) => (
+              <div key={index} className={styles.redFlagItem}>
+                <AlertTriangle className={styles.flagIcon} />
+                <span>{flag}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Individual Persona Cards */}
         <div className={styles.personaCardsGrid}>
-          {educationalContent.personaEducation.map((personaEd: any) => (
-            <Card
-              key={personaEd.persona.id}
-              className={`${styles.personaCard} ${
-                selectedPersona?.id === personaEd.persona.id ? styles.selected : ''
-              } ${styles[personaEd.riskLevel]}`}
-              onClick={() => handlePersonaSelect(personaEd.persona)}
-            >
-              <div className={styles.personaHeader}>
-                <h4>{personaEd.persona.persona}</h4>
-                <div className={`${styles.riskBadge} ${styles[personaEd.riskLevel]}`}>
-                  {personaEd.riskLevel.toUpperCase()}
-                </div>
-              </div>
-              <p>{personaEd.persona.why}</p>
-              <div className={styles.personaActions}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={e => {
-                    e.stopPropagation();
-                    handleExpandCard(personaEd.persona.id);
-                  }}
-                >
-                  <Eye />
-                  {expandedCards.has(personaEd.persona.id) ? 'Hide Details' : 'View Details'}
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+          {selectedPersonas.map((persona, index) => {
+            const personaRedFlags = getPersonaRedFlags(persona);
+            const protectionStrategies = getPersonaProtectionStrategies(persona);
 
-        {selectedPersona && (
-          <Card className={styles.personaDetails}>
-            {(() => {
-              const personaEd = educationalContent.personaEducation.find(
-                (ed: any) => ed.persona.id === selectedPersona.id
-              );
-
-              if (!personaEd) return null;
-
-              return (
-                <>
-                  <h3>
-                    {personaEd.persona.persona} - {personaEd.persona.title}
-                  </h3>
-                  <div className={styles.personaAnalysis}>
-                    <div className={styles.analysisSection}>
-                      <h4>🎭 Character Examples</h4>
-                      <p>{personaEd.persona.characters.join(', ')}</p>
-                    </div>
-                    <div className={styles.analysisSection}>
-                      <h4>💭 Why You're Drawn to Them</h4>
-                      <p>{personaEd.persona.why}</p>
-                    </div>
-                    <div className={styles.analysisSection}>
-                      <h4>🔍 The Reality Check</h4>
-                      <p>{personaEd.persona.plotTwist}</p>
-                    </div>
-                    <div className={styles.analysisSection}>
-                      <h4>🎯 Your Blind Spot</h4>
-                      <p>{personaEd.persona.blindSpot}</p>
-                    </div>
-                    <div className={styles.analysisSection}>
-                      <h4>💡 Remember This</h4>
-                      <p>{personaEd.persona.punchline}</p>
-                    </div>
+            return (
+              <Card
+                key={persona.id}
+                className={`${styles.personaCard} ${
+                  selectedPersona?.id === persona.id ? styles.selected : ''
+                }`}
+                onClick={() => handlePersonaSelect(persona)}
+              >
+                <div className={styles.personaHeader}>
+                  <div className={styles.personaIcon}>📍</div>
+                  <div className={styles.personaTitle}>
+                    <h3>{persona.title}</h3>
+                    <p className={styles.personaSubtitle}>{persona.persona}</p>
                   </div>
-                </>
-              );
-            })()}
-          </Card>
-        )}
+                  <div className={styles.riskLevel}>
+                    <span className={`${styles.riskBadge} ${styles.high}`}>HIGH</span>
+                  </div>
+                </div>
+
+                {/* Pop Culture References */}
+                <div className={styles.popCultureSection}>
+                  <Film className={styles.sectionIcon} />
+                  <div className={styles.popCultureContent}>
+                    <strong>Think:</strong>{' '}
+                    {persona.characters?.join(', ') || 'Classic manipulation patterns'}
+                  </div>
+                </div>
+
+                {/* Why It Appeals */}
+                <div className={styles.appealSection}>
+                  <Heart className={styles.sectionIcon} />
+                  <p>
+                    <strong>Why it's appealing:</strong>{' '}
+                    {persona.why || 'Appeals to your caring nature'}
+                  </p>
+                </div>
+
+                {/* Expanded Content When Selected */}
+                {selectedPersona?.id === persona.id && (
+                  <div className={styles.expandedPersonaContent}>
+                    {/* Red Flags Section */}
+                    <div className={styles.warningSignsSection}>
+                      <h4>🚩 Warning Signs</h4>
+                      <ul>
+                        {personaRedFlags.map((flag, idx) => (
+                          <li key={idx}>{flag}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Protection Strategies */}
+                    <div className={styles.protectionStrategies}>
+                      <h4>🛡️ Protection Strategies</h4>
+                      <ul>
+                        {protectionStrategies.map((strategy, idx) => (
+                          <li key={idx}>{strategy}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Manipulation Tactics */}
+                    <div className={styles.tacticsSection}>
+                      <h4>🎭 Common Tactics</h4>
+                      <ul>
+                        {persona.psychologicalTactics?.map((tactic, idx) => (
+                          <li key={idx}>{tactic}</li>
+                        )) || <li>Uses various psychological manipulation techniques</li>}
+                      </ul>
+                    </div>
+
+                    {/* Reality Check */}
+                    {persona.plotTwist && (
+                      <div className={styles.realityCheck}>
+                        <h4>💡 The Reality</h4>
+                        <p>{persona.plotTwist}</p>
+                      </div>
+                    )}
+
+                    {/* Blind Spot Warning */}
+                    {persona.blindSpot && (
+                      <div className={styles.blindSpotWarning}>
+                        <h4>⚠️ Your Blind Spot</h4>
+                        <p>{persona.blindSpot}</p>
+                      </div>
+                    )}
+
+                    {/* Memorable Takeaway */}
+                    {persona.punchline && (
+                      <div className={styles.takeawaySection}>
+                        <h4>🎯 Remember This</h4>
+                        <p className={styles.punchline}>{persona.punchline}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Card>
+            );
+          })}
+        </div>
       </div>
     );
   };
 
-  const renderAttractionPatternsTab = () => (
-    <div className={styles.attractionPatternsContent}>
-      <Card className={styles.comingSoonCard}>
-        <div className={styles.comingSoonContent}>
-          <Target className={styles.comingSoonIcon} />
-          <h2>Attraction Patterns</h2>
+  const renderAttractionPatternsTab = () => {
+    return (
+      <div className={styles.patternsContent}>
+        <Card className={styles.comingSoonCard}>
+          <Heart className={styles.comingSoonIcon} />
+          <h3>Attraction Patterns Analysis</h3>
           <p>
-            Coming soon! This section will analyze your attraction patterns and provide insights
-            into relationship compatibility.
+            This comprehensive analysis of your attraction dynamics and relationship patterns is
+            coming soon. It will include insights into your romantic preferences, compatibility
+            indicators, and relationship growth opportunities.
           </p>
           <div className={styles.comingSoonFeatures}>
-            <div className={styles.featureItem}>
+            <div className={styles.feature}>
               <Users />
-              <span>Compatibility Insights</span>
+              <span>Compatibility Analysis</span>
             </div>
-            <div className={styles.featureItem}>
+            <div className={styles.feature}>
               <TrendingUp />
-              <span>Relationship Patterns</span>
+              <span>Growth Patterns</span>
             </div>
-            <div className={styles.featureItem}>
+            <div className={styles.feature}>
               <Target />
-              <span>Personal Growth Areas</span>
+              <span>Attraction Triggers</span>
             </div>
           </div>
           <div className={styles.comingSoonActions}>
-            <Button variant="outline" disabled>
-              <BarChart3 />
-              View Patterns (Coming Soon)
+            <Button variant="outline" onClick={() => setActiveTab('archetypes')}>
+              Explore Archetypes
             </Button>
           </div>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
+  };
 
   const renderActionButtons = () => (
-    <div className={styles.actionsSection}>
+    <div className={styles.actionButtons}>
       <div className={styles.primaryActions}>
-        {activeTab === 'archetypes' && (
-          <Button
-            variant="cta"
-            size="lg"
-            onClick={() => handleTabChange('vulnerabilities')}
-            className={styles.continueButton}
-          >
-            Continue to Vulnerability Assessment
-            <ChevronRight />
+        {assessmentResult && (
+          <Button variant="primary" onClick={handleDownloadResults} disabled={isDownloading}>
+            {isDownloading ? <LoadingSpinner size="sm" /> : <Download />}
+            Download Results
           </Button>
         )}
 
-        {activeTab === 'vulnerabilities' && (
-          // <Button
-          //   variant="cta"
-          //   size="lg"
-          //   onClick={() => handleTabChange('patterns')}
-          //   className={styles.continueButton}
-          // >
-          //   Continue to Attraction Patterns
-          //   <ChevronRight />
-          // </Button>
-          <Button
-            variant="cta"
-            size="lg"
-            onClick={() => router.push('/vulnerabilities')}
-            className={styles.continueButton}
-          >
-            View Detailed Vulnerability Analysis
-            <ChevronRight />
-          </Button>
-        )}
-
-        {activeTab === 'patterns' && (
-          <Button
-            variant="cta"
-            size="lg"
-            onClick={() => router.push('/')}
-            className={styles.continueButton}
-          >
-            Complete Assessment
-            <Home />
-          </Button>
-        )}
-      </div>
-
-      <div className={styles.secondaryActions}>
         <Button
-          variant="outline"
-          onClick={handleDownloadResults}
-          loading={isDownloading}
-          disabled={isDownloading}
+          variant="secondary"
+          onClick={() => {
+            // Implement share functionality
+            if (navigator.share) {
+              navigator.share({
+                title: 'My Relationship Assessment Results',
+                text: 'I just completed a comprehensive relationship assessment!',
+                url: window.location.href,
+              });
+            }
+          }}
         >
-          <Download />
-          Download Complete Results
-        </Button>
-
-        <Button variant="outline" onClick={handleShareResults}>
           <Share2 />
           Share Results
         </Button>
+      </div>
 
-        <Button variant="secondary" onClick={handleRetakeAssessment}>
+      <div className={styles.secondaryActions}>
+        <Button variant="outline" onClick={handleRetakeAssessment}>
           <RefreshCw />
           Retake Assessment
+        </Button>
+
+        <Button variant="outline" onClick={handleGoHome}>
+          <Home />
+          Back to Home
         </Button>
       </div>
     </div>
@@ -634,27 +1055,6 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
         </div>
 
         {renderActionButtons()}
-
-        {debug && showAnalytics && assessmentResult && (
-          <Card className={styles.debugCard}>
-            <h4>Debug Information</h4>
-            <div className={styles.debugInfo}>
-              <p>
-                <strong>Assessment Duration:</strong> {assessmentResult.assessmentDuration}ms
-              </p>
-              <p>
-                <strong>Total Answers:</strong> {assessmentResult.answers?.length || 0}
-              </p>
-              <p>
-                <strong>Session ID:</strong> {assessmentResult.sessionId}
-              </p>
-              <p>
-                <strong>Path Analytics:</strong>{' '}
-                {assessmentResult.pathAnalytics ? 'Available' : 'Not Available'}
-              </p>
-            </div>
-          </Card>
-        )}
       </div>
     </PageLayout>
   );

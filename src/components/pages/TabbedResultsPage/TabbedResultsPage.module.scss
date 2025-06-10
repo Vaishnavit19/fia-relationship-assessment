@@ -186,6 +186,19 @@
   }
 }
 
+.archetypesList {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  padding-block: 1rem;
+}
+
+.actionButtons {
+  display: grid;
+    gap: 1rem;
+}
+
+
 // ==========================================================================
 // ARCHETYPES TAB STYLES
 // ==========================================================================
@@ -680,29 +693,6 @@
   }
 }
 
-.riskBadge {
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  text-transform: uppercase;
-
-  &.high {
-    background: rgb(245 101 101 / 20%);
-    color: #c53030;
-  }
-
-  &.medium {
-    background: rgb(237 137 54 / 20%);
-    color: #dd6b20;
-  }
-
-  &.low {
-    background: rgb(72 187 120 / 20%);
-    color: #2f855a;
-  }
-}
-
 .personaSubtitle {
   color: #718096;
   font-size: 14px;
@@ -995,6 +985,7 @@
 
 .primaryActions {
   display: flex;
+  gap: 1rem;
   justify-content: center;
 }
 
@@ -1008,7 +999,7 @@
 .secondaryActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 1rem;
   justify-content: center;
 
   @media (width <= 768px) {
@@ -1097,5 +1088,242 @@
 
   .secondaryActions {
     flex-direction: column;
+  }
+}
+
+.redFlagsCard {
+  .cardHeader {
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+
+    .cardIcon {
+      color: #e53e3e;
+      height: 20px;
+      width: 20px;
+    }
+
+    h3 {
+      color: #2d3748;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+}
+
+.redFlagsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.redFlagItem {
+  align-items: flex-start;
+  background: #fef5e7;
+  border-left: 4px solid #f6ad55;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #fed7d7;
+    border-left-color: #e53e3e;
+  }
+
+  .flagIcon {
+    color: #e53e3e;
+    flex-shrink: 0;
+    height: 16px;
+    margin-top: 2px;
+    width: 16px;
+  }
+
+  span {
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+// ==========================================================================
+// PERSONA CARD ENHANCEMENTS
+// ==========================================================================
+
+.popCultureSection {
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+
+  .sectionIcon {
+    color: #667eea;
+    height: 16px;
+    width: 16px;
+  }
+
+  .popCultureContent {
+    font-size: 14px;
+    line-height: 1.4;
+
+    strong {
+      color: #2d3748;
+      font-weight: 600;
+    }
+  }
+}
+
+.appealSection {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+
+  .sectionIcon {
+    color: #ed8936;
+    flex-shrink: 0;
+    height: 16px;
+    margin-top: 2px;
+    width: 16px;
+  }
+
+  p {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+
+    strong {
+      color: #2d3748;
+      font-weight: 600;
+    }
+  }
+}
+
+.expandedPersonaContent {
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.warningSignsSection,
+.protectionStrategies {
+  h4 {
+    color: #2d3748;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    background: #f8fafc;
+    border-radius: 6px;
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    padding: 8px 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.warningSignsSection {
+  li {
+    background: #fef5e7;
+    border-left: 3px solid #f6ad55;
+  }
+}
+
+.protectionStrategies {
+  li {
+    background: #f0fff4;
+    border-left: 3px solid #68d391;
+  }
+}
+
+.realityCheck {
+  background: #fef2f2;
+  border-left: 4px solid #f56565;
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  h4 {
+    color: #c53030;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+.blindSpotWarning {
+  background: #fffbeb;
+  border-left: 4px solid #f6ad55;
+  border-radius: 8px;
+  padding: 12px 16px;
+
+  h4 {
+    color: #d69e2e;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+// ==========================================================================
+// RISK LEVEL BADGES
+// ==========================================================================
+.riskBadge {
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  text-transform: uppercase;
+
+
+  &.high {
+    background: #fed7d7;
+    color: #c53030;
+  }
+
+  &.medium {
+    background: #fef5e7;
+    color: #d69e2e;
+  }
+
+  &.low {
+    background: #f0fff4;
+    color: #38a169;
   }
 }

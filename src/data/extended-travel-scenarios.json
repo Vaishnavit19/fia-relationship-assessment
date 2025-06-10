@@ -2,15 +2,19 @@
   "metadata": {
     "title": "Extended Travel Scenarios Assessment",
     "description": "Complex branching questionnaire for relationship vulnerability assessment",
-    "totalScenarios": 20,
-    "averageQuestions": 10,
-    "maxQuestions": 12,
-    "minQuestions": 8
+    "totalScenarios": 25,
+    "averageQuestions": 18,
+    "maxQuestions": 19,
+    "minQuestions": 16,
+    "multiSelectScenarios": 4,
+    "branchingPoints": 2,
+    "scoringDimensions": ["emotional", "logical", "exploratory"],
+    "version": "1.0"
   },
   "scenarios": [
     {
       "id": 1,
-      "text": "First you need to decide on your travel itinerary. How many days do you want your trip to be?",
+      "text": "First you need to decide on your travel initiary. How many days do you want your trip to be?",
       "options": [
         {
           "letter": "A",
@@ -19,14 +23,14 @@
           "next": 2
         },
         {
-          "letter": "B", 
+          "letter": "B",
           "text": "I'll run the costs and schedules to choose the most efficient trip length.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
           "next": 2
         },
         {
           "letter": "C",
-          "text": "Let's go as long as our schedules allow—more days means more chances for spontaneous adventures.",
+          "text": "Let's go as long as our schedules allowr—more days means more chances for spontaneous adventures.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 2
         }
@@ -34,465 +38,605 @@
     },
     {
       "id": 2,
-      "text": "Now you need to decide on where to go. You have always wanted to visit Paris but your partner thinks London would be more fun.",
+      "text": "Now you need to decide on where to go. You have always wanted to visit Paris but your partner thinks London would be more fun",
       "options": [
         {
           "letter": "A",
           "text": "If London makes you happier, I'm good with it.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "3.1"
+          "next": 3.1
         },
         {
           "letter": "B",
           "text": "Paris makes more sense—better flights, lower costs, and amazing attractions.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "3.2"
+          "next": 3.2
         },
         {
           "letter": "C",
           "text": "London just feels right to me—I love the idea of exploring somewhere unexpected.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "3.1"
+          "next": 3.1
         }
       ]
     },
     {
-      "id": "3.1",
-      "text": "You guys are going to London!! You are excited, but the night before the flight your partner told you work came up and they had to stay behind for another day.",
+      "id": 3.1,
+      "text": "You guys are going to London !! You are excited, But the night before the flight your partner told you work came up and they had to stay behind for another day.",
       "options": [
         {
           "letter": "A",
           "text": "I'll cancel and rebook so we arrive together. I don't want to be in a new place alone.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "4.1"
+          "next": 4.1
         },
         {
           "letter": "B",
           "text": "I'll compare rebooking fees; if it's too high, I'll go ahead today, check in, and you can join me tomorrow.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "4.3"
+          "next": 4.3
         },
         {
           "letter": "C",
-          "text": "This is actually great—more time to plan my day. I'll go today solo and explore until you arrive tomorrow.",
+          "text": "This is actually great—more time to plan my day. I'll go today solo and explore until you arrive tomorrow",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "4.3"
+          "next": 4.3
         }
       ]
     },
     {
-      "id": "3.2",
-      "text": "You guys are going to Paris!! You are excited, but the night before the flight your partner told you work came up and they had to stay behind for another day.",
+      "id": 3.2,
+      "text": "You guys are going to Paris!! You are excited, But the night before the flight your partner told you work came up and they had to stay behind for another day.",
       "options": [
         {
           "letter": "A",
           "text": "I don't want to experience a new city without you. Let me rebook so we can go together.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "4.2"
+          "next": 4.2
         },
         {
           "letter": "B",
           "text": "Let me check the rebooking fees first. If they're reasonable, I'll wait. If not, I'll go ahead and you can join tomorrow.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "4.4"
+          "next": 4.4
         },
         {
           "letter": "C",
           "text": "Actually, this could be fun! I'll go explore on my own today and have stories to share when you arrive.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "4.4"
+          "next": 4.4
         }
       ]
     },
     {
-      "id": "4.1",
+      "id": 4.1,
       "text": "You canceled your flight and booked a hotel near the airport. It's late evening and your partner still hasn't replied to any texts all day.",
       "options": [
         {
           "letter": "A",
-          "text": "You pick up your phone again and text: 'Please let me know you're okay—I'm really worried.'",
+          "text": "You pick up your phone again and text: \"Please let me know you're okay—I'm really worried.\"",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "5.1"
+          "next": 5.1
         },
         {
           "letter": "B",
           "text": "You decide to leave the hotel for a bit—grab coffee at a nearby café and take photos of the city at night until they respond.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "5.1"
+          "next": 5.1
         },
         {
           "letter": "C",
           "text": "They're probably still tied up with work. I'll confirm that everything on my end is in order and avoid reaching out until necessary.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "5.1"
+          "next": 5.1
         }
       ]
     },
     {
-      "id": "4.2",
+      "id": 4.2,
       "text": "You canceled your flight and booked a hotel near the airport. It's late evening and your partner still hasn't replied to any texts all day.",
       "options": [
         {
           "letter": "A",
-          "text": "You pick up your phone again and text: 'Please let me know you're okay—I'm really worried.'",
+          "text": "You pick up your phone again and text: \"Please let me know you're okay—I'm really worried.\"",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "5.2"
+          "next": 5.2
         },
         {
           "letter": "B",
           "text": "They're probably swamped with work. I'll explore the area and grab coffee until they respond.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "5.2"
+          "next": 4.3
         },
         {
           "letter": "C",
           "text": "Work emergencies happen. I'll double-check our new flight details and wait for them to reach out.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "5.2"
+          "next": 4.3
         }
       ]
     },
     {
-      "id": "4.3",
-      "text": "You arrive in London alone because your partner's flight was pushed to tomorrow. Your hotel room is booked; it's 10 AM and you have a free day.",
+      "id": 4.3,
+      "text": "You arrive in Londo alone because your partner's flight was pushed to tomorrow. Your hotel room is booked; it's 10 AM and you have a free day.",
       "options": [
         {
           "letter": "A",
           "text": "I'll go spend time in that beautiful café we always wanted to visit—and send you a photo so you feel part of it.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "5.3"
+          "next": 5.3
         },
         {
           "letter": "B",
           "text": "Let's stick to the plan and take that tour since I'm already here—no need to reinvent the day.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "5.3"
+          "next": 5.3
         },
         {
           "letter": "C",
-          "text": "I'll just wander around and see what catches my eye in this neighborhood.",
+          "text": "I'll just wander around and see what catches my eye in this neighborhood",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "5.3"
+          "next": 5.3
         }
       ]
     },
     {
-      "id": "4.4",
+      "id": 4.4,
       "text": "You arrive in Paris alone because your partner's flight was pushed to tomorrow. Your hotel room is booked; it's 10 AM and you have a free day.",
       "options": [
         {
           "letter": "A",
           "text": "I'll go spend time in that beautiful café we always wanted to visit—and send them a photo so they feel part of it.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "5.4"
+          "next": 5.4
         },
         {
           "letter": "B",
           "text": "Let's stick to the plan and take that tour since I'm already here—no need to reinvent the day.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "5.4"
+          "next": 5.4
         },
         {
           "letter": "C",
-          "text": "I'll just wander around and see what catches my eye in this neighborhood.",
+          "text": "I'll just wander around and see what catches my eye in this neighborhood",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "5.4"
+          "next": 5.4
         }
       ]
     },
     {
-      "id": "5.1",
+      "id": 5.1,
       "text": "Later, your partner arrives at the hotel. 'Work has been crazy and I'm sorry for not replying to your texts all day,' they say.",
       "options": [
         {
           "letter": "A",
           "text": "I was so worried! I felt completely ignored and it really hurt my feelings. I need you to understand how that made me feel.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "6.1"
+          "next": 5.2
         },
         {
           "letter": "B",
           "text": "I understand work gets hectic. Just send a quick 'busy today' text next time so I know what's happening.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "6.1"
+          "next": 5.2
         },
         {
           "letter": "C",
           "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well - want to hear about it?",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "6.1"
+          "next": 5.2
         }
       ]
     },
     {
-      "id": "5.2",
+      "id": 5.2,
       "text": "Later, your partner arrives at the hotel. 'Work has been crazy and I'm sorry for not replying to your texts all day,' they say.",
       "options": [
         {
           "letter": "A",
           "text": "I was so worried! I felt completely ignored and it really hurt my feelings. I need you to understand how that made me feel.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "6.2"
+          "next": 5.3
         },
         {
           "letter": "B",
           "text": "I understand work gets hectic. Just send a quick 'busy today' text next time so I know what's happening.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "6.2"
+          "next": 5.3
         },
         {
           "letter": "C",
           "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well - want to hear about it?",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "6.2"
+          "next": 5.3
         }
       ]
     },
     {
-      "id": "5.3",
+      "id": 5.3,
       "text": "You're walking down a bustling London street when you see a street artist creating an incredible portrait—but your phone battery is at 5%.",
       "options": [
         {
           "letter": "A",
           "text": "This is too amazing not to capture—I'll risk my phone dying for this moment.",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 1 },
-          "next": "6.3"
+          "next": 6.3
         },
         {
           "letter": "B",
           "text": "I'll snap one quick photo, then save the rest of my battery.",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 1 },
-          "next": "6.3"
+          "next": 6.3
         },
         {
           "letter": "C",
           "text": "I'll just enjoy this without my phone—some moments are better experienced than photographed.",
           "scores": { "emotional": 1, "logical": 1, "exploratory": 0 },
-          "next": "6.3"
+          "next": 6.3
         }
       ]
     },
     {
-      "id": "5.4",
+      "id": 5.4,
       "text": "You're strolling down Rue Montorgueil when you hear a street musician playing something so moving you stop in your tracks—but your phone battery is at 5%.",
       "options": [
         {
           "letter": "A",
           "text": "This is too amazing not to capture—I'll risk my phone dying for this moment.",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 1 },
-          "next": "6.4"
+          "next": 6.4
         },
         {
           "letter": "B",
           "text": "I'll snap one quick photo, then save the rest of my battery.",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 1 },
-          "next": "6.4"
+          "next": 6.4
         },
         {
           "letter": "C",
           "text": "I'll just enjoy this without my phone—some moments are better experienced than photographed.",
           "scores": { "emotional": 1, "logical": 1, "exploratory": 0 },
-          "next": "6.4"
+          "next": 6.4
         }
       ]
     },
     {
-      "id": "6.1",
-      "text": "The next day, you and your partner flew in and checked into your hotel. Now you have a few hours before dinner. Pick exactly two of these to begin your day:",
-      "type": "multi-select",
-      "selectCount": 2,
+      "id": 6.1,
+      "text": "The next day, you and your partner flied in and checked into your hotel. now you have a few hours before dinner. Pick exactly two of these to begin your day:",
+      "minSelection": 2,
       "options": [
         {
           "letter": "A",
-          "text": "Big Ben & Westminster - Visit the iconic landmark and learn its history",
+          "text": "Big Ben & Westminster - \"Visit the iconic landmark and learn its history\"",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 0 },
-          "next": "7.1"
+          "next": 6.2
         },
         {
           "letter": "B",
-          "text": "London Eye - Share a romantic moment high above the Thames",
+          "text": "London Eye - \"Share a romantic moment high above the Thames\"",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 0 },
-          "next": "7.2"
+          "next": 6.2
         },
         {
           "letter": "C",
-          "text": "Hidden Pub in Covent Garden - Discover a secret local spot off the beaten path",
+          "text": "Hidden Pub in Covent Garden - \"Discover a secret local spot off the beaten path\"",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 1 },
-          "next": "7.3"
+          "next": 6.2
         }
       ]
     },
     {
-      "id": "6.2",
-      "text": "The next day, you and your partner flew in and checked into your hotel. Now you have a few hours before dinner. Pick exactly two of these to begin your day:",
-      "type": "multi-select",
-      "selectCount": 2,
+      "id": 6.2,
+      "text": "The next day, you and your partner flied in and checked into your hotel. now you have a few hours before dinner. Pick exactly two of these to begin your day:",
+      "minSelection": 2,
       "options": [
         {
           "letter": "A",
-          "text": "The Louvre - Explore world-famous art and masterpieces",
+          "text": "The Louvre - \"Explore world-famous art and masterpieces\"",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 0 },
-          "next": "7.4"
+          "next": 6.3
         },
         {
           "letter": "B",
-          "text": "Eiffel Tower - Share a romantic view from Paris's most iconic spot",
+          "text": "Eiffel Tower - \"Share a romantic view from Paris's most iconic spot\"",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 0 },
-          "next": "7.5"
+          "next": 6.3
         },
         {
           "letter": "C",
-          "text": "Hidden Pâtisserie - Hunt down a secret bakery locals rave about",
+          "text": "Hidden Pâtisserie - \"Hunt down a secret bakery locals rave about\"",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 1 },
-          "next": "7.6"
+          "next": 6.3
         }
       ]
     },
     {
-      "id": "6.3",
+      "id": 6.3,
       "text": "The next day, your partner arrives and you both check into your hotel. With a few hours to kill before dinner, you decide to explore. Pick exactly two activities to start your adventure:",
-      "type": "multi-select",
-      "selectCount": 2,
+      "minSelection": 2,
       "options": [
         {
           "letter": "A",
-          "text": "Big Ben & Westminster - Visit the iconic landmark and learn its history",
+          "text": "Big Ben & Westminster - \"Visit the iconic landmark and learn its history\"",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 0 },
-          "next": "7.1"
+          "next": 6.4
         },
         {
           "letter": "B",
-          "text": "London Eye - Share a romantic moment high above the Thames",
+          "text": "London Eye - \"Share a romantic moment high above the Thames\"",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 0 },
-          "next": "7.2"
+          "next": 6.4
         },
         {
           "letter": "C",
-          "text": "Hidden Pub in Covent Garden - Discover a secret local spot off the beaten path",
+          "text": "Hidden Pub in Covent Garden - \"Discover a secret local spot off the beaten path\"",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 1 },
-          "next": "7.3"
+          "next": 6.4
         }
       ]
     },
     {
-      "id": "6.4",
+      "id": 6.4,
       "text": "The next day, your partner arrives and you both check into your hotel. With a few hours to kill before dinner, you decide to explore. Pick exactly two activities to start your adventure:",
-      "type": "multi-select",
-      "selectCount": 2,
+      "minSelection": 2,
       "options": [
         {
           "letter": "A",
-          "text": "The Louvre - Explore world-famous art and masterpieces",
+          "text": "The Louvre - \"Explore world-famous art and masterpieces\"",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 0 },
-          "next": "7.4"
+          "next": 7.1
         },
         {
           "letter": "B",
-          "text": "Eiffel Tower - Share a romantic view from Paris's most iconic spot",
+          "text": "Eiffel Tower - \"Share a romantic view from Paris's most iconic spot\"",
           "scores": { "emotional": 1, "logical": 0, "exploratory": 0 },
-          "next": "7.5"
+          "next": 7.1
         },
         {
           "letter": "C",
-          "text": "Hidden Pâtisserie - Hunt down a secret bakery locals rave about",
+          "text": "Hidden Pâtisserie - \"Hunt down a secret bakery locals rave about\"",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 1 },
-          "next": "7.6"
+          "next": 7.1
         }
       ]
     },
     {
-      "id": "7.1",
-      "text": "As you approach Big Ben, your partner suddenly feels overwhelmed by the crowd. They tug your arm and say, 'Can we leave? I can't focus like this.'",
+      "id": 7.1,
+      "text": "As you approach Big Ben, your partner suddenly feels overwhelmed by the crowd. They tug your arm and say, \"Can we leave? I can't focus like this.\"",
       "options": [
         {
           "letter": "A",
           "text": "I'd step aside with them and focus on how they're feeling before anything else.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "9.1"
+          "next": 7.2
         },
         {
           "letter": "B",
           "text": "Sure, but let me grab one quick photo since we made it this far.",
           "scores": { "emotional": 0, "logical": 1, "exploratory": 1 },
-          "next": "9.1"
+          "next": 7.2
         },
         {
           "letter": "C",
-          "text": "I'd point toward the church and say, 'Let's try in there instead.'",
+          "text": "I'd point toward the church and say, \"Let's try in there instead.\"",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "9.1"
+          "next": 7.2
         }
       ]
     },
     {
-      "id": "7.2",
-      "text": "You're riding the London Eye just as the sun dips below the skyline. The capsule gently rotates, offering sweeping views over the Thames. Your partner's phone buzzes: it's a text from a friend who has extra tickets to a secret rooftop concert starting now.",
+      "id": 7.2,
+      "text": "You're riding the London Eye just as the sun dips below the skyline. The capsule gently rotates, offering sweeping views over the Thames. Your partner's phone buzzes: it's a text from a friend who has extra tickets to a secret rooftop concert starting now",
       "options": [
         {
           "letter": "A",
           "text": "I've been dreaming of this ride—let's finish it. We can't bail now; I want us to share this moment.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "9.1"
+          "next": 7.3
         },
         {
           "letter": "B",
           "text": "We paid for this ride and have 20 minutes left. Let's finish, then maybe catch the concert after.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "9.1"
+          "next": 7.3
         },
         {
           "letter": "C",
           "text": "Secret concert? Way more exciting than this tourist trap! Let's go see what happens!",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "9.1"
+          "next": 7.3
         }
       ]
     },
     {
-      "id": "9.1",
-      "text": "It's 8 PM and you're both starving. You arrive at a busy bistro—there's a 45-minute wait for a table. Your partner suggests grabbing something nearby instead.",
+      "id": 7.3,
+      "text": "After skipping the big landmarks, you and your partner are wandering side streets. A street performer invites you both to join their improv sketch in front of a small crowd.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Oh my god, that sounds fun! Are you up for it? Let's do it!",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7.4
+        },
+        {
+          "letter": "B",
+          "text": "Hmm, let me just watch for a sec to see what we're getting into first.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 7.4
+        },
+        {
+          "letter": "C",
+          "text": "Sure, why not? Let's see what happens!",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7.4
+        }
+      ]
+    },
+    {
+      "id": 7.4,
+      "text": "You're at the Louvre with only two hours before it closes. There are so many famous works to see, but you can't possibly visit everything. How do you decide what to prioritize?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "I really want to see the Mona Lisa—that's been on my bucket list forever!",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 7.5
+        },
+        {
+          "letter": "B",
+          "text": "Let's pick the top 3 must-see sections and focus on those so we don't waste time.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 7.5
+        },
+        {
+          "letter": "C",
+          "text": "Let's just wander and see what draws us in—we might discover something amazing",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7.5
+        }
+      ]
+    },
+    {
+      "id": 7.5,
+      "text": "Your partner wants to write a love note and lock it at the top of the Eiffel Tower. You're not sure.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "It might be cheesy, but it's meaningful to them—so I'd go for it.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 7.6
+        },
+        {
+          "letter": "B",
+          "text": "I'd prefer snapping a great picture—something we'll actually keep and look at.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 7.6
+        },
+        {
+          "letter": "C",
+          "text": "Let's write it but hide it somewhere unexpected up there—feels more fun and personal.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 7.6
+        }
+      ]
+    },
+    {
+      "id": 7.6,
+      "text": "You and your partner discover a small, local pâtisserie filled with beautiful, unique pastries—You're overwhelmed by choice?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "I'll let my partner pick.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 9.1
+        },
+        {
+          "letter": "B",
+          "text": "Check reviews online—let's see what other people say about this place",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 9.1
+        },
+        {
+          "letter": "C",
+          "text": "Ask the owner for their favorite—you're in adventure mode.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 9.1
+        }
+      ]
+    },
+    {
+      "id": 9.1,
+      "text": "It's 8 PM in London and you're both starving. You arrive at a busy bistro—there's a 45-minute wait for a table. Your partner suggests grabbing something nearby instead.",
       "options": [
         {
           "letter": "A",
           "text": "But this place looks so cozy and romantic! Can't we just wait? I really had my heart set on this.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "10.1"
+          "next": 9.2
         },
         {
           "letter": "B",
           "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby - we'll eat sooner and avoid the crowd.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "10.1"
+          "next": 9.2
         },
         {
           "letter": "C",
           "text": "Let's wander and see what we discover! Maybe we'll find some hidden gem or street food we never would have tried otherwise.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "10.1"
+          "next": 9.2
         }
       ]
     },
     {
-      "id": "10.1",
+      "id": 9.2,
+      "text": "It's 8 PM in Paris and you're both starving. You arrive at a busy bistro—there's a 45-minute wait for a table. Your partner suggests grabbing something nearby instead.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "But this place looks so cozy and romantic! Can't we just wait? I really had my heart set on this.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": 10.1
+        },
+        {
+          "letter": "B",
+          "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby - we'll eat sooner and avoid the crowd.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": 10.1
+        },
+        {
+          "letter": "C",
+          "text": "Let's wander and see what we discover! Maybe we'll find some hidden gem or street food we never would have tried otherwise.",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": 10.1
+        }
+      ]
+    },
+    {
+      "id": 10.1,
       "text": "It's nearly midnight and you're both getting tired. You could head back to your hotel, but there's a late-night Thames boat tour departing in 15 minutes, or a 24-hour diner that locals say has the best breakfast in London.",
       "options": [
         {
           "letter": "A",
           "text": "A moonlit boat ride sounds so dreamy! Even though we're tired, imagine how romantic the city lights will look from the water!",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
-          "next": "end"
+          "next": 10.2
         },
         {
           "letter": "B",
           "text": "We've had a full day and need rest for tomorrow's plans. Let's head back to the hotel and get proper sleep.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
-          "next": "end"
+          "next": 10.2
         },
         {
           "letter": "C",
           "text": "Local diner at midnight? That's where we'll find the real London experience! Who knows what characters we'll meet there.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
-          "next": "end"
+          "next": 10.2
+        }
+      ]
+    },
+    {
+      "id": 10.2,
+      "text": "After dinner, you walked pass a late-night cinema showing a classic film that starts in 10 minutes, while across the street there's a 24-hour arcade that looks surprisingly fun and retro.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Ooh, a classic film sounds so romantic! We could snuggle in the dark theater - that feels perfect after dinner together.",
+          "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
+          "next": null
+        },
+        {
+          "letter": "B",
+          "text": "The movie starts in 10 minutes, so we'd have to rush and might miss the beginning. The arcade has no time pressure - better choice.",
+          "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
+          "next": null
+        },
+        {
+          "letter": "C",
+          "text": "An arcade? When's the last time we played old-school games? Let's see what weird vintage stuff they have in there!",
+          "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
+          "next": null
         }
       ]
     }

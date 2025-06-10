@@ -15,5 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <TabbedResultsPage initialTab="archetypes" showAnalytics={true} />;
+  return (
+    <TabbedResultsPage
+      initialTab="archetypes"
+      debug={process.env.NODE_ENV === 'development'}
+      showAnalytics={true}
+    />
+  );
 }

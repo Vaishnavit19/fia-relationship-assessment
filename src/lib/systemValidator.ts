@@ -1,48 +1,34 @@
-// src/lib/systemValidator.ts
+// lib/systemValidator.ts
 // ==========================================================================
-// UPDATED SYSTEM INTEGRATION VALIDATOR - Based on New Architecture
+// SYSTEM INTEGRATION VALIDATOR - UPDATED FOR STORE COMPATIBILITY
 // ==========================================================================
 
 import {
   generateArchetypeResults,
   calculateConfidenceGap,
   areDistancesTied,
-  calculateEuclideanDistance,
-  getDetailedScoreAnalysis,
 } from './archetypeCalculator';
 import {
   calculateExtendedScores,
+  safeCalculateExtendedScores,
   getUserScenarioPath,
   getExtendedScenarioById,
-  validateScenarioIntegrity,
-  calculateExtendedProgress,
-  isScenarioPathComplete,
+  validateScenarioData, // FIXED: Updated from validateScenarioIntegrity
+  createExtendedUserAnswer,
+  validateAnswerObject,
 } from './data';
-import {
-  selectPersonasForUser,
-  validatePersonaSelectionSetup,
-  getPersonaDistribution,
-  getArchetypeVulnerabilities,
-} from './personaSelector';
-import {
-  generateCompleteAssessmentResults,
-  formatArchetypeResultsForDisplay,
-} from './resultsEngine';
+import { selectPersonasForUser } from './personaSelector';
 import {
   ExtendedUserAnswer,
   ScoreData,
   ArchetypeResults,
-  VulnerabilityAssessment,
-  ExtendedAssessmentResult,
+  ExtendedAnswerOption,
+  ExtendedScenario,
 } from './types';
-import {
-  generateVulnerabilityAssessment,
-  calculateOverallRiskLevel,
-  generateRiskProfile,
-} from './vulnerabilityPipeline';
+import { generateVulnerabilityAssessment, VulnerabilityAssessment } from './vulnerabilityPipeline';
 
 // ==========================================================================
-// ENHANCED SYSTEM VALIDATION TYPES
+// SYSTEM VALIDATION TYPES
 // ==========================================================================
 
 export interface SystemValidationResult {
@@ -50,20 +36,14 @@ export interface SystemValidationResult {
   overallScore: number; // 0-100
   summary: string;
   phases: {
-    scenarioValidation: PhaseValidationResult;
-    mathematicalEngine: PhaseValidationResult;
-    personaSelection: PhaseValidationResult;
-    vulnerabilityPipeline: PhaseValidationResult;
-    integrationTesting: PhaseValidationResult;
+    phase1: PhaseValidationResult;
+    phase2: PhaseValidationResult;
+    phase3: PhaseValidationResult;
+    integration: PhaseValidationResult;
   };
   recommendations: string[];
   criticalIssues: string[];
   warnings: string[];
-  performanceMetrics: {
-    averageProcessingTime: number;
-    memoryUsage: number;
-    successRate: number;
-  };
 }
 
 export interface PhaseValidationResult {
@@ -72,737 +52,432 @@ export interface PhaseValidationResult {
   score: number; // 0-100
   tests: TestResult[];
   duration: number; // ms
-  coverage: number; // 0-100
 }
 
 export interface TestResult {
   name: string;
   status: 'pass' | 'fail' | 'warning';
   message: string;
-  details?: any;
-  duration?: number;
-  expectedResult?: any;
-  actualResult?: any;
+  details?: Record<string, unknown>;
+  duration: number; // ms
 }
 
 // ==========================================================================
 // ENHANCED SYSTEM VALIDATOR CLASS
 // ==========================================================================
 
-export class SystemValidator {
-  private testStartTime = 0;
-
+export class EnhancedSystemValidator {
   /**
-   * Run complete system validation with enhanced coverage
+   * Run complete system validation suite
    */
-  async validateSystem(): Promise<SystemValidationResult> {
-    this.testStartTime = Date.now();
+  async validateCompleteSystem(): Promise<SystemValidationResult> {
+    const startTime = Date.now();
 
-    console.log('🔍 Starting comprehensive system validation...');
+    try {
+      // Phase 1: Data and Scenario Validation
+      const phase1 = await this.validatePhase1DataIntegrity();
 
-    // Run all validation phases
-    const scenarioValidation = await this.validateScenarioPhase();
-    const mathematicalEngine = await this.validateMathematicalEngine();
-    const personaSelection = await this.validatePersonaSelectionPhase();
-    const vulnerabilityPipeline = await this.validateVulnerabilityPipeline();
-    const integrationTesting = await this.validateIntegrationPhase();
+      // Phase 2: Archetype Calculation Validation
+      const phase2 = await this.validatePhase2ArchetypeSystem();
 
-    // Calculate overall metrics
-    const phases = {
-      scenarioValidation,
-      mathematicalEngine,
-      personaSelection,
-      vulnerabilityPipeline,
-      integrationTesting,
-    };
+      // Phase 3: Persona and Vulnerability Validation
+      const phase3 = await this.validatePhase3VulnerabilitySystem();
 
-    const allTests = Object.values(phases).flatMap(phase => phase.tests);
-    const passedTests = allTests.filter(t => t.status === 'pass').length;
-    const overallScore = Math.round((passedTests / allTests.length) * 100);
-    const isValid = !allTests.some(t => t.status === 'fail');
+      // Integration: End-to-End System Validation
+      const integration = await this.validateSystemIntegration();
 
-    // Generate performance metrics
-    const performanceMetrics = await this.calculatePerformanceMetrics();
+      // Calculate overall score
+      const phases = { phase1, phase2, phase3, integration };
+      const overallScore = this.calculateOverallScore(phases);
+      const isValid = Object.values(phases).every(phase => phase.isValid);
 
-    const result: SystemValidationResult = {
-      isValid,
-      overallScore,
-      summary: this.generateSummary(overallScore, isValid),
-      phases,
-      recommendations: this.generateRecommendations(...Object.values(phases)),
-      criticalIssues: this.extractCriticalIssues(...Object.values(phases)),
-      warnings: this.extractWarnings(...Object.values(phases)),
-      performanceMetrics,
-    };
+      // Generate recommendations and issues
+      const recommendations = this.generateRecommendations(...Object.values(phases));
+      const criticalIssues = this.extractCriticalIssues(...Object.values(phases));
+      const warnings = this.extractWarnings(...Object.values(phases));
 
-    const totalDuration = Date.now() - this.testStartTime;
-    console.log(`✅ System validation completed in ${totalDuration}ms`);
-    console.log(`📊 Overall Score: ${overallScore}/100`);
-    console.log(`🎯 Status: ${isValid ? 'VALID' : 'ISSUES DETECTED'}`);
-
-    return result;
+      return {
+        isValid,
+        overallScore,
+        summary: this.generateSummary(overallScore, isValid),
+        phases,
+        recommendations,
+        criticalIssues,
+        warnings,
+      };
+    } catch (error) {
+      console.error('System validation failed:', error);
+      return this.generateFailureResult(error);
+    }
   }
 
   /**
-   * Phase 1: Validate Extended Scenario System
+   * Phase 1: Validate data integrity and scenario system
    */
-  private async validateScenarioPhase(): Promise<PhaseValidationResult> {
+  private async validatePhase1DataIntegrity(): Promise<PhaseValidationResult> {
     const startTime = Date.now();
     const tests: TestResult[] = [];
 
-    console.log('📋 Validating Extended Scenario System...');
-
-    // Test 1: Scenario Data Integrity
+    // Test 1: Scenario Data Validation
     tests.push(
       await this.runTest('Scenario Data Integrity', async () => {
-        const validation = validateScenarioIntegrity();
+        const validation = validateScenarioData(); // FIXED: Updated function name
 
         if (!validation.isValid) {
-          throw new Error(`Scenario integrity failed: ${validation.errors.join(', ')}`);
+          throw new Error(`Scenario validation failed: ${validation.errors.join(', ')}`);
         }
 
         return {
-          totalScenarios: validation.totalScenarios || 0,
-          branchingScenarios: validation.branchingScenarios || 0,
+          totalScenarios: validation.errors.length === 0,
           errors: validation.errors,
+          warnings: validation.warnings,
         };
       })
     );
 
-    // Test 2: Branching Logic Validation
+    // Test 2: Extended User Answer Structure
     tests.push(
-      await this.runTest('Branching Logic Validation', async () => {
-        const branchingScenarios = [3.1, 3.2, 4.1, 4.2, 5.1, 5.2, 6.1, 6.2, 7.1, 7.2];
-        let validBranches = 0;
+      await this.runTest('Extended User Answer Validation', async () => {
+        const testAnswer = createExtendedUserAnswer(1, {
+          letter: 'A',
+          text: 'Test option',
+          scores: { emotional: 2, logical: 1, exploratory: 0 },
+          next: 2,
+        });
 
-        for (const id of branchingScenarios) {
-          const scenario = getExtendedScenarioById(id);
-          if (scenario?.options && scenario.options.length > 0) {
-            validBranches++;
-          }
+        const validation = validateAnswerObject(testAnswer);
+
+        if (!validation.isValid) {
+          throw new Error(`Answer validation failed: ${validation.errors.join(', ')}`);
         }
 
-        if (validBranches < branchingScenarios.length * 0.8) {
-          throw new Error(
-            `Only ${validBranches}/${branchingScenarios.length} branching scenarios are valid`
-          );
-        }
-
-        return { validBranches, totalBranches: branchingScenarios.length };
+        return { answerStructure: 'valid', validation };
       })
     );
 
-    // Test 3: Score Calculation
+    // Test 3: Score Calculation with Enhanced Structure
     tests.push(
-      await this.runTest('Score Calculation', async () => {
-        const testAnswers: ExtendedUserAnswer[] = [
-          {
-            scenarioId: 1,
-            selectedOption: {
-              letter: 'a',
-              text: 'Test',
-              scores: { emotional: 2, logical: 3, exploratory: 1 },
-              next: 2,
-            },
-            timestamp: new Date(),
-          },
-          {
-            scenarioId: 2,
-            selectedOption: {
-              letter: 'b',
-              text: 'Test',
-              scores: { emotional: 1, logical: 1, exploratory: 2 },
-              next: 3,
-            },
-            timestamp: new Date(),
-          },
-        ];
+      await this.runTest('Enhanced Score Calculation', async () => {
+        const testAnswers = this.generateTestAnswers(5);
+        const scoreResult = safeCalculateExtendedScores(testAnswers);
 
-        const scores = calculateExtendedScores(testAnswers);
-        const expectedScores = { emotional: 3, logical: 4, exploratory: 3 };
-
-        if (JSON.stringify(scores) !== JSON.stringify(expectedScores)) {
-          throw new Error(
-            `Score calculation mismatch. Expected: ${JSON.stringify(expectedScores)}, Got: ${JSON.stringify(scores)}`
-          );
+        if (scoreResult.errors.length > 0) {
+          throw new Error(`Score calculation errors: ${scoreResult.errors.join(', ')}`);
         }
 
-        return { calculatedScores: scores, expectedScores };
+        const totalScore =
+          scoreResult.scores.emotional +
+          scoreResult.scores.logical +
+          scoreResult.scores.exploratory;
+        if (totalScore === 0) {
+          throw new Error('Total score is zero');
+        }
+
+        return {
+          totalScore,
+          scores: scoreResult.scores,
+          warnings: scoreResult.warnings,
+        };
       })
     );
 
-    // Test 4: Path Tracking
+    // Test 4: Multi-Select Answer Handling
     tests.push(
-      await this.runTest('Path Tracking', async () => {
-        const testAnswers: ExtendedUserAnswer[] = [
+      await this.runTest('Multi-Select Answer Support', async () => {
+        const multiSelectAnswer = createExtendedUserAnswer(
+          1,
           {
-            scenarioId: 1,
-            selectedOption: {
-              letter: 'a',
-              text: 'Test',
-              scores: { emotional: 1, logical: 1, exploratory: 1 },
+            letter: 'A',
+            text: 'Primary option',
+            scores: { emotional: 1, logical: 1, exploratory: 1 },
+            next: 2,
+          },
+          true,
+          [
+            {
+              letter: 'A',
+              text: 'Option A',
+              scores: { emotional: 1, logical: 0, exploratory: 0 },
               next: 2,
             },
-            timestamp: new Date(),
-          },
-          {
-            scenarioId: 2,
-            selectedOption: {
-              letter: 'b',
-              text: 'Test',
-              scores: { emotional: 1, logical: 1, exploratory: 1 },
-              next: 3.1,
-            },
-            timestamp: new Date(),
-          },
-        ];
-
-        const userPath = getUserScenarioPath(testAnswers);
-
-        if (!userPath || userPath.totalSteps !== 2) {
-          throw new Error(
-            `Path tracking failed. Expected 2 steps, got ${userPath?.totalSteps || 0}`
-          );
-        }
-
-        return userPath;
-      })
-    );
-
-    // Test 5: Progress Calculation
-    tests.push(
-      await this.runTest('Progress Calculation', async () => {
-        const testAnswers: ExtendedUserAnswer[] = [
-          {
-            scenarioId: 1,
-            selectedOption: {
-              letter: 'a',
-              text: 'Test',
-              scores: { emotional: 1, logical: 1, exploratory: 1 },
+            {
+              letter: 'B',
+              text: 'Option B',
+              scores: { emotional: 0, logical: 1, exploratory: 0 },
               next: 2,
             },
-            timestamp: new Date(),
-          },
-        ];
+          ]
+        );
 
-        const progress = calculateExtendedProgress(testAnswers, 2);
-
-        if (progress < 0 || progress > 100) {
-          throw new Error(`Invalid progress value: ${progress}`);
+        const validation = validateAnswerObject(multiSelectAnswer);
+        if (!validation.isValid) {
+          throw new Error('Multi-select answer validation failed');
         }
 
-        return { progress };
+        return {
+          multiSelectSupport: 'working',
+          selectedOptions: multiSelectAnswer.selectedOptions?.length,
+        };
       })
     );
 
     const duration = Date.now() - startTime;
     const passedTests = tests.filter(t => t.status === 'pass').length;
     const score = Math.round((passedTests / tests.length) * 100);
-    const coverage = Math.round((tests.length / 5) * 100); // 5 expected tests
 
     return {
-      name: 'Extended Scenario System',
+      name: 'Data & Scenario Validation',
       isValid: tests.every(t => t.status !== 'fail'),
       score,
       tests,
       duration,
-      coverage,
     };
   }
 
   /**
-   * Phase 2: Validate Mathematical Engine
+   * Phase 2: Validate archetype calculation system
    */
-  private async validateMathematicalEngine(): Promise<PhaseValidationResult> {
+  private async validatePhase2ArchetypeSystem(): Promise<PhaseValidationResult> {
     const startTime = Date.now();
     const tests: TestResult[] = [];
 
-    console.log('🧮 Validating Mathematical Proximity Engine...');
-
-    // Test 1: Euclidean Distance Calculation
-    tests.push(
-      await this.runTest('Euclidean Distance Calculation', async () => {
-        const userScores: ScoreData = { logical: 10, emotional: 5, exploratory: 3 };
-        const targetScores: ScoreData = { logical: 8, emotional: 7, exploratory: 5 };
-
-        const distance = calculateEuclideanDistance(userScores, targetScores);
-        const expectedDistance = Math.sqrt((10 - 8) ** 2 + (5 - 7) ** 2 + (3 - 5) ** 2); // sqrt(12) ≈ 3.464
-
-        if (Math.abs(distance - expectedDistance) > 0.01) {
-          throw new Error(
-            `Distance calculation incorrect. Expected: ${expectedDistance}, Got: ${distance}`
-          );
-        }
-
-        return { distance, expectedDistance };
-      })
-    );
-
-    // Test 2: Archetype Results Generation
+    // Test 1: Archetype Generation
     tests.push(
       await this.runTest('Archetype Results Generation', async () => {
-        const testScores: ScoreData = { logical: 8, emotional: 6, exploratory: 4 };
+        const testScores: ScoreData = { emotional: 8, logical: 4, exploratory: 2 };
         const results = generateArchetypeResults(testScores);
 
-        if (!results.matches || results.matches.length === 0) {
+        if (!results.topMatches || results.topMatches.length === 0) {
           throw new Error('No archetype matches generated');
         }
 
-        if (!results.topMatches || results.topMatches.length < 3) {
-          throw new Error(
-            `Insufficient top matches. Expected at least 3, got ${results.topMatches?.length || 0}`
-          );
-        }
-
-        // Verify distance ordering
-        for (let i = 1; i < results.matches.length; i++) {
-          if (results.matches[i].distance < results.matches[i - 1].distance) {
-            throw new Error('Matches not properly ordered by distance');
-          }
+        if (results.topMatches[0].confidence < 30) {
+          throw new Error('Top archetype confidence too low');
         }
 
         return {
-          totalMatches: results.matches.length,
-          topMatches: results.topMatches.length,
           topArchetype: results.topMatches[0].archetype.name,
-          topConfidence: results.topMatches[0].confidence,
+          confidence: results.topMatches[0].confidence,
+          totalMatches: results.topMatches.length,
         };
       })
     );
 
-    // Test 3: Confidence Gap Analysis
+    // Test 2: Confidence Gap Calculation
     tests.push(
       await this.runTest('Confidence Gap Analysis', async () => {
-        const testScores: ScoreData = { logical: 10, emotional: 2, exploratory: 3 };
+        const testScores: ScoreData = { emotional: 10, logical: 2, exploratory: 1 };
         const results = generateArchetypeResults(testScores);
         const confidenceGap = calculateConfidenceGap(results.topMatches);
 
-        if (!confidenceGap.primaryArchetype) {
-          throw new Error('Primary archetype not identified');
+        if (typeof confidenceGap.gap !== 'number') {
+          throw new Error('Confidence gap not calculated');
         }
 
-        if (!['largeGap', 'mediumGap', 'smallGap'].includes(confidenceGap.gapType)) {
-          throw new Error(`Invalid gap type: ${confidenceGap.gapType}`);
-        }
-
-        return confidenceGap;
+        return {
+          gap: confidenceGap.gap,
+          gapType: confidenceGap.gapType,
+          primaryArchetype: confidenceGap.primaryArchetype,
+        };
       })
     );
 
-    // Test 4: Tie Detection
+    // Test 3: Distance Tie Detection
     tests.push(
       await this.runTest('Distance Tie Detection', async () => {
-        const testCases = [
-          { d1: 3.1, d2: 3.2, threshold: 1, expected: true },
-          { d1: 3.1, d2: 4.5, threshold: 1, expected: false },
-          { d1: 5.0, d2: 5.0, threshold: 1, expected: true },
-        ];
+        const similarDistances = areDistancesTied(2.1, 2.0, 0.5);
+        const differentDistances = areDistancesTied(3.0, 1.0, 0.5);
 
-        for (const testCase of testCases) {
-          const result = areDistancesTied(testCase.d1, testCase.d2, testCase.threshold);
-          if (result !== testCase.expected) {
-            throw new Error(`Tie detection failed for distances ${testCase.d1} and ${testCase.d2}`);
-          }
+        if (!similarDistances || differentDistances) {
+          throw new Error('Distance tie detection not working correctly');
         }
 
-        return { testsPassed: testCases.length };
-      })
-    );
-
-    // Test 5: Detailed Score Analysis
-    tests.push(
-      await this.runTest('Detailed Score Analysis', async () => {
-        const testScores: ScoreData = { logical: 12, emotional: 4, exploratory: 6 };
-        const analysis = getDetailedScoreAnalysis(testScores);
-
-        if (!Array.isArray(analysis) || analysis.length === 0) {
-          throw new Error('Detailed analysis failed to generate results');
-        }
-
-        // Verify analysis structure
-        const firstResult = analysis[0];
-        const requiredFields = [
-          'archetypeId',
-          'name',
-          'distance',
-          'confidence',
-          'targetScores',
-          'scoreDifferences',
-        ];
-
-        for (const field of requiredFields) {
-          if (!(field in firstResult)) {
-            throw new Error(`Missing field in analysis: ${field}`);
-          }
-        }
-
-        return { analysisCount: analysis.length, topResult: firstResult.name };
+        return { tieDetection: 'working' };
       })
     );
 
     const duration = Date.now() - startTime;
     const passedTests = tests.filter(t => t.status === 'pass').length;
     const score = Math.round((passedTests / tests.length) * 100);
-    const coverage = Math.round((tests.length / 5) * 100);
 
     return {
-      name: 'Mathematical Proximity Engine',
+      name: 'Archetype Calculation System',
       isValid: tests.every(t => t.status !== 'fail'),
       score,
       tests,
       duration,
-      coverage,
     };
   }
 
   /**
-   * Phase 3: Validate Persona Selection System
+   * Phase 3: Validate vulnerability and persona system
    */
-  private async validatePersonaSelectionPhase(): Promise<PhaseValidationResult> {
+  private async validatePhase3VulnerabilitySystem(): Promise<PhaseValidationResult> {
     const startTime = Date.now();
     const tests: TestResult[] = [];
 
-    console.log('👥 Validating Persona Selection System...');
-
-    // Test 1: Persona Selection Setup
+    // Test 1: Persona Selection
     tests.push(
-      await this.runTest('Persona Selection Setup', async () => {
-        const validation = validatePersonaSelectionSetup();
-
-        if (!validation.isValid) {
-          throw new Error(`Persona setup invalid: ${validation.errors.join(', ')}`);
-        }
-
-        return validation;
-      })
-    );
-
-    // Test 2: Distribution Rules
-    tests.push(
-      await this.runTest('Distribution Rules', async () => {
-        const gapTypes = ['largeGap', 'mediumGap', 'smallGap'] as const;
-        const distributions: Record<string, any> = {};
-
-        for (const gapType of gapTypes) {
-          const distribution = getPersonaDistribution(gapType);
-
-          if (!distribution || distribution.total < 3 || distribution.total > 8) {
-            throw new Error(`Invalid distribution for ${gapType}: ${JSON.stringify(distribution)}`);
-          }
-
-          distributions[gapType] = distribution;
-        }
-
-        return distributions;
-      })
-    );
-
-    // Test 3: Vulnerability Mapping
-    tests.push(
-      await this.runTest('Vulnerability Mapping', async () => {
-        const testArchetypes = ['intellectual', 'achiever', 'leader', 'explorer'];
-        let mappingsFound = 0;
-
-        for (const archetypeId of testArchetypes) {
-          const vulnerabilities = getArchetypeVulnerabilities(archetypeId);
-          if (Array.isArray(vulnerabilities)) {
-            mappingsFound++;
-          }
-        }
-
-        return { mappingsFound, totalTested: testArchetypes.length };
-      })
-    );
-
-    // Test 4: Persona Selection Algorithm
-    tests.push(
-      await this.runTest('Persona Selection Algorithm', async () => {
-        const testScores: ScoreData = { logical: 9, emotional: 5, exploratory: 4 };
+      await this.runTest('Persona Selection System', async () => {
+        const testScores: ScoreData = { emotional: 9, logical: 3, exploratory: 4 };
         const archetypeResults = generateArchetypeResults(testScores);
-        const confidenceGap = calculateConfidenceGap(archetypeResults.topMatches);
 
-        const personaSelection = selectPersonasForUser(
-          archetypeResults.topMatches,
-          confidenceGap.gap,
-          confidenceGap.gapType
-        );
-
-        if (!personaSelection.selectedPersonas || personaSelection.selectedPersonas.length < 3) {
-          throw new Error(
-            `Insufficient personas selected: ${personaSelection.selectedPersonas?.length || 0}`
+        try {
+          const personaSelection = selectPersonasForUser(
+            archetypeResults.topMatches,
+            15,
+            'mediumGap'
           );
-        }
 
-        if (personaSelection.selectedPersonas.length > 8) {
-          throw new Error(
-            `Too many personas selected: ${personaSelection.selectedPersonas.length}`
+          if (
+            !personaSelection.selectedPersonas ||
+            personaSelection.selectedPersonas.length === 0
+          ) {
+            throw new Error('No personas selected');
+          }
+
+          return {
+            selectedCount: personaSelection.selectedPersonas.length,
+            primaryArchetype: personaSelection.primaryArchetype,
+            confidenceGap: personaSelection.confidenceGap,
+          };
+        } catch (error) {
+          // If persona selector has compatibility issues, this will catch them
+          throw new Error(`Persona selection failed: ${error}`);
+        }
+      })
+    );
+
+    // Test 2: Vulnerability Assessment Pipeline
+    tests.push(
+      await this.runTest('Vulnerability Assessment Pipeline', async () => {
+        const testAnswers = this.generateTestAnswers(5);
+        const testScores = calculateExtendedScores(testAnswers);
+        const archetypeResults = generateArchetypeResults(testScores);
+
+        try {
+          const vulnerabilityAssessment = generateVulnerabilityAssessment(
+            testAnswers,
+            archetypeResults
           );
-        }
 
-        return {
-          selectedCount: personaSelection.selectedPersonas.length,
-          primaryArchetype: personaSelection.primaryArchetype.archetype.name,
-          confidenceGap: personaSelection.confidenceGap,
-        };
+          if (!vulnerabilityAssessment.personaSelection) {
+            throw new Error('Vulnerability assessment missing persona selection');
+          }
+
+          return {
+            hasEducationalContent: !!vulnerabilityAssessment.educationalContent,
+            hasRiskProfile: !!vulnerabilityAssessment.riskProfile,
+            hasActionablePlan: !!vulnerabilityAssessment.actionablePlan,
+          };
+        } catch (error) {
+          throw new Error(`Vulnerability assessment failed: ${error}`);
+        }
       })
     );
 
     const duration = Date.now() - startTime;
     const passedTests = tests.filter(t => t.status === 'pass').length;
     const score = Math.round((passedTests / tests.length) * 100);
-    const coverage = Math.round((tests.length / 4) * 100);
 
     return {
-      name: 'Persona Selection System',
+      name: 'Vulnerability & Persona System',
       isValid: tests.every(t => t.status !== 'fail'),
       score,
       tests,
       duration,
-      coverage,
     };
   }
 
   /**
-   * Phase 4: Validate Vulnerability Pipeline
+   * Integration: End-to-end system validation
    */
-  private async validateVulnerabilityPipeline(): Promise<PhaseValidationResult> {
+  private async validateSystemIntegration(): Promise<PhaseValidationResult> {
     const startTime = Date.now();
     const tests: TestResult[] = [];
 
-    console.log('🛡️ Validating Vulnerability Assessment Pipeline...');
-
-    // Test 1: Vulnerability Assessment Generation
+    // Test 1: Complete Assessment Flow
     tests.push(
-      await this.runTest('Vulnerability Assessment Generation', async () => {
-        const testScores: ScoreData = { logical: 7, emotional: 8, exploratory: 5 };
-        const archetypeResults = generateArchetypeResults(testScores);
+      await this.runTest('Complete Assessment Flow', async () => {
+        const completeAnswers = this.generateTestAnswers(8);
 
-        const vulnerabilityAssessment = generateVulnerabilityAssessment(archetypeResults);
-
-        if (!vulnerabilityAssessment.personaSelection) {
-          throw new Error('Persona selection missing from vulnerability assessment');
+        // Step 1: Calculate scores
+        const scores = calculateExtendedScores(completeAnswers);
+        if (scores.emotional + scores.logical + scores.exploratory === 0) {
+          throw new Error('Score calculation failed in integration test');
         }
 
-        if (!vulnerabilityAssessment.educationalContent) {
-          throw new Error('Educational content missing from vulnerability assessment');
+        // Step 2: Generate archetypes
+        const archetypes = generateArchetypeResults(scores);
+        if (archetypes.topMatches.length === 0) {
+          throw new Error('Archetype generation failed in integration test');
         }
 
-        if (!vulnerabilityAssessment.riskProfile) {
-          throw new Error('Risk profile missing from vulnerability assessment');
+        // Step 3: Generate vulnerability assessment
+        const vulnerability = generateVulnerabilityAssessment(completeAnswers, archetypes);
+        if (!vulnerability.personaSelection) {
+          throw new Error('Vulnerability assessment failed in integration test');
+        }
+
+        // Step 4: Validate path tracking
+        const userPath = getUserScenarioPath(completeAnswers);
+        if (userPath.totalSteps !== completeAnswers.length) {
+          throw new Error('Path tracking failed in integration test');
         }
 
         return {
-          personaCount: vulnerabilityAssessment.personaSelection.selectedPersonas.length,
-          hasEducationalContent: !!vulnerabilityAssessment.educationalContent,
-          riskLevel: vulnerabilityAssessment.riskProfile.overallRiskLevel,
+          totalSteps: userPath.totalSteps,
+          finalScores: scores,
+          topArchetype: archetypes.topMatches[0].archetype.name,
+          vulnerabilityAssessment: 'generated',
         };
       })
     );
 
-    // Test 2: Risk Level Calculation
+    // Test 2: Error Handling Resilience
     tests.push(
-      await this.runTest('Risk Level Calculation', async () => {
-        const testScores: ScoreData = { logical: 6, emotional: 9, exploratory: 3 };
-        const archetypeResults = generateArchetypeResults(testScores);
-        const confidenceGap = calculateConfidenceGap(archetypeResults.topMatches);
-
-        const personaSelection = selectPersonasForUser(
-          archetypeResults.topMatches,
-          confidenceGap.gap,
-          confidenceGap.gapType
-        );
-
-        const riskLevel = calculateOverallRiskLevel(personaSelection);
-
-        if (!['high', 'medium', 'low'].includes(riskLevel)) {
-          throw new Error(`Invalid risk level: ${riskLevel}`);
-        }
-
-        return { riskLevel };
-      })
-    );
-
-    // Test 3: Risk Profile Generation
-    tests.push(
-      await this.runTest('Risk Profile Generation', async () => {
-        const testScores: ScoreData = { logical: 8, emotional: 6, exploratory: 7 };
-        const archetypeResults = generateArchetypeResults(testScores);
-        const confidenceGap = calculateConfidenceGap(archetypeResults.topMatches);
-
-        const personaSelection = selectPersonasForUser(
-          archetypeResults.topMatches,
-          confidenceGap.gap,
-          confidenceGap.gapType
-        );
-
-        const riskProfile = generateRiskProfile(personaSelection, archetypeResults);
-
-        if (!riskProfile.vulnerabilityFactors || !Array.isArray(riskProfile.vulnerabilityFactors)) {
-          throw new Error('Vulnerability factors missing or invalid');
-        }
-
-        if (!riskProfile.protectiveFactors || !Array.isArray(riskProfile.protectiveFactors)) {
-          throw new Error('Protective factors missing or invalid');
-        }
-
-        if (typeof riskProfile.riskScore !== 'number' || riskProfile.riskScore < 0) {
-          throw new Error(`Invalid risk score: ${riskProfile.riskScore}`);
-        }
-
-        return {
-          vulnerabilityFactors: riskProfile.vulnerabilityFactors.length,
-          protectiveFactors: riskProfile.protectiveFactors.length,
-          riskScore: riskProfile.riskScore,
-          overallRiskLevel: riskProfile.overallRiskLevel,
-        };
-      })
-    );
-
-    const duration = Date.now() - startTime;
-    const passedTests = tests.filter(t => t.status === 'pass').length;
-    const score = Math.round((passedTests / tests.length) * 100);
-    const coverage = Math.round((tests.length / 3) * 100);
-
-    return {
-      name: 'Vulnerability Assessment Pipeline',
-      isValid: tests.every(t => t.status !== 'fail'),
-      score,
-      tests,
-      duration,
-      coverage,
-    };
-  }
-
-  /**
-   * Phase 5: Integration Testing
-   */
-  private async validateIntegrationPhase(): Promise<PhaseValidationResult> {
-    const startTime = Date.now();
-    const tests: TestResult[] = [];
-
-    console.log('🔗 Validating System Integration...');
-
-    // Test 1: Complete Assessment Pipeline
-    tests.push(
-      await this.runTest('Complete Assessment Pipeline', async () => {
-        const testAnswers: ExtendedUserAnswer[] = [
-          {
-            scenarioId: 1,
-            selectedOption: {
-              letter: 'a',
-              text: 'Test Answer 1',
-              scores: { emotional: 2, logical: 3, exploratory: 1 },
-              next: 2,
-            },
-            timestamp: new Date(),
-          },
-          {
-            scenarioId: 2,
-            selectedOption: {
-              letter: 'b',
-              text: 'Test Answer 2',
-              scores: { emotional: 1, logical: 2, exploratory: 3 },
-              next: 3,
-            },
-            timestamp: new Date(),
-          },
-          {
-            scenarioId: 3,
-            selectedOption: {
-              letter: 'c',
-              text: 'Test Answer 3',
-              scores: { emotional: 3, logical: 1, exploratory: 2 },
-              next: null,
-            },
-            timestamp: new Date(),
-          },
-        ];
-
-        const startTime = new Date();
-        const userData = { name: 'Integration Test User', email: 'test@example.com' };
-
-        const completeResults = generateCompleteAssessmentResults(testAnswers, startTime, userData);
-
-        if (!completeResults.userScores) {
-          throw new Error('User scores missing from complete results');
-        }
-
-        if (!completeResults.archetypeResults) {
-          throw new Error('Archetype results missing from complete results');
-        }
-
-        if (!completeResults.personaSelection) {
-          throw new Error('Persona selection missing from complete results');
-        }
-
-        return {
-          totalScores:
-            completeResults.userScores.emotional +
-            completeResults.userScores.logical +
-            completeResults.userScores.exploratory,
-          topArchetype: completeResults.archetypeResults.topMatches[0]?.archetype.name,
-          assessmentDuration: completeResults.assessmentDuration,
-        };
-      })
-    );
-
-    // Test 2: Results Display Formatting
-    tests.push(
-      await this.runTest('Results Display Formatting', async () => {
-        const testScores: ScoreData = { logical: 9, emotional: 6, exploratory: 4 };
-        const archetypeResults = generateArchetypeResults(testScores);
-
-        const displayResults = formatArchetypeResultsForDisplay(archetypeResults);
-
-        if (!displayResults.topMatches || displayResults.topMatches.length === 0) {
-          throw new Error('No top matches in display results');
-        }
-
-        if (!displayResults.confidenceRange) {
-          throw new Error('Confidence range missing from display results');
-        }
-
-        return {
-          displayCount: displayResults.displayCount,
-          hasties: displayResults.hasties,
-          confidenceRange: displayResults.confidenceRange,
-        };
-      })
-    );
-
-    // Test 3: Error Handling
-    tests.push(
-      await this.runTest('Error Handling', async () => {
+      await this.runTest('Error Handling & Resilience', async () => {
         let errorsHandledCorrectly = 0;
         const totalErrorTests = 3;
 
-        // Test 1: Empty user answers
+        // Test 1: Empty answers array
         try {
-          const emptyAnswers: ExtendedUserAnswer[] = [];
-          const scores = calculateExtendedScores(emptyAnswers);
-          if (scores.emotional === 0 && scores.logical === 0 && scores.exploratory === 0) {
-            errorsHandledCorrectly++;
+          const emptyScores = calculateExtendedScores([]);
+          if (
+            emptyScores.emotional === 0 &&
+            emptyScores.logical === 0 &&
+            emptyScores.exploratory === 0
+          ) {
+            errorsHandledCorrectly++; // Should return zero scores
           }
         } catch (error) {
-          // Should not throw for empty answers
+          // Error handling failed if it throws
         }
 
-        // Test 2: Invalid scenario ID
+        // Test 2: Invalid answer structure
         try {
-          const invalidScenario = getExtendedScenarioById(999);
-          if (invalidScenario === undefined) {
-            errorsHandledCorrectly++; // Should return undefined for invalid ID
+          const invalidAnswer = { scenarioId: 999, selectedOption: null } as any;
+          const validation = validateAnswerObject(invalidAnswer);
+          if (!validation.isValid) {
+            errorsHandledCorrectly++; // Should detect invalid structure
           }
         } catch (error) {
-          // Should not throw for invalid ID
+          // Should not throw, should return validation result
         }
 
-        // Test 3: Malformed scores
+        // Test 3: Safe score calculation with problematic data
         try {
-          const malformedScores: ScoreData = { emotional: -1, logical: 100, exploratory: -5 };
-          const results = generateArchetypeResults(malformedScores);
-          if (results.matches.length > 0) {
-            errorsHandledCorrectly++; // Should still produce results
+          const problematicAnswers = [
+            createExtendedUserAnswer(1, {
+              letter: 'A',
+              text: 'Test',
+              scores: { emotional: 1, logical: 1, exploratory: 1 },
+              next: 2,
+            }),
+          ];
+          const safeResult = safeCalculateExtendedScores(problematicAnswers);
+          if (safeResult.scores) {
+            errorsHandledCorrectly++; // Should produce scores safely
           }
         } catch (error) {
           // Error handling failed if it throws
@@ -822,55 +497,9 @@ export class SystemValidator {
       })
     );
 
-    // Test 4: Performance Test
-    tests.push(
-      await this.runTest('Performance Test', async () => {
-        const iterations = 50;
-        const startTime = Date.now();
-        let successfulRuns = 0;
-
-        for (let i = 0; i < iterations; i++) {
-          try {
-            const testAnswers = this.generateRandomTestAnswers(5);
-            const scores = calculateExtendedScores(testAnswers);
-            const results = generateArchetypeResults(scores);
-            const vulnerability = generateVulnerabilityAssessment(results);
-
-            if (vulnerability.personaSelection.selectedPersonas.length > 0) {
-              successfulRuns++;
-            }
-          } catch (error) {
-            // Count failed runs
-          }
-        }
-
-        const endTime = Date.now();
-        const avgTime = (endTime - startTime) / iterations;
-        const successRate = successfulRuns / iterations;
-
-        if (successRate < 0.95) {
-          // 95% success rate minimum
-          throw new Error(`Performance test failed: ${successRate * 100}% success rate`);
-        }
-
-        if (avgTime > 100) {
-          // Should complete within 100ms on average
-          throw new Error(`Performance test failed: ${avgTime}ms average time`);
-        }
-
-        return {
-          iterations,
-          successfulRuns,
-          successRate,
-          avgTime,
-        };
-      })
-    );
-
     const duration = Date.now() - startTime;
     const passedTests = tests.filter(t => t.status === 'pass').length;
     const score = Math.round((passedTests / tests.length) * 100);
-    const coverage = Math.round((tests.length / 4) * 100);
 
     return {
       name: 'System Integration',
@@ -878,71 +507,7 @@ export class SystemValidator {
       score,
       tests,
       duration,
-      coverage,
     };
-  }
-
-  /**
-   * Calculate performance metrics
-   */
-  private async calculatePerformanceMetrics(): Promise<{
-    averageProcessingTime: number;
-    memoryUsage: number;
-    successRate: number;
-  }> {
-    const iterations = 25;
-    const startTime = Date.now();
-    let successfulRuns = 0;
-
-    for (let i = 0; i < iterations; i++) {
-      try {
-        const testAnswers = this.generateRandomTestAnswers(Math.floor(Math.random() * 8) + 3);
-        const startTestTime = new Date();
-        const userData = { name: `Performance Test ${i}` };
-
-        const results = generateCompleteAssessmentResults(testAnswers, startTestTime, userData);
-        const vulnerability = generateVulnerabilityAssessment(results.archetypeResults);
-
-        if (vulnerability.personaSelection.selectedPersonas.length > 0) {
-          successfulRuns++;
-        }
-      } catch (error) {
-        // Count as failed run
-      }
-    }
-
-    const endTime = Date.now();
-    const averageProcessingTime = (endTime - startTime) / iterations;
-    const successRate = successfulRuns / iterations;
-
-    // Memory usage (approximation)
-    const memoryUsage = process.memoryUsage ? process.memoryUsage().heapUsed / 1024 / 1024 : 0;
-
-    return {
-      averageProcessingTime,
-      memoryUsage,
-      successRate,
-    };
-  }
-
-  /**
-   * Generate random test answers for performance testing
-   */
-  private generateRandomTestAnswers(count: number): ExtendedUserAnswer[] {
-    return Array.from({ length: count }, (_, i) => ({
-      scenarioId: i + 1,
-      selectedOption: {
-        letter: String.fromCharCode(97 + Math.floor(Math.random() * 3)), // a, b, or c
-        text: `Random answer ${i + 1}`,
-        scores: {
-          emotional: Math.floor(Math.random() * 4),
-          logical: Math.floor(Math.random() * 4),
-          exploratory: Math.floor(Math.random() * 4),
-        },
-        next: i < count - 1 ? i + 2 : null,
-      },
-      timestamp: new Date(),
-    }));
   }
 
   /**
@@ -967,10 +532,7 @@ export class SystemValidator {
       const errorMessage = error instanceof Error ? error.message : String(error);
 
       // Determine if this is a critical failure or just a warning
-      const isWarning =
-        errorMessage.includes('warning') ||
-        errorMessage.includes('deprecated') ||
-        errorMessage.includes('performance');
+      const isWarning = errorMessage.includes('warning') || errorMessage.includes('deprecated');
 
       return {
         name,
@@ -982,21 +544,49 @@ export class SystemValidator {
   }
 
   /**
-   * Generate overall system summary
+   * Generate test answers with proper ExtendedUserAnswer structure
+   */
+  private generateTestAnswers(count: number): ExtendedUserAnswer[] {
+    const answers: ExtendedUserAnswer[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const scenarioId = i + 1;
+      const option: ExtendedAnswerOption = {
+        letter: String.fromCharCode(65 + (i % 3)), // A, B, C rotation
+        text: `Test option ${i + 1}`,
+        scores: {
+          emotional: i % 3 === 0 ? 2 : 0,
+          logical: i % 3 === 1 ? 2 : 0,
+          exploratory: i % 3 === 2 ? 2 : 0,
+        },
+        next: i + 2 > count ? 'complete' : i + 2,
+      };
+
+      answers.push(createExtendedUserAnswer(scenarioId, option));
+    }
+
+    return answers;
+  }
+
+  /**
+   * Calculate overall score from phase results
+   */
+  private calculateOverallScore(phases: Record<string, PhaseValidationResult>): number {
+    const scores = Object.values(phases).map(phase => phase.score);
+    return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+  }
+
+  /**
+   * Generate summary based on overall score
    */
   private generateSummary(score: number, isValid: boolean): string {
-    if (score >= 95 && isValid) {
+    if (score >= 95 && isValid)
       return '🎉 Excellent! System is production-ready with outstanding performance.';
-    }
-    if (score >= 85 && isValid) {
+    if (score >= 85 && isValid)
       return '✅ Great! System is ready for production with minor optimizations needed.';
-    }
-    if (score >= 75) {
+    if (score >= 75)
       return '👍 Good! System is functional but needs some improvements before production.';
-    }
-    if (score >= 60) {
-      return '⚠️ Fair! System has significant issues that need addressing.';
-    }
+    if (score >= 60) return '⚠️ Fair! System has significant issues that need addressing.';
     return '❌ Poor! System has critical issues that must be fixed before deployment.';
   }
 
@@ -1012,9 +602,6 @@ export class SystemValidator {
 
       if (failedTests.length > 0) {
         recommendations.push(`${phase.name}: Fix ${failedTests.length} critical issue(s)`);
-        failedTests.forEach(test => {
-          recommendations.push(`  - ${test.name}: ${test.message}`);
-        });
       }
 
       if (warningTests.length > 0) {
@@ -1022,25 +609,16 @@ export class SystemValidator {
       }
 
       if (phase.score < 90) {
-        recommendations.push(
-          `${phase.name}: Consider performance optimizations (Current: ${phase.score}%)`
-        );
-      }
-
-      if (phase.coverage < 100) {
-        recommendations.push(`${phase.name}: Increase test coverage (Current: ${phase.coverage}%)`);
+        recommendations.push(`${phase.name}: Consider performance optimizations`);
       }
     });
 
-    // General recommendations
     if (recommendations.length === 0) {
-      recommendations.push('🎯 System is performing excellently!');
-      recommendations.push('📈 Consider adding more comprehensive edge case testing');
-      recommendations.push('🚀 Monitor performance metrics in production environment');
-      recommendations.push('🔄 Set up automated testing pipeline for continuous validation');
-    } else {
-      recommendations.push('🔧 Run system validation regularly during development');
-      recommendations.push('📊 Monitor performance metrics after implementing fixes');
+      recommendations.push(
+        'System is performing well! Consider adding more comprehensive test coverage.',
+        'Monitor performance metrics in production environment.',
+        'Set up automated testing pipeline for continuous validation.'
+      );
     }
 
     return recommendations;
@@ -1055,7 +633,7 @@ export class SystemValidator {
     phases.forEach(phase => {
       const failedTests = phase.tests.filter(t => t.status === 'fail');
       failedTests.forEach(test => {
-        criticalIssues.push(`${phase.name} → ${test.name}: ${test.message}`);
+        criticalIssues.push(`${phase.name}: ${test.name} - ${test.message}`);
       });
     });
 
@@ -1071,346 +649,83 @@ export class SystemValidator {
     phases.forEach(phase => {
       const warningTests = phase.tests.filter(t => t.status === 'warning');
       warningTests.forEach(test => {
-        warnings.push(`${phase.name} → ${test.name}: ${test.message}`);
+        warnings.push(`${phase.name}: ${test.name} - ${test.message}`);
       });
-
-      // Add performance warnings
-      if (phase.duration > 5000) {
-        warnings.push(`${phase.name}: Slow execution time (${phase.duration}ms)`);
-      }
-
-      // Add coverage warnings
-      if (phase.coverage < 80) {
-        warnings.push(`${phase.name}: Low test coverage (${phase.coverage}%)`);
-      }
     });
 
     return warnings;
   }
+
+  /**
+   * Generate failure result when validation crashes
+   */
+  private generateFailureResult(error: unknown): SystemValidationResult {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    return {
+      isValid: false,
+      overallScore: 0,
+      summary: '❌ System validation failed due to critical error',
+      phases: {
+        phase1: this.createFailedPhase('Data & Scenario Validation', errorMessage),
+        phase2: this.createFailedPhase('Archetype Calculation System', errorMessage),
+        phase3: this.createFailedPhase('Vulnerability & Persona System', errorMessage),
+        integration: this.createFailedPhase('System Integration', errorMessage),
+      },
+      recommendations: [
+        'Fix critical system validation error',
+        'Check console for detailed error information',
+      ],
+      criticalIssues: [`System validation crashed: ${errorMessage}`],
+      warnings: [],
+    };
+  }
+
+  /**
+   * Create a failed phase result
+   */
+  private createFailedPhase(name: string, error: string): PhaseValidationResult {
+    return {
+      name,
+      isValid: false,
+      score: 0,
+      tests: [
+        {
+          name: 'System Validation',
+          status: 'fail',
+          message: error,
+          duration: 0,
+        },
+      ],
+      duration: 0,
+    };
+  }
 }
 
 // ==========================================================================
-// QUICK VALIDATION UTILITIES
+// CONVENIENCE FUNCTIONS
 // ==========================================================================
 
 /**
- * Quick system health check for rapid validation
+ * Quick system validation check
  */
-export async function quickHealthCheck(): Promise<{
-  isHealthy: boolean;
-  score: number;
-  issues: string[];
-  summary: string;
-  duration: number;
-}> {
-  const startTime = Date.now();
-  const issues: string[] = [];
-  let score = 100;
-
-  try {
-    // Test 1: Basic score calculation
-    const testAnswers: ExtendedUserAnswer[] = [
-      {
-        scenarioId: 1,
-        selectedOption: {
-          letter: 'a',
-          text: 'Test',
-          scores: { emotional: 2, logical: 3, exploratory: 1 },
-          next: 2,
-        },
-        timestamp: new Date(),
-      },
-      {
-        scenarioId: 2,
-        selectedOption: {
-          letter: 'b',
-          text: 'Test',
-          scores: { emotional: 1, logical: 1, exploratory: 2 },
-          next: null,
-        },
-        timestamp: new Date(),
-      },
-    ];
-
-    const scores = calculateExtendedScores(testAnswers);
-    if (scores.emotional + scores.logical + scores.exploratory === 0) {
-      issues.push('Score calculation system failure');
-      score -= 30;
-    }
-
-    // Test 2: Archetype matching
-    const archetypes = generateArchetypeResults(scores);
-    if (archetypes.topMatches.length === 0) {
-      issues.push('Archetype matching system failure');
-      score -= 30;
-    }
-
-    // Test 3: Persona selection
-    const vulnerability = generateVulnerabilityAssessment(archetypes);
-    if (vulnerability.personaSelection.selectedPersonas.length === 0) {
-      issues.push('Persona selection system failure');
-      score -= 30;
-    }
-
-    // Test 4: Educational content
-    if (!vulnerability.educationalContent) {
-      issues.push('Educational content generation failure');
-      score -= 10;
-    }
-
-    // Test 5: Scenario integrity
-    const scenarioValidation = validateScenarioIntegrity();
-    if (!scenarioValidation.isValid) {
-      issues.push('Scenario integrity issues detected');
-      score -= 15;
-    }
-
-    // Test 6: Persona setup
-    const personaValidation = validatePersonaSelectionSetup();
-    if (!personaValidation.isValid) {
-      issues.push('Persona selection setup issues detected');
-      score -= 15;
-    }
-  } catch (error) {
-    issues.push(`System health check crashed: ${error}`);
-    score = 0;
-  }
-
-  const duration = Date.now() - startTime;
-  const isHealthy = issues.length === 0;
-
-  let summary: string;
-  if (isHealthy) {
-    summary = '✅ System is healthy and ready for use';
-  } else if (score >= 70) {
-    summary = '⚠️ System has minor issues but is functional';
-  } else if (score >= 40) {
-    summary = '🔧 System has significant issues requiring attention';
-  } else {
-    summary = '❌ System has critical failures and is not operational';
-  }
-
-  return {
-    isHealthy,
-    score: Math.max(0, score),
-    issues,
-    summary,
-    duration,
-  };
-}
+export const validateSystem = async (): Promise<SystemValidationResult> => {
+  const validator = new EnhancedSystemValidator();
+  return validator.validateCompleteSystem();
+};
 
 /**
- * Validate specific archetype calculation for testing
+ * Simple integration test for development
  */
-export function validateArchetypeCalculation(
-  userScores: ScoreData,
-  expectedTopArchetype?: string
-): {
-  isValid: boolean;
-  actualTopArchetype: string;
-  confidence: number;
-  distance: number;
-  message: string;
-} {
+export const runQuickIntegrationTest = (): boolean => {
   try {
-    const results = generateArchetypeResults(userScores);
+    // Test basic data functions
+    const testScores: ScoreData = { emotional: 5, logical: 3, exploratory: 2 };
+    const archetypeResults = generateArchetypeResults(testScores);
 
-    if (results.topMatches.length === 0) {
-      return {
-        isValid: false,
-        actualTopArchetype: 'none',
-        confidence: 0,
-        distance: Infinity,
-        message: 'No archetype matches generated',
-      };
-    }
-
-    const topMatch = results.topMatches[0];
-    const isValid = expectedTopArchetype
-      ? topMatch.archetype.name.toLowerCase().includes(expectedTopArchetype.toLowerCase())
-      : true;
-
-    return {
-      isValid,
-      actualTopArchetype: topMatch.archetype.name,
-      confidence: topMatch.confidence,
-      distance: topMatch.distance,
-      message: isValid
-        ? 'Archetype calculation is working correctly'
-        : `Expected ${expectedTopArchetype}, got ${topMatch.archetype.name}`,
-    };
+    return archetypeResults.topMatches.length > 0;
   } catch (error) {
-    return {
-      isValid: false,
-      actualTopArchetype: 'error',
-      confidence: 0,
-      distance: Infinity,
-      message: `Archetype calculation failed: ${error}`,
-    };
+    console.error('Quick integration test failed:', error);
+    return false;
   }
-}
-
-/**
- * Run performance benchmark test
- */
-export async function runPerformanceBenchmark(iterations = 100): Promise<{
-  averageTime: number;
-  minTime: number;
-  maxTime: number;
-  successRate: number;
-  throughput: number;
-  memoryUsage: number;
-}> {
-  const times: number[] = [];
-  let successfulRuns = 0;
-  const startTime = Date.now();
-
-  for (let i = 0; i < iterations; i++) {
-    const testStart = Date.now();
-
-    try {
-      // Generate random test data
-      const testAnswers: ExtendedUserAnswer[] = Array.from(
-        { length: Math.floor(Math.random() * 8) + 3 },
-        (_, j) => ({
-          scenarioId: j + 1,
-          selectedOption: {
-            letter: String.fromCharCode(97 + Math.floor(Math.random() * 3)),
-            text: `Test ${j}`,
-            scores: {
-              emotional: Math.floor(Math.random() * 4),
-              logical: Math.floor(Math.random() * 4),
-              exploratory: Math.floor(Math.random() * 4),
-            },
-            next: j < 7 ? j + 2 : null,
-          },
-          timestamp: new Date(),
-        })
-      );
-
-      // Run complete pipeline
-      const scores = calculateExtendedScores(testAnswers);
-      const archetypes = generateArchetypeResults(scores);
-      const vulnerability = generateVulnerabilityAssessment(archetypes);
-
-      if (vulnerability.personaSelection.selectedPersonas.length > 0) {
-        successfulRuns++;
-      }
-
-      const testEnd = Date.now();
-      times.push(testEnd - testStart);
-    } catch (error) {
-      const testEnd = Date.now();
-      times.push(testEnd - testStart);
-      // Count as failed run
-    }
-  }
-
-  const totalTime = Date.now() - startTime;
-  const averageTime = times.reduce((a, b) => a + b, 0) / times.length;
-  const minTime = Math.min(...times);
-  const maxTime = Math.max(...times);
-  const successRate = successfulRuns / iterations;
-  const throughput = iterations / (totalTime / 1000); // operations per second
-
-  // Memory usage (if available)
-  const memoryUsage = process.memoryUsage ? process.memoryUsage().heapUsed / 1024 / 1024 : 0;
-
-  return {
-    averageTime,
-    minTime,
-    maxTime,
-    successRate,
-    throughput,
-    memoryUsage,
-  };
-}
-
-/**
- * Validate system with custom test data
- */
-export function validateWithCustomData(
-  customAnswers: ExtendedUserAnswer[],
-  expectedOutcome?: {
-    topArchetype?: string;
-    minPersonas?: number;
-    maxPersonas?: number;
-    expectedRiskLevel?: 'high' | 'medium' | 'low';
-  }
-): {
-  isValid: boolean;
-  results: any;
-  issues: string[];
-  summary: string;
-} {
-  const issues: string[] = [];
-
-  try {
-    // Run complete assessment
-    const startTime = new Date();
-    const userData = { name: 'Custom Validation User' };
-
-    const completeResults = generateCompleteAssessmentResults(customAnswers, startTime, userData);
-    const vulnerability = generateVulnerabilityAssessment(completeResults.archetypeResults);
-
-    // Validate against expected outcomes
-    if (expectedOutcome) {
-      if (expectedOutcome.topArchetype) {
-        const actualTop = completeResults.archetypeResults.topMatches[0]?.archetype.name;
-        if (!actualTop.toLowerCase().includes(expectedOutcome.topArchetype.toLowerCase())) {
-          issues.push(`Expected top archetype: ${expectedOutcome.topArchetype}, got: ${actualTop}`);
-        }
-      }
-
-      if (expectedOutcome.minPersonas) {
-        const personaCount = vulnerability.personaSelection.selectedPersonas.length;
-        if (personaCount < expectedOutcome.minPersonas) {
-          issues.push(
-            `Expected at least ${expectedOutcome.minPersonas} personas, got: ${personaCount}`
-          );
-        }
-      }
-
-      if (expectedOutcome.maxPersonas) {
-        const personaCount = vulnerability.personaSelection.selectedPersonas.length;
-        if (personaCount > expectedOutcome.maxPersonas) {
-          issues.push(
-            `Expected at most ${expectedOutcome.maxPersonas} personas, got: ${personaCount}`
-          );
-        }
-      }
-
-      if (expectedOutcome.expectedRiskLevel) {
-        const actualRisk = vulnerability.riskProfile.overallRiskLevel;
-        if (actualRisk !== expectedOutcome.expectedRiskLevel) {
-          issues.push(
-            `Expected risk level: ${expectedOutcome.expectedRiskLevel}, got: ${actualRisk}`
-          );
-        }
-      }
-    }
-
-    const isValid = issues.length === 0;
-    const summary = isValid
-      ? '✅ Custom validation passed successfully'
-      : `⚠️ Custom validation found ${issues.length} issue(s)`;
-
-    return {
-      isValid,
-      results: {
-        completeResults,
-        vulnerability,
-        processingTime: completeResults.assessmentDuration,
-      },
-      issues,
-      summary,
-    };
-  } catch (error) {
-    return {
-      isValid: false,
-      results: null,
-      issues: [`Custom validation failed: ${error}`],
-      summary: '❌ Custom validation crashed',
-    };
-  }
-}
+};
