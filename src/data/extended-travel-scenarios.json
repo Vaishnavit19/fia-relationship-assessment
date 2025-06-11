@@ -30,7 +30,7 @@
         },
         {
           "letter": "C",
-          "text": "Let's go as long as our schedules allowr—more days means more chances for spontaneous adventures.",
+          "text": "Let's go as long as our schedules allow—more days means more chances for spontaneous adventures.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 2
         }
@@ -158,7 +158,7 @@
     },
     {
       "id": 4.3,
-      "text": "You arrive in Londo alone because your partner's flight was pushed to tomorrow. Your hotel room is booked; it's 10 AM and you have a free day.",
+      "text": "You arrive in London alone because your partner's flight was pushed to tomorrow. Your hotel room is booked; it's 10 AM and you have a free day.",
       "options": [
         {
           "letter": "A",

@@ -195,9 +195,8 @@
 
 .actionButtons {
   display: grid;
-    gap: 1rem;
+  gap: 1rem;
 }
-
 
 // ==========================================================================
 // ARCHETYPES TAB STYLES
@@ -736,7 +735,7 @@
 
       &::before {
         color: #ed8936;
-        content: '•';
+        content: "•";
         font-weight: bold;
         left: 0;
         position: absolute;
@@ -814,15 +813,15 @@
 }
 
 .redFlagsSection ul li::before {
-  content: '🚩';
+  content: "🚩";
 }
 
 .tacticsSection ul li::before {
-  content: '⚠️';
+  content: "⚠️";
 }
 
 .protectionSection ul li::before {
-  content: '🛡️';
+  content: "🛡️";
 }
 
 // Educational Content
@@ -1028,7 +1027,7 @@
     background: #2d3748;
     border-radius: 6px;
     color: #e2e8f0;
-    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
     font-size: 12px;
     line-height: 1.4;
     max-height: 400px;
@@ -1312,7 +1311,6 @@
   padding: 4px 8px;
   text-transform: uppercase;
 
-
   &.high {
     background: #fed7d7;
     color: #c53030;
@@ -1329,7 +1327,8 @@
   }
 }
 
-.successNotice, .tiesNotice {
+.successNotice,
+.tiesNotice {
   display: flex;
   gap: 4px;
   margin-bottom: 8px;
@@ -1338,6 +1337,6 @@
 .tabContent {
   > div {
     display: grid;
-  gap: 1rem;
-}}
-
+    gap: 1rem;
+  }
+}
