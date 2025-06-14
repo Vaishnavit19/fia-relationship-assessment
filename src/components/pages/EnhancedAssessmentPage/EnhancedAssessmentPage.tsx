@@ -546,8 +546,8 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
       <PageLayout maxWidth="md" centered background="gradient">
         <div className={`${styles.assessmentPage} ${className}`}>
           <div className={styles.welcomeContainer}>
-            <Card className={styles.welcomeCard}>
-              {/* <div className={styles.welcomeContent}>
+            {/* <Card className={styles.welcomeCard}> */}
+            {/* <div className={styles.welcomeContent}>
                 <h1>Enhanced Relationship Assessment</h1>
                 <p>
                   Discover your partnership style and vulnerability patterns through travel
@@ -556,8 +556,8 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
                 </p>
               </div> */}
 
-              <UserInfoForm onSubmit={handleUserSubmit} loading={isLoading} error={error} />
-            </Card>
+            <UserInfoForm onSubmit={handleUserSubmit} loading={isLoading} error={error} />
+            {/* </Card> */}
           </div>
         </div>
       </PageLayout>

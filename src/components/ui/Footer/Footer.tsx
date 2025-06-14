@@ -2,6 +2,7 @@
 'use client';
 
 import { Heart, Mail, ExternalLink, Shield, FileText } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -25,12 +26,8 @@ export const Footer: React.FC<FooterProps> = ({
   copyrightText,
 }) => {
   const currentYear = new Date().getFullYear();
-  
-  const footerClasses = [
-    styles.footer,
-    minimal && styles.footerMinimal,
-    className,
-  ]
+
+  const footerClasses = [styles.footer, minimal && styles.footerMinimal, className]
     .filter(Boolean)
     .join(' ');
 
@@ -45,8 +42,9 @@ export const Footer: React.FC<FooterProps> = ({
               {!hideBranding && (
                 <div className={styles.brandSection}>
                   <div className={styles.logo}>
-                    <Heart size={24} className={styles.logoIcon} />
-                    <span className={styles.logoText}>FIA Assessment</span>
+                    {/* <Heart size={24} className={styles.logoIcon} /> */}
+                    <Image alt="fia logo" src={'/fia-logo.png'} height={30} width={30}></Image>
+                    <span className={styles.logoText}>FIA Relationship Assessment</span>
                   </div>
                   <p className={styles.tagline}>
                     Understanding relationships through travel scenarios
@@ -95,7 +93,7 @@ export const Footer: React.FC<FooterProps> = ({
                       </Link>
                     </li>
                     <li>
-                      <a 
+                      <a
                         href="mailto:support@fia-relationship-assessment.com"
                         className={styles.link}
                       >
@@ -134,11 +132,9 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom Section */}
         <div className={styles.bottomSection}>
           <div className={styles.copyright}>
-            <span>
-              {copyrightText ?? `© ${currentYear} FIA. All rights reserved.`}
-            </span>
+            <span>{copyrightText ?? `© ${currentYear} FIA. All rights reserved.`}</span>
           </div>
-          
+
           {!minimal && (
             <div className={styles.badges}>
               <span className={styles.badge}>

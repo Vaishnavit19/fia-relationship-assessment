@@ -2,6 +2,7 @@
 'use client';
 
 import { User, Mail, Heart, ArrowRight, AlertCircle } from 'lucide-react';
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 import { Button } from '../Button';
@@ -170,7 +171,9 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.iconContainer}>
-            <Heart size={32} className={styles.headerIcon} />
+            {/* <Heart size={32} className={styles.headerIcon} /> */}
+
+            <Image alt="fia logo" src={'/fia-logo.png'} height={64} width={64}></Image>
           </div>
           <h1 className={styles.title}>{title}</h1>
           <p className={styles.description}>{description}</p>

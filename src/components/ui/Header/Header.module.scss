@@ -24,7 +24,7 @@
 .container {
   align-items: center;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr 1fr;
   min-height: 70px;
   padding-bottom: vars.$spacing-lg;
   padding-top: vars.$spacing-lg;

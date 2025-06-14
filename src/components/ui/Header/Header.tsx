@@ -2,6 +2,7 @@
 'use client';
 
 import { ArrowLeft, Heart, Home, Info } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -103,8 +104,9 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           ) : (
             <Link href="/" className={styles.logo}>
-              <Heart size={24} className={styles.logoIcon} />
-              <span className={styles.logoText}>{title ?? 'FIA Assessment'}</span>
+              {/* <Heart size={24} className={styles.logoIcon} /> */}
+              <Image alt="fia logo" src={'/fia-logo.png'} height={30} width={30}></Image>
+              <span className={styles.logoText}>{title ?? 'FIA Relationship Assessment'}</span>
             </Link>
           )}
         </div>
