@@ -1,0 +1,903 @@
+// ==========================================================================
+// AboutPAGE STYLES - ENHANCED ASSESSMENT SYSTEM
+// ==========================================================================
+
+// src/app/about/AboutPage.module.scss
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// ==========================================================================
+// HERO SECTION - Enhanced
+// ==========================================================================
+
+.hero {
+  background: linear-gradient(135deg, #e8e5ff 0%, #f4f2ff 50%, #faf9ff 100%);
+  border-radius: 1rem;
+  overflow: hidden;
+  padding: 80px 0 100px;
+  position: relative;
+
+  &::before {
+    background: radial-gradient(circle at 20% 20%, rgb(102 126 234 / 10%) 0%, transparent 50%);
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  @media (width <= 768px) {
+    padding: 60px 0 80px;
+  }
+}
+
+.heroContent {
+  align-items: center;
+  display: flex;
+  gap: 80px;
+  position: relative;
+  z-index: 2;
+
+  @media (width <= 1024px) {
+    flex-direction: column;
+    gap: 60px;
+    text-align: center;
+  }
+
+  @media (width <= 768px) {
+    gap: 40px;
+  }
+}
+
+.heroText {
+  flex: 1;
+padding-inline: 2rem;
+
+  // max-width: 600px;
+}
+
+.heroTitle {
+  color: #2d3748;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+
+  @media (width <= 1024px) {
+    font-size: 48px;
+  }
+
+  @media (width <= 768px) {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  @media (width <= 480px) {
+    font-size: 32px;
+  }
+}
+
+.highlightText {
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.heroSubtitle {
+  color: #4a5568;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  text-align: center;
+
+  @media (width <= 768px) {
+    font-size: 18px;
+    margin-bottom: 32px;
+  }
+
+  @media (width <= 480px) {
+    font-size: 16px;
+  }
+}
+
+.heroActions {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.continueSection {
+  text-align: center;
+  width: 100%;
+}
+
+.welcomeBack {
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+
+  @media (width <= 768px) {
+    font-size: 16px;
+  }
+}
+
+.actionButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  @media (width <= 480px) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.primaryAction {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: 200px;
+
+  @media (width <= 480px) {
+    width: 100%;
+  }
+}
+
+.assessmentStats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+
+  @media (width <= 768px) {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  @media (width <= 480px) {
+    gap: 16px;
+  }
+}
+
+.stat {
+  text-align: center;
+
+  strong {
+    color: #2d3748;
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+
+    @media (width <= 768px) {
+      font-size: 20px;
+    }
+  }
+
+  & > :not(strong) {
+    color: #718096;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+}
+
+// ==========================================================================
+// HERO VISUAL - Enhanced Archetype Preview
+// ==========================================================================
+
+.heroVisual {
+  flex: 1;
+  max-width: 500px;
+}
+
+.archetypePreview {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+
+  @media (width <= 480px) {
+    gap: 12px;
+  }
+}
+
+.archetypeCard {
+  animation: fadeInUp 0.6s ease forwards;
+  animation-delay: var(--animation-delay, 0s);
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  opacity: 0;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--archetype-color, #667eea);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+    transform: translateY(-4px);
+  }
+
+  @media (width <= 768px) {
+    padding: 16px;
+  }
+}
+
+.archetypeIcon {
+  font-size: 32px;
+  margin-bottom: 8px;
+
+  @media (width <= 768px) {
+    font-size: 28px;
+  }
+}
+
+.archetypeName {
+  color: #2d3748;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+
+  @media (width <= 768px) {
+    font-size: 13px;
+  }
+}
+
+.archetypeDesc {
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+
+  @media (width <= 768px) {
+    font-size: 11px;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================================================
+// FEATURES SECTION - Enhanced
+// ==========================================================================
+
+.features {
+  padding: 100px 0;
+
+  @media (width <= 768px) {
+    padding: 80px 0;
+  }
+}
+
+.sectionHeader {
+  margin-bottom: 60px;
+  text-align: center;
+
+  @media (width <= 768px) {
+    margin-bottom: 40px;
+  }
+}
+
+.sectionTitle {
+  color: #2d3748;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+
+  @media (width <= 768px) {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  @media (width <= 480px) {
+    font-size: 28px;
+  }
+}
+
+.sectionSubtitle {
+  color: #4a5568;
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 600px;
+
+  @media (width <= 768px) {
+    font-size: 16px;
+  }
+}
+
+.featuresGrid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+  @media (width <= 768px) {
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+}
+
+.featureCard {
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    transform: translateY(-4px);
+  }
+
+  @media (width <= 768px) {
+    padding: 24px 20px;
+  }
+}
+
+.featureIcon {
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 12px;
+  color: white;
+  display: inline-flex;
+  margin-bottom: 20px;
+  padding: 12px;
+
+  @media (width <= 768px) {
+    margin-bottom: 16px;
+    padding: 10px;
+  }
+}
+
+.featureTitle {
+  color: #2d3748;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+
+  @media (width <= 768px) {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+}
+
+.featureDescription {
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+
+  @media (width <= 768px) {
+    font-size: 15px;
+  }
+}
+
+// ==========================================================================
+// SYSTEM FEATURES SECTION - New
+// ==========================================================================
+
+.systemFeatures {
+  background: #f8fafc;
+  padding: 80px 0;
+
+  @media (width <= 768px) {
+    padding: 60px 0;
+  }
+}
+
+.systemFeaturesGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.systemFeatureCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
+    transform: translateY(-2px);
+  }
+}
+
+.systemFeatureIcon {
+  background: linear-gradient(135deg, rgb(102 126 234 / 10%) 0%, rgb(255 107 157 / 10%) 100%);
+  border-radius: 8px;
+  color: #667eea;
+  display: inline-flex;
+  margin-bottom: 16px;
+  padding: 8px;
+}
+
+.systemFeatureTitle {
+  color: #2d3748;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.systemFeatureDescription {
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+// ==========================================================================
+// ARCHETYPES SECTION - Enhanced
+// ==========================================================================
+
+.archetypes {
+  padding: 100px 0;
+
+  @media (width <= 768px) {
+    padding: 80px 0;
+  }
+}
+
+.archetypesGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  @media (width <= 768px) {
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  @media (width <= 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.archetypeOverviewCard {
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    transform: translateY(-4px);
+  }
+}
+
+.archetypeHeader {
+  margin-bottom: 16px;
+}
+
+.archetypeIconLarge {
+  align-items: center;
+  background: var(--archetype-color, #667eea);
+  border-radius: 50%;
+  color: white;
+  display: inline-flex;
+  font-size: 24px;
+  height: 60px;
+  justify-content: center;
+  margin-bottom: 12px;
+  width: 60px;
+
+  @media (width <= 768px) {
+    font-size: 20px;
+    height: 50px;
+    width: 50px;
+  }
+}
+
+.archetypeTitle {
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+
+  @media (width <= 768px) {
+    font-size: 16px;
+  }
+}
+
+.archetypeOverviewDesc {
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+
+  @media (width <= 768px) {
+    font-size: 13px;
+  }
+}
+
+// ==========================================================================
+// RESULTS SYSTEM SECTION - New
+// ==========================================================================
+
+.resultsSystem {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  padding: 100px 0;
+
+  @media (width <= 768px) {
+    padding: 80px 0;
+  }
+}
+
+.resultsGrid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+  @media (width <= 768px) {
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+}
+
+.resultCard {
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 32px rgb(0 0 0 / 15%);
+    transform: translateY(-6px);
+  }
+
+  @media (width <= 768px) {
+    padding: 24px 20px;
+  }
+}
+
+.resultIcon {
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 16px;
+  color: white;
+  display: inline-flex;
+  margin-bottom: 20px;
+  padding: 16px;
+
+  @media (width <= 768px) {
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+}
+
+.resultTitle {
+  color: #2d3748;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+
+  @media (width <= 768px) {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+}
+
+.resultDescription {
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+
+  @media (width <= 768px) {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+}
+
+.resultFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.resultFeature {
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 500;
+
+  @media (width <= 768px) {
+    font-size: 13px;
+  }
+}
+
+// ==========================================================================
+// HOW IT WORKS SECTION - Enhanced
+// ==========================================================================
+
+.howItWorks {
+  padding: 100px 0;
+
+  @media (width <= 768px) {
+    padding: 80px 0;
+  }
+}
+
+.processSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (width <= 768px) {
+    gap: 36px;
+  }
+}
+
+.step {
+  align-items: flex-start;
+  display: flex;
+  gap: 24px;
+
+  @media (width <= 768px) {
+    gap: 16px;
+  }
+}
+
+.stepNumber {
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b9d 0%, #667eea 100%);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 700;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+
+  @media (width <= 768px) {
+    font-size: 18px;
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.stepContent {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.stepTitle {
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+
+  @media (width <= 768px) {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+}
+
+.stepDescription {
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+
+  @media (width <= 768px) {
+    font-size: 15px;
+  }
+}
+
+// ==========================================================================
+// CTA SECTION - Enhanced
+// ==========================================================================
+
+.cta {
+  padding: 100px 0;
+
+  @media (width <= 768px) {
+    padding: 80px 0;
+  }
+}
+
+.ctaCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+
+  &::before {
+    background: radial-gradient(circle at 80% 20%, rgb(255 255 255 / 10%) 0%, transparent 50%);
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.ctaContent {
+  padding: 60px 40px;
+  position: relative;
+  z-index: 2;
+
+  @media (width <= 768px) {
+    padding: 40px 24px;
+  }
+}
+
+.ctaTitle {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+
+  @media (width <= 768px) {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  @media (width <= 480px) {
+    font-size: 24px;
+  }
+}
+
+.ctaSubtitle {
+  color: unset;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  opacity: 0.9;
+
+  @media (width <= 768px) {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+}
+
+.ctaStats {
+  align-items: center;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  margin-bottom: 32px;
+
+  @media (width <= 768px) {
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  @media (width <= 480px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.ctaStat {
+  text-align: center;
+
+  strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+
+    @media (width <= 768px) {
+      font-size: 20px;
+    }
+  }
+
+  & > :not(strong) {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+}
+
+.ctaButton {
+  align-items: center;
+  background: white;
+  color: #667eea;
+  display: inline-flex;
+  font-size: 18px;
+  font-weight: 600;
+  gap: 8px;
+  margin-bottom: 16px;
+  min-width: 280px;
+
+  &:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+  }
+
+  @media (width <= 480px) {
+    font-size: 16px;
+    min-width: 100%;
+  }
+}
+
+.ctaDisclaimer {
+  color: unset;
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.8;
+
+  @media (width <= 768px) {
+    font-size: 13px;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE UTILITIES
+// ==========================================================================
+
+@media (width <= 1200px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (width <= 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+// ==========================================================================
+// ACCESSIBILITY & FOCUS STATES
+// ==========================================================================
+
+.primaryAction:focus,
+.ctaButton:focus {
+  box-shadow: 0 0 0 3px rgb(102 126 234 / 30%);
+  outline: none;
+}
+
+// Dark mode support (if needed)
+// @media (prefers-color-scheme: dark) {
+//   .hero {
+//     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f172a 100%);
+//   }
+
+//   .heroTitle,
+//   .sectionTitle,
+//   .featureTitle,
+//   .archetypeTitle,
+//   .resultTitle,
+//   .stepTitle {
+//     color: #f7fafc;
+//   }
+
+//   .heroSubtitle,
+//   .sectionSubtitle,
+//   .featureDescription,
+//   .archetypeOverviewDesc,
+//   .resultDescription,
+//   .stepDescription {
+//     color: #cbd5e0;
+//   }
+// }

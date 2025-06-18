@@ -1,8 +1,8 @@
 // ==========================================================================
-// HOMEPAGE ORCHESTRATOR COMPONENT - ENHANCED ASSESSMENT SYSTEM
+// AboutPAGE ORCHESTRATOR COMPONENT - ENHANCED ASSESSMENT SYSTEM
 // ==========================================================================
 
-// src/components/pages/HomePage/HomePage.tsx
+// src/app/about/page.tsx
 'use client';
 
 import {
@@ -29,9 +29,9 @@ import useEnhancedAssessmentStore, {
   useEnhancedAssessmentData,
 } from '@/lib/store';
 
-import styles from './HomePage.module.scss';
+import styles from './AboutPage.module.scss';
 
-export const HomePage: React.FC = () => {
+export const AboutPage: React.FC = () => {
   const router = useRouter();
   // FIXED: Use enhanced store hooks
   const { isStarted } = useEnhancedAssessmentData();
@@ -178,126 +178,157 @@ export const HomePage: React.FC = () => {
     <PageLayout>
       <div className={styles.homepage}>
         {/* Hero Section */}
-        <section className={styles.hero}>
+
+        {/* Features Section */}
+        <section className={styles.features}>
           <div className="container">
-            <div className={styles.heroContent}>
-              <div className={styles.heroText}>
-                <h1 className={styles.heroTitle}>
-                  Discover Your <span className={styles.highlightText}>Relationship Archetype</span>
-                  <br />
-                  Through Advanced Travel Psychology
-                </h1>
-                <p className={styles.heroSubtitle}>
-                  Experience our revolutionary assessment system that combines branching travel
-                  scenarios with psychological profiling to reveal your relationship patterns,
-                  vulnerability awareness, and attraction dynamics. Get comprehensive insights in
-                  just {appConfig.assessment.timeEstimate}.
-                </p>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Revolutionary Assessment Experience</h2>
+              <p className={styles.sectionSubtitle}>
+                Our enhanced system combines travel psychology with advanced algorithms to provide
+                comprehensive relationship insights
+              </p>
+            </div>
 
-                <div className={styles.heroActions}>
-                  {isStarted && userData ? (
-                    <div className={styles.continueSection}>
-                      <p className={styles.welcomeBack}>
-                        Welcome back, {userData.name}! Ready to continue your enhanced assessment?
-                      </p>
-                      <div className={styles.actionButtons}>
-                        <Button
-                          variant="cta"
-                          size="large"
-                          onClick={handleContinueAssessment}
-                          className={styles.primaryAction}
-                        >
-                          Continue Assessment
-                          <ArrowRight size={20} />
-                        </Button>
-                        <Button variant="secondary" size="large" onClick={handleStartAssessment}>
-                          Start Over
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Button
-                      variant="cta"
-                      size="large"
-                      onClick={handleStartAssessment}
-                      className={styles.primaryAction}
-                    >
-                      Start Your Enhanced Assessment
-                      <ArrowRight size={20} />
-                    </Button>
-                  )}
-
-                  <div className={styles.assessmentStats}>
-                    <div className={styles.stat}>
-                      <strong>20+</strong> Branching Scenarios
-                    </div>
-                    <div className={styles.stat}>
-                      <strong>8-12</strong> Adaptive Questions
-                    </div>
-                    <div className={styles.stat}>
-                      <strong>8</strong> Personality Archetypes
-                    </div>
-                    <div className={styles.stat}>
-                      <strong>17</strong> Vulnerability Patterns
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* <div className={styles.heroVisual}>
-                <div className={styles.archetypePreview}>
-                  {archetypes.slice(0, 4).map((archetype, index) => (
-                    <div
-                      key={archetype.name}
-                      className={styles.archetypeCard}
-                      style={
-                        {
-                          '--archetype-color': archetype.color,
-                          '--animation-delay': `${index * 0.2}s`,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <div className={styles.archetypeIcon}>{archetype.icon}</div>
-                      <h4 className={styles.archetypeName}>{archetype.name}</h4>
-                      <p className={styles.archetypeDesc}>{archetype.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
+            <div className={styles.featuresGrid}>
+              {features.map(feature => (
+                <Card key={feature.title} className={styles.featureCard} variant="default">
+                  <div className={styles.featureIcon}>{feature.icon}</div>
+                  <h3 className={styles.featureTitle}>{feature.title}</h3>
+                  <p className={styles.featureDescription}>{feature.description}</p>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Enhanced Archetypes Overview */}
-        <section className={styles.archetypes}>
+        {/* System Features */}
+        <section className={styles.systemFeatures}>
           <div className="container">
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Eight Comprehensive Archetypes</h2>
+              <h2 className={styles.sectionTitle}>Advanced Technology</h2>
               <p className={styles.sectionSubtitle}>
-                Discover your unique personality blend among our scientifically-backed relationship
-                archetypes
+                Built with cutting-edge algorithms and psychological insights
               </p>
             </div>
 
-            <div className={styles.archetypesGrid}>
-              {archetypes.map(archetype => (
-                <Card
-                  key={archetype.name}
-                  className={styles.archetypeOverviewCard}
-                  variant="default"
-                >
-                  <div className={styles.archetypeHeader}>
-                    <div
-                      className={styles.archetypeIconLarge}
-                      style={{ '--archetype-color': archetype.color } as React.CSSProperties}
-                    >
-                      {archetype.icon}
-                    </div>
-                    <h3 className={styles.archetypeTitle}>{archetype.name}</h3>
-                  </div>
-                  <p className={styles.archetypeOverviewDesc}>{archetype.description}</p>
+            <div className={styles.systemFeaturesGrid}>
+              {systemFeatures.map(feature => (
+                <Card key={feature.title} className={styles.systemFeatureCard} variant="outlined">
+                  <div className={styles.systemFeatureIcon}>{feature.icon}</div>
+                  <h3 className={styles.systemFeatureTitle}>{feature.title}</h3>
+                  <p className={styles.systemFeatureDescription}>{feature.description}</p>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Three-Part Results System */}
+        <section className={styles.resultsSystem}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Comprehensive Three-Part Results</h2>
+              <p className={styles.sectionSubtitle}>
+                Your results span three integrated areas for complete relationship awareness
+              </p>
+            </div>
+
+            <div className={styles.resultsGrid}>
+              <Card className={styles.resultCard} variant="elevated">
+                <div className={styles.resultIcon}>
+                  <Brain size={32} />
+                </div>
+                <h3 className={styles.resultTitle}>Archetype Analysis</h3>
+                <p className={styles.resultDescription}>
+                  Detailed ranking of all 8 archetypes with confidence percentages, mathematical
+                  proximity scores, and personalized insights into your relationship patterns.
+                </p>
+                <div className={styles.resultFeatures}>
+                  <span className={styles.resultFeature}>• Mathematical ranking system</span>
+                  <span className={styles.resultFeature}>• Confidence percentages</span>
+                  <span className={styles.resultFeature}>• Detailed trait analysis</span>
+                </div>
+              </Card>
+
+              <Card className={styles.resultCard} variant="elevated">
+                <div className={styles.resultIcon}>
+                  <Shield size={32} />
+                </div>
+                <h3 className={styles.resultTitle}>Vulnerability Assessment</h3>
+                <p className={styles.resultDescription}>
+                  Educational awareness of manipulation patterns specific to your personality type,
+                  with 3-8 personalized persona cards and red flag recognition training.
+                </p>
+                <div className={styles.resultFeatures}>
+                  <span className={styles.resultFeature}>• Personalized persona cards</span>
+                  <span className={styles.resultFeature}>• Red flag recognition</span>
+                  <span className={styles.resultFeature}>• Protection strategies</span>
+                </div>
+              </Card>
+
+              <Card className={styles.resultCard} variant="elevated">
+                <div className={styles.resultIcon}>
+                  <Heart size={32} />
+                </div>
+                <h3 className={styles.resultTitle}>Attraction Patterns</h3>
+                <p className={styles.resultDescription}>
+                  Coming soon: Deep analysis of your attraction triggers, compatibility insights,
+                  and relationship dynamics to help you build healthier connections.
+                </p>
+                <div className={styles.resultFeatures}>
+                  <span className={styles.resultFeature}>• Attraction triggers</span>
+                  <span className={styles.resultFeature}>• Compatibility insights</span>
+                  <span className={styles.resultFeature}>• Relationship dynamics</span>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works - Enhanced Process */}
+        <section className={styles.howItWorks}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>How FIA Relationship Assessment Works</h2>
+              <p className={styles.sectionSubtitle}>
+                Advanced branching logic adapts to your responses for personalized insights
+              </p>
+            </div>
+
+            <div className={styles.processSteps}>
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>1</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>Dynamic Branching Scenarios</h3>
+                  <p className={styles.stepDescription}>
+                    Choose between London and Paris travel experiences. Your decisions create a
+                    unique path through 20+ possible scenarios.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>2</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>Mathematical Analysis</h3>
+                  <p className={styles.stepDescription}>
+                    Advanced algorithms calculate your proximity to all 8 archetypes using Euclidean
+                    distance formulas for precise matching.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>3</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>Personalized Results</h3>
+                  <p className={styles.stepDescription}>
+                    Receive comprehensive insights across three areas: archetypes, vulnerability
+                    patterns, and attraction dynamics (coming soon).
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -348,4 +379,4 @@ export const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default AboutPage;

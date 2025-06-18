@@ -71,18 +71,18 @@ export const Footer: React.FC<FooterProps> = ({
                         How It Works
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link href="/archetypes" className={styles.link}>
                         Relationship Types
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
 
                 <div className={styles.linkGroup}>
                   <h3 className={styles.linkGroupTitle}>Support</h3>
                   <ul className={styles.linkList}>
-                    <li>
+                    {/* <li>
                       <Link href="/faq" className={styles.link}>
                         FAQ
                       </Link>
@@ -91,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({
                       <Link href="/contact" className={styles.link}>
                         Contact Us
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <a
                         href="mailto:support@fia-relationship-assessment.com"
