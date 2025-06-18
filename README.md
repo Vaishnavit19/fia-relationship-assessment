@@ -1,38 +1,23 @@
-# FIA Relationship Assessment
+# 🏆 FIA Relationship Assessment
 
-A sophisticated relationship assessment tool that uses travel scenarios to analyze personality patterns and provide educational content about relationship vulnerabilities. The system combines advanced mathematical algorithms with educational psychology to deliver personalized insights about manipulation patterns and relationship safety.
+**Discover your relationship style through travel scenarios.** An interactive assessment that reveals how you balance emotional connection, logical planning, and adventurous exploration in relationships.
 
-## 🎯 Features
+## ✨ Features
 
-- **Dynamic Travel Scenarios**: 25 scenarios with intelligent branching logic and 4 multi-select questions
-- **Advanced Branching Logic**: Questions adapt based on previous answers with London vs Paris pathways
-- **Eight Comprehensive Archetypes**: Achiever, Intellectual, Leader, Explorer, Peacemaker, Dreamer, Rebel, Caregiver
-- **Vulnerability Education**: 17 educational manipulation personas with pop culture references
-- **Mathematical Precision**: Euclidean distance calculations for accurate personality matching
-- **Three-Tab Results Interface**: Archetypes, Vulnerabilities, and Attraction Patterns
-- **Beautiful Modern UI**: Clean, professional design with smooth animations
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
-- **Progress Tracking**: Visual progress indicators with adaptive completion (16-19 questions)
-- **Educational Value**: Red flag recognition and protection strategies
-- **Type-Safe**: Built with TypeScript for reliability
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Styling**: SCSS with custom design system (no Tailwind)
-- **State Management**: Zustand
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Development**: Storybook for component development
-- **Package Manager**: pnpm
+- **Interactive Travel Scenarios**: 7 engaging scenarios that reveal relationship dynamics
+- **Dynamic Question Flow**: Smart branching logic that adapts to your responses
+- **Three Relationship Archetypes**: Heartfelt Companion 💝, Strategic Navigator 🧠, Spontaneous Explorer 🌟
+- **Comprehensive Results**: Detailed analysis with vulnerability insights and persona mapping
+- **Responsive Design**: Optimized for all devices with modern UI/UX
+- **Privacy-First**: Secure data handling with comprehensive privacy protections
+- **Legal Compliance**: Full Terms of Service and Privacy Policy documentation
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) or npm
+- Node.js 18+ (recommended: 20+)
+- pnpm (recommended) or npm/yarn
 
 ### Installation
 
@@ -46,78 +31,55 @@ pnpm install
 
 # Start development server
 pnpm dev
-
-# Open in browser
-open http://localhost:3000
 ```
 
-### Development Commands
+Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Available Scripts
 
 ```bash
-pnpm dev              # Start development server
-pnpm build            # Build for production
-pnpm start            # Start production server
-pnpm lint             # Run ESLint
-pnpm type-check       # TypeScript validation
+# Development
+pnpm dev          # Start development server with Turbopack
+pnpm build        # Build for production
+pnpm start        # Start production server
 
-# Storybook
-pnpm storybook        # Start Storybook development
-pnpm build-storybook  # Build Storybook for deployment
+# Code Quality
+pnpm lint         # Run ESLint
+pnpm lint:fix     # Auto-fix ESLint issues
+pnpm format       # Format code with Prettier
+pnpm type-check   # Run TypeScript compiler
+
+# Component Development
+pnpm storybook    # Start Storybook component library
 ```
 
 ## 📁 Project Structure
 
 ```
-fia-relationship-assessment/
-├── .storybook/           # Storybook configuration
-├── src/
-│ ├── app/                # Next.js App Router pages
-│ │ ├── layout.tsx        # Root layout
-│ │ ├── page.tsx          # Homepage
-│ │ ├── assessment/       # Assessment flow
-│ │ └── results/          # Results page
-│ ├── components/         # React components
-│ │ ├── pages/            # Page-level components
-│ │ │ ├── HomePage/
-│ │ │ ├── AssessmentPage/
-│ │ │ ├── TabbedResultsPage/
-│ │ │ ├── VulnerabilityCardsPage/
-│ │ │ └── EnhancedResultsPage/
-│ │ └── ui/               # Reusable UI components
-│ │   ├── Button/
-│ │   ├── Card/
-│ │   ├── LoadingSpinner/
-│ │   ├── PageLayout/
-│ │   ├── Modal/
-│ │   ├── ProgressBar/
-│ │   ├── AssessmentProgress/
-│ │   ├── NavigationControls/
-│ │   ├── OptionButton/
-│ │   ├── QuestionCard/
-│ │   ├── UserInfoForm/
-│ │   ├── ArchetypeCard/
-│ │   ├── ResultsSummary/
-│ │   ├── ScoreChart/
-│ │   └── ShareButtons/
-│ ├── lib/                # Utilities and logic
-│ │ ├── types.ts          # TypeScript definitions
-│ │ ├── store.ts          # Zustand state management
-│ │ ├── data.ts           # Data loading functions
-│ │ ├── archetypeCalculator.ts    # Mathematical algorithms
-│ │ ├── personaSelector.ts        # Vulnerability selection
-│ │ ├── personaEducator.ts        # Educational content
-│ │ └── vulnerabilityPipeline.ts  # Assessment pipeline
-│ ├── data/               # JSON data files
-│ │ ├── extended-travel-scenarios.json    # 25 travel scenarios
-│ │ ├── extended-archetypes.json          # 8 archetype definitions
-│ │ ├── archetype-scoring-profiles.json   # Mathematical profiles
-│ │ ├── enhanced-persona-cards.json       # 17 manipulation personas
-│ │ └── persona-archetype-mapping.json    # Vulnerability mappings
-│ └── styles/             # SCSS stylesheets
-│ ├── globals.scss        # Global styles
-│ ├── variables.scss      # Design system variables
-│ └── mixins.scss         # SCSS mixins and utilities
-├── public/               # Static assets
+src/
+├── app/                  # Next.js App Router
+│   ├── assessment/       # Assessment flow page
+│   ├── results/          # Results display page
+│   ├── terms/           # Terms of Service page
+│   ├── privacy/         # Privacy Policy page
+│   └── layout.tsx       # Root layout
+├── components/
+│   ├── ui/              # Reusable UI components
+│   ├── pages/           # Page-specific components
+│   │   ├── AssessmentPage/
+│   │   ├── TabbedResultsPage/
+│   │   ├── TermsOfService/    # New: Terms of Service component
+│   │   └── PrivacyPolicy/     # New: Privacy Policy component
+│   └── assessment/      # Assessment-specific components
+├── data/                # Static data and configurations
+├── hooks/               # Custom React hooks
+├── lib/                 # Utility functions and configurations
+├── store/               # Zustand state management
+├── styles/              # SCSS styles and design system
+│   ├── globals.scss     # Global styles and CSS reset
+│   ├── variables.scss   # Design system variables
+│   └── mixins.scss      # SCSS mixins and utilities
+├── public/              # Static assets
 ├── package.json
 ├── next.config.js
 ├── tsconfig.json
@@ -152,92 +114,55 @@ Each answer is scored across three dimensions:
 - **Logical Score** (0-2 points): Practical thinking, efficiency, planning
 - **Exploratory Score** (0-2 points): Spontaneity, adventure, independence
 
-### Advanced Branching Logic
+### Branching Logic
 
-- **25 total scenarios** with complex decision tree structure
-- **4 multi-select scenarios** requiring multiple choice selections
-- **2 major branching points**: London vs Paris pathways create personalized experiences
-- **Delay scenarios** branch into waiting vs going-ahead paths
-- **Adaptive completion**: Assessment completes at 16-19 questions based on user path
-- **Convergence points** bring different paths back together
+- Dynamic question flow based on previous answers
+- Questions 2 leads to different city scenarios (London/Paris)
+- Delay scenarios branch into waiting vs. going ahead
+- All paths converge for final scenarios
 
-### Mathematical Archetype Matching
+### Relationship Archetypes
 
-- **Euclidean distance calculation** for personality proximity
-- **Confidence percentages** based on distance ratios
-- **Top 3-5 matches** displayed with detailed analysis
-- **Tie-breaking algorithms** for close matches
+1. **The Heartfelt Companion** 💝
 
-### Eight Relationship Archetypes
+   - Prioritizes emotional connection and togetherness
+   - Partner's happiness is their happiness
+   - Creates deep bonds through shared experiences
 
-1. **The Achiever** 🎯
+2. **The Strategic Navigator** 🧠
 
-   - Goal-oriented and success-driven
-   - Builds relationships through shared ambitions
-   - Values efficiency and strategic planning
+   - Approaches relationships with careful planning
+   - Makes efficient, logic-based decisions
+   - Creates well-organized adventures
 
-2. **The Intellectual** 🧠
+3. **The Spontaneous Explorer** 🌟
+   - Embraces the unexpected and thrives on new experiences
+   - Comfortable with uncertainty and change
+   - Brings excitement through adventurous approach
 
-   - Values deep conversations and mental connection
-   - Approaches relationships analytically
-   - Seeks intellectual compatibility
+## 📄 Legal Documentation
 
-3. **The Leader** 👑
+### Terms of Service
 
-   - Takes charge naturally in relationships
-   - Creates structure and direction
-   - Protective and decision-oriented
+- **Location**: `/terms` route, `src/components/pages/TermsOfService/`
+- **Features**: Comprehensive terms covering service usage, user responsibilities, and liability
+- **Integration**: Linked in user registration form for required consent
+- **Components**: Print-friendly formatting, accessible design, contact information
 
-4. **The Explorer** 🌟
+### Privacy Policy
 
-   - Seeks adventure and growth together
-   - Embraces spontaneity and new experiences
-   - Values freedom and discovery
+- **Location**: `/privacy` route, `src/components/pages/PrivacyPolicy/`
+- **Features**: Detailed privacy protections, data handling practices, user rights
+- **Integration**: Required consent checkbox in user information form
+- **Compliance**: GDPR considerations, data retention policies, user control options
 
-5. **The Peacemaker** 🕊️
+Both legal documents include:
 
-   - Maintains harmony and prevents conflict
-   - Prioritizes emotional connection
-   - Accommodating and supportive
-
-6. **The Dreamer** 💭
-
-   - Builds relationships around shared visions
-   - Creative and idealistic approach
-   - Values meaning and possibility
-
-7. **The Rebel** ⚡
-
-   - Values authenticity and freedom
-   - Challenges conventional relationship norms
-   - Independent and non-conformist
-
-8. **The Caregiver** 💝
-   - Nurtures and supports others naturally
-   - Finds fulfillment in caring for partners
-   - Emotionally generous and protective
-
-## 🛡️ Vulnerability Education System
-
-### Educational Personas
-
-- **17 manipulation personas** with detailed psychological profiles
-- **Pop culture references** for easy recognition and retention
-- **Risk-level assessment** (high, medium, low) based on archetype vulnerability
-- **Protection strategies** tailored to individual patterns
-
-### Persona Selection Algorithm
-
-- **Confidence gap analysis**: Determines persona distribution
-- **Weighted selection**: Prioritizes high-risk patterns for user's archetype
-- **3-5 personas selected** based on mathematical analysis
-- **Educational content generation** with recognition signs and protection tips
-
-### Three-Tab Results Interface
-
-1. **Archetypes Tab**: Personality analysis with confidence scores and detailed profiles
-2. **Vulnerabilities Tab**: Personalized manipulation awareness education
-3. **Attraction Patterns Tab**: Relationship dynamic insights (coming soon)
+- Professional styling with consistent branding
+- Print-friendly versions for offline reference
+- Accessibility features and responsive design
+- Clear contact information for legal inquiries
+- Regular update mechanisms with user notification
 
 ## 🔧 Development Guide
 
@@ -257,7 +182,6 @@ The app uses Zustand for state management with persistence:
 - Assessment progress and answers
 - User data collection
 - Results calculation
-- Vulnerability assessment state
 - Navigation state
 
 ### Styling Approach
@@ -300,33 +224,15 @@ NEXT_PUBLIC_GA_ID=your-analytics-id
 NEXT_PUBLIC_API_URL=your-api-endpoint
 ```
 
-## 🎯 Usage Flow
+## 🎯 Usage
 
-1. **Homepage**: Introduction to the enhanced assessment with feature overview
+1. **Homepage**: Introduction to the assessment with feature overview
 2. **User Registration**: Simple form to collect name and optional email
-3. **Assessment Flow**: 25 travel-based scenarios with intelligent branching (16-19 questions)
-4. **Results Processing**: Mathematical archetype calculation and vulnerability analysis
-5. **Three-Tab Results**: Comprehensive personality analysis and educational content
-6. **Sharing & Actions**: Easy sharing of results and option to retake
-
-## 🔄 System Architecture
-
-### Core Data Files
-
-1. **extended-travel-scenarios.json**: 25 scenarios with branching logic
-2. **extended-archetypes.json**: 8 archetype definitions with traits
-3. **archetype-scoring-profiles.json**: Mathematical matching algorithms
-4. **enhanced-persona-cards.json**: 17 educational manipulation personas
-5. **persona-archetype-mapping.json**: Vulnerability mapping system
-
-### Processing Pipeline
-
-1. **Answer Collection**: User responses to travel scenarios
-2. **Score Calculation**: Three-dimensional scoring (emotional, logical, exploratory)
-3. **Archetype Matching**: Euclidean distance calculation for personality proximity
-4. **Confidence Analysis**: Gap calculation between top matches
-5. **Persona Selection**: Risk-based educational content selection
-6. **Results Generation**: Comprehensive three-tab interface with educational value
+   - **New**: Required consent to Terms of Service and Privacy Policy
+3. **Assessment Flow**: 7 travel-based scenarios with branching logic
+4. **Results Page**: Detailed archetype results with score breakdown
+5. **Sharing**: Easy sharing of results and option to retake
+6. **Legal Pages**: Access to Terms of Service and Privacy Policy via `/terms` and `/privacy`
 
 ## 🤝 Contributing
 
@@ -344,27 +250,22 @@ NEXT_PUBLIC_API_URL=your-api-endpoint
 - Write Storybook stories for new components
 - Test responsive behavior
 - Maintain accessibility standards
-- Validate algorithm accuracy for assessment components
-
-## 📊 System Performance
-
-- **Assessment Time**: 16-19 questions (average 18 questions)
-- **Completion Rate**: Optimized for high engagement
-- **Accuracy**: Mathematical precision with confidence scoring
-- **Educational Value**: Comprehensive vulnerability awareness training
-- **Personalization**: Tailored content based on individual archetype profiles
-
-## 🆘 Support
-
-For support and questions:
-
-- Documentation: Check Storybook documentation
-- Issues: Create GitHub issues for bugs and feature requests
 
 ## 📄 License
 
 This project is proprietary software developed for FIA. All rights reserved.
 
+## 🆘 Support
+
+For support and questions:
+
+- **Technical Issues**: Create GitHub issues for bugs and feature requests
+- **Privacy Questions**: support@fia-relationship-assessment.com (Subject: Privacy Policy Inquiry)
+- **Legal Questions**: support@fia-relationship-assessment.com (Subject: Terms of Service Inquiry)
+- **Documentation**: Check Storybook documentation
+
+Response time: 5 business days for legal/privacy inquiries
+
 ---
 
-**Built with ❤️ for understanding relationships better through advanced personality assessment and educational awareness**
+**Built with ❤️ for understanding relationships better**
