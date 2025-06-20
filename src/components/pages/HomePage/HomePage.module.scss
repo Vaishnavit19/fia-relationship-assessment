@@ -475,17 +475,33 @@ padding-inline: 2rem;
 }
 
 .archetypeOverviewCard {
-  padding: 24px;
+  align-items: end;
+  color: white;
+  display: grid;
   text-align: center;
   transition: all 0.3s ease;
 
-  &:hover {
-    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
-    transform: translateY(-4px);
+  img {
+    align-self: center;
+    border-radius: 1.5rem;
+    filter: brightness(0.75) opacity(0.75);
+    height: auto;
+    transition: all 0.3s ease;
+    width: 100%;
+
+
+    // position: absolute;
   }
 }
 
+.archetypeDetails {
+  padding-bottom: 1rem;
+  text-shadow: 0 0 5px black;
+  z-index: 1;
+}
+
 .archetypeHeader {
+  color: inherit;
   margin-bottom: 16px;
 }
 
@@ -509,7 +525,9 @@ padding-inline: 2rem;
 }
 
 .archetypeTitle {
-  color: #2d3748;
+  color: inherit;
+
+  // color: #2d3748;
   font-size: 18px;
   font-weight: 600;
   margin: 0;
@@ -520,15 +538,41 @@ padding-inline: 2rem;
 }
 
 .archetypeOverviewDesc {
-  color: #4a5568;
+  color: inherit;
+
+  // color: #4a5568;
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
+  max-height: 100px;
+  overflow: hidden;
+  transition: all 0.3s ease;
 
   @media (width <= 768px) {
     font-size: 13px;
   }
 }
+
+.archetypeOverviewCard > img,
+.archetypeDetails {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.archetypeOverviewCard:hover {
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+
+    >img{
+      filter: none;
+      transform: scale(1.1);
+    }
+
+    .archetypeOverviewDesc {
+      max-height: 0;
+    }
+
+    // transform: translateY(-4px);
+  }
 
 // ==========================================================================
 // RESULTS SYSTEM SECTION - New

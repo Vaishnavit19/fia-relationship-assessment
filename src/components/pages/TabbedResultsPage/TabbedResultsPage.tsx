@@ -27,7 +27,9 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
+
+import archetypes from '@/data/archetypes-homepage.json';
 
 import {
   generateArchetypeResults,
@@ -227,6 +229,12 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   };
 
   // ==========================================================================
+  // REFS
+  // ==========================================================================
+
+  const expandedArchetypeCardRef = useRef<HTMLDivElement>(null);
+
+  // ==========================================================================
   // COMPUTED VALUES
   // ==========================================================================
 
@@ -374,9 +382,15 @@ Total Questions Answered: ${answers?.length || 0}
   };
 
   const handleArchetypeSelect = (archetype: ArchetypeMatch) => {
-    setSelectedArchetype(
-      selectedArchetype?.archetype.id === archetype.archetype.id ? null : archetype
-    );
+    setSelectedArchetype(archetype);
+    // setSelectedArchetype(
+    //   selectedArchetype?.archetype.id === archetype.archetype.id ? null : archetype
+    // );
+
+    const { top, left } = expandedArchetypeCardRef.current.getBoundingClientRect();
+    console.log('scrolling to ', top, left);
+
+    scrollTo({ behavior: 'smooth', top: top, left: left });
   };
 
   const handlePersonaSelect = (persona: PersonaCard) => {
@@ -552,7 +566,7 @@ Total Questions Answered: ${answers?.length || 0}
           {/* Archetype Expansion Content */}
           {selectedArchetype && (
             <Card className={styles.detailsCard}>
-              <div className={styles.detailsHeader}>
+              <div ref={expandedArchetypeCardRef} className={styles.detailsHeader}>
                 <div className={styles.archetypeIcon}>
                   <Brain />
                 </div>

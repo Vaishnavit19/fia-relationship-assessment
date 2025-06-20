@@ -1,0 +1,58 @@
+[
+  {
+    "icon": "🎯",
+    "name": "The Achiever",
+    "description": "Goal-oriented and success-driven, building relationships through shared ambitions.",
+    "color": "#ff6b9d",
+    "image": "/images/archetypes/achiever.webp"
+  },
+  {
+    "icon": "🧠",
+    "name": "The Intellectual",
+    "description": "Values deep conversations and mental connection above all else.",
+    "color": "#667eea",
+    "image": "/images/archetypes/intellectual.webp"
+  },
+  {
+    "icon": "👑",
+    "name": "The Leader",
+    "description": "Takes charge naturally and creates structure in relationships.",
+    "color": "#764ba2",
+    "image": "/images/archetypes/leader.webp"
+  },
+  {
+    "icon": "🌟",
+    "name": "The Explorer",
+    "description": "Seeks adventure and growth through new experiences together.",
+    "color": "#ffb347",
+    "image": "/images/archetypes/explorer.webp"
+  },
+  {
+    "icon": "🕊️",
+    "name": "The Peacemaker",
+    "description": "Maintains harmony and prevents conflict through understanding.",
+    "color": "#87ceeb",
+    "image": "/images/archetypes/peacemaker.webp"
+  },
+  {
+    "icon": "💭",
+    "name": "The Dreamer",
+    "description": "Builds relationships around shared visions and creative possibilities.",
+    "color": "#dda0dd",
+    "image": "/images/archetypes/dreamer.webp"
+  },
+  {
+    "icon": "⚡",
+    "name": "The Rebel",
+    "description": "Values authenticity and freedom, challenging conventional relationship norms.",
+    "color": "#ff8c00",
+    "image": "/images/archetypes/rebel.webp"
+  },
+  {
+    "icon": "💝",
+    "name": "The Caregiver",
+    "description": "Nurtures and supports, finding fulfillment in caring for others.",
+    "color": "#98fb98",
+    "image": "/images/archetypes/caregiver.webp"
+  }
+]

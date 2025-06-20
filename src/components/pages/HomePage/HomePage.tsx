@@ -17,12 +17,14 @@ import {
   TrendingUp,
   Star,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import PageLayout from '@/components/ui/PageLayout';
+import archetypes from '@/data/archetypes-homepage.json';
 import { appConfig } from '@/lib/data';
 import useEnhancedAssessmentStore, {
   useEnhancedAssessmentActions,
@@ -93,58 +95,6 @@ export const HomePage: React.FC = () => {
       title: 'Science-Based Analysis',
       description:
         'Built on mathematical proximity algorithms and weighted selection systems for accurate, reliable results.',
-    },
-  ];
-
-  const archetypes = [
-    {
-      icon: '🎯',
-      name: 'The Achiever',
-      description:
-        'Goal-oriented and success-driven, building relationships through shared ambitions.',
-      color: '#ff6b9d',
-    },
-    {
-      icon: '🧠',
-      name: 'The Intellectual',
-      description: 'Values deep conversations and mental connection above all else.',
-      color: '#667eea',
-    },
-    {
-      icon: '👑',
-      name: 'The Leader',
-      description: 'Takes charge naturally and creates structure in relationships.',
-      color: '#764ba2',
-    },
-    {
-      icon: '🌟',
-      name: 'The Explorer',
-      description: 'Seeks adventure and growth through new experiences together.',
-      color: '#ffb347',
-    },
-    {
-      icon: '🕊️',
-      name: 'The Peacemaker',
-      description: 'Maintains harmony and prevents conflict through understanding.',
-      color: '#87ceeb',
-    },
-    {
-      icon: '💭',
-      name: 'The Dreamer',
-      description: 'Builds relationships around shared visions and creative possibilities.',
-      color: '#dda0dd',
-    },
-    {
-      icon: '⚡',
-      name: 'The Rebel',
-      description: 'Values authenticity and freedom, challenging conventional relationship norms.',
-      color: '#ff8c00',
-    },
-    {
-      icon: '💝',
-      name: 'The Caregiver',
-      description: 'Nurtures and supports, finding fulfillment in caring for others.',
-      color: '#98fb98',
     },
   ];
 
@@ -229,10 +179,10 @@ export const HomePage: React.FC = () => {
 
                   <div className={styles.assessmentStats}>
                     <div className={styles.stat}>
-                      <strong>20+</strong> Branching Scenarios
+                      <strong>26</strong> Branching Scenarios
                     </div>
                     <div className={styles.stat}>
-                      <strong>8-12</strong> Adaptive Questions
+                      <strong>10</strong> Adaptive Questions
                     </div>
                     <div className={styles.stat}>
                       <strong>8</strong> Personality Archetypes
@@ -285,17 +235,21 @@ export const HomePage: React.FC = () => {
                   key={archetype.name}
                   className={styles.archetypeOverviewCard}
                   variant="default"
+                  padding="none"
                 >
-                  <div className={styles.archetypeHeader}>
-                    <div
-                      className={styles.archetypeIconLarge}
-                      style={{ '--archetype-color': archetype.color } as React.CSSProperties}
-                    >
-                      {archetype.icon}
+                  <Image src={archetype.image} alt="" height={250} width={250} quality={80}></Image>
+                  <div className={styles.archetypeDetails}>
+                    <div className={styles.archetypeHeader}>
+                      <div
+                        className={styles.archetypeIconLarge}
+                        style={{ '--archetype-color': archetype.color } as React.CSSProperties}
+                      >
+                        {archetype.icon}
+                      </div>
+                      <h3 className={styles.archetypeTitle}>{archetype.name}</h3>
                     </div>
-                    <h3 className={styles.archetypeTitle}>{archetype.name}</h3>
+                    <p className={styles.archetypeOverviewDesc}>{archetype.description}</p>
                   </div>
-                  <p className={styles.archetypeOverviewDesc}>{archetype.description}</p>
                 </Card>
               ))}
             </div>

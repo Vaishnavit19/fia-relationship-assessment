@@ -7,9 +7,9 @@
     "website": "https://fia-relationship-assessment.com"
   },
   "assessment": {
-    "totalScenarios": "20+",
-    "maxScore": 30,
-    "timeEstimate": "8-12 minutes",
+    "totalScenarios": "26",
+    "maxScore": 20,
+    "timeEstimate": "5 minutes",
     "resultTypes": 8
   },
   "ui": {
