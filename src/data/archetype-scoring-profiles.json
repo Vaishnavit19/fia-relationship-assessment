@@ -10,11 +10,11 @@
       "archetypeId": "intellectual",
       "name": "The Intellectual or Analyst",
       "targetScores": {
-        "logical": 18,
-        "emotional": 4,
-        "exploratory": 12
+        "logical": 9,
+        "emotional": 2,
+        "exploratory": 6
       },
-      "totalScore": 34,
+      "totalScore": 17,
       "percentages": {
         "logical": 52.94,
         "emotional": 11.76,
@@ -27,11 +27,11 @@
       "archetypeId": "achiever",
       "name": "The Achiever",
       "targetScores": {
-        "logical": 16,
-        "emotional": 8,
-        "exploratory": 10
+        "logical": 8,
+        "emotional": 4,
+        "exploratory": 5
       },
-      "totalScore": 34,
+      "totalScore": 17,
       "percentages": {
         "logical": 47.06,
         "emotional": 23.53,
@@ -44,11 +44,11 @@
       "archetypeId": "leader",
       "name": "The Leader or Ruler",
       "targetScores": {
-        "logical": 14,
-        "emotional": 12,
-        "exploratory": 10
+        "logical": 7,
+        "emotional": 6,
+        "exploratory": 5
       },
-      "totalScore": 36,
+      "totalScore": 18,
       "percentages": {
         "logical": 38.89,
         "emotional": 33.33,
@@ -61,11 +61,11 @@
       "archetypeId": "explorer",
       "name": "The Explorer",
       "targetScores": {
-        "logical": 6,
-        "emotional": 10,
-        "exploratory": 20
+        "logical": 3,
+        "emotional": 5,
+        "exploratory": 10
       },
-      "totalScore": 36,
+      "totalScore": 18,
       "percentages": {
         "logical": 16.67,
         "emotional": 27.78,
@@ -78,11 +78,11 @@
       "archetypeId": "rebel",
       "name": "The Rebel",
       "targetScores": {
-        "logical": 8,
-        "emotional": 12,
-        "exploratory": 18
+        "logical": 4,
+        "emotional": 6,
+        "exploratory": 9
       },
-      "totalScore": 38,
+      "totalScore": 19,
       "percentages": {
         "logical": 21.05,
         "emotional": 31.58,
@@ -95,11 +95,11 @@
       "archetypeId": "peacemaker",
       "name": "The Peacemaker",
       "targetScores": {
-        "logical": 10,
-        "emotional": 16,
-        "exploratory": 6
+        "logical": 5,
+        "emotional": 8,
+        "exploratory": 3
       },
-      "totalScore": 32,
+      "totalScore": 16,
       "percentages": {
         "logical": 31.25,
         "emotional": 50.0,
@@ -112,11 +112,11 @@
       "archetypeId": "dreamer",
       "name": "The Dreamer",
       "targetScores": {
-        "logical": 4,
-        "emotional": 18,
-        "exploratory": 16
+        "logical": 2,
+        "emotional": 9,
+        "exploratory": 8
       },
-      "totalScore": 38,
+      "totalScore": 19,
       "percentages": {
         "logical": 10.53,
         "emotional": 47.37,
@@ -129,11 +129,11 @@
       "archetypeId": "caregiver",
       "name": "The Caregiver",
       "targetScores": {
-        "logical": 6,
-        "emotional": 20,
-        "exploratory": 4
+        "logical": 3,
+        "emotional": 10,
+        "exploratory": 2
       },
-      "totalScore": 30,
+      "totalScore": 15,
       "percentages": {
         "logical": 20.0,
         "emotional": 66.67,
