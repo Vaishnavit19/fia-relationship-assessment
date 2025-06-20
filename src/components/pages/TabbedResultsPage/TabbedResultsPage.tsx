@@ -309,10 +309,15 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
     // router.push('/assessment');
     // Chatbot link here
     window.open(
-      'https://6848340aa0a2233a0e0a63e9--partner-assessment-tool.netlify.app/',
+      'https://6851c5d59fdb71b6babeee51--partner-assessment-tool.netlify.app/',
       '_blank',
       'noopener,noreferrer'
     );
+    // window.open(
+    //   'https://6848340aa0a2233a0e0a63e9--partner-assessment-tool.netlify.app/',
+    //   '_blank',
+    //   'noopener,noreferrer'
+    // );
   };
 
   const handleGoHome = () => {
@@ -844,7 +849,7 @@ Total Questions Answered: ${answers?.length || 0}
           </div>
         </Card>
 
-        {/* Key Red Flags Summary */}
+        {/* Key Red Flags Summary
         <Card className={styles.redFlagsCard}>
           <div className={styles.cardHeader}>
             <AlertTriangle className={styles.cardIcon} />
@@ -859,7 +864,7 @@ Total Questions Answered: ${answers?.length || 0}
               </div>
             ))}
           </div>
-        </Card>
+        </Card> */}
 
         {/* Individual Persona Cards */}
         <div className={styles.personaCardsGrid}>
