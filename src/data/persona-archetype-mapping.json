@@ -1,9 +1,12 @@
 {
   "metadata": {
-    "title": "Persona-Archetype Vulnerability Mapping",
-    "description": "Maps which personas target which archetypes for weighted hybrid selection algorithm",
+    "title": "Persona-Archetype Vulnerability Mapping - CORRECTED VERSION",
+    "description": "Complete mapping using ONLY existing personas from enhanced-persona-cards.json",
     "purpose": "Enable selection of 3-8 persona cards based on user's primary and secondary archetypes",
-    "selectionAlgorithm": "weighted_hybrid_based_on_confidence_gaps"
+    "selectionAlgorithm": "weighted_hybrid_based_on_confidence_gaps",
+    "version": "2.1-corrected",
+    "lastUpdated": "2025-06-20",
+    "note": "This version ONLY uses persona IDs that actually exist in enhanced-persona-cards.json"
   },
   "archetypeVulnerabilityMap": {
     "achiever": {
@@ -18,44 +21,86 @@
         {
           "personaId": "intimidator",
           "riskLevel": "high",
-          "exploitedTraits": ["success-oriented", "recognition-seeking", "competitive"],
-          "manipulationMethods": ["authority assertion", "control through protection promises"]
+          "exploitedTraits": [
+            "success-oriented",
+            "recognition-seeking",
+            "competitive"
+          ],
+          "manipulationMethods": [
+            "authority assertion",
+            "control through protection promises"
+          ]
         },
         {
           "personaId": "drill_sergeant",
           "riskLevel": "high",
-          "exploitedTraits": ["highly organized", "perfectionistic", "hardworking"],
-          "manipulationMethods": ["structure as control", "discipline disguised as improvement"]
+          "exploitedTraits": [
+            "highly organized",
+            "perfectionistic",
+            "hardworking"
+          ],
+          "manipulationMethods": [
+            "structure as control",
+            "discipline disguised as improvement"
+          ]
         },
         {
           "personaId": "master_of_everything",
           "riskLevel": "high",
           "exploitedTraits": ["ambitious", "strategic", "analytical"],
-          "manipulationMethods": ["intellectual superiority", "expertise as dominance tool"]
-        },
-        {
-          "personaId": "suspicious_strategist",
-          "riskLevel": "high",
-          "exploitedTraits": ["analytical", "strategic", "focused"],
-          "manipulationMethods": ["intelligence manipulation", "strategic planning exploitation"]
-        },
+          "manipulationMethods": [
+            "intellectual superiority",
+            "expertise as dominance tool"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "emotionally_distant",
           "riskLevel": "medium",
           "exploitedTraits": ["competitive", "challenge-seeking"],
-          "manipulationMethods": ["distance as challenge", "emotional unavailability as conquest"]
+          "manipulationMethods": [
+            "distance as challenge",
+            "emotional unavailability as conquest"
+          ]
         },
         {
           "personaId": "future_faker",
           "riskLevel": "medium",
           "exploitedTraits": ["goal-oriented", "ambitious"],
-          "manipulationMethods": ["false success promises", "shared goal fantasies"]
+          "manipulationMethods": [
+            "false success promises",
+            "shared goal fantasies"
+          ]
         },
         {
           "personaId": "self_obsessed",
           "riskLevel": "medium",
           "exploitedTraits": ["status-conscious", "recognition-seeking"],
-          "manipulationMethods": ["status association", "validation through reflection"]
+          "manipulationMethods": [
+            "status association",
+            "validation through reflection"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "thinker",
+          "riskLevel": "low",
+          "exploitedTraits": ["focused", "analytical"],
+          "manipulationMethods": [
+            "intellectual competition",
+            "subtle perfectionism pressure"
+          ]
+        },
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["hardworking", "dedicated"],
+          "manipulationMethods": [
+            "subtle undermining of achievements",
+            "slow confidence erosion"
+          ]
         }
       ]
     },
@@ -71,32 +116,93 @@
         {
           "personaId": "master_of_everything",
           "riskLevel": "high",
-          "exploitedTraits": ["analytical mindset", "curiosity for knowledge", "critical thinking"],
-          "manipulationMethods": ["intellectual debates", "knowledge superiority", "complex reasoning traps"]
+          "exploitedTraits": [
+            "analytical mindset",
+            "curiosity for knowledge",
+            "critical thinking"
+          ],
+          "manipulationMethods": [
+            "intellectual debates",
+            "knowledge superiority",
+            "complex reasoning traps"
+          ]
         },
         {
           "personaId": "puppet_master",
           "riskLevel": "high",
-          "exploitedTraits": ["introspective", "problem-solving oriented", "emotionally sensitive"],
-          "manipulationMethods": ["complex emotional scenarios", "strategic vulnerability", "intellectual seduction"]
+          "exploitedTraits": [
+            "introspective",
+            "problem-solving oriented",
+            "emotionally sensitive"
+          ],
+          "manipulationMethods": [
+            "complex emotional scenarios",
+            "strategic vulnerability",
+            "intellectual seduction"
+          ]
         },
         {
           "personaId": "suspicious_strategist",
           "riskLevel": "high",
-          "exploitedTraits": ["logical thinking", "detail-oriented", "independent learner"],
-          "manipulationMethods": ["intellectual games", "strategic information reveal", "calculated responses"]
-        },
-        {
-          "personaId": "thinker",
-          "riskLevel": "high",
-          "exploitedTraits": ["passion for subjects", "reserved nature", "analytical approach"],
-          "manipulationMethods": ["intellectual mystery", "complex problem presentation", "emotional unavailability with vocabulary"]
-        },
+          "exploitedTraits": [
+            "logical thinking",
+            "detail-oriented",
+            "independent learner"
+          ],
+          "manipulationMethods": [
+            "intellectual games",
+            "strategic information reveal",
+            "calculated responses"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "emotional_invalidator",
           "riskLevel": "medium",
           "exploitedTraits": ["logical thinking", "rational approach"],
-          "manipulationMethods": ["logic over emotion validation", "intellectual dismissal of feelings"]
+          "manipulationMethods": [
+            "logic over emotion validation",
+            "intellectual dismissal of feelings"
+          ]
+        },
+        {
+          "personaId": "thinker",
+          "riskLevel": "medium",
+          "exploitedTraits": ["passion for subjects", "reserved nature"],
+          "manipulationMethods": [
+            "intellectual mystery",
+            "complex problem presentation"
+          ]
+        },
+        {
+          "personaId": "emotionally_distant",
+          "riskLevel": "medium",
+          "exploitedTraits": ["independent learning", "analytical patience"],
+          "manipulationMethods": [
+            "mystery as intellectual challenge",
+            "emotional unavailability as puzzle"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["reserved nature", "thoughtful approach"],
+          "manipulationMethods": [
+            "intellectual boundary testing",
+            "subtle questioning of analysis"
+          ]
+        },
+        {
+          "personaId": "self_obsessed",
+          "riskLevel": "low",
+          "exploitedTraits": ["appreciation for intelligence"],
+          "manipulationMethods": [
+            "intellectual ego stroking",
+            "knowledge validation seeking"
+          ]
         }
       ]
     },
@@ -113,25 +219,86 @@
           "personaId": "master_of_everything",
           "riskLevel": "high",
           "exploitedTraits": ["confidence", "visionary", "strategic thinking"],
-          "manipulationMethods": ["authority challenge", "intellectual dominance assertion", "power struggle initiation"]
+          "manipulationMethods": [
+            "authority challenge",
+            "intellectual dominance assertion",
+            "power struggle initiation"
+          ]
         },
         {
           "personaId": "drill_sergeant",
           "riskLevel": "high",
           "exploitedTraits": ["responsibility", "decisiveness", "leadership"],
-          "manipulationMethods": ["authority testing", "control through structure", "leadership undermining"]
+          "manipulationMethods": [
+            "authority testing",
+            "control through structure",
+            "leadership undermining"
+          ]
         },
+        {
+          "personaId": "intimidator",
+          "riskLevel": "high",
+          "exploitedTraits": ["confidence", "assertiveness", "influence"],
+          "manipulationMethods": [
+            "power competition",
+            "dominance assertion",
+            "authority challenging"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "self_obsessed",
           "riskLevel": "medium",
           "exploitedTraits": ["charisma", "influence", "confidence"],
-          "manipulationMethods": ["status exploitation", "leadership position abuse", "influence manipulation"]
+          "manipulationMethods": [
+            "status exploitation",
+            "leadership position abuse",
+            "influence manipulation"
+          ]
         },
         {
           "personaId": "suspicious_strategist",
           "riskLevel": "medium",
-          "exploitedTraits": ["strategic thinking", "problem-solving", "decisiveness"],
-          "manipulationMethods": ["strategic games", "leadership testing", "authority challenge"]
+          "exploitedTraits": [
+            "strategic thinking",
+            "problem-solving",
+            "decisiveness"
+          ],
+          "manipulationMethods": [
+            "strategic games",
+            "leadership testing",
+            "authority challenge"
+          ]
+        },
+        {
+          "personaId": "emotionally_distant",
+          "riskLevel": "medium",
+          "exploitedTraits": ["emotional intelligence", "adaptability"],
+          "manipulationMethods": [
+            "emotional unavailability as challenge",
+            "leadership worthiness testing"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["responsibility", "integrity"],
+          "manipulationMethods": [
+            "subtle authority testing",
+            "gradual boundary expansion"
+          ]
+        },
+        {
+          "personaId": "emotional_invalidator",
+          "riskLevel": "low",
+          "exploitedTraits": ["confidence", "decisiveness"],
+          "manipulationMethods": [
+            "emotional logic over leadership instincts",
+            "subtle decision questioning"
+          ]
         }
       ]
     },
@@ -148,31 +315,81 @@
           "personaId": "puppet_master",
           "riskLevel": "high",
           "exploitedTraits": ["openness", "curiosity", "fearlessness"],
-          "manipulationMethods": ["intense emotional experiences", "dramatic scenarios", "thrill provision"]
-        },
-        {
-          "personaId": "freewheeler",
-          "riskLevel": "high",
-          "exploitedTraits": ["spontaneity", "love for excitement", "adventurous"],
-          "manipulationMethods": ["adventure without commitment", "excitement over stability", "spontaneous manipulation"]
+          "manipulationMethods": [
+            "intense emotional experiences",
+            "dramatic scenarios",
+            "thrill provision"
+          ]
         },
         {
           "personaId": "rake",
           "riskLevel": "high",
           "exploitedTraits": ["fearlessness", "openness", "thrill-seeking"],
-          "manipulationMethods": ["dangerous charm", "conquest games", "seductive adventures"]
+          "manipulationMethods": [
+            "dangerous charm",
+            "conquest games",
+            "seductive adventures"
+          ]
         },
         {
-          "personaId": "addict",
-          "riskLevel": "medium",
-          "exploitedTraits": ["risk-taking", "excitement seeking", "resilience"],
-          "manipulationMethods": ["chaotic lifestyle appeal", "high-adrenaline situations", "dangerous excitement"]
-        },
+          "personaId": "freewheeler",
+          "riskLevel": "high",
+          "exploitedTraits": [
+            "spontaneity",
+            "love for excitement",
+            "adventurous"
+          ],
+          "manipulationMethods": [
+            "adventure without commitment",
+            "excitement over stability",
+            "spontaneous manipulation"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "emotionally_distant",
           "riskLevel": "medium",
           "exploitedTraits": ["curiosity", "independence", "challenge-seeking"],
-          "manipulationMethods": ["mystery as challenge", "emotional unavailability as conquest"]
+          "manipulationMethods": [
+            "mystery as challenge",
+            "emotional unavailability as conquest"
+          ]
+        },
+        {
+          "personaId": "future_faker",
+          "riskLevel": "medium",
+          "exploitedTraits": ["openness", "fearlessness"],
+          "manipulationMethods": [
+            "adventure promises",
+            "exploration fantasy creation"
+          ]
+        },
+        {
+          "personaId": "self_obsessed",
+          "riskLevel": "medium",
+          "exploitedTraits": ["excitement seeking", "openness"],
+          "manipulationMethods": ["adventure ego stroking", "thrill validation"]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["flexibility", "openness"],
+          "manipulationMethods": [
+            "gradual limit pushing",
+            "adventure boundary expansion"
+          ]
+        },
+        {
+          "personaId": "thinker",
+          "riskLevel": "low",
+          "exploitedTraits": ["curiosity", "independence"],
+          "manipulationMethods": [
+            "intellectual exploration",
+            "mystery as mild manipulation"
+          ]
         }
       ]
     },
@@ -188,26 +405,86 @@
         {
           "personaId": "intimidator",
           "riskLevel": "high",
-          "exploitedTraits": ["conflict-averse", "accommodating", "non-judgmental"],
-          "manipulationMethods": ["intimidation to avoid confrontation", "authority assertion", "power through fear"]
+          "exploitedTraits": [
+            "conflict-averse",
+            "accommodating",
+            "non-judgmental"
+          ],
+          "manipulationMethods": [
+            "intimidation to avoid confrontation",
+            "authority assertion",
+            "power through fear"
+          ]
         },
         {
           "personaId": "drill_sergeant",
           "riskLevel": "high",
           "exploitedTraits": ["harmony-seeking", "patient", "adaptable"],
-          "manipulationMethods": ["control through structure", "authority exploitation", "conflict avoidance abuse"]
+          "manipulationMethods": [
+            "control through structure",
+            "authority exploitation",
+            "conflict avoidance abuse"
+          ]
         },
         {
-          "personaId": "subtle_saboteur",
+          "personaId": "puppet_master",
           "riskLevel": "high",
           "exploitedTraits": ["passive", "non-confrontational", "patient"],
-          "manipulationMethods": ["passive-aggressive tactics", "subtle undermining", "conflict avoidance manipulation"]
-        },
+          "manipulationMethods": [
+            "emotional manipulation",
+            "conflict creation then resolution",
+            "peace disruption"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "emotional_invalidator",
           "riskLevel": "medium",
           "exploitedTraits": ["accommodating", "conflict-averse", "patient"],
-          "manipulationMethods": ["emotional dismissal", "logic over feelings", "invalidation tactics"]
+          "manipulationMethods": [
+            "emotional dismissal",
+            "logic over feelings",
+            "invalidation tactics"
+          ]
+        },
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "medium",
+          "exploitedTraits": ["compassionate", "yielding tendency"],
+          "manipulationMethods": [
+            "guilt for causing conflict",
+            "indirect manipulation"
+          ]
+        },
+        {
+          "personaId": "perpetual_victim",
+          "riskLevel": "medium",
+          "exploitedTraits": ["adaptable", "patient"],
+          "manipulationMethods": [
+            "victimhood to avoid conflict",
+            "sympathy manipulation"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "thinker",
+          "riskLevel": "low",
+          "exploitedTraits": ["accommodating", "tendency to yield"],
+          "manipulationMethods": [
+            "intellectual boundary testing",
+            "subtle questioning"
+          ]
+        },
+        {
+          "personaId": "emotionally_distant",
+          "riskLevel": "low",
+          "exploitedTraits": ["harmony-seeking", "supportive"],
+          "manipulationMethods": [
+            "emotional distance as peace",
+            "conflict avoidance enabling"
+          ]
         }
       ]
     },
@@ -223,37 +500,93 @@
         {
           "personaId": "puppet_master",
           "riskLevel": "high",
-          "exploitedTraits": ["emotionally sensitive", "visionary", "optimistic"],
-          "manipulationMethods": ["fantasy fulfillment promises", "emotional depth exploitation", "dream manipulation"]
+          "exploitedTraits": [
+            "emotionally sensitive",
+            "visionary",
+            "optimistic"
+          ],
+          "manipulationMethods": [
+            "fantasy fulfillment promises",
+            "emotional depth exploitation",
+            "dream manipulation"
+          ]
         },
         {
           "personaId": "future_faker",
           "riskLevel": "high",
-          "exploitedTraits": ["possibility-oriented", "ideal-driven", "optimistic"],
-          "manipulationMethods": ["false future promises", "shared dream creation", "hope manipulation"]
+          "exploitedTraits": [
+            "possibility-oriented",
+            "ideal-driven",
+            "optimistic"
+          ],
+          "manipulationMethods": [
+            "false future promises",
+            "shared dream creation",
+            "hope manipulation"
+          ]
         },
         {
-          "personaId": "subtle_saboteur",
+          "personaId": "rake",
+          "riskLevel": "high",
+          "exploitedTraits": ["romantic", "idealistic"],
+          "manipulationMethods": [
+            "romantic fantasy creation",
+            "idealistic seduction"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
+        {
+          "personaId": "self_obsessed",
           "riskLevel": "medium",
-          "exploitedTraits": ["emotionally sensitive", "optimistic", "idealistic"],
-          "manipulationMethods": ["subtle dream undermining", "kindness as strategy", "slow emotional manipulation"]
+          "exploitedTraits": [
+            "emotionally sensitive",
+            "empathetic",
+            "compassionate"
+          ],
+          "manipulationMethods": ["dream validation", "idealistic ego stroking"]
         },
         {
-          "personaId": "clinger",
+          "personaId": "emotionally_distant",
           "riskLevel": "medium",
-          "exploitedTraits": ["emotionally sensitive", "empathetic", "compassionate"],
-          "manipulationMethods": ["emotional overwhelming", "devotion mimicry", "intensity as love"]
+          "exploitedTraits": ["introspective", "idealistic", "meaning-seeking"],
+          "manipulationMethods": [
+            "emotional unavailability mystery",
+            "depth through inconsistency"
+          ]
         },
         {
           "personaId": "thinker",
           "riskLevel": "medium",
-          "exploitedTraits": ["introspective", "idealistic", "meaning-seeking"],
-          "manipulationMethods": ["intellectual mystery", "deep thinking appeal", "complex emotional unavailability"]
+          "exploitedTraits": ["introspective", "meaning-seeking"],
+          "manipulationMethods": [
+            "intellectual depth appeal",
+            "complex thinking attraction"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["empathetic", "understanding"],
+          "manipulationMethods": [
+            "gentle limit testing",
+            "idealistic boundary justification"
+          ]
+        },
+        {
+          "personaId": "parental_seeker",
+          "riskLevel": "low",
+          "exploitedTraits": ["compassionate", "sensitive"],
+          "manipulationMethods": [
+            "nurturing instinct appeal",
+            "gentle dependency"
+          ]
         }
       ]
     },
     "rebel": {
-      "archetypeId": "rebel",
       "archetypeName": "The Rebel",
       "primaryVulnerabilities": [
         "independence_and_freedom_manipulation",
@@ -265,37 +598,92 @@
         {
           "personaId": "drill_sergeant",
           "riskLevel": "high",
-          "exploitedTraits": ["questioning authority", "strong-willed", "resistant to control"],
-          "manipulationMethods": ["authority challenge as attraction", "control through taming", "rebellion as conquest"]
+          "exploitedTraits": [
+            "questioning authority",
+            "strong-willed",
+            "resistant to control"
+          ],
+          "manipulationMethods": [
+            "authority challenge as attraction",
+            "control through taming",
+            "rebellion as conquest"
+          ]
         },
         {
           "personaId": "rake",
           "riskLevel": "high",
           "exploitedTraits": ["adventurous", "risk-taking", "passionate"],
-          "manipulationMethods": ["rebellious energy exploitation", "dangerous charm", "challenge seduction"]
+          "manipulationMethods": [
+            "rebellious energy exploitation",
+            "dangerous charm",
+            "challenge seduction"
+          ]
         },
         {
           "personaId": "freewheeler",
           "riskLevel": "high",
           "exploitedTraits": ["independent", "non-conformist", "adventurous"],
-          "manipulationMethods": ["freedom illusion", "spontaneous rebellion", "anti-establishment appeal"]
-        },
+          "manipulationMethods": [
+            "freedom illusion",
+            "spontaneous rebellion",
+            "anti-establishment appeal"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "self_obsessed",
           "riskLevel": "medium",
           "exploitedTraits": ["independent", "strong-willed", "charismatic"],
-          "manipulationMethods": ["independence as challenge", "barrier breaking", "dominance assertion"]
+          "manipulationMethods": [
+            "independence as challenge",
+            "barrier breaking",
+            "dominance assertion"
+          ]
         },
         {
           "personaId": "future_faker",
           "riskLevel": "medium",
-          "exploitedTraits": ["idealistic", "passionate", "principle-motivated"],
-          "manipulationMethods": ["authentic connection promises", "shared rebellion fantasies", "meaningful connection illusion"]
+          "exploitedTraits": [
+            "idealistic",
+            "passionate",
+            "principle-motivated"
+          ],
+          "manipulationMethods": [
+            "authentic connection promises",
+            "shared rebellion fantasies",
+            "meaningful connection illusion"
+          ]
+        },
+        {
+          "personaId": "emotionally_distant",
+          "riskLevel": "medium",
+          "exploitedTraits": ["independent", "strong-willed"],
+          "manipulationMethods": ["emotional challenge", "independence testing"]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "subtle_saboteur",
+          "riskLevel": "low",
+          "exploitedTraits": ["non-conformist", "questioning nature"],
+          "manipulationMethods": [
+            "subtle authority testing",
+            "gradual control introduction"
+          ]
+        },
+        {
+          "personaId": "thinker",
+          "riskLevel": "low",
+          "exploitedTraits": ["independent", "resistant to conformity"],
+          "manipulationMethods": [
+            "intellectual rebellion",
+            "thoughtful non-conformity appeal"
+          ]
         }
       ]
     },
     "caregiver": {
-      "archetypeId": "caregiver",
       "archetypeName": "The Caregiver",
       "primaryVulnerabilities": [
         "empathy_and_compassion_exploitation",
@@ -308,43 +696,85 @@
           "personaId": "puppet_master",
           "riskLevel": "high",
           "exploitedTraits": ["empathetic", "nurturing", "compassionate"],
-          "manipulationMethods": ["strategic vulnerability", "emotional turmoil feigning", "healing fantasy creation"]
+          "manipulationMethods": [
+            "strategic vulnerability",
+            "emotional turmoil feigning",
+            "healing fantasy creation"
+          ]
         },
         {
           "personaId": "perpetual_victim",
           "riskLevel": "high",
           "exploitedTraits": ["self-sacrificing", "supportive", "guilt-prone"],
-          "manipulationMethods": ["constant victimhood", "sympathy demands", "guilt manipulation"]
+          "manipulationMethods": [
+            "constant victimhood",
+            "sympathy demands",
+            "guilt manipulation"
+          ]
         },
         {
           "personaId": "parental_seeker",
           "riskLevel": "high",
           "exploitedTraits": ["nurturing", "responsible", "patient"],
-          "manipulationMethods": ["parental need exploitation", "dependency cultivation", "infantilization tactics"]
-        },
-        {
-          "personaId": "addict",
-          "riskLevel": "high",
-          "exploitedTraits": ["altruistic", "compassionate", "generous"],
-          "manipulationMethods": ["healing fantasy", "rescue situation creation", "enabling behavior exploitation"]
-        },
-        {
-          "personaId": "clinger",
-          "riskLevel": "high",
-          "exploitedTraits": ["loyal", "dependable", "patient"],
-          "manipulationMethods": ["dependency as devotion", "overwhelming neediness", "emotional support demands"]
-        },
+          "manipulationMethods": [
+            "parental need exploitation",
+            "dependency cultivation",
+            "infantilization tactics"
+          ]
+        }
+      ],
+      "mediumRiskPersonas": [
         {
           "personaId": "subtle_saboteur",
           "riskLevel": "medium",
-          "exploitedTraits": ["non-confrontational", "trusting", "people-pleaser"],
-          "manipulationMethods": ["kindness exploitation", "indirect manipulation", "conflict avoidance abuse"]
+          "exploitedTraits": [
+            "non-confrontational",
+            "trusting",
+            "people-pleaser"
+          ],
+          "manipulationMethods": [
+            "kindness exploitation",
+            "indirect manipulation",
+            "conflict avoidance abuse"
+          ]
         },
         {
-          "personaId": "intimidator",
+          "personaId": "emotionally_distant",
           "riskLevel": "medium",
           "exploitedTraits": ["accommodating", "conflict-averse", "supportive"],
-          "manipulationMethods": ["protection illusion", "control through intimidation", "power dynamic abuse"]
+          "manipulationMethods": [
+            "protection need creation",
+            "emotional unavailability as wound"
+          ]
+        },
+        {
+          "personaId": "future_faker",
+          "riskLevel": "medium",
+          "exploitedTraits": ["patient", "understanding"],
+          "manipulationMethods": [
+            "healing promise manipulation",
+            "caretaking fantasy"
+          ]
+        }
+      ],
+      "lowRiskPersonas": [
+        {
+          "personaId": "thinker",
+          "riskLevel": "low",
+          "exploitedTraits": ["generous", "giving"],
+          "manipulationMethods": [
+            "intellectual neediness",
+            "thoughtful dependency"
+          ]
+        },
+        {
+          "personaId": "self_obsessed",
+          "riskLevel": "low",
+          "exploitedTraits": ["loyal", "dedicated"],
+          "manipulationMethods": [
+            "ego caretaking",
+            "validation seeking through care"
+          ]
         }
       ]
     }
@@ -353,32 +783,35 @@
     "weightedHybridRules": {
       "step1": "Calculate confidence gap between top archetype and others",
       "step2": "Determine distribution based on gap size",
-      "step3": "Select personas based on weighted vulnerability scores",
-      "step4": "Ensure 3-8 total cards within limits"
+      "step3": "Select personas based on weighted vulnerability scores from both primary and secondary archetypes",
+      "step4": "Ensure 3-8 total cards within limits with proper risk distribution"
     },
     "confidenceGapCalculation": {
       "largeGap": {
         "threshold": "top_archetype_confidence > second_archetype_confidence + 20%",
         "selection": {
-          "primaryArchetypePersonas": 5,
-          "secondaryArchetypePersonas": 1,
-          "totalCards": 6
+          "totalPersonas": 3,
+          "highRisk": 2,
+          "mediumRisk": 1,
+          "lowRisk": 0
         }
       },
       "mediumGap": {
         "threshold": "top_archetype_confidence > second_archetype_confidence + 10%",
         "selection": {
-          "primaryArchetypePersonas": 4,
-          "secondaryArchetypePersonas": 2,
-          "totalCards": 6
+          "totalPersonas": 4,
+          "highRisk": 2,
+          "mediumRisk": 2,
+          "lowRisk": 0
         }
       },
       "smallGap": {
         "threshold": "top_archetype_confidence <= second_archetype_confidence + 10%",
         "selection": {
-          "primaryArchetypePersonas": 3,
-          "secondaryArchetypePersonas": 3,
-          "totalCards": 6
+          "totalPersonas": 5,
+          "highRisk": 2,
+          "mediumRisk": 2,
+          "lowRisk": 1
         }
       }
     },
@@ -388,10 +821,47 @@
       "lowRisk": "priority_weight = 1"
     }
   },
+  "dataValidation": {
+    "confirmedExistingPersonas": [
+      "puppet_master",
+      "intimidator",
+      "drill_sergeant",
+      "suspicious_strategist",
+      "master_of_everything",
+      "subtle_saboteur",
+      "thinker",
+      "emotional_invalidator",
+      "emotionally_distant",
+      "perpetual_victim",
+      "parental_seeker",
+      "rake",
+      "future_faker",
+      "self_obsessed",
+      "freewheeler"
+    ],
+    "coverageStatus": {
+      "achiever": "✅ Complete: 3H, 3M, 2L",
+      "intellectual": "✅ Complete: 3H, 3M, 2L",
+      "leader": "✅ Complete: 3H, 3M, 2L",
+      "explorer": "✅ Complete: 3H, 3M, 2L",
+      "peacemaker": "✅ Complete: 3H, 3M, 2L",
+      "dreamer": "✅ Complete: 3H, 3M, 2L",
+      "rebel": "✅ Complete: 3H, 3M, 2L",
+      "caregiver": "✅ Complete: 3H, 3M, 2L"
+    },
+    "allRequirementsMet": true
+  },
   "implementationNotes": {
     "dataStructure": "Use this mapping to select persona cards based on user's top 2-3 archetypes",
     "algorithm": "Weight selection by risk level and archetype confidence scores",
     "limits": "Always respect 3-8 card limits regardless of calculation",
-    "fallback": "If calculations result in <3 cards, add medium-risk personas until minimum reached"
+    "fallback": "If calculations result in <3 cards, add medium-risk personas until minimum reached",
+    "corrections": [
+      "ONLY uses persona IDs that exist in enhanced-persona-cards.json",
+      "Redistributed existing personas across risk levels for each archetype",
+      "Strategic reuse of personas across archetypes at different risk levels",
+      "Ensured proper risk distribution for all confidence gap scenarios",
+      "Maintained psychological consistency in manipulation methods"
+    ]
   }
 }

@@ -2,6 +2,9 @@
   "archetypes": [
     {
       "id": "achiever",
+      "icon": "🎯",
+      "image": "/images/archetypes/achiever.webp",
+      "color": "#ff6b9d",
       "name": "The Achiever",
       "title": "Success-Driven Perfectionist",
       "description": "Highly driven to succeed with lofty goals, often at any cost. Success-oriented with self-worth tied to achievements.",
@@ -31,13 +34,13 @@
           "vulnerability": "Targets perfectionism and fear of failure, using criticism to undermine confidence while posing as 'improvement'"
         },
         {
-          "manipulatorType": "The Water Torturer", 
+          "manipulatorType": "The Water Torturer",
           "source": "Lundy Bancroft",
           "vulnerability": "Uses subtle, manipulative communication to draw Achiever into trying to 'solve' complex behaviors"
         },
         {
           "manipulatorType": "The Perpetual Victim",
-          "source": "Lundy Bancroft", 
+          "source": "Lundy Bancroft",
           "vulnerability": "Appeals to Achiever's sense of responsibility and drive, leveraging guilt and obligation"
         },
         {
@@ -52,7 +55,7 @@
         },
         {
           "manipulatorType": "The Future Faker",
-          "source": "Nathalie Lue", 
+          "source": "Nathalie Lue",
           "vulnerability": "Exploits goal-oriented mindset with false promises of shared, successful future"
         },
         {
@@ -74,6 +77,9 @@
     },
     {
       "id": "intellectual",
+      "icon": "🧠",
+      "image": "/images/archetypes/intellectual.webp",
+      "color": "#667eea",
       "name": "The Intellectual or Analyst",
       "title": "Analytical Knowledge Seeker",
       "description": "Possesses highly analytical approach to life, with insatiable curiosity and deep thirst for knowledge.",
@@ -134,6 +140,9 @@
     },
     {
       "id": "leader",
+      "icon": "👑",
+      "image": "/images/archetypes/leader.webp",
+      "color": "#764ba2",
       "name": "The Leader or Ruler",
       "title": "Confident Decision Maker",
       "description": "Strong sense of self-assurance with natural ability to make decisions and lead others effectively.",
@@ -198,6 +207,9 @@
     },
     {
       "id": "explorer",
+      "icon": "🌟",
+      "color": "#ffb347",
+      "image": "/images/archetypes/explorer.webp",
       "name": "The Explorer",
       "title": "Adventurous Thrill Seeker",
       "description": "Driven by desire for new and diverse experiences, often seen as thrill-seeker who relishes novel situations.",
@@ -263,6 +275,9 @@
     },
     {
       "id": "peacemaker",
+      "icon": "🕊️",
+      "color": "#87ceeb",
+      "image": "/images/archetypes/peacemaker.webp",
       "name": "The Peacemaker",
       "title": "Harmony-Seeking Mediator",
       "description": "Naturally inclined towards maintaining harmony and balance, prioritizing peace over conflict.",
@@ -322,6 +337,9 @@
     },
     {
       "id": "dreamer",
+      "icon": "💭",
+      "color": "#dda0dd",
+      "image": "/images/archetypes/dreamer.webp",
       "name": "The Dreamer",
       "title": "Visionary Idealist",
       "description": "Driven by strong vision and ideals, often having lofty goals and aspiring to make significant impact.",
@@ -372,6 +390,9 @@
     },
     {
       "id": "rebel",
+      "icon": "⚡",
+      "color": "#ff8c00",
+      "image": "/images/archetypes/rebel.webp",
       "name": "The Rebel",
       "title": "Independent Non-Conformist",
       "description": "Values independence highly, resisting conformity to societal norms and challenging established ways.",
@@ -439,6 +460,9 @@
     },
     {
       "id": "caregiver",
+      "icon": "💝",
+      "color": "#98fb98",
+      "image": "/images/archetypes/caregiver.webp",
       "name": "The Caregiver",
       "title": "Nurturing Self-Sacrificer",
       "description": "High degree of empathy, deeply attuned to others' needs with inherent desire to care and nurture.",

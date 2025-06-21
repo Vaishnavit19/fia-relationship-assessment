@@ -28,6 +28,7 @@
   "personas": [
     {
       "id": "puppet_master",
+      "image": "/images/personas/puppet-master.webp",
       "persona": "The Puppet Master",
       "title": "THE CHARMING MANIPULATOR",
       "characters": ["Loki", "Light Yagami", "Klaus Mikaelson", "Azula"],
@@ -49,6 +50,7 @@
     },
     {
       "id": "intimidator",
+      "image": "/images/personas/intimidator.webp",
       "persona": "The Intimidator",
       "title": "THE POWERHOUSE PARTNER",
       "characters": [
@@ -75,6 +77,7 @@
     },
     {
       "id": "drill_sergeant",
+      "image": "/images/personas/drill-sergeant.webp",
       "persona": "The Drill Sergeant",
       "title": "THE RULEBOOK ROMANTIC",
       "characters": [
@@ -88,11 +91,7 @@
       "blindSpot": "You mistake rigidity for reliability. But love shouldn't feel like a training camp.",
       "punchline": "You thought it was devotion. It was just daily inspection with hugs.",
       "vulnerableArchetypes": ["achiever", "peacemaker", "leader"],
-      "manipulatorTypes": [
-        "The Drill Sergeant",
-        "The Demand Man",
-        "Rambo"
-      ],
+      "manipulatorTypes": ["The Drill Sergeant", "The Demand Man", "Rambo"],
       "psychologicalTactics": [
         "Structure as control mechanism",
         "Discipline disguised as care",
@@ -101,6 +100,7 @@
     },
     {
       "id": "suspicious_strategist",
+      "image": "/images/personas/strategist.webp",
       "persona": "The Suspicious Strategist",
       "title": "THE CALCULATING GENIUS",
       "characters": [
@@ -127,6 +127,7 @@
     },
     {
       "id": "master_of_everything",
+      "image": "/images/personas/ted-talk.webp",
       "persona": "Master of Everything",
       "title": "THE WALKING TED TALK",
       "characters": [
@@ -153,6 +154,7 @@
     },
     {
       "id": "subtle_saboteur",
+      "image": "/images/personas/heartbreaker.webp",
       "persona": "The Subtle Saboteur",
       "title": "THE SILENT HEARTBREAKER",
       "characters": [
@@ -179,6 +181,7 @@
     },
     {
       "id": "clinger",
+      "image": "/images/personas/overlover.webp",
       "persona": "The Clinger",
       "title": "THE OVERLOVER",
       "characters": [
@@ -205,6 +208,7 @@
     },
     {
       "id": "addict",
+      "image": "/images/personas/addict.webp",
       "persona": "The Addict",
       "title": "THE BEAUTIFUL MESS",
       "characters": [
@@ -218,11 +222,7 @@
       "blindSpot": "You think love will fix them. It won't. Especially not yours alone.",
       "punchline": "You thought you were the cure. You were just another hit.",
       "vulnerableArchetypes": ["caregiver", "explorer", "dreamer"],
-      "manipulatorTypes": [
-        "The Addict",
-        "The Perpetual Victim",
-        "The Player"
-      ],
+      "manipulatorTypes": ["The Addict", "The Perpetual Victim", "The Player"],
       "psychologicalTactics": [
         "Chaos as emotional bait",
         "Brokenness as attraction",
@@ -231,6 +231,7 @@
     },
     {
       "id": "freewheeler",
+      "image": "/images/personas/chaos.webp",
       "persona": "The Freewheeler",
       "title": "THE CHAOS SIREN",
       "characters": [
@@ -244,11 +245,7 @@
       "blindSpot": "You think you're soulmates. They think you're optional.",
       "punchline": "You packed for forever. They forgot you in the itinerary.",
       "vulnerableArchetypes": ["explorer", "rebel", "dreamer"],
-      "manipulatorTypes": [
-        "The Player",
-        "The Future Faker",
-        "The Rake"
-      ],
+      "manipulatorTypes": ["The Player", "The Future Faker", "The Rake"],
       "psychologicalTactics": [
         "Spontaneity as avoidance",
         "Adventure without commitment",
@@ -257,6 +254,7 @@
     },
     {
       "id": "thinker",
+      "image": "/images/personas/thinker.webp",
       "persona": "The Thinker",
       "title": "THE BRILLIANT LONER",
       "characters": [
@@ -283,6 +281,7 @@
     },
     {
       "id": "emotional_invalidator",
+      "image": "/images/personas/shrugger.webp",
       "persona": "The Emotional Invalidator",
       "title": "THE SHRUGGER",
       "characters": [
@@ -309,6 +308,7 @@
     },
     {
       "id": "emotionally_distant",
+      "image": "/images/personas/iceberg.webp",
       "persona": "The Emotionally Distant",
       "title": "THE ICEBERG",
       "characters": [
@@ -335,6 +335,7 @@
     },
     {
       "id": "perpetual_victim",
+      "image": "/images/personas/victim.webp",
       "persona": "The Perpetual Victim",
       "title": "THE TRAGIC HERO",
       "characters": [
@@ -361,6 +362,7 @@
     },
     {
       "id": "parental_seeker",
+      "image": "/images/personas/grown-child.webp",
       "persona": "The Parental Seeker",
       "title": "THE GROWN CHILD",
       "characters": [
@@ -387,6 +389,7 @@
     },
     {
       "id": "rake",
+      "image": "/images/personas/charmer.webp",
       "persona": "The Rake",
       "title": "THE DANGEROUS CHARMER",
       "characters": [
@@ -400,11 +403,7 @@
       "blindSpot": "You think you're the exception. You're actually chapter 12.",
       "punchline": "You called it chemistry. They called it Tuesday.",
       "vulnerableArchetypes": ["explorer", "rebel", "dreamer"],
-      "manipulatorTypes": [
-        "The Rake",
-        "The Player",
-        "The Seducer"
-      ],
+      "manipulatorTypes": ["The Rake", "The Player", "The Seducer"],
       "psychologicalTactics": [
         "Seduction as primary strategy",
         "Charm used for conquest",
@@ -413,6 +412,7 @@
     },
     {
       "id": "future_faker",
+      "image": "/images/personas/castle.webp",
       "persona": "The Future Faker",
       "title": "THE CASTLE BUILDER",
       "characters": [
@@ -439,6 +439,7 @@
     },
     {
       "id": "self_obsessed",
+      "image": "/images/personas/mirror.webp",
       "persona": "The Self-Obsessed",
       "title": "THE HUMAN MIRROR",
       "characters": [

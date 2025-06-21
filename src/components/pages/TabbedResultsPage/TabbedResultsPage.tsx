@@ -26,6 +26,7 @@ import {
   Film,
   BookOpen,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 
@@ -173,9 +174,30 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   // LOCAL STATE
   // ==========================================================================
 
+  const dummySelectedArchetype: ArchetypeMatch = {
+    archetype: {
+      description: '',
+      id: '',
+      name: '',
+      title: '',
+      traits: [''],
+      vulnerabilities: [
+        {
+          manipulatorType: '',
+          source: '',
+          vulnerability: '',
+        },
+      ],
+    },
+    confidence: 0,
+    distance: 0,
+    rank: 0,
+  };
+
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
-  const [selectedArchetype, setSelectedArchetype] = useState<ArchetypeMatch | null>(null);
+  const [selectedArchetype, setSelectedArchetype] =
+    useState<ArchetypeMatch>(dummySelectedArchetype);
   const [selectedPersona, setSelectedPersona] = useState<PersonaCard | null>(null);
   const [showConfidenceDetails, setShowConfidenceDetails] = useState(false);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
@@ -196,7 +218,7 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   const primaryArchetype = formattedResults?.topMatches?.[0] || null;
   const secondaryArchetype = formattedResults?.topMatches?.[1] || null;
 
-  const selectedPersonas = vulnerabilityAssessment?.personaSelection?.selectedPersonas || [];
+  const selectedPersonas = vulnerabilityAssessment?.personaSelection?.selectedPersonas ?? [];
 
   // ==========================================================================
   // SAFE UTILITY FUNCTIONS
@@ -233,6 +255,7 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   // ==========================================================================
 
   const expandedArchetypeCardRef = useRef<HTMLDivElement>(null);
+  const personaGridRef = useRef<HTMLDivElement>(null);
 
   // ==========================================================================
   // COMPUTED VALUES
@@ -384,17 +407,32 @@ Total Questions Answered: ${answers?.length || 0}
   const handleArchetypeSelect = (archetype: ArchetypeMatch) => {
     setSelectedArchetype(archetype);
     // setSelectedArchetype(
-    //   selectedArchetype?.archetype.id === archetype.archetype.id ? null : archetype
+    //   selectedArchetype?.archetype.id === archetype.archetype.id
+    //     ? dummySelectedArchetype
+    //     : archetype
     // );
 
-    const { top, left } = expandedArchetypeCardRef.current.getBoundingClientRect();
-    console.log('scrolling to ', top, left);
-
-    scrollTo({ behavior: 'smooth', top: top, left: left });
+    setTimeout(() => {
+      // if (selectedArchetype.confidence !== 0) {
+      // const { top, left } = expandedArchetypeCardRef.current.getBoundingClientRect();
+      // console.log('scrolling to ', top, left);
+      expandedArchetypeCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // scrollTo({ behavior: 'smooth', top: top, left: left });
+      // }
+    }, 300);
   };
 
   const handlePersonaSelect = (persona: PersonaCard) => {
     setSelectedPersona(selectedPersona?.id === persona.id ? null : persona);
+    setTimeout(() => {
+      const selectedPersonaCard = personaGridRef.current.querySelector('[class*="selected"]');
+      if (selectedPersonaCard) {
+        // const bounds = selectedPersonaCard.getBoundingClientRect();
+        selectedPersonaCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // scrollTo({ behavior: 'smooth', top: bounds.top, left: bounds.left });
+        // console.log('selected card is at', bounds);
+      }
+    }, 300);
   };
 
   const handleExpandCard = (cardId: string) => {
@@ -524,34 +562,45 @@ Total Questions Answered: ${answers?.length || 0}
                   selectedArchetype?.archetype.id === match.archetype.id ? styles.selected : ''
                 }`}
                 onClick={() => handleArchetypeSelect(match)}
+                padding="zero"
               >
+                <Image
+                  alt=""
+                  src={match.archetype.image}
+                  height={250}
+                  width={250}
+                  quality={80}
+                ></Image>
                 <div className={styles.archetypeHeader}>
                   <div className={styles.archetypeRank}>
-                    {index === 0 ? (
+                    {/* {index === 0 ? (
                       <Trophy className={styles.primaryIcon} />
                     ) : index === 1 ? (
                       <Award className={styles.secondaryIcon} />
                     ) : (
                       <span className={styles.rankNumber}>{index + 1}</span>
-                    )}
+                    )} */}
+                    <span className={styles.rankNumber}>{match.archetype.icon}</span>
                   </div>
 
                   <div className={styles.archetypeInfo}>
-                    <h4 className={styles.archetypeName}>{match.archetype.name}</h4>
-                    <p className={styles.archetypeTitle}>{match.archetype.title}</p>
-                  </div>
-
-                  <div className={styles.confidenceSection}>
-                    <div className={styles.confidenceBar}>
-                      <div
-                        className={styles.confidenceProgress}
-                        style={{ width: `${match.confidence}%` }}
-                      />
+                    <div className={styles.archetypeNameConfidence}>
+                      <h4 className={styles.archetypeName}>{match.archetype.name}</h4>
+                      <div className={styles.confidenceSection}>
+                        <div className={styles.confidenceBar}>
+                          <div
+                            className={styles.confidenceLabel}
+                            style={{ width: `${match.confidence}%` }}
+                          />
+                        </div>
+                        <span className={styles.confidenceValue}>{match.confidence}%</span>
+                      </div>
                     </div>
-                    <span className={styles.confidenceValue}>{match.confidence}%</span>
+                    <div className={styles.archetypeTitleArrow}>
+                      <p className={styles.archetypeTitle}>{match.archetype.title}</p>
+                      <ChevronRight className={styles.selectIcon} />
+                    </div>
                   </div>
-
-                  <ChevronRight className={styles.selectIcon} />
 
                   {debug && (
                     <div className={styles.debugInfo}>
@@ -564,71 +613,74 @@ Total Questions Answered: ${answers?.length || 0}
           </div>
 
           {/* Archetype Expansion Content */}
-          {selectedArchetype && (
-            <Card className={styles.detailsCard}>
-              <div ref={expandedArchetypeCardRef} className={styles.detailsHeader}>
+
+          <Card
+            className={`${styles.detailsCard} ${selectedArchetype.confidence === 0 ? styles.hide : ''}`}
+          >
+            <div ref={expandedArchetypeCardRef} className={styles.detailsHeader}>
+              <div className={styles.archetypeHeading}>
                 <div className={styles.archetypeIcon}>
-                  <Brain />
+                  {/* <Brain /> */}
+                  <span>{selectedArchetype.archetype.icon}</span>
                 </div>
-                <div className={styles.archetypeHeading}>
+                <div>
                   <h2>{selectedArchetype.archetype.name}</h2>
                   <p className={styles.archetypeSubtitle}>{selectedArchetype.archetype.title}</p>
-                  <div className={styles.confidenceBadge}>
-                    {selectedArchetype.confidence}% Match
-                  </div>
                 </div>
+                {/* <div className={styles.confidenceBadge}>{selectedArchetype.confidence}% Match</div> */}
               </div>
+            </div>
 
-              <div className={styles.archetypeDescription}>
-                <p>{selectedArchetype.archetype.description}</p>
-              </div>
+            <div className={styles.archetypeDescription}>
+              <p>{selectedArchetype.archetype.description}</p>
+            </div>
 
-              <div className={styles.traitsSection}>
-                <h4>Key Traits</h4>
-                <div className={styles.traitsList}>
-                  {selectedArchetype.archetype.traits.map((trait, index) => {
-                    // Split trait on " - " to get title and description
-                    const [title, description] = trait.split(' - ');
-                    return (
-                      <div key={index} className={styles.traitItem}>
+            <div className={styles.traitsSection}>
+              <h4>Key Traits</h4>
+              <div className={styles.traitsList}>
+                {selectedArchetype.archetype.traits.map((trait, index) => {
+                  // Split trait on " - " to get title and description
+                  const [title, description] = trait.split(' - ');
+                  return (
+                    <Card key={index}>
+                      <div className={styles.traitItem}>
                         <strong>{title}</strong>
                         {description && <span> - {description}</span>}
                       </div>
-                    );
-                  })}
-                </div>
+                    </Card>
+                  );
+                })}
               </div>
+            </div>
 
-              {selectedArchetype.archetype.vulnerabilities && (
-                <div className={styles.vulnerabilitiesPreview}>
-                  <h4>Awareness Areas</h4>
-                  <p className={styles.vulnerabilityHint}>
-                    Understanding these patterns helps you recognize potential relationship
-                    dynamics:
-                  </p>
-                  <div className={styles.vulnerabilitiesList}>
-                    {selectedArchetype.archetype.vulnerabilities.slice(0, 4).map((vuln, index) => (
-                      <div key={index} className={styles.vulnerabilityItem}>
-                        <AlertTriangle className={styles.vulnIcon} />
-                        <div>
-                          <strong>{vuln.manipulatorType}</strong>
-                          <p>{vuln.vulnerability}</p>
-                        </div>
+            {/* {selectedArchetype.archetype.vulnerabilities && (
+              <div className={styles.vulnerabilitiesPreview}>
+                <h4>Awareness Areas</h4>
+                <p className={styles.vulnerabilityHint}>
+                  Understanding these patterns helps you recognize potential relationship dynamics:
+                </p>
+                <div className={styles.vulnerabilitiesList}>
+                  {selectedArchetype.archetype.vulnerabilities.slice(0, 4).map((vuln, index) => (
+                    <div key={index} className={styles.vulnerabilityItem}>
+                      <AlertTriangle className={styles.vulnIcon} />
+                      <div>
+                        <strong>{vuln.manipulatorType}</strong>
+                        <p>{vuln.vulnerability}</p>
                       </div>
-                    ))}
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => setActiveTab('vulnerabilities')}
-                    className={styles.seeMoreButton}
-                  >
-                    See Complete Vulnerability Assessment
-                    <ChevronRight />
-                  </Button>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </Card>
-          )}
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveTab('vulnerabilities')}
+                  className={styles.seeMoreButton}
+                >
+                  See Complete Vulnerability Assessment
+                  <ChevronRight />
+                </Button>
+              </div>
+            )} */}
+          </Card>
 
           {/* <Card className={styles.confidenceExplanation}>
             <button
@@ -881,7 +933,7 @@ Total Questions Answered: ${answers?.length || 0}
         </Card> */}
 
         {/* Individual Persona Cards */}
-        <div className={styles.personaCardsGrid}>
+        <div className={styles.personaCardsGrid} ref={personaGridRef}>
           {selectedPersonas.map((persona, index) => {
             const personaRedFlags = getPersonaRedFlags(persona);
             const protectionStrategies = getPersonaProtectionStrategies(persona);
@@ -893,34 +945,49 @@ Total Questions Answered: ${answers?.length || 0}
                   selectedPersona?.id === persona.id ? styles.selected : ''
                 }`}
                 onClick={() => handlePersonaSelect(persona)}
+                padding="none"
               >
-                <div className={styles.personaHeader}>
-                  <div className={styles.personaIcon}>📍</div>
-                  <div className={styles.personaTitle}>
-                    <h3>{persona.title}</h3>
-                    <p className={styles.personaSubtitle}>{persona.persona}</p>
-                  </div>
-                  <div className={styles.riskLevel}>
-                    <span className={`${styles.riskBadge} ${styles.high}`}>HIGH</span>
-                  </div>
-                </div>
+                <div className={styles.personaCardData}>
+                  <Image
+                    alt=""
+                    src={persona.image}
+                    height={250}
+                    width={250}
+                    quality={80}
+                    className={styles.personaImg}
+                  ></Image>
+                  <div className={styles.upperSection}>
+                    <div className={styles.personaHeader}>
+                      {/* <div className={styles.personaIcon}>📍</div> */}
+                      <div className={styles.personaTitle}>
+                        <div className={styles.riskLevel}>
+                          <span className={`${styles.riskBadge} ${styles[persona.riskLevel]}`}>
+                            {persona.riskLevel}
+                          </span>
+                        </div>
+                        <h3>{persona.title}</h3>
+                        <p className={styles.personaSubtitle}>{persona.persona}</p>
+                      </div>
+                    </div>
 
-                {/* Pop Culture References */}
-                <div className={styles.popCultureSection}>
-                  <Film className={styles.sectionIcon} />
-                  <div className={styles.popCultureContent}>
-                    <strong>Think:</strong>{' '}
-                    {persona.characters?.join(', ') || 'Classic manipulation patterns'}
-                  </div>
-                </div>
+                    {/* Pop Culture References */}
+                    <div className={styles.popCultureSection}>
+                      <Film className={styles.sectionIcon} />
+                      <div className={styles.popCultureContent}>
+                        <strong>Think:</strong>{' '}
+                        {persona.characters?.join(', ') || 'Classic manipulation patterns'}
+                      </div>
+                    </div>
 
-                {/* Why It Appeals */}
-                <div className={styles.appealSection}>
-                  <Heart className={styles.sectionIcon} />
-                  <p>
-                    <strong>Why it's appealing:</strong>{' '}
-                    {persona.why || 'Appeals to your caring nature'}
-                  </p>
+                    {/* Why It Appeals */}
+                    <div className={styles.appealSection}>
+                      <Heart className={styles.sectionIcon} />
+                      <p>
+                        <strong>Why it&apos;s appealing:</strong>{' '}
+                        {persona.why || 'Appeals to your caring nature'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Expanded Content When Selected */}

@@ -189,7 +189,7 @@
 .archetypesList {
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   padding-block: 1rem;
 }
 
@@ -208,12 +208,34 @@
   gap: 24px;
 }
 
-.topArchetypeCard {
-  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
-  border: 2px solid #e2e8f0;
+.archetypeCard > img, 
+.archetypeHeader {
+  grid-column: 1;
+  grid-row: 1;
 }
 
-.topArchetypeContent {
+.archetypesList .archetypeCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  border: 2px solid #e2e8f0;
+  display: grid;
+
+  > img {
+    border-radius: 1.5rem;
+    filter: brightness(0.5) blur(2px);
+    height: auto;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  &:hover {
+    > img {
+      filter: none;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.archetypeContent {
   align-items: center;
   display: flex;
   gap: 24px;
@@ -241,10 +263,32 @@
   font-size: 36px;
 }
 
+.archetypeNameConfidence,
+.archetypeTitleArrow {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.archetypeTitleArrow > p {
+  color: inherit;
+  margin: 0;
+}
+
+.detailsCard {
+  &.hide {
+    max-height: 0;
+    transform: scale(0);
+  }
+}
+
 .archetypeInfo {
-  flex: 1;
+  // flex: 1;
+  padding-inline: 1rem;
 
   h2 {
+    // color: white;
+
     color: #2d3748;
     font-size: 28px;
     font-weight: 700;
@@ -258,6 +302,17 @@
   }
 }
 
+.archetypeHeading {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
 .archetypeDescription {
   color: #4a5568;
   font-size: 16px;
@@ -265,10 +320,20 @@
   margin-bottom: 16px;
 }
 
+.traitsList {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .confidenceScore {
   align-items: center;
   display: flex;
   gap: 12px;
+}
+
+.confidenceSection {
+  margin-left: 1rem;
 }
 
 .confidenceLabel {
@@ -345,11 +410,11 @@
   border-radius: 50%;
   color: white;
   display: flex;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
-  height: 32px;
+  height: 40px;
   justify-content: center;
-  min-width: 32px;
+  min-width: 40px;
 }
 
 .archetypeDetails {
@@ -358,9 +423,14 @@
 
 .archetypeHeader {
   align-items: center;
+  color: white;
   display: flex;
+  flex-direction: column;
   gap: 12px;
+  justify-content: end;
   margin-bottom: 8px;
+  text-shadow: 0 0 5px black;
+  z-index: 1;
 }
 
 .archetypeIcon {
@@ -368,10 +438,14 @@
 }
 
 .archetypeName {
-  color: #2d3748;
+  color: inherit;
+
+  // color: #2d3748;
   flex: 1;
   font-size: 16px;
   font-weight: 600;
+  margin: 0;
+  text-overflow: ellipsis;
 }
 
 .archetypeScore {
@@ -647,9 +721,20 @@
 // Persona Cards Grid
 .personaCardsGrid {
   align-items: start;
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+
+  // display: grid;
+  gap: 1rem;
+
+  // grid-template-columns: 1fr 1fr 1fr;
+  transition: all 0.3s ease;
+
+  &:has(.personaCard.selected) {
+    // TODO: after slide motion
+    // grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
@@ -659,12 +744,16 @@
 .personaCard {
   border: 2px solid #e2e8f0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  flex: 0 0 calc(33.33% - 0.67rem);
+  transition: all 0.3s ease;
 
   &:hover {
-    border-color: #cbd5e0;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-    transform: translateY(-2px);
+    // border-color: #cbd5e0;
+    // box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+    // transform: translateY(-2px);
+    .personaImg {
+      filter: unset;
+    }
   }
 
   &.selected {
@@ -673,16 +762,53 @@
   }
 }
 
+.personaCardsGrid:has(.personaCard.selected) .personaCard {
+flex: 0 0 calc(50% - 1rem);
+}
+
 .personaHeader {
-  border-bottom: 1px solid #e2e8f0;
-  padding: 16px;
+  // border-bottom: 1px solid #e2e8f0;
+  padding: 0 16px;
+}
+
+.personaCardData {
+  align-items: end;
+  display: grid;
+}
+
+.personaImg {
+  border-radius: 1.5rem;
+  filter: blur(2px) brightness(0.5);
+  height: auto;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.upperSection {
+  color: white;
+  text-shadow: 0 0 5px black;
+  z-index: 1;
+}
+
+.personaImg,
+.upperSection {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .personaTitle {
-  align-items: center;
+  // align-items: center;
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+
+  // gap: 12px;
   margin-bottom: 8px;
+
+  h3 {
+    color: inherit;
+    margin: 0;
+    margin-top: 12px;
+  }
 
   h4 {
     color: #2d3748;
@@ -690,6 +816,10 @@
     font-size: 16px;
     font-weight: 600;
     margin: 0;
+  }
+
+  p {
+    color: inherit;
   }
 }
 
@@ -1082,10 +1212,6 @@
     font-size: 22px;
   }
 
-  .personaCardsGrid {
-    grid-template-columns: 1fr;
-  }
-
   .secondaryActions {
     flex-direction: column;
   }
@@ -1156,14 +1282,17 @@
 // ==========================================================================
 
 .popCultureSection {
-  align-items: center;
-  border-bottom: 1px solid #f1f5f9;
+  align-items: start;
+
+  // border-bottom: 1px solid #f1f5f9;
   display: flex;
   gap: 8px;
   padding: 12px 16px;
 
   .sectionIcon {
-    color: #667eea;
+    flex-shrink: 0;
+
+    // color: #667eea;
     height: 16px;
     width: 16px;
   }
@@ -1173,7 +1302,7 @@
     line-height: 1.4;
 
     strong {
-      color: #2d3748;
+      // color: #2d3748;
       font-weight: 600;
     }
   }
@@ -1181,6 +1310,7 @@
 
 .appealSection {
   align-items: flex-start;
+  color: inherit;
   display: flex;
   gap: 8px;
   padding: 12px 16px;
@@ -1194,20 +1324,22 @@
   }
 
   p {
-    color: #4a5568;
+    color: inherit;
+
+    // color: #4a5568;
     font-size: 14px;
     line-height: 1.4;
     margin: 0;
 
     strong {
-      color: #2d3748;
+      // color: #2d3748;
       font-weight: 600;
     }
   }
 }
 
 .expandedPersonaContent {
-  border-top: 1px solid #e2e8f0;
+  // border-top: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -1309,6 +1441,7 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   padding: 4px 8px;
+  text-shadow: none;
   text-transform: uppercase;
 
   &.high {

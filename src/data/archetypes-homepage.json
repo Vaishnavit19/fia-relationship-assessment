@@ -1,6 +1,7 @@
 [
   {
     "icon": "🎯",
+    "id": "achiever",
     "name": "The Achiever",
     "description": "Goal-oriented and success-driven, building relationships through shared ambitions.",
     "color": "#ff6b9d",
@@ -8,6 +9,7 @@
   },
   {
     "icon": "🧠",
+    "id": "intellectual",
     "name": "The Intellectual",
     "description": "Values deep conversations and mental connection above all else.",
     "color": "#667eea",
@@ -15,6 +17,7 @@
   },
   {
     "icon": "👑",
+    "id": "leader",
     "name": "The Leader",
     "description": "Takes charge naturally and creates structure in relationships.",
     "color": "#764ba2",
@@ -22,6 +25,7 @@
   },
   {
     "icon": "🌟",
+    "id": "explorer",
     "name": "The Explorer",
     "description": "Seeks adventure and growth through new experiences together.",
     "color": "#ffb347",
@@ -29,6 +33,7 @@
   },
   {
     "icon": "🕊️",
+    "id": "peacemaker",
     "name": "The Peacemaker",
     "description": "Maintains harmony and prevents conflict through understanding.",
     "color": "#87ceeb",
@@ -36,6 +41,7 @@
   },
   {
     "icon": "💭",
+    "id": "dreamer",
     "name": "The Dreamer",
     "description": "Builds relationships around shared visions and creative possibilities.",
     "color": "#dda0dd",
@@ -43,6 +49,7 @@
   },
   {
     "icon": "⚡",
+    "id": "rebel",
     "name": "The Rebel",
     "description": "Values authenticity and freedom, challenging conventional relationship norms.",
     "color": "#ff8c00",
@@ -50,6 +57,7 @@
   },
   {
     "icon": "💝",
+    "id": "caregiver",
     "name": "The Caregiver",
     "description": "Nurtures and supports, finding fulfillment in caring for others.",
     "color": "#98fb98",

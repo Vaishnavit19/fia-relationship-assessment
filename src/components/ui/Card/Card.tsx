@@ -38,7 +38,7 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const isInteractive = onClick ?? variant === 'interactive';
-  
+
   const handleClick = () => {
     if (!disabled && onClick) {
       onClick();
@@ -79,11 +79,7 @@ export const Card: React.FC<CardProps> = ({
     ...props,
   };
 
-  return (
-    <div {...cardProps}>
-      {children}
-    </div>
-  );
+  return <div {...cardProps}>{children}</div>;
 };
 
 export default Card;
