@@ -31,6 +31,13 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 
 import archetypes from '@/data/archetypes-homepage.json';
+import { generateAnalysisPromptFromStore } from '@/lib/prompt';
+import useEnhancedAssessmentStore, {
+  useAISummary,
+  useEnhancedAssessmentData,
+  useEnhancedAssessmentActions,
+  useEnhancedAssessmentResults,
+} from '@/lib/store';
 
 import {
   generateArchetypeResults,
@@ -47,11 +54,6 @@ import {
   formatArchetypeResultsForDisplay,
   generateResultsSummary,
 } from '../../../lib/resultsEngine';
-import useEnhancedAssessmentStore, {
-  useEnhancedAssessmentData,
-  useEnhancedAssessmentActions,
-  useEnhancedAssessmentResults,
-} from '../../../lib/store';
 import {
   ArchetypeMatch,
   PersonaCard,
@@ -169,6 +171,16 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   // Get additional state values directly from store for error handling
   const startTime = useEnhancedAssessmentStore(state => state.startTime);
   const sessionId = useEnhancedAssessmentStore(state => state.sessionId);
+
+  const storeState = useEnhancedAssessmentStore(state => state);
+
+  const {
+    aiGeneratedSummary,
+    aiResponseStatus,
+    autoGenerateAISummaryIfNeeded,
+    shouldRegenerateAISummary,
+    generateAISummary,
+  } = useAISummary();
 
   // ==========================================================================
   // LOCAL STATE
@@ -327,11 +339,23 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
     vulnerabilityAssessment,
   ]);
 
+  // AUTO-GENERATE AI SUMMARY WHEN COMPONENT MOUNTS
+  useEffect(() => {
+    if (isComplete) {
+      autoGenerateAISummaryIfNeeded();
+    }
+  }, [isComplete, autoGenerateAISummaryIfNeeded]);
+
   // ==========================================================================
   // EVENT HANDLERS
   // ==========================================================================
 
   const handleTabChange = (tab: TabType) => {
+    // if (tab === 'vulnerabilities') {
+    //   console.log('vul');
+    //   const prompt = generateAnalysisPromptFromStore();
+    //   console.log(prompt);
+    // }
     setActiveTab(tab);
   };
 
@@ -911,6 +935,35 @@ Total Questions Answered: ${answers?.length || 0}
                 This comprehensive awareness helps you recognize manipulation across different
                 contexts.
               </p>
+            </div>
+
+            <div className={styles.aiSummary}>
+              <div className={styles.summarySection}>
+                <h3>Personalized Result Interpretation</h3>
+                <p>{aiGeneratedSummary.personalizedInterpretation}</p>
+              </div>
+
+              <div className={styles.summarySection}>
+                <h3>Vulnerability Pattern Analysis</h3>
+                <p>{aiGeneratedSummary.vulnerabilityAnalysis}</p>
+              </div>
+
+              <div className={styles.summarySection}>
+                <h3>Relationship Insights</h3>
+                <p>{aiGeneratedSummary.relationshipInsights}</p>
+              </div>
+
+              <div className={styles.summaryMeta}>
+                <small>
+                  Generated on {new Date(aiGeneratedSummary.generatedAt).toLocaleDateString()}
+                  {aiGeneratedSummary.responseTime && ` in ${aiGeneratedSummary.responseTime}ms`}
+                </small>
+                {shouldRegenerateAISummary() && (
+                  <button onClick={generateAISummary} className={styles.regenerateBtn}>
+                    🔄 Update Analysis
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </Card>

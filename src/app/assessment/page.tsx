@@ -15,5 +15,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <EnhancedAssessmentPage />;
+  return <EnhancedAssessmentPage debug={process.env.NODE_ENV === 'development'} />;
 }

@@ -1553,3 +1553,337 @@
 .takeawaySection p {
   color: inherit;
 }
+
+// AI Summary Component Styles
+// ==========================================================================
+
+.aiSummary {
+  background: linear-gradient(135deg, #2f8dbeaa 0%, #51c49faa 100%);
+  border: 1px solid rgb(148 163 184 / 10%);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 5%),
+    0 2px 4px -1px rgb(0 0 0 / 3%);
+
+  // margin: 1.5rem 0;
+  overflow: hidden;
+
+  // padding: 2rem;
+  position: relative;
+
+  // Subtle animated background
+  &::before {
+    animation: shimmer 3s ease-in-out infinite;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+    background-size: 200% 100%;
+    content: "";
+    height: 3px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  @media (width <= 768px) {
+    border-radius: 12px;
+    margin: 1rem 0;
+    padding: 1.5rem;
+  }
+}
+
+// Individual summary sections
+.summarySection {
+  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 70%);
+  border: 1px solid rgb(148 163 184 / 8%);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgb(255 255 255 / 85%);
+    box-shadow:
+      0 8px 25px -8px rgb(0 0 0 / 10%),
+      0 4px 10px -4px rgb(0 0 0 / 5%);
+    transform: translateY(-2px);
+  }
+
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    align-items: center;
+    color: #1e293b;
+    display: flex;
+    font-size: 1.25rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    line-height: 1.4;
+    margin: 0 0 1rem;
+
+    @media (width <= 768px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  p {
+    color: black;
+
+    // color: #475569;
+    font-size: 1rem;
+    hyphens: auto;
+    line-height: 1.7;
+    margin: 0;
+
+    // text-align: justify;
+
+    @media (width <= 768px) {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: left;
+    }
+  }
+}
+
+// Target specific sections with nth-child (most reliable approach)
+.summarySection:nth-child(1) h3::before {
+  content: "🎯";
+  font-size: 1.1em;
+}
+
+.summarySection:nth-child(2) h3::before {
+  content: "🛡️";
+  font-size: 1.1em;
+}
+
+.summarySection:nth-child(3) h3::before {
+  content: "💕";
+  font-size: 1.1em;
+}
+
+// Metadata section
+.summaryMeta {
+  align-items: center;
+  background: rgb(241 245 249 / 60%);
+  border-radius: 8px;
+  border-top: 1px solid rgb(148 163 184 / 10%);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+
+  @media (width <= 768px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  small {
+    align-items: center;
+    color: #64748b;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.5rem;
+
+    &::before {
+      content: "⏱️";
+      font-size: 0.9em;
+    }
+
+    @media (width <= 768px) {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// Regenerate button
+.regenerateBtn {
+  align-items: center;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(59 130 246 / 15%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    box-shadow: 0 4px 8px rgb(59 130 246 / 25%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    box-shadow: 0 2px 4px rgb(59 130 246 / 15%);
+    transform: translateY(0);
+  }
+
+  &:focus {
+    box-shadow:
+      0 2px 4px rgb(59 130 246 / 15%),
+      0 0 0 3px rgb(59 130 246 / 10%);
+    outline: none;
+  }
+
+  // Animate the emoji on hover
+  &:hover::before {
+    animation: rotate 0.5s ease-in-out;
+  }
+
+  @media (width <= 768px) {
+    font-size: 0.9rem;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+  }
+}
+
+// Loading state styles
+.aiSummaryLoading {
+  align-items: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid rgb(148 163 184 / 10%);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 3rem 2rem;
+
+  p {
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    text-align: center;
+  }
+}
+
+// Error state styles
+.aiSummaryError {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 20%);
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  padding: 2rem;
+  text-align: center;
+
+  p {
+    color: #dc2626;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    background: #dc2626;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: #b91c1c;
+    }
+  }
+}
+
+// Animations
+@keyframes shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Print styles
+@media print {
+  .aiSummary {
+    background: white;
+    border: 1px solid #e2e8f0;
+    box-shadow: none;
+    page-break-inside: avoid;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .summarySection {
+    background: white;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .regenerateBtn {
+    display: none;
+  }
+}
+
+// Dark mode support (if implemented)
+@media (prefers-color-scheme: dark) {
+  .aiSummary {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: rgb(148 163 184 / 20%);
+  }
+
+  .summarySection {
+    background: rgb(15 23 42 / 70%);
+    border-color: rgb(148 163 184 / 10%);
+
+    &:hover {
+      background: rgb(15 23 42 / 85%);
+    }
+
+    h3 {
+      color: #f1f5f9;
+    }
+
+    p {
+      color: #cbd5e1;
+    }
+  }
+
+  .summaryMeta {
+    background: rgb(15 23 42 / 60%);
+    border-color: rgb(148 163 184 / 10%);
+
+    small {
+      color: #94a3b8;
+    }
+  }
+
+  .aiSummaryLoading {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: rgb(148 163 184 / 20%);
+
+    p {
+      color: #94a3b8;
+    }
+  }
+}

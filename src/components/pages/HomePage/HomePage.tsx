@@ -135,7 +135,7 @@ export const HomePage: React.FC = () => {
                 <h1 className={styles.heroTitle}>
                   Discover Your <span className={styles.highlightText}>Relationship Archetype</span>
                   <br />
-                  Through Advanced Travel Psychology
+                  Through Travel Scenarios
                 </h1>
                 <p className={styles.heroSubtitle}>
                   Experience our revolutionary assessment system that combines branching travel

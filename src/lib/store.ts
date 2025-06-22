@@ -26,6 +26,7 @@ import {
   EnhancedUserPath,
   PathAnalytics,
 } from './pathTracking';
+import { generateAnalysisPromptFromStore, parseAIResponse } from './prompt';
 import {
   ArchetypeResults,
   ExtendedUserAnswer,
@@ -36,6 +37,7 @@ import {
   ExtendedAssessmentResult,
   MultiSelectState,
   MultiSelectValidation,
+  AIGeneratedSummary,
 } from './types';
 import { generateVulnerabilityAssessment, VulnerabilityAssessment } from './vulnerabilityPipeline';
 
@@ -140,6 +142,9 @@ export interface EnhancedAssessmentState {
   // Debug and development
   debugMode: boolean;
   performanceMetrics: PerformanceMetrics;
+
+  aiGeneratedSummary: AIGeneratedSummary | null;
+  aiResponseStatus: AIResponseStatus;
 }
 
 // ==========================================================================
@@ -203,6 +208,15 @@ export interface EnhancedAssessmentActions {
   toggleDebugMode: () => void;
   resetPerformanceMetrics: () => void;
   exportDebugData: () => Record<string, unknown>;
+
+  // NEW: AI response management actions
+  generateAISummary: (prompt: string, aiModel?: string) => Promise<void>;
+  autoGenerateAISummaryIfNeeded: () => Promise<void>;
+  shouldRegenerateAISummary: () => boolean;
+  setAISummary: (summary: AIGeneratedSummary) => void;
+  clearAISummary: () => void;
+  retryAIGeneration: () => Promise<void>;
+  getAISummaryStatus: () => AIResponseStatus;
 }
 
 // Combined store interface
@@ -271,6 +285,15 @@ const initialState: EnhancedAssessmentState = {
     storeUpdateCount: 0,
     averageUpdateTime: 0,
     lastUpdateTime: null,
+  },
+
+  // NEW: AI response initial state
+  aiGeneratedSummary: null,
+  aiResponseStatus: {
+    isGenerating: false,
+    lastError: null,
+    retryCount: 0,
+    lastGeneratedAt: null,
   },
 };
 
@@ -1059,6 +1082,213 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             storeIntegrity: state.validateStoreIntegrity(),
           };
         },
+
+        // ==========================================================================
+        // NEW: AI SUMMARY MANAGEMENT ACTIONS
+        // ==========================================================================
+
+        generateAISummary: async (
+          prompt: string,
+          aiModel = 'gemini-1.5-flash',
+          forceRegenerate = false
+        ) => {
+          const state = get();
+
+          // CHECK 1: Avoid API call if summary already exists (unless forced)
+          if (!forceRegenerate && state.aiGeneratedSummary) {
+            console.log('AI summary already exists, skipping generation');
+            return;
+          }
+
+          // CHECK 2: Avoid API call if already generating
+          if (state.aiResponseStatus.isGenerating) {
+            console.log('AI summary generation already in progress');
+            return;
+          }
+
+          // CHECK 3: Ensure we have the required data to generate
+          if (!state.archetypeResults || !state.vulnerabilityAssessment || !state.isComplete) {
+            console.warn('Cannot generate AI summary: missing required assessment data');
+            set(state => ({
+              aiResponseStatus: {
+                ...state.aiResponseStatus,
+                lastError: 'Assessment not complete or missing results',
+              },
+            }));
+            return;
+          }
+
+          // CHECK 4: Ensure meaningful text segregation is taken
+          // if (state.aiGeneratedSummary && !state.aiGeneratedSummary.sectionsComplete) {
+          //   console.log('Segregated AI response is unavailable. retrying.');
+          //   if (state.aiGeneratedSummary.rawResponse) {
+          //     console.log('we have raw');
+          //     parseAIResponse(state.aiGeneratedSummary.rawResponse);
+          //   }
+          //   return;
+          // }
+
+          const startTime = Date.now();
+
+          set(state => ({
+            aiResponseStatus: {
+              ...state.aiResponseStatus,
+              isGenerating: true,
+              lastError: null,
+            },
+          }));
+
+          try {
+            // Call your AI service (replace with your actual implementation)
+            const response = await fetch('/api/gemini', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: prompt,
+                model: aiModel,
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error(`AI generation failed: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('raw response', data);
+            const responseTime = Date.now() - startTime;
+
+            // Parse the AI response into sections
+            const sections = parseAIResponse(data.text);
+
+            const aiSummary: AIGeneratedSummary = {
+              personalizedInterpretation: sections.personalizedInterpretation,
+              vulnerabilityAnalysis: sections.vulnerabilityAnalysis,
+              relationshipInsights: sections.relationshipInsights,
+              rawResponse: data.text,
+              generatedAt: new Date(),
+              promptUsed: prompt,
+              aiModel,
+              responseTime,
+              wordCount: data.text.split(/\s+/).length,
+              sectionsComplete:
+                sections.personalizedInterpretation &&
+                sections.vulnerabilityAnalysis &&
+                sections.relationshipInsights,
+              version: '1.0',
+            };
+
+            set(state => ({
+              aiGeneratedSummary: aiSummary,
+              aiResponseStatus: {
+                ...state.aiResponseStatus,
+                isGenerating: false,
+                lastGeneratedAt: new Date(),
+                retryCount: 0,
+              },
+            }));
+
+            console.log('✅ AI summary generated successfully');
+          } catch (error) {
+            console.error('AI summary generation failed:', error);
+
+            set(state => ({
+              aiResponseStatus: {
+                ...state.aiResponseStatus,
+                isGenerating: false,
+                lastError: error instanceof Error ? error.message : 'Unknown error',
+                retryCount: state.aiResponseStatus.retryCount + 1,
+              },
+            }));
+          }
+        },
+
+        // NEW: Auto-generate summary when results are ready
+        autoGenerateAISummaryIfNeeded: async () => {
+          const state = get();
+
+          // Only auto-generate if:
+          // 1. Assessment is complete
+          // 2. We have archetype and vulnerability results
+          // 3. No AI summary exists yet
+          // 4. Not currently generating
+          // 5. No recent generation errors (avoid retry loops)
+          if (
+            state.isComplete &&
+            state.archetypeResults &&
+            state.vulnerabilityAssessment &&
+            !state.aiGeneratedSummary &&
+            !state.aiResponseStatus.isGenerating &&
+            state.aiResponseStatus.retryCount < 3
+          ) {
+            console.log('Auto-generating AI summary...');
+
+            // Generate the prompt using the current store state
+            const prompt = generateAnalysisPromptFromStore();
+            await get().generateAISummary(prompt, 'gemini-1.5-flash');
+          }
+        },
+
+        // NEW: Check if AI summary should be regenerated (for data changes)
+        shouldRegenerateAISummary: (): boolean => {
+          const state = get();
+
+          if (!state.aiGeneratedSummary) return true;
+
+          // Check if core data has changed since last generation
+          const lastGenerated = state.aiGeneratedSummary.generatedAt;
+          const lastResultsUpdate = state.lastActivityTime;
+
+          if (lastResultsUpdate && lastGenerated && lastResultsUpdate > lastGenerated) {
+            return true;
+          }
+
+          // Check if summary is incomplete
+          if (!state.aiGeneratedSummary.sectionsComplete) {
+            return true;
+          }
+
+          return false;
+        },
+
+        setAISummary: (summary: AIGeneratedSummary) => {
+          set({
+            aiGeneratedSummary: summary,
+            aiResponseStatus: {
+              isGenerating: false,
+              lastError: null,
+              retryCount: 0,
+              lastGeneratedAt: summary.generatedAt,
+            },
+          });
+        },
+
+        clearAISummary: () => {
+          set({
+            aiGeneratedSummary: null,
+            aiResponseStatus: {
+              isGenerating: false,
+              lastError: null,
+              retryCount: 0,
+              lastGeneratedAt: null,
+            },
+          });
+        },
+
+        retryAIGeneration: async () => {
+          const state = get();
+          if (state.aiGeneratedSummary?.promptUsed) {
+            await get().generateAISummary(
+              state.aiGeneratedSummary.promptUsed,
+              state.aiGeneratedSummary.aiModel
+            );
+          } else {
+            throw new Error('No previous prompt available for retry');
+          }
+        },
+
+        getAISummaryStatus: () => {
+          return get().aiResponseStatus;
+        },
       }),
       {
         name: 'enhanced-assessment-store',
@@ -1169,6 +1399,21 @@ export const useEnhancedDebugMode = () => {
       exportSessionData: state.exportSessionData,
       importSessionData: state.importSessionData,
       resetPerformanceMetrics: state.resetPerformanceMetrics,
+    }))
+  );
+};
+
+export const useAISummary = () => {
+  return useEnhancedAssessmentStore(
+    useShallow(state => ({
+      aiGeneratedSummary: state.aiGeneratedSummary,
+      aiResponseStatus: state.aiResponseStatus,
+      generateAISummary: state.generateAISummary,
+      autoGenerateAISummaryIfNeeded: state.autoGenerateAISummaryIfNeeded,
+      shouldRegenerateAISummary: state.shouldRegenerateAISummary,
+      setAISummary: state.setAISummary,
+      clearAISummary: state.clearAISummary,
+      retryAIGeneration: state.retryAIGeneration,
     }))
   );
 };

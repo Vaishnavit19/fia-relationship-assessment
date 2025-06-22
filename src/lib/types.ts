@@ -403,6 +403,40 @@ export interface FlowControlActions {
 }
 
 // ==========================================================================
+// NEW AI RESPONSE INTERFACES
+// ==========================================================================
+
+export interface AIGeneratedSummary {
+  // The sections of the AI response
+  personalizedInterpretation: string;
+  vulnerabilityAnalysis: string;
+  relationshipInsights: string;
+
+  // raw response
+  rawResponse: string;
+
+  // Metadata about the generation
+  generatedAt: Date;
+  promptUsed: string;
+  aiModel?: string; // e.g., "gpt-4", "claude-3"
+  responseTime?: number; // in milliseconds
+
+  // Quality metrics
+  wordCount: number;
+  sectionsComplete: boolean;
+
+  // Version tracking
+  version: string; // e.g., "1.0" for future prompt iterations
+}
+
+export interface AIResponseStatus {
+  isGenerating: boolean;
+  lastError: string | null;
+  retryCount: number;
+  lastGeneratedAt: Date | null;
+}
+
+// ==========================================================================
 // EXPORT GROUPINGS FOR CONVENIENCE
 // ==========================================================================
 
