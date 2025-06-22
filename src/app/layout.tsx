@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.scss';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <SpeedInsights />
         <Analytics />
+        <GoogleAnalytics gaId="G-D5Y2D2SQ3Y" />
         <div id="root">{children}</div>
       </body>
     </html>
