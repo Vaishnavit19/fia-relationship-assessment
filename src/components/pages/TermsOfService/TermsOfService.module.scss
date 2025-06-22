@@ -1,5 +1,5 @@
 // src/components/pages/TermsOfService/TermsOfService.module.scss
-@use '@/styles/mixins' as mix;
+@use "@/styles/mixins" as mix;
 
 .termsOfService {
   background: vars.$light-bg;
@@ -89,7 +89,7 @@
   @include mix.mobile-only {
     flex-direction: column;
     gap: vars.$spacing-xs;
-    
+
     span {
       display: block;
     }
@@ -205,7 +205,7 @@
 
     &::before {
       color: vars.$secondary-accent-solid;
-      content: '•';
+      content: "•";
       font-size: 1.2em;
       font-weight: vars.$font-bold;
       left: 0;
@@ -406,39 +406,39 @@
 }
 
 // Dark mode support
-@media (prefers-color-scheme: dark) {
-  .termsOfService {
-    background: #1a1a1a;
-  }
+// @media (prefers-color-scheme: dark) {
+//   .termsOfService {
+//     background: #1a1a1a;
+//   }
 
-  .container {
-    background: #2d2d2d;
-    border: 1px solid #404040;
-  }
+//   .container {
+//     background: #2d2d2d;
+//     border: 1px solid #404040;
+//   }
 
-  .title,
-  .sectionTitle,
-  .subsectionTitle,
-  .paragraph {
-    color: #fff;
-  }
+//   .title,
+//   .sectionTitle,
+//   .subsectionTitle,
+//   .paragraph {
+//     color: #fff;
+//   }
 
-  .lastUpdated,
-  .footerText {
-    color: #ccc;
-  }
+//   .lastUpdated,
+//   .footerText {
+//     color: #ccc;
+//   }
 
-  .contact {
-    background: #1a1a1a;
-    border-color: #404040;
-  }
+//   .contact {
+//     background: #1a1a1a;
+//     border-color: #404040;
+//   }
 
-  .footer {
-    background: #1a1a1a;
-    border-color: #404040;
-  }
+//   .footer {
+//     background: #1a1a1a;
+//     border-color: #404040;
+//   }
 
-  .list li::before {
-    color: vars.$secondary-accent-solid;
-  }
-}
+//   .list li::before {
+//     color: vars.$secondary-accent-solid;
+//   }
+// }

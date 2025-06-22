@@ -531,7 +531,7 @@ Total Questions Answered: ${answers?.length || 0}
     if (hasValidArchetypeResults && formattedResults?.topMatches) {
       return (
         <div className={styles.archetypesContent}>
-          <div className={styles.archetypesHeader}>
+          <div className={styles.archetypesListHeader}>
             <h2>Your Personality Archetypes</h2>
             <p>
               Based on your responses, here are your top archetype matches ranked by mathematical
@@ -569,7 +569,7 @@ Total Questions Answered: ${answers?.length || 0}
                   src={match.archetype.image}
                   height={250}
                   width={250}
-                  quality={80}
+                  quality={85}
                 ></Image>
                 <div className={styles.archetypeHeader}>
                   <div className={styles.archetypeRank}>
@@ -642,8 +642,8 @@ Total Questions Answered: ${answers?.length || 0}
                   // Split trait on " - " to get title and description
                   const [title, description] = trait.split(' - ');
                   return (
-                    <Card key={index}>
-                      <div className={styles.traitItem}>
+                    <Card key={index} className={styles.traitItem}>
+                      <div>
                         <strong>{title}</strong>
                         {description && <span> - {description}</span>}
                       </div>
@@ -948,14 +948,24 @@ Total Questions Answered: ${answers?.length || 0}
                 padding="none"
               >
                 <div className={styles.personaCardData}>
-                  <Image
-                    alt=""
-                    src={persona.image}
-                    height={250}
-                    width={250}
-                    quality={80}
-                    className={styles.personaImg}
-                  ></Image>
+                  <div className={styles.imgFlipContainer}>
+                    <Image
+                      alt=""
+                      src={persona.image}
+                      height={250}
+                      width={250}
+                      quality={85}
+                      className={styles.personaImg}
+                    ></Image>
+                    <Image
+                      alt=""
+                      src={persona.flipimage}
+                      height={250}
+                      width={250}
+                      quality={85}
+                      className={styles.personaImgBack}
+                    ></Image>
+                  </div>
                   <div className={styles.upperSection}>
                     <div className={styles.personaHeader}>
                       {/* <div className={styles.personaIcon}>📍</div> */}
@@ -1018,7 +1028,7 @@ Total Questions Answered: ${answers?.length || 0}
                       <h4>🎭 Common Tactics</h4>
                       <ul>
                         {persona.psychologicalTactics?.map((tactic, idx) => (
-                          <li key={idx}>{tactic}</li>
+                          <li key={idx}>&nbsp;{tactic}</li>
                         )) || <li>Uses various psychological manipulation techniques</li>}
                       </ul>
                     </div>

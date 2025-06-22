@@ -237,7 +237,7 @@ export const HomePage: React.FC = () => {
                   variant="default"
                   padding="none"
                 >
-                  <Image src={archetype.image} alt="" height={250} width={250} quality={80}></Image>
+                  <Image src={archetype.image} alt="" height={250} width={250} quality={85}></Image>
                   <div className={styles.archetypeDetails}>
                     <div className={styles.archetypeHeader}>
                       <div

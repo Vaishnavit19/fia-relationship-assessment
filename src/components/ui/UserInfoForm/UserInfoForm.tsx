@@ -234,16 +234,16 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
             {fieldErrors.email && touched.email && (
               <span className={styles.fieldError}>{fieldErrors.email}</span>
             )}
-            {!requireEmail && (
+            {/* {!requireEmail && (
               <span className={styles.fieldHint}>We&apos;ll email your results if provided</span>
-            )}
+            )} */}
           </div>
         </div>
 
         {/* Consent Checkboxes */}
         {(showEmailConsent || showPrivacyConsent) && (
           <div className={styles.consents}>
-            {showEmailConsent && (
+            {/* {showEmailConsent && (
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
@@ -256,7 +256,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
                   I&apos;d like to receive my results and relationship insights via email
                 </span>
               </label>
-            )}
+            )} */}
 
             {showPrivacyConsent && (
               <label className={styles.checkboxLabel}>
@@ -277,8 +277,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
                   and{' '}
                   <a href="/terms" target="_blank" className={styles.link}>
                     Terms of Service
-                  </a>{' '}
-                  *
+                  </a>
                 </span>
               </label>
             )}

@@ -1,10 +1,10 @@
 // src/components/ui/UserInfoForm/UserInfoForm.module.scss
-@use '../../../styles/mixins' as mix;
+@use "../../../styles/mixins" as mix;
 
 .userInfoForm {
   margin: 0 auto;
   max-width: 500px;
-  
+
   @include mix.mobile-only {
     margin: 0;
     max-width: none;
@@ -221,7 +221,8 @@
 .submitSection {
   display: flex;
   justify-content: center;
-  padding-top: vars.$spacing-md;
+
+  // padding-top: vars.$spacing-md;
 }
 
 .submitButton {
@@ -289,7 +290,6 @@
     .title {
       background: vars.$primary-accent;
       background-clip: text;
-      background-clip: text;
       font-size: vars.$font-hero;
       -webkit-text-fill-color: transparent;
     }
@@ -333,9 +333,16 @@
   }
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
   }
 }
 

@@ -86,7 +86,7 @@ export const AboutPage: React.FC = () => {
     {
       icon: <Clock size={24} />,
       title: 'Adaptive & Efficient',
-      description: `Complete in 8-12 questions (${appConfig.assessment.timeEstimate}) with intelligent branching that personalizes your journey.`,
+      description: `Complete in 10 questions (${appConfig.assessment.timeEstimate}) with intelligent branching that personalizes your journey.`,
     },
     {
       icon: <CheckCircle size={24} />,

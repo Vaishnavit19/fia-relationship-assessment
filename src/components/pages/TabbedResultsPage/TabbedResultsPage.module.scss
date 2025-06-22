@@ -208,7 +208,7 @@
   gap: 24px;
 }
 
-.archetypeCard > img, 
+.archetypeCard > img,
 .archetypeHeader {
   grid-column: 1;
   grid-row: 1;
@@ -235,7 +235,7 @@
   }
 }
 
-.archetypeContent {
+.archetypesContent {
   align-items: center;
   display: flex;
   gap: 24px;
@@ -275,7 +275,9 @@
   margin: 0;
 }
 
-.detailsCard {
+.archetypesContent .detailsCard {
+  background: linear-gradient(315deg, #2f8dbe 0%, #51c49f 100%);
+
   &.hide {
     max-height: 0;
     transform: scale(0);
@@ -311,19 +313,31 @@
   h2 {
     margin: 0;
   }
+
+  p {
+    color: #2d3748;
+  }
 }
 
 .archetypeDescription {
-  color: #4a5568;
+  color: #2d3748;
   font-size: 16px;
   line-height: 1.5;
   margin-bottom: 16px;
+
+  p {
+    color: inherit;
+  }
 }
 
 .traitsList {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
+
+  .traitItem {
+    border: 2px solid #e576b0;
+  }
 }
 
 .confidenceScore {
@@ -673,10 +687,16 @@
 }
 
 .statItem {
-  background: #f8fafc;
+  background: linear-gradient(135deg, #e576b0aa 0%, #51c49faa 100%);
+
+  // background: #f8fafc;
   border-radius: 8px;
   padding: 16px;
   text-align: center;
+}
+
+.statItem:last-child {
+  background: linear-gradient(220deg, #e576b0aa 0%, #51c49faa 100%);
 }
 
 .statValue {
@@ -688,7 +708,7 @@
 }
 
 .statLabel {
-  color: #718096;
+  // color: #718096;
   font-size: 14px;
   font-weight: 500;
 }
@@ -730,18 +750,17 @@
   // grid-template-columns: 1fr 1fr 1fr;
   transition: all 0.3s ease;
 
-  &:has(.personaCard.selected) {
-    // TODO: after slide motion
-    // grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
+  // &:has(.personaCard.selected) {
+  //   // grid-template-columns: 1fr 1fr;
+  //   gap: 2rem;
+  // }
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
   }
 }
 
-.personaCard {
+.tabContent .personaCardsGrid .personaCard {
   border: 2px solid #e2e8f0;
   cursor: pointer;
   flex: 0 0 calc(33.33% - 0.67rem);
@@ -751,7 +770,12 @@
     // border-color: #cbd5e0;
     // box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
     // transform: translateY(-2px);
-    .personaImg {
+    .imgFlipContainer {
+      transform: rotateY(180deg);
+    }
+
+    .personaImg,
+    .personaImgBack {
       filter: unset;
     }
   }
@@ -759,11 +783,15 @@
   &.selected {
     border-color: #ed8936;
     box-shadow: 0 4px 12px rgb(237 137 54 / 20%);
-  }
-}
 
-.personaCardsGrid:has(.personaCard.selected) .personaCard {
-flex: 0 0 calc(50% - 1rem);
+    .personaCardData {
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+
+    &:hover .imgFlipContainer {
+      transform: none;
+    }
+  }
 }
 
 .personaHeader {
@@ -773,15 +801,34 @@ flex: 0 0 calc(50% - 1rem);
 
 .personaCardData {
   align-items: end;
+  background: linear-gradient(45deg, #e576b0aa 0%, #2f8dbeaa 50%, #51c49faa 100%);
+  border-radius: 1.5rem;
   display: grid;
+  perspective: 1000px;
 }
 
-.personaImg {
+.imgFlipContainer {
+  aspect-ratio: 1/1;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  transform-style: preserve-3d;
+  transition: transform 0.6s 0.3s ease;
+  will-change: transform;
+}
+
+.personaImg,
+.personaImgBack {
+  backface-visibility: hidden;
   border-radius: 1.5rem;
   filter: blur(2px) brightness(0.5);
   height: auto;
+  position: absolute;
   transition: all 0.3s ease;
   width: 100%;
+}
+
+.personaImgBack {
+  transform: rotateY(180deg);
 }
 
 .upperSection {
@@ -790,7 +837,7 @@ flex: 0 0 calc(50% - 1rem);
   z-index: 1;
 }
 
-.personaImg,
+.imgFlipContainer,
 .upperSection {
   grid-column: 1;
   grid-row: 1;
@@ -925,7 +972,7 @@ flex: 0 0 calc(50% - 1rem);
     padding: 0;
 
     li {
-      color: #4a5568;
+      // color: #4a5568;
       font-size: 13px;
       line-height: 1.4;
       margin-bottom: 6px;
@@ -1287,7 +1334,10 @@ flex: 0 0 calc(50% - 1rem);
   // border-bottom: 1px solid #f1f5f9;
   display: flex;
   gap: 8px;
-  padding: 12px 16px;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: all 0.3s ease;
 
   .sectionIcon {
     flex-shrink: 0;
@@ -1313,7 +1363,10 @@ flex: 0 0 calc(50% - 1rem);
   color: inherit;
   display: flex;
   gap: 8px;
-  padding: 12px 16px;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: all 0.3s ease;
 
   .sectionIcon {
     color: #ed8936;
@@ -1338,7 +1391,30 @@ flex: 0 0 calc(50% - 1rem);
   }
 }
 
+.personaCardsGrid:has(.personaCard.selected) {
+  gap: 2rem;
+
+  .personaCard {
+    flex: 0 0 calc(50% - 1rem);
+  }
+}
+
+.personaCard.selected {
+  .popCultureSection {
+    max-height: unset;
+    padding: 12px 16px;
+  }
+
+  .appealSection {
+    max-height: unset;
+    padding: 12px 16px;
+  }
+}
+
 .expandedPersonaContent {
+  background: linear-gradient(135deg, #e576b0aa 0%, #2f8dbeaa 50%, #51c49faa 100%);
+  border-radius: 0 0 1.5rem 1.5rem;
+
   // border-top: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
@@ -1472,4 +1548,8 @@ flex: 0 0 calc(50% - 1rem);
     display: grid;
     gap: 1rem;
   }
+}
+
+.takeawaySection p {
+  color: inherit;
 }

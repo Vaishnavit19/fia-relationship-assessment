@@ -23,7 +23,7 @@
 
   &::before {
     background: radial-gradient(circle at 20% 20%, rgb(102 126 234 / 10%) 0%, transparent 50%);
-    content: '';
+    content: "";
     height: 100%;
     left: 0;
     position: absolute;
@@ -56,7 +56,7 @@
 
 .heroText {
   flex: 1;
-padding-inline: 2rem;
+  padding-inline: 2rem;
 
   // max-width: 600px;
 }
@@ -474,7 +474,7 @@ padding-inline: 2rem;
   }
 }
 
-.archetypeOverviewCard {
+.archetypesGrid .archetypeOverviewCard {
   align-items: end;
   color: white;
   display: grid;
@@ -488,7 +488,6 @@ padding-inline: 2rem;
     height: auto;
     transition: all 0.3s ease;
     width: 100%;
-
 
     // position: absolute;
   }
@@ -560,19 +559,19 @@ padding-inline: 2rem;
 }
 
 .archetypeOverviewCard:hover {
-    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
 
-    >img{
-      filter: none;
-      transform: scale(1.1);
-    }
-
-    .archetypeOverviewDesc {
-      max-height: 0;
-    }
-
-    // transform: translateY(-4px);
+  > img {
+    filter: none;
+    transform: scale(1.1);
   }
+
+  .archetypeOverviewDesc {
+    max-height: 0;
+  }
+
+  // transform: translateY(-4px);
+}
 
 // ==========================================================================
 // RESULTS SYSTEM SECTION - New
@@ -772,7 +771,7 @@ padding-inline: 2rem;
 
   &::before {
     background: radial-gradient(circle at 80% 20%, rgb(255 255 255 / 10%) 0%, transparent 50%);
-    content: '';
+    content: "";
     height: 100%;
     left: 0;
     position: absolute;

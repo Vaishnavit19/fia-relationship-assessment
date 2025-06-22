@@ -28,8 +28,9 @@
   "personas": [
     {
       "id": "puppet_master",
-      "image": "/images/personas/puppet-master.webp",
-      "persona": "The Puppet Master",
+      "image": "/images/personas/predator.webp",
+      "flipimage": "/images/personas/predator-flipped.webp",
+      "persona": "Emotional Predator",
       "title": "THE CHARMING MANIPULATOR",
       "characters": ["Loki", "Light Yagami", "Klaus Mikaelson", "Azula"],
       "why": "They're intense, dramatic, and say things like \"no one really gets me.\" You're like \"I do.\"",
@@ -50,8 +51,9 @@
     },
     {
       "id": "intimidator",
-      "image": "/images/personas/intimidator.webp",
-      "persona": "The Intimidator",
+      "image": "/images/personas/terrorist.webp",
+      "flipimage": "/images/personas/terrorist-flipped.webp",
+      "persona": "The Terrorist",
       "title": "THE POWERHOUSE PARTNER",
       "characters": [
         "Gustavo Fring (Breaking Bad)",
@@ -77,7 +79,8 @@
     },
     {
       "id": "drill_sergeant",
-      "image": "/images/personas/drill-sergeant.webp",
+      "image": "/images/personas/sergeant.webp",
+      "flipimage": "/images/personas/sergeant-flipped.webp",
       "persona": "The Drill Sergeant",
       "title": "THE RULEBOOK ROMANTIC",
       "characters": [
@@ -100,8 +103,9 @@
     },
     {
       "id": "suspicious_strategist",
-      "image": "/images/personas/strategist.webp",
-      "persona": "The Suspicious Strategist",
+      "image": "/images/personas/paranoid.webp",
+      "flipimage": "/images/personas/paranoid-flipped.webp",
+      "persona": "The Paranoid",
       "title": "THE CALCULATING GENIUS",
       "characters": [
         "Light Yagami (Death Note)",
@@ -127,8 +131,9 @@
     },
     {
       "id": "master_of_everything",
-      "image": "/images/personas/ted-talk.webp",
-      "persona": "Master of Everything",
+      "image": "/images/personas/right.webp",
+      "flipimage": "/images/personas/right-flipped.webp",
+      "persona": "Always Right",
       "title": "THE WALKING TED TALK",
       "characters": [
         "Tony Stark (Iron Man / MCU)",
@@ -154,8 +159,9 @@
     },
     {
       "id": "subtle_saboteur",
-      "image": "/images/personas/heartbreaker.webp",
-      "persona": "The Subtle Saboteur",
+      "image": "/images/personas/passive.webp",
+      "flipimage": "/images/personas/passive-flipped.webp",
+      "persona": "Passive Aggressive Person",
       "title": "THE SILENT HEARTBREAKER",
       "characters": [
         "Tom (500 Days of Summer)",
@@ -181,7 +187,8 @@
     },
     {
       "id": "clinger",
-      "image": "/images/personas/overlover.webp",
+      "image": "/images/personas/clinger.webp",
+      "flipimage": "/images/personas/clinger-flipped.webp",
       "persona": "The Clinger",
       "title": "THE OVERLOVER",
       "characters": [
@@ -209,6 +216,7 @@
     {
       "id": "addict",
       "image": "/images/personas/addict.webp",
+      "flipimage": "/images/personas/addict-flipped.webp",
       "persona": "The Addict",
       "title": "THE BEAUTIFUL MESS",
       "characters": [
@@ -231,8 +239,9 @@
     },
     {
       "id": "freewheeler",
-      "image": "/images/personas/chaos.webp",
-      "persona": "The Freewheeler",
+      "image": "/images/personas/adhd.webp",
+      "flipimage": "/images/personas/adhd-flipped.webp",
+      "persona": "ADHDer",
       "title": "THE CHAOS SIREN",
       "characters": [
         "Ferris Bueller (Ferris Bueller's Day Off)",
@@ -254,8 +263,9 @@
     },
     {
       "id": "thinker",
-      "image": "/images/personas/thinker.webp",
-      "persona": "The Thinker",
+      "image": "/images/personas/autistic.webp",
+      "flipimage": "/images/personas/autistic-flipped.webp",
+      "persona": "Autistic",
       "title": "THE BRILLIANT LONER",
       "characters": [
         "Sherlock Holmes (Sherlock)",
@@ -281,7 +291,8 @@
     },
     {
       "id": "emotional_invalidator",
-      "image": "/images/personas/shrugger.webp",
+      "image": "/images/personas/shrug.webp",
+      "flipimage": "/images/personas/shrug-flipped.webp",
       "persona": "The Emotional Invalidator",
       "title": "THE SHRUGGER",
       "characters": [
@@ -309,7 +320,8 @@
     {
       "id": "emotionally_distant",
       "image": "/images/personas/iceberg.webp",
-      "persona": "The Emotionally Distant",
+      "flipimage": "/images/personas/iceberg-flipped.webp",
+      "persona": "The Unavailable",
       "title": "THE ICEBERG",
       "characters": [
         "Mr. Darcy (Pride & Prejudice)",
@@ -336,6 +348,7 @@
     {
       "id": "perpetual_victim",
       "image": "/images/personas/victim.webp",
+      "flipimage": "/images/personas/victim-flipped.webp",
       "persona": "The Perpetual Victim",
       "title": "THE TRAGIC HERO",
       "characters": [
@@ -362,8 +375,9 @@
     },
     {
       "id": "parental_seeker",
-      "image": "/images/personas/grown-child.webp",
-      "persona": "The Parental Seeker",
+      "image": "/images/personas/mommy.webp",
+      "flipimage": "/images/personas/mommy-flipped.webp",
+      "persona": "The Mommy Seeker",
       "title": "THE GROWN CHILD",
       "characters": [
         "Shinji Ikari (Neon Genesis Evangelion)",
@@ -389,7 +403,8 @@
     },
     {
       "id": "rake",
-      "image": "/images/personas/charmer.webp",
+      "image": "/images/personas/rake.webp",
+      "flipimage": "/images/personas/rake-flipped.webp",
       "persona": "The Rake",
       "title": "THE DANGEROUS CHARMER",
       "characters": [
@@ -413,6 +428,7 @@
     {
       "id": "future_faker",
       "image": "/images/personas/castle.webp",
+      "flipimage": "/images/personas/castle-flipped.webp",
       "persona": "The Future Faker",
       "title": "THE CASTLE BUILDER",
       "characters": [
@@ -439,8 +455,9 @@
     },
     {
       "id": "self_obsessed",
-      "image": "/images/personas/mirror.webp",
-      "persona": "The Self-Obsessed",
+      "image": "/images/personas/narcissist.webp",
+      "flipimage": "/images/personas/narcissist-flipped.webp",
+      "persona": "The Narcissist",
       "title": "THE HUMAN MIRROR",
       "characters": [
         "Regina George (Mean Girls)",

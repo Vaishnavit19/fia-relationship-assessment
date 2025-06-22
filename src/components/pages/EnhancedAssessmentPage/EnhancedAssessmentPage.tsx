@@ -126,7 +126,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
   // Check if we can proceed (different logic for single vs multi-select)
   const canProceed = isCurrentMultiSelect
     ? multiSelectRequirements
-      ? localMultiSelectOptions.length >= multiSelectRequirements.minSelections
+      ? localMultiSelectOptions.length === multiSelectRequirements.minSelections
       : false
     : selectedOption !== null;
 
@@ -428,7 +428,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
 
     const selectedCount = localMultiSelectOptions.length;
     const required = multiSelectRequirements.minSelections;
-    const isValid = selectedCount >= required;
+    const isValid = selectedCount === required;
 
     return (
       <div className={styles.multiSelectStatus}>
@@ -468,7 +468,8 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
         loading={isSubmitting}
         className={styles.nextButton}
       >
-        {isCurrentMultiSelect ? 'Submit Selections' : 'Next Question'}
+        {/* {isCurrentMultiSelect ? 'Submit Selections' : 'Next Question'} */}
+        Next Question
         <ChevronRight className={styles.navIcon} />
       </Button>
     </div>
