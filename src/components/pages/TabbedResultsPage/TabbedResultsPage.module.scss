@@ -702,14 +702,14 @@
 .statValue {
   color: #2d3748;
   display: block;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .statLabel {
   // color: #718096;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -732,7 +732,8 @@
 
   p {
     color: #2d3748;
-    font-size: 15px;
+
+    // font-size: 15px;
     line-height: 1.5;
     margin: 0;
   }
@@ -973,20 +974,24 @@
 
     li {
       // color: #4a5568;
-      font-size: 13px;
+      font-size: 16px;
       line-height: 1.4;
       margin-bottom: 6px;
       padding-left: 16px;
       position: relative;
 
       &::before {
-        font-size: 12px;
+        font-size: 18px;
         left: 0;
         position: absolute;
-        top: 1px;
+        top: -2px;
       }
     }
   }
+}
+
+.tacticsSection h4 {
+  font-size: 18px;
 }
 
 .redFlagsSection ul li::before {
@@ -1343,12 +1348,12 @@
     flex-shrink: 0;
 
     // color: #667eea;
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
   }
 
   .popCultureContent {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.4;
 
     strong {
@@ -1371,16 +1376,16 @@
   .sectionIcon {
     color: #ed8936;
     flex-shrink: 0;
-    height: 16px;
+    height: 18px;
     margin-top: 2px;
-    width: 16px;
+    width: 18px;
   }
 
   p {
     color: inherit;
 
     // color: #4a5568;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.4;
     margin: 0;
 
@@ -1426,7 +1431,7 @@
 .protectionStrategies {
   h4 {
     color: #2d3748;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
   }
@@ -1441,7 +1446,7 @@
     background: #f8fafc;
     border-radius: 6px;
     color: #4a5568;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.4;
     margin-bottom: 6px;
     padding: 8px 12px;
@@ -1474,14 +1479,14 @@
 
   h4 {
     color: #c53030;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 6px;
   }
 
   p {
     color: #2d3748;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.4;
     margin: 0;
   }
@@ -1495,14 +1500,14 @@
 
   h4 {
     color: #d69e2e;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 6px;
   }
 
   p {
     color: #2d3748;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.4;
     margin: 0;
   }
@@ -1550,8 +1555,14 @@
   }
 }
 
-.takeawaySection p {
-  color: inherit;
+.takeawaySection {
+  p {
+    color: inherit;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
 }
 
 // AI Summary Component Styles

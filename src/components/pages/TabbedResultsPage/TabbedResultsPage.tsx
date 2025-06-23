@@ -251,6 +251,15 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
         const seconds = Math.floor((assessmentResult.assessmentDuration % 60000) / 1000);
         const assessmentTime = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
+        console.log(
+          'catch sad1',
+          minutes,
+          seconds,
+          assessmentTime,
+          assessmentResult.answers,
+          assessmentResult.assessmentDuration
+        );
+
         return {
           totalQuestions: assessmentResult.answers.length,
           assessmentTime,
@@ -1081,7 +1090,7 @@ Total Questions Answered: ${answers?.length || 0}
                       <h4>🎭 Common Tactics</h4>
                       <ul>
                         {persona.psychologicalTactics?.map((tactic, idx) => (
-                          <li key={idx}>&nbsp;{tactic}</li>
+                          <li key={idx}>&nbsp;&nbsp;{tactic}</li>
                         )) || <li>Uses various psychological manipulation techniques</li>}
                       </ul>
                     </div>
