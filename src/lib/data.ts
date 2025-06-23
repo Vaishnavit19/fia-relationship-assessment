@@ -49,6 +49,8 @@ export const appConfig = config;
  * Updated to work with store.ts expectations
  */
 export const getExtendedScenarioById = (id: number | string): ExtendedScenario | null => {
+  if (id === null) return id;
+
   const scenario = extendedScenarios.find(
     scenario => scenario.id === id || scenario.id.toString() === id.toString()
   );
@@ -59,13 +61,27 @@ export const getExtendedScenarioById = (id: number | string): ExtendedScenario |
 /**
  * Calculate total scores from user answers
  * Updated to handle both single and multi-select answers properly with defensive programming
+ * ✅ NEW: Added deduplication to prevent inflated scores from back navigation
  */
 export const calculateExtendedScores = (answers: ExtendedUserAnswer[]): ScoreData => {
   if (!Array.isArray(answers) || answers.length === 0) {
     return { logical: 0, emotional: 0, exploratory: 0 };
   }
 
-  return answers.reduce(
+  // ✅ DEDUPLICATION: Keep only the most recent answer for each scenario
+  const uniqueAnswers = new Map<number | string, ExtendedUserAnswer>();
+
+  // Process answers in order, so later answers overwrite earlier ones for same scenario
+  answers.forEach(answer => {
+    if (answer && answer.scenarioId !== null && answer.scenarioId !== undefined) {
+      uniqueAnswers.set(answer.scenarioId, answer);
+    }
+  });
+
+  // Convert back to array and process
+  const deduplicatedAnswers = Array.from(uniqueAnswers.values());
+
+  return deduplicatedAnswers.reduce(
     (totalScores, answer) => {
       // Defensive check: ensure answer exists
       if (!answer) {
@@ -97,25 +113,16 @@ export const calculateExtendedScores = (answers: ExtendedUserAnswer[]): ScoreDat
           emotional: totalScores.emotional + multiSelectScores.emotional,
           exploratory: totalScores.exploratory + multiSelectScores.exploratory,
         };
-      } else {
-        // Handle single select answers
-        // Defensive check: ensure selectedOption and scores exist
-        if (!answer.selectedOption) {
-          console.warn('Missing selectedOption in answer', answer);
-          return totalScores;
-        }
-
-        if (!answer.selectedOption.scores) {
-          console.warn('Missing scores in selectedOption', answer.selectedOption);
-          return totalScores;
-        }
-
-        const scores = answer.selectedOption.scores;
+      } else if (answer.selectedOption?.scores) {
+        // Handle single-select answers
         return {
-          logical: totalScores.logical + (scores.logical || 0),
-          emotional: totalScores.emotional + (scores.emotional || 0),
-          exploratory: totalScores.exploratory + (scores.exploratory || 0),
+          logical: totalScores.logical + (answer.selectedOption.scores.logical || 0),
+          emotional: totalScores.emotional + (answer.selectedOption.scores.emotional || 0),
+          exploratory: totalScores.exploratory + (answer.selectedOption.scores.exploratory || 0),
         };
+      } else {
+        console.warn('Answer has no valid scores, skipping', answer);
+        return totalScores;
       }
     },
     { logical: 0, emotional: 0, exploratory: 0 }
@@ -221,6 +228,93 @@ export const getUserScenarioPath = (answers: ExtendedUserAnswer[]): UserPath => 
     pathSequence,
     branchingPoints,
   };
+};
+
+/**
+ * Find the convergence point for multiple scenario paths
+ * This analyzes where different scenario paths merge back together
+ */
+export const findConvergencePoint = (scenarioIds: (number | string)[]): number | string | null => {
+  if (scenarioIds.length === 0) return null;
+  if (scenarioIds.length === 1) {
+    // Single scenario - find where it leads
+    const scenario = getExtendedScenarioById(scenarioIds[0]);
+    return scenario?.options[0]?.next || null;
+  }
+
+  // Get all possible next scenarios for each scenario
+  const allPaths: Set<number | string>[] = scenarioIds.map(id => {
+    const possibleNextScenarios = getPossibleNextScenarios(id);
+    return new Set(possibleNextScenarios);
+  });
+
+  // Find common scenarios across all paths
+  const convergencePoints = allPaths.reduce((intersection, currentSet) => {
+    return new Set([...intersection].filter(x => currentSet.has(x)));
+  });
+
+  // Return the first convergence point (or null if no convergence)
+  return convergencePoints.size > 0 ? Array.from(convergencePoints)[0] : null;
+};
+
+/**
+ * Create a scenario queue from multi-select options
+ * This determines the order in which scenarios should be experienced
+ */
+export const createScenarioQueue = (
+  multiSelectOptions: ExtendedAnswerOption[],
+  originalScenarioId: number | string
+): ScenarioQueueItem[] => {
+  // Sort options by letter to ensure consistent ordering
+  const sortedOptions = [...multiSelectOptions].sort((a, b) => a.letter.localeCompare(b.letter));
+
+  return sortedOptions
+    .map(option => ({
+      scenarioId: option.next,
+      originOption: option,
+      isProcessed: false,
+    }))
+    .filter(item => item.scenarioId !== null && item.scenarioId !== undefined);
+};
+
+/**
+ * Validate that all scenarios in queue lead to the same convergence point
+ */
+export const validateQueueConvergence = (
+  queue: ScenarioQueueItem[]
+): {
+  isValid: boolean;
+  convergencePoint: number | string | null;
+  warnings: string[];
+} => {
+  const warnings: string[] = [];
+  const scenarioIds = queue.map(item => item.scenarioId);
+  const convergencePoint = findConvergencePoint(scenarioIds);
+
+  if (!convergencePoint) {
+    warnings.push('No convergence point found for multi-select scenarios');
+  }
+
+  // Verify each scenario actually leads to the convergence point
+  let isValid = true;
+  if (convergencePoint) {
+    queue.forEach(item => {
+      const scenario = getExtendedScenarioById(item.scenarioId);
+      if (scenario) {
+        const allOptionsLeadToConvergence = scenario.options.every(
+          option => option.next === convergencePoint
+        );
+        if (!allOptionsLeadToConvergence) {
+          warnings.push(
+            `Scenario ${item.scenarioId} doesn't lead to convergence point ${convergencePoint}`
+          );
+          isValid = false;
+        }
+      }
+    });
+  }
+
+  return { isValid, convergencePoint, warnings };
 };
 
 // ==========================================================================

@@ -234,6 +234,9 @@ export interface ExtendedAssessmentState {
   // Results
   archetypeResults: ArchetypeResults | null;
   personaSelection: PersonaSelection | null;
+
+  // Multi-select handling
+  multiSelectNavigation: MultiSelectNavigationState | null;
 }
 
 // ==========================================================================
@@ -434,6 +437,25 @@ export interface AIResponseStatus {
   lastError: string | null;
   retryCount: number;
   lastGeneratedAt: Date | null;
+}
+
+//
+// MULTI - SELECT SCENARIO HANDLING (MULTI SELECT -> CONVERGE)
+//
+
+export interface ScenarioQueueItem {
+  scenarioId: number | string;
+  originOption: ExtendedAnswerOption;
+  isProcessed: boolean;
+}
+
+export interface MultiSelectNavigationState {
+  isProcessingQueue: boolean;
+  scenarioQueue: ScenarioQueueItem[];
+  currentQueueIndex: number;
+  originalMultiSelectScenario: number | string;
+  convergencePoint?: number | string;
+  queueAnswers: ExtendedUserAnswer[]; // Answers from queue processing
 }
 
 // ==========================================================================

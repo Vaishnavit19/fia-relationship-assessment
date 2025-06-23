@@ -17,6 +17,8 @@ import {
   calculateExtendedProgress,
   createExtendedUserAnswer,
   validateAnswerObject,
+  createScenarioQueue,
+  validateQueueConvergence,
 } from './data';
 import {
   generateEnhancedUserPath,
@@ -174,6 +176,12 @@ export interface EnhancedAssessmentActions {
   goToPreviousScenario: () => void;
   goToScenario: (scenarioId: number | string) => void;
 
+  /**
+   * ✅ NEW: Navigate back during queue processing
+   * Handles the complex logic of going back within multi-select queues
+   */
+  goToPreviousQueueScenario: () => void;
+
   // Multi-select management
   initializeMultiSelect: (scenario: ExtendedScenario) => void;
   toggleMultiSelectOption: (optionId: string) => void;
@@ -245,6 +253,7 @@ const initialState: EnhancedAssessmentState = {
   currentMultiSelectState: null,
   isMultiSelectMode: false,
   multiSelectError: null,
+  multiSelectNavigation: null,
 
   // Enhanced path tracking
   enhancedUserPath: null,
@@ -441,7 +450,11 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             isMultiSelect: false,
           };
 
-          const newAnswers = [...state.answers, answer];
+          // ✅ PREVENT DUPLICATES: Remove any existing answers for this scenario
+          const filteredAnswers = state.answers.filter(
+            existingAnswer => existingAnswer.scenarioId !== state.currentScenario
+          );
+          const newAnswers = [...filteredAnswers, answer];
 
           // Use safe calculation with error handling
           const calculationResult = safeCalculateExtendedScores(newAnswers);
@@ -454,12 +467,16 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
 
           const nextScenarioId = getNextScenarioId(state.currentScenario, option);
 
+          // ✅ FIX: Don't check completion when navigating TO a scenario
+          // Only set completion if we're explicitly told to complete (nextScenarioId is null)
+          const shouldComplete = nextScenarioId === null || nextScenarioId === undefined;
+
           set({
             answers: newAnswers,
             scores: calculationResult.scores,
             currentScenario: nextScenarioId,
             lastActivityTime: now,
-            isComplete: isScenarioPathComplete(nextScenarioId, newAnswers),
+            isComplete: shouldComplete, // ✅ Only complete if explicitly told to
             navigationHistory: [
               ...state.navigationHistory,
               {
@@ -492,6 +509,15 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             return;
           }
 
+          // Create scenario queue for sequential processing
+          const scenarioQueue = createScenarioQueue(options, state.currentScenario);
+          const queueValidation = validateQueueConvergence(scenarioQueue);
+
+          if (!queueValidation.isValid) {
+            console.warn('Queue validation warnings:', queueValidation.warnings);
+          }
+
+          // Create the multi-select answer record
           const now = new Date();
           const answer: ExtendedUserAnswer = {
             scenarioId: state.currentScenario,
@@ -510,7 +536,11 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             ),
           };
 
-          const newAnswers = [...state.answers, answer];
+          // ✅ PREVENT DUPLICATES: Remove any existing answers for this scenario
+          const filteredAnswers = state.answers.filter(
+            existingAnswer => existingAnswer.scenarioId !== state.currentScenario
+          );
+          const newAnswers = [...filteredAnswers, answer];
 
           // Use safe calculation with error handling
           const calculationResult = safeCalculateExtendedScores(newAnswers);
@@ -521,16 +551,110 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             console.warn('Multi-select score calculation warnings:', calculationResult.warnings);
           }
 
-          const nextScenarioId = getNextScenarioId(state.currentScenario, options[0]);
+          // Initialize multi-select navigation
+          const multiSelectNavigation: MultiSelectNavigationState = {
+            isProcessingQueue: true,
+            scenarioQueue,
+            currentQueueIndex: 0,
+            originalMultiSelectScenario: state.currentScenario,
+            convergencePoint: queueValidation.convergencePoint || undefined,
+            queueAnswers: [],
+          };
+
+          // Navigate to first scenario in queue
+          const firstScenarioId = scenarioQueue[0]?.scenarioId;
+          const shouldComplete = firstScenarioId === null || firstScenarioId === undefined;
 
           set({
             answers: newAnswers,
             scores: calculationResult.scores,
-            currentScenario: nextScenarioId,
+            currentScenario: firstScenarioId,
             isMultiSelectMode: false,
             currentMultiSelectState: null,
+            multiSelectNavigation, // ✅ New navigation state
             lastActivityTime: now,
-            isComplete: isScenarioPathComplete(nextScenarioId, newAnswers),
+            isComplete: shouldComplete,
+            navigationHistory: [
+              ...state.navigationHistory,
+              {
+                scenarioId: firstScenarioId,
+                action: 'forward' as const,
+                timestamp: now,
+              },
+            ],
+          });
+
+          updateComputedProperties(set, get);
+        },
+
+        // New action for processing queue scenarios:
+        processQueueScenario: (option: ExtendedAnswerOption) => {
+          const state = get();
+          const navigation = state.multiSelectNavigation;
+
+          if (!navigation?.isProcessingQueue) {
+            console.error('Not in queue processing mode');
+            return;
+          }
+
+          const currentQueueItem = navigation.scenarioQueue[navigation.currentQueueIndex];
+          if (!currentQueueItem) {
+            console.error('No current queue item');
+            return;
+          }
+
+          // Create answer for current queue scenario
+          const now = new Date();
+          const queueAnswer: ExtendedUserAnswer = {
+            scenarioId: currentQueueItem.scenarioId,
+            selectedOption: option,
+            timestamp: now,
+            responseTime: now.getTime() - (state.lastActivityTime?.getTime() || now.getTime()),
+            isMultiSelect: false,
+          };
+
+          // Update queue state
+          const updatedQueue = [...navigation.scenarioQueue];
+          updatedQueue[navigation.currentQueueIndex] = {
+            ...currentQueueItem,
+            isProcessed: true,
+          };
+
+          const updatedQueueAnswers = [...navigation.queueAnswers, queueAnswer];
+          const nextQueueIndex = navigation.currentQueueIndex + 1;
+          const hasMoreInQueue = nextQueueIndex < navigation.scenarioQueue.length;
+
+          let nextScenarioId: number | string | null;
+          let isComplete = false;
+
+          if (hasMoreInQueue) {
+            // Move to next scenario in queue
+            nextScenarioId = navigation.scenarioQueue[nextQueueIndex].scenarioId;
+          } else {
+            // Queue complete - move to convergence point
+            nextScenarioId = navigation.convergencePoint || null;
+            isComplete = nextScenarioId === null || nextScenarioId === undefined;
+          }
+
+          // Update main answers with queue answers
+          const allAnswers = [...state.answers, ...updatedQueueAnswers];
+          const calculationResult = safeCalculateExtendedScores(allAnswers);
+
+          const updatedNavigation: MultiSelectNavigationState = {
+            ...navigation,
+            scenarioQueue: updatedQueue,
+            currentQueueIndex: nextQueueIndex,
+            queueAnswers: updatedQueueAnswers,
+            isProcessingQueue: hasMoreInQueue,
+          };
+
+          set({
+            answers: allAnswers,
+            scores: calculationResult.scores,
+            currentScenario: nextScenarioId,
+            multiSelectNavigation: hasMoreInQueue ? updatedNavigation : null, // Clear when done
+            lastActivityTime: now,
+            isComplete,
             navigationHistory: [
               ...state.navigationHistory,
               {
@@ -567,10 +691,38 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
 
         goToPreviousScenario: () => {
           const state = get();
+
+          // ✅ NEW: Check if we're in queue processing mode
+          if (state.multiSelectNavigation?.isProcessingQueue) {
+            // Delegate to queue-specific navigation
+            get().goToPreviousQueueScenario();
+            return;
+          }
+
           if (state.answers.length === 0) return;
 
           const now = new Date();
-          const newAnswers = state.answers.slice(0, -1);
+
+          // ✅ SIMPLE FIX: Find which answer led TO the current scenario
+          const answerThatLedHere = state.answers.find(
+            answer => answer.selectedOption.next === state.currentScenario
+          );
+
+          // const newAnswers = state.answers.slice(0, -1);
+
+          let newAnswers: ExtendedUserAnswer[];
+          let previousScenario: number | string;
+
+          if (answerThatLedHere) {
+            // ✅ Go back to where that answer was given & remove it
+            previousScenario = answerThatLedHere.scenarioId;
+            newAnswers = state.answers.filter(answer => answer !== answerThatLedHere);
+          } else {
+            // ✅ Fallback: use the old logic
+            newAnswers = state.answers.slice(0, -1);
+            previousScenario =
+              newAnswers.length > 0 ? newAnswers[newAnswers.length - 1].scenarioId : 1;
+          }
 
           // Use safe calculation with error handling
           const calculationResult = safeCalculateExtendedScores(newAnswers);
@@ -578,8 +730,8 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
             console.error('Previous scenario score calculation errors:', calculationResult.errors);
           }
 
-          const previousScenario =
-            newAnswers.length > 0 ? newAnswers[newAnswers.length - 1].scenarioId : 1;
+          // const previousScenario =
+          //   newAnswers.length > 0 ? newAnswers[newAnswers.length - 1].scenarioId : 1;
 
           set({
             answers: newAnswers,
@@ -596,6 +748,103 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
               },
             ],
           });
+
+          updateComputedProperties(set, get);
+        },
+
+        /**
+         * ✅ NEW: Navigate back during queue processing
+         * This is the new function that handles queue-specific back navigation
+         */
+        goToPreviousQueueScenario: () => {
+          const state = get();
+          const navigation = state.multiSelectNavigation;
+
+          if (!navigation?.isProcessingQueue) {
+            console.error('Not in queue processing mode');
+            return;
+          }
+
+          const currentQueueIndex = navigation.currentQueueIndex;
+          const now = new Date();
+
+          if (currentQueueIndex > 0) {
+            // ✅ Go back to previous scenario in queue
+            const previousQueueIndex = currentQueueIndex - 1;
+            const previousQueueItem = navigation.scenarioQueue[previousQueueIndex];
+
+            // Remove the last queue answer if it exists
+            const updatedQueueAnswers = navigation.queueAnswers.slice(0, -1);
+
+            // Update queue state
+            const updatedQueue = [...navigation.scenarioQueue];
+            updatedQueue[currentQueueIndex] = {
+              ...updatedQueue[currentQueueIndex],
+              isProcessed: false, // Mark current as unprocessed
+            };
+
+            const updatedNavigation: MultiSelectNavigationState = {
+              ...navigation,
+              scenarioQueue: updatedQueue,
+              currentQueueIndex: previousQueueIndex,
+              queueAnswers: updatedQueueAnswers,
+            };
+
+            // Recalculate main answers (original multi-select + remaining queue answers)
+            const allAnswers = [...state.answers, ...updatedQueueAnswers];
+            const calculationResult = safeCalculateExtendedScores(allAnswers);
+
+            set({
+              answers: allAnswers,
+              scores: calculationResult.scores,
+              currentScenario: previousQueueItem.scenarioId,
+              multiSelectNavigation: updatedNavigation,
+              lastActivityTime: now,
+              navigationHistory: [
+                ...state.navigationHistory,
+                {
+                  scenarioId: previousQueueItem.scenarioId,
+                  action: 'backward' as const,
+                  timestamp: now,
+                },
+              ],
+            });
+          } else {
+            // ✅ Go back to original multi-select scenario
+            // Clear all queue answers and return to the multi-select question
+
+            // Remove the multi-select answer from main answers
+            const newMainAnswers = state.answers.slice(0, -1);
+            const calculationResult = safeCalculateExtendedScores(newMainAnswers);
+
+            // Determine the previous scenario before multi-select
+            const previousScenario = navigation.originalMultiSelectScenario;
+
+            set({
+              answers: newMainAnswers,
+              scores: calculationResult.scores,
+              currentScenario: previousScenario,
+              isMultiSelectMode: true, // Return to multi-select mode
+              multiSelectNavigation: null, // Clear queue processing
+              currentMultiSelectState: {
+                scenarioId: previousScenario,
+                selectedOptions: [], // Reset selections
+                minSelections: getExtendedScenarioById(previousScenario)?.minSelection || 2,
+                maxSelections: getExtendedScenarioById(previousScenario)?.maxSelection || 3,
+                isValid: false,
+              },
+              lastActivityTime: now,
+              isComplete: false,
+              navigationHistory: [
+                ...state.navigationHistory,
+                {
+                  scenarioId: previousScenario,
+                  action: 'backward' as const,
+                  timestamp: now,
+                },
+              ],
+            });
+          }
 
           updateComputedProperties(set, get);
         },

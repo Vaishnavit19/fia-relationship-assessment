@@ -88,12 +88,15 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
     submitMultiSelectAnswer,
     goToNextScenario,
     goToPreviousScenario,
+    goToPreviousQueueScenario, // ✅ NEW: Add this new action
     initializeMultiSelect,
     toggleMultiSelectOption,
     validateMultiSelectState,
     clearMultiSelectError,
     getIsCurrentScenarioMultiSelect,
     completeAssessment,
+    multiSelectNavigation,
+    processQueueScenario,
   } = useEnhancedAssessmentStore();
 
   // ==========================================================================
@@ -130,12 +133,52 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
       : false
     : selectedOption !== null;
 
+  // Check if we're in queue processing mode
+  const isProcessingQueue = multiSelectNavigation?.isProcessingQueue || false;
+
   // ==========================================================================
-  // HELPERS
+  // HELPERS (✅ FIXED NAVIGATION LOGIC)
   // ==========================================================================
 
-  const canGoBack = answers.length > 0;
+  /**
+   * ✅ FIXED: Context-aware back navigation logic
+   * Now properly handles multi-select queue processing
+   */
+  const canGoBack = (() => {
+    if (isProcessingQueue && multiSelectNavigation) {
+      // During queue processing:
+      // - Can go back if not at first queue item, OR
+      // - Can go back to multi-select if at first queue item but have main answers
+      return multiSelectNavigation.currentQueueIndex > 0 || answers.length > 1;
+    }
+
+    // Normal scenario: can go back if we have previous answers
+    return answers.length > 0;
+  })();
+
   const canGoNext = canProceed && !isSubmitting;
+
+  // Helper to get current question number for display
+  const getCurrentQuestionNumber = (): number => {
+    if (isProcessingQueue && multiSelectNavigation) {
+      // During queue processing, count: main answers + current queue position
+      return answers.length + multiSelectNavigation.currentQueueIndex;
+    }
+    return answers.length + 1;
+  };
+
+  // Helper to get total progress including queue
+  const getTotalProgress = (): number => {
+    if (isProcessingQueue && multiSelectNavigation) {
+      const mainAnswersCount = answers.length;
+      const queueAnswersCount = multiSelectNavigation.queueAnswers.length;
+      const totalQueueLength = multiSelectNavigation.scenarioQueue.length;
+
+      // Estimate: main answers + queue progress
+      return mainAnswersCount + queueAnswersCount;
+    }
+    return answers.length;
+  };
 
   const getScenarioTypeIcon = (scenarioId: number | string) => {
     const id = scenarioId.toString();
@@ -191,7 +234,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
   }, []);
 
   // ==========================================================================
-  // EVENT HANDLERS
+  // EVENT HANDLERS (✅ FIXED PREVIOUS HANDLER)
   // ==========================================================================
 
   // Handle user registration
@@ -263,13 +306,18 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
         startTime,
       }));
 
-      if (isCurrentMultiSelect) {
-        // Handle multi-select submission using local state
+      if (isProcessingQueue) {
+        // ✅ Processing queue scenarios - use special logic
+        if (selectedOption) {
+          await processQueueScenario(selectedOption);
+        }
+      } else if (isCurrentMultiSelect) {
+        // ✅ Regular multi-select submission
         if (localMultiSelectOptions.length > 0) {
           await submitMultiSelectAnswer(localMultiSelectOptions);
         }
       } else {
-        // Handle single-select submission
+        // ✅ Regular single-select submission
         if (selectedOption) {
           await submitAnswer(selectedOption);
         }
@@ -285,6 +333,10 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
     }
   };
 
+  /**
+   * ✅ FIXED: Context-aware previous navigation
+   * Handles both queue processing and normal navigation
+   */
   const handlePrevious = () => {
     if (!canGoBack || isSubmitting) return;
 
@@ -295,11 +347,16 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
       startTime: ensureDate(currentState.startTime),
     }));
 
-    goToPreviousScenario();
+    // ✅ NEW: Use context-aware navigation
+    if (isProcessingQueue && multiSelectNavigation) {
+      goToPreviousQueueScenario();
+    } else {
+      goToPreviousScenario();
+    }
   };
 
   // ==========================================================================
-  // RENDER HELPERS
+  // RENDER HELPERS (✅ UPDATED FOR QUEUE PROCESSING)
   // ==========================================================================
 
   const renderProgressSection = () => (
@@ -326,7 +383,17 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
         <div className={styles.scenarioMeta}>
           {getScenarioTypeIcon(currentScenario)}
           <div className={styles.scenarioInfo}>
-            <span className={styles.scenarioNumber}>Question {answers.length + 1}</span>
+            <span className={styles.scenarioNumber}>
+              Question {getCurrentQuestionNumber()}
+              {/* ✅ NEW: Show queue processing indicator */}
+              {isProcessingQueue && multiSelectNavigation && (
+                <span className={styles.queueIndicator}>
+                  {' '}
+                  (Queue {multiSelectNavigation.currentQueueIndex + 1} of{' '}
+                  {multiSelectNavigation.scenarioQueue.length})
+                </span>
+              )}
+            </span>
             {context && (
               <span className={styles.scenarioContext}>
                 {context.city || context.location} • {context.situation}
