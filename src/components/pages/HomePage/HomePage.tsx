@@ -253,6 +253,11 @@ export const HomePage: React.FC = () => {
                 </Card>
               ))}
             </div>
+            <Card className={styles.disclaimerCard} size="small">
+              <h3>Disclaimer:</h3>
+              Love knows no borders. Neither do we. Every visual is crafted to reflect diverse
+              identities, emotions, and possibilities.
+            </Card>
           </div>
         </section>
 

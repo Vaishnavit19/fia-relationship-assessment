@@ -424,11 +424,11 @@
   border-radius: 50%;
   color: white;
   display: flex;
-  font-size: 20px;
+  font-size: 32px;
   font-weight: 700;
-  height: 40px;
+  height: 60px;
   justify-content: center;
-  min-width: 40px;
+  min-width: 60px;
 }
 
 .archetypeDetails {
@@ -672,6 +672,12 @@
       margin: 0;
     }
   }
+}
+
+.vulnerabilitiesClickSuggestion {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .overviewContent {
@@ -1546,6 +1552,14 @@
   display: flex;
   gap: 4px;
   margin-bottom: 8px;
+}
+
+.successNotice {
+  align-items: baseline;
+
+  .topArchetypeIcon {
+    font-size: 1.5rem;
+  }
 }
 
 .tabContent {

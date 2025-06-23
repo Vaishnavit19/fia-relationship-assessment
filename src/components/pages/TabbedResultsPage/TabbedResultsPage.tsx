@@ -251,15 +251,6 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
         const seconds = Math.floor((assessmentResult.assessmentDuration % 60000) / 1000);
         const assessmentTime = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
-        console.log(
-          'catch sad1',
-          minutes,
-          seconds,
-          assessmentTime,
-          assessmentResult.answers,
-          assessmentResult.assessmentDuration
-        );
-
         return {
           totalQuestions: assessmentResult.answers.length,
           assessmentTime,
@@ -572,9 +563,12 @@ Total Questions Answered: ${answers?.length || 0}
             </p>
 
             <div className={styles.successNotice}>
-              <CheckCircle />
+              {/* <CheckCircle /> */}
+              <span className={styles.topArchetypeIcon}>
+                {formattedResults.topMatches[0].archetype.icon}
+              </span>
               <span>
-                Results successfully generated! Your primary archetype is{' '}
+                Your primary archetype is{' '}
                 <strong>{formattedResults.topMatches[0].archetype.name}</strong>
               </span>
             </div>
@@ -585,6 +579,10 @@ Total Questions Answered: ${answers?.length || 0}
                 <span>Close matches detected - multiple archetypes show similar affinity</span>
               </div>
             )}
+            <div className={styles.tiesNotice}>
+              <CheckCircle />
+              <span>Click on the tiles to know more.</span>
+            </div>
           </div>
 
           <div className={styles.archetypesList}>
@@ -976,6 +974,11 @@ Total Questions Answered: ${answers?.length || 0}
             </div>
           </div>
         </Card>
+
+        <div className={styles.vulnerabilitiesClickSuggestion}>
+          <CheckCircle />
+          <span>Click on the tiles to know more.</span>
+        </div>
 
         {/* Key Red Flags Summary
         <Card className={styles.redFlagsCard}>
