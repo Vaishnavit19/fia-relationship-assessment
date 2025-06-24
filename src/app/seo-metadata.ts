@@ -111,10 +111,10 @@ export const sitemetadata: Metadata = {
   manifest: '/site.webmanifest',
 
   // Verification (add these if you have them)
-  // verification: {
-  //   google: 'your-google-verification-code',
-  //   yandex: 'your-yandex-verification-code',
-  // },
+  verification: {
+    google: '20FRoOAvLtAsyVH179tGWrrPEAaGiBGJ-SiUpv7iYIU',
+    // yandex: 'your-yandex-verification-code',
+  },
 
   // Category for app stores
   category: 'lifestyle',
