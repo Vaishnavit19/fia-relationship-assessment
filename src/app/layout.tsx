@@ -2,8 +2,11 @@
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
 import '../styles/globals.scss';
+import { sitemetadata } from './seo-metadata';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -11,24 +14,13 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-export const metadata = {
-  title: 'FIA Relationship Assessment',
-  description:
-    'Discover your relationship style through travel scenarios. Understand how you balance emotional connection, logical planning, and adventurous exploration.',
-  keywords: 'relationship assessment, compatibility test, travel scenarios, relationship dynamics',
-  authors: [{ name: 'FIA' }],
-  openGraph: {
-    title: 'FIA Relationship Assessment',
-    description: 'Discover your relationship style through travel scenarios',
-    type: 'website',
-  },
-};
+export const metadata: Metadata = sitemetadata;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>

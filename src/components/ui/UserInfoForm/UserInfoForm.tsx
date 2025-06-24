@@ -71,7 +71,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof UserData, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof UserData, boolean>>>({});
 
-  console.log('unused', autoFocus);
+  // console.log('unused', autoFocus);
 
   const validateField = (field: keyof UserData, value: string | boolean): string => {
     switch (field) {

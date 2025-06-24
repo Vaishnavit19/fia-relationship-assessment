@@ -909,10 +909,13 @@ Total Questions Answered: ${answers?.length || 0}
         <div className={styles.vulnerabilitiesHeader}>
           <h2>Your Vulnerability Profile</h2>
           <p>
-            Based on your {primaryArchetype?.archetype.name || 'personality'} profile, we've
-            identified {selectedPersonas.length} manipulation patterns you should be aware of.
-            Knowledge of these patterns helps you recognize and avoid potentially harmful
-            situations.
+            Based on your{' '}
+            <span style={{ color: 'black', fontWeight: 'bold' }}>
+              {primaryArchetype?.archetype.name || 'personality'}
+            </span>{' '}
+            profile, we&apos;ve identified {selectedPersonas.length} manipulation patterns you
+            should be aware of. Knowledge of these patterns helps you recognize and avoid
+            potentially harmful situations.
           </p>
         </div>
 

@@ -1266,7 +1266,7 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
         resetAssessment: () => {
           set(state => ({
             ...initialState,
-            userData: state.userData,
+            // userData: state.userData,
             debugMode: state.debugMode,
             sessionId: generateSessionId(),
           }));

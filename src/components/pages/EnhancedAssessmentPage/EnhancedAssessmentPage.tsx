@@ -17,6 +17,7 @@ import { Card } from '../../ui/Card';
 import PageLayout from '../../ui/PageLayout';
 import { ProgressBar } from '../../ui/ProgressBar';
 import UserInfoForm from '../../ui/UserInfoForm';
+import IntroPage from '../IntroPage/IntroPage';
 
 import styles from './EnhancedAssessmentPage.module.scss';
 
@@ -244,7 +245,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
 
     try {
       // Simulate API call for user registration
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       setUserData(data);
 
@@ -255,7 +256,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
         startTime: now,
       }));
 
-      startAssessment();
+      // startAssessment();
 
       // Log user data for backend integration
       console.log('User registered:', data);
@@ -609,7 +610,7 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
   }
 
   // Show initial user info form if not started
-  if (!isStarted || !userData) {
+  if (!isStarted && !userData) {
     return (
       <PageLayout maxWidth="md" centered background="gradient">
         <div className={`${styles.assessmentPage} ${className}`}>
@@ -625,6 +626,31 @@ export const EnhancedAssessmentPage: React.FC<EnhancedAssessmentPageProps> = ({
               </div> */}
 
             <UserInfoForm onSubmit={handleUserSubmit} loading={isLoading} error={error} />
+            {/* </Card> */}
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  // Show intro after user info is collected
+  if (!isStarted && userData) {
+    return (
+      <PageLayout maxWidth="lg" centered background="gradient">
+        <div className={`${styles.assessmentPage} ${className}`}>
+          <div className={styles.welcomeContainer}>
+            {/* <Card className={styles.welcomeCard}> */}
+            {/* <div className={styles.welcomeContent}>
+                <h1>Enhanced Relationship Assessment</h1>
+                <p>
+                  Discover your partnership style and vulnerability patterns through travel
+                  scenarios. This assessment takes about 8-12 minutes and provides personalized
+                  insights across multiple dimensions of relationship dynamics.
+                </p>
+              </div> */}
+
+            {/* <UserInfoForm onSubmit={handleUserSubmit} loading={isLoading} error={error} /> */}
+            <IntroPage onClick={startAssessment} />
             {/* </Card> */}
           </div>
         </div>

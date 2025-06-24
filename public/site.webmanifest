@@ -1,0 +1,25 @@
+{
+  "name": "FIA Relationship Assessment - 8 Archetypes & Vulnerability Assessment",
+  "short_name": "FIA Assessment",
+  "description": "Discover your relationship archetype through 20+ branching travel scenarios. Comprehensive assessment covering 8 personality types and vulnerability patterns for healthier relationships.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "categories": ["lifestyle", "education", "personal development", "psychology", "relationships"],
+  "lang": "en-US",
+  "orientation": "portrait-primary"
+}

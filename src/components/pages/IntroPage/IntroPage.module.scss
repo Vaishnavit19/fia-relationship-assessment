@@ -1,0 +1,424 @@
+// src/components/pages/IntroPage/IntroPage.module.scss
+// ==========================================================================
+// INTRO PAGE STYLES - TRAVEL STORY INTRODUCTION
+// ==========================================================================
+
+// @use '../../../styles/variables' as vars;
+@use "../../../styles/mixins" as mix;
+
+.introPage {
+  animation: page-enter 0.6s ease-out;
+  background: vars.$bg-gradient;
+  min-height: 100vh;
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// ==========================================================================
+// CONTAINER AND LAYOUT
+// ==========================================================================
+
+.container {
+  @include mix.container;
+
+  padding-bottom: vars.$spacing-3xl;
+  padding-top: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    padding-bottom: vars.$spacing-2xl;
+    padding-top: vars.$spacing-2xl;
+  }
+}
+
+.storyGrid {
+  display: grid;
+  gap: vars.$spacing-2xl;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: vars.$spacing-3xl;
+
+  @include mix.mobile-only {
+    gap: vars.$spacing-lg;
+    grid-template-columns: 1fr;
+    margin-bottom: vars.$spacing-2xl;
+  }
+}
+
+// ==========================================================================
+// STORY CARDS
+// ==========================================================================
+
+.storyCard {
+  animation: fadeInUp 0.8s ease-out both;
+  background: vars.$card-bg;
+  border-radius: vars.$radius-xl;
+  box-shadow: vars.$shadow-card;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s ease;
+
+  &:hover {
+    box-shadow: vars.$shadow-card-hover;
+    transform: translateY(-4px);
+  }
+
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  &:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  &:nth-child(5) {
+    animation-delay: 0.8s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Hero card spans 2 columns
+.heroCard {
+  aspect-ratio: 2/1;
+  grid-column: span 2;
+  min-height: 320px;
+
+  @include mix.mobile-only {
+    aspect-ratio: 1/1;
+    grid-column: span 1;
+    min-height: 300px;
+  }
+
+  .cardTitle {
+    font-size: vars.$font-hero;
+    margin-bottom: vars.$spacing-xl;
+
+    @include mix.mobile-only {
+      font-size: vars.$font-main;
+    }
+  }
+
+  .cardText {
+    font-size: vars.$font-body-lg;
+
+    // max-width: 600px;
+
+    @include mix.mobile-only {
+      font-size: vars.$font-body;
+    }
+  }
+}
+
+// Regular square cards
+.storyCard:not(.heroCard) {
+  aspect-ratio: 1/1;
+  min-height: 305px;
+
+  @include mix.mobile-only {
+    min-height: 280px;
+  }
+
+  &:hover {
+    .cardOverlay {
+      background: unset;
+    }
+
+    .imageBackground {
+      filter: unset;
+      transform: scale(1.05);
+    }
+  }
+}
+
+// ==========================================================================
+// CARD CONTENT AND IMAGES
+// ==========================================================================
+
+.cardImage {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.imageBackground {
+  filter: blur(1px) brightness(0.5);
+  height: auto;
+
+  // object-fit: cover;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.cardOverlay {
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    rgb(0 0 0 / 60%) 0%,
+    rgb(0 0 0 / 30%) 40%,
+    rgb(0 0 0 / 70%) 100%
+  );
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: end;
+  padding: vars.$spacing-2xl;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-lg;
+  }
+}
+
+.cardBadge {
+  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 20%);
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 32px;
+  font-size: vars.$font-caption;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: vars.$spacing-lg;
+  padding: vars.$spacing-sm vars.$spacing-md;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  @include mix.text-title;
+
+  color: white;
+  line-height: 1.2;
+  margin-bottom: vars.$spacing-md;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+
+  @include mix.mobile-only {
+    font-size: vars.$font-subtitle;
+  }
+}
+
+.cardText {
+  color: white;
+  font-size: vars.$font-body;
+  font-weight: 400;
+  line-height: 1.6;
+
+  // max-width: 400px;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body-sm;
+  }
+}
+
+// .highlightText {
+//   background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+//   background-clip: text;
+//   color: transparent;
+//   display: inline-block;
+//   font-weight: 900;
+//   text-shadow: none;
+// }
+
+// ==========================================================================
+// FINAL CTA SECTION
+// ==========================================================================
+
+.finalCta {
+  animation: fadeInUp 0.8s ease-out both;
+  background: vars.$card-bg;
+  border-radius: vars.$radius-xl;
+  box-shadow: vars.$shadow-card;
+  margin: 0 auto;
+
+  // max-width: 600px;
+  overflow: hidden;
+  padding: vars.$spacing-3xl vars.$spacing-2xl;
+  position: relative;
+  text-align: center;
+
+  &::before {
+    background: linear-gradient(90deg, #e576b0, #2f8dbe, #51c49f);
+    border-radius: vars.$radius-xl vars.$radius-xl 0 0;
+    content: "";
+    height: 4px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  @include mix.mobile-only {
+    padding: vars.$spacing-2xl vars.$spacing-lg;
+  }
+}
+
+.airportIcon {
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 10%));
+  font-size: 3.5rem;
+  margin-bottom: vars.$spacing-xl;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @include mix.mobile-only {
+    font-size: 3rem;
+  }
+}
+
+.ctaQuestion {
+  @include mix.text-hero;
+
+  color: vars.$primary-text;
+  line-height: 1.2;
+  margin-bottom: vars.$spacing-md;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-main;
+  }
+}
+
+.ctaSubtitle {
+  @include mix.text-body;
+
+  color: vars.$secondary-text;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 0 auto vars.$spacing-xl;
+  max-width: 500px;
+
+  @include mix.mobile-only {
+    font-size: vars.$font-body;
+    margin-bottom: vars.$spacing-lg;
+  }
+}
+
+.ctaButton {
+  align-items: center;
+  background: vars.$primary-accent;
+  border: none;
+  border-radius: vars.$radius-lg;
+  box-shadow: vars.$shadow-accent;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: vars.$font-body-lg;
+  font-weight: 700;
+  gap: vars.$spacing-sm;
+  justify-content: center;
+  min-width: 220px;
+  padding: vars.$spacing-lg vars.$spacing-xl;
+  transition: vars.$transition-standard;
+
+  &:hover {
+    box-shadow: 0 0.5rem 2rem rgb(255 107 157 / 40%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: 2px solid vars.$primary-accent-solid;
+    outline-offset: 2px;
+  }
+
+  @include mix.mobile-only {
+    width: 100%;
+  }
+}
+
+.container .introContainer {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  background: linear-gradient(135deg, #2f8dbeaa 0%, #51c49faa 100%);
+
+  // display: flex;
+  margin: 2rem 0;
+  text-align: center;
+
+  .cardTitle {
+    color: vars.$primary-text;
+    font-size: 2rem;
+    text-shadow: none;
+  }
+
+  .cardText {
+    // color: vars.$secondary-text;
+    font-size: 1.125rem;
+
+    // text-shadow: 0 0 8px white;
+  }
+}
+
+// ==========================================================================
+// ACCESSIBILITY
+// ==========================================================================
+
+// @media (prefers-reduced-motion: reduce) {
+//   .storyCard,
+//   .airportIcon,
+//   .introPage {
+//     animation: none;
+//   }
+
+//   .storyCard:hover {
+//     transform: none;
+//   }
+
+//   .ctaButton:hover {
+//     transform: none;
+//   }
+// }
+
+// @media (prefers-contrast: high) {
+//   .cardOverlay {
+//     background: rgb(0 0 0 / 80%);
+//   }
+
+//   .finalCta {
+//     border: 2px solid vars.$primary-text;
+//   }
+// }
