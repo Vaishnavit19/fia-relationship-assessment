@@ -14,7 +14,7 @@
   "scenarios": [
     {
       "id": 1,
-      "text": "First you need to decide on your travel initiary. How many days do you want your trip to be?",
+      "text": "First, you need to decide on your travel itinerary. How many days do you want your trip to be?",
       "options": [
         {
           "letter": "A",
@@ -38,7 +38,7 @@
     },
     {
       "id": 2,
-      "text": "Now you need to decide on where to go. You have always wanted to visit Paris but your partner thinks London would be more fun",
+      "text": "Now you need to decide on where to go. You have always wanted to visit Paris, but your partner thinks London would be more fun.",
       "options": [
         {
           "letter": "A",
@@ -62,7 +62,7 @@
     },
     {
       "id": 3.1,
-      "text": "You guys are going to London !! You are excited, But the night before the flight your partner told you work came up and they had to stay behind for another day.",
+      "text": "You guys are going to London! You are excited, but the night before the flight, your partner told you that work came up and they had to stay behind for another day.",
       "options": [
         {
           "letter": "A",
@@ -78,7 +78,7 @@
         },
         {
           "letter": "C",
-          "text": "This is actually great—more time to plan my day. I'll go today solo and explore until you arrive tomorrow",
+          "text": "This is actually great—more time to plan my day. I'll go today solo and explore until you arrive tomorrow.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 4.3
         }
@@ -86,7 +86,7 @@
     },
     {
       "id": 3.2,
-      "text": "You guys are going to Paris!! You are excited, But the night before the flight your partner told you work came up and they had to stay behind for another day.",
+      "text": "You guys are going to Paris! You are excited, but the night before the flight, your partner told you that work came up and they had to stay behind for another day.",
       "options": [
         {
           "letter": "A",
@@ -110,7 +110,7 @@
     },
     {
       "id": 4.1,
-      "text": "You canceled your flight and booked a hotel near the airport. It's late evening and your partner still hasn't replied to any texts all day.",
+      "text": "You canceled your flight and booked a hotel near the airport. It's late evening, and your partner still hasn't replied to any texts all day.",
       "options": [
         {
           "letter": "A",
@@ -134,7 +134,7 @@
     },
     {
       "id": 4.2,
-      "text": "You canceled your flight and booked a hotel near the airport. It's late evening and your partner still hasn't replied to any texts all day.",
+      "text": "You canceled your flight and booked a hotel near the airport. It's late evening, and your partner still hasn't replied to any texts all day.",
       "options": [
         {
           "letter": "A",
@@ -174,7 +174,7 @@
         },
         {
           "letter": "C",
-          "text": "I'll just wander around and see what catches my eye in this neighborhood",
+          "text": "I'll just wander around and see what catches my eye in this neighborhood.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 5.3
         }
@@ -198,7 +198,7 @@
         },
         {
           "letter": "C",
-          "text": "I'll just wander around and see what catches my eye in this neighborhood",
+          "text": "I'll just wander around and see what catches my eye in this neighborhood.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 5.4
         }
@@ -222,7 +222,7 @@
         },
         {
           "letter": "C",
-          "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well - want to hear about it?",
+          "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well—want to hear about it?",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 6.1
         }
@@ -246,7 +246,7 @@
         },
         {
           "letter": "C",
-          "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well - want to hear about it?",
+          "text": "No worries! I ended up discovering some cool places on my own. Actually worked out pretty well—want to hear about it?",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 6.2
         }
@@ -302,7 +302,7 @@
     },
     {
       "id": 6.1,
-      "text": "The next day, you and your partner flied in and checked into your hotel. now you have a few hours before dinner. Pick exactly two of these to begin your day:",
+      "text": "The next day, you and your partner flew in and checked into your hotel. Now you have a few hours before dinner. Pick exactly two of these to begin your day:",
       "minSelection": 2,
       "options": [
         {
@@ -327,7 +327,7 @@
     },
     {
       "id": 6.2,
-      "text": "The next day, you and your partner flied in and checked into your hotel. now you have a few hours before dinner. Pick exactly two of these to begin your day:",
+      "text": "The next day, you and your partner flew in and checked into your hotel. Now you have a few hours before dinner. Pick exactly two of these to begin your day:",
       "minSelection": 2,
       "options": [
         {
@@ -426,7 +426,7 @@
     },
     {
       "id": 7.2,
-      "text": "You're riding the London Eye just as the sun dips below the skyline. The capsule gently rotates, offering sweeping views over the Thames. Your partner's phone buzzes: it's a text from a friend who has extra tickets to a secret rooftop concert starting now",
+      "text": "You're riding the London Eye just as the sun dips below the skyline. The capsule gently rotates, offering sweeping views over the Thames. Your partner's phone buzzes: it's a text from a friend who has extra tickets to a secret rooftop concert starting now.",
       "options": [
         {
           "letter": "A",
@@ -490,7 +490,7 @@
         },
         {
           "letter": "C",
-          "text": "Let's just wander and see what draws us in—we might discover something amazing",
+          "text": "Let's just wander and see what draws us in—we might discover something amazing.",
           "scores": { "emotional": 0, "logical": 0, "exploratory": 2 },
           "next": 8.2
         }
@@ -522,7 +522,7 @@
     },
     {
       "id": 7.6,
-      "text": "You and your partner discover a small, local pâtisserie filled with beautiful, unique pastries—You're overwhelmed by choice?",
+      "text": "You and your partner discover a small, local pâtisserie filled with beautiful, unique pastries. You're overwhelmed by choice.",
       "options": [
         {
           "letter": "A",
@@ -532,7 +532,7 @@
         },
         {
           "letter": "B",
-          "text": "Check reviews online—let's see what other people say about this place",
+          "text": "Check reviews online—let's see what other people say about this place.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
           "next": 8.2
         },
@@ -556,7 +556,7 @@
         },
         {
           "letter": "B",
-          "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby - we'll eat sooner and avoid the crowd.",
+          "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby—we'll eat sooner and avoid the crowd.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
           "next": 9.1
         },
@@ -580,7 +580,7 @@
         },
         {
           "letter": "B",
-          "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby - we'll eat sooner and avoid the crowd.",
+          "text": "45 minutes is too long when we're this hungry. Let's find somewhere nearby—we'll eat sooner and avoid the crowd.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
           "next": 9.2
         },
@@ -618,17 +618,17 @@
     },
     {
       "id": 9.2,
-      "text": "After dinner, you walked pass a late-night cinema showing a classic film that starts in 10 minutes, while across the street there's a 24-hour arcade that looks surprisingly fun and retro.",
+      "text": "After dinner, you walk past a late-night cinema showing a classic film that starts in 10 minutes, while across the street there's a 24-hour arcade that looks surprisingly fun and retro.",
       "options": [
         {
           "letter": "A",
-          "text": "Ooh, a classic film sounds so romantic! We could snuggle in the dark theater - that feels perfect after dinner together.",
+          "text": "Ooh, a classic film sounds so romantic! We could snuggle in the dark theater—that feels perfect after dinner together.",
           "scores": { "emotional": 2, "logical": 0, "exploratory": 0 },
           "next": null
         },
         {
           "letter": "B",
-          "text": "The movie starts in 10 minutes, so we'd have to rush and might miss the beginning. The arcade has no time pressure - better choice.",
+          "text": "The movie starts in 10 minutes, so we'd have to rush and might miss the beginning. The arcade has no time pressure—better choice.",
           "scores": { "emotional": 0, "logical": 2, "exploratory": 0 },
           "next": null
         },
