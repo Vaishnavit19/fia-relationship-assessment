@@ -7,7 +7,7 @@ A sophisticated relationship assessment tool that uses travel scenarios to analy
 - **20+ Branching Travel Scenarios** with London vs Paris pathways that adapt to your choices
 - **8 Relationship Archetypes** with mathematical precision matching (Achiever, Intellectual, Leader, Explorer, Peacemaker, Dreamer, Rebel, Caregiver)
 - **Vulnerability Education** featuring 17 manipulative persona types for relationship safety awareness
-- **8-12 Minutes** adaptive completion time with intelligent question flow
+- **5 Minutes** adaptive completion time with intelligent question flow
 - **Professional Results Interface** with three specialized tabs: Archetypes | Vulnerabilities | Attraction Patterns
 
 ## 🛠️ Tech Stack
@@ -49,7 +49,7 @@ src/
 ├── data/                   # Assessment data files
 │   ├── extended-travel-scenarios.json
 │   ├── extended-archetypes.json
-│   └── attraction-persona-cards.json
+│   └── enhanced-persona-cards.json
 └── styles/                 # SCSS design system
 ```
 

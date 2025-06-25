@@ -1060,7 +1060,7 @@ Total Questions Answered: ${answers?.length || 0}
                           </span>
                         </div>
                         <h3>{persona.title}</h3>
-                        <p className={styles.personaSubtitle}>{persona.persona}</p>
+                        {/* <p className={styles.personaSubtitle}>{persona.persona}</p> */}
                       </div>
                     </div>
 

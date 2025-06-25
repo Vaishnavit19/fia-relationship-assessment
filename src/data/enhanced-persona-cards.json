@@ -31,7 +31,7 @@
       "image": "/images/personas/predator.webp",
       "flipimage": "/images/personas/predator-flipped.webp",
       "persona": "Emotional Predator",
-      "title": "THE CHARMING MANIPULATOR",
+      "title": "THE PUPPET MASTER",
       "characters": ["Loki", "Light Yagami", "Klaus Mikaelson", "Azula"],
       "why": "They're intense, dramatic, and say things like \"no one really gets me.\" You're like \"I do.\"",
       "plotTwist": "They're not being vulnerable. They're being strategic.",
@@ -54,7 +54,7 @@
       "image": "/images/personas/terrorist.webp",
       "flipimage": "/images/personas/terrorist-flipped.webp",
       "persona": "The Terrorist",
-      "title": "THE POWERHOUSE PARTNER",
+      "title": "THE INTIMIDATOR",
       "characters": [
         "Gustavo Fring (Breaking Bad)",
         "Logan Roy (Succession)",
@@ -82,7 +82,7 @@
       "image": "/images/personas/sergeant.webp",
       "flipimage": "/images/personas/sergeant-flipped.webp",
       "persona": "The Drill Sergeant",
-      "title": "THE RULEBOOK ROMANTIC",
+      "title": "THE DRILL SERGEANT",
       "characters": [
         "Captain Holt (Brooklyn Nine-Nine)",
         "Coach Carter (Coach Carter)",
@@ -106,7 +106,7 @@
       "image": "/images/personas/paranoid.webp",
       "flipimage": "/images/personas/paranoid-flipped.webp",
       "persona": "The Paranoid",
-      "title": "THE CALCULATING GENIUS",
+      "title": "THE SUSPICIOUS STRATEGIST",
       "characters": [
         "Light Yagami (Death Note)",
         "Joe Goldberg (You)",
@@ -134,7 +134,7 @@
       "image": "/images/personas/right.webp",
       "flipimage": "/images/personas/right-flipped.webp",
       "persona": "Always Right",
-      "title": "THE WALKING TED TALK",
+      "title": "THE MASTER OF EVERYTHING",
       "characters": [
         "Tony Stark (Iron Man / MCU)",
         "Light Yagami (Death Note)",
@@ -162,7 +162,7 @@
       "image": "/images/personas/passive.webp",
       "flipimage": "/images/personas/passive-flipped.webp",
       "persona": "Passive Aggressive Person",
-      "title": "THE SILENT HEARTBREAKER",
+      "title": "THE SUBTLE SABOTEUR",
       "characters": [
         "Tom (500 Days of Summer)",
         "George (Gaslight)",
@@ -190,7 +190,7 @@
       "image": "/images/personas/clinger.webp",
       "flipimage": "/images/personas/clinger-flipped.webp",
       "persona": "The Clinger",
-      "title": "THE OVERLOVER",
+      "title": "THE CLINGER",
       "characters": [
         "Geet (Jab We Met)",
         "Gollum (The Lord of the Rings)",
@@ -218,7 +218,7 @@
       "image": "/images/personas/addict.webp",
       "flipimage": "/images/personas/addict-flipped.webp",
       "persona": "The Addict",
-      "title": "THE BEAUTIFUL MESS",
+      "title": "THE CHAOS JUNKIE",
       "characters": [
         "Rue Bennett (Euphoria)",
         "Jesse Pinkman (Breaking Bad)",
@@ -242,7 +242,7 @@
       "image": "/images/personas/adhd.webp",
       "flipimage": "/images/personas/adhd-flipped.webp",
       "persona": "ADHDer",
-      "title": "THE CHAOS SIREN",
+      "title": "THE FREEWHEELER",
       "characters": [
         "Ferris Bueller (Ferris Bueller's Day Off)",
         "Jack Sparrow (Pirates of the Caribbean)",
@@ -266,7 +266,7 @@
       "image": "/images/personas/autistic.webp",
       "flipimage": "/images/personas/autistic-flipped.webp",
       "persona": "Autistic",
-      "title": "THE BRILLIANT LONER",
+      "title": "THE THINKER",
       "characters": [
         "Sherlock Holmes (Sherlock)",
         "Light Yagami (Death Note)",
@@ -294,7 +294,7 @@
       "image": "/images/personas/shrug.webp",
       "flipimage": "/images/personas/shrug-flipped.webp",
       "persona": "The Emotional Invalidator",
-      "title": "THE SHRUGGER",
+      "title": "THE EMOTIONAL INVALIDATOR",
       "characters": [
         "Sheldon Cooper (The Big Bang Theory)",
         "Rick Sanchez (Rick and Morty)",
@@ -322,7 +322,7 @@
       "image": "/images/personas/iceberg.webp",
       "flipimage": "/images/personas/iceberg-flipped.webp",
       "persona": "The Unavailable",
-      "title": "THE ICEBERG",
+      "title": "THE EMOTIONALLY DISTANT",
       "characters": [
         "Mr. Darcy (Pride & Prejudice)",
         "Don Draper (Mad Men)",
@@ -350,7 +350,7 @@
       "image": "/images/personas/victim.webp",
       "flipimage": "/images/personas/victim-flipped.webp",
       "persona": "The Perpetual Victim",
-      "title": "THE TRAGIC HERO",
+      "title": "THE PERPETUAL VICTIM",
       "characters": [
         "BoJack Horseman (BoJack Horseman)",
         "Eeyore (Winnie the Pooh)",
@@ -378,7 +378,7 @@
       "image": "/images/personas/mommy.webp",
       "flipimage": "/images/personas/mommy-flipped.webp",
       "persona": "The Mommy Seeker",
-      "title": "THE GROWN CHILD",
+      "title": "THE PARENTAL SEEKER",
       "characters": [
         "Shinji Ikari (Neon Genesis Evangelion)",
         "Tom Hansen (500 Days of Summer)",
@@ -406,7 +406,7 @@
       "image": "/images/personas/rake.webp",
       "flipimage": "/images/personas/rake-flipped.webp",
       "persona": "The Rake",
-      "title": "THE DANGEROUS CHARMER",
+      "title": "THE RAKE",
       "characters": [
         "Damon Salvatore (The Vampire Diaries)",
         "Chuck Bass (Gossip Girl)",
@@ -430,7 +430,7 @@
       "image": "/images/personas/castle.webp",
       "flipimage": "/images/personas/castle-flipped.webp",
       "persona": "The Future Faker",
-      "title": "THE CASTLE BUILDER",
+      "title": "THE FUTURE FAKER",
       "characters": [
         "Ted Mosby (How I Met Your Mother)",
         "Nate (Euphoria)",
@@ -458,7 +458,7 @@
       "image": "/images/personas/narcissist.webp",
       "flipimage": "/images/personas/narcissist-flipped.webp",
       "persona": "The Narcissist",
-      "title": "THE HUMAN MIRROR",
+      "title": "THE SELF-OBSESSED",
       "characters": [
         "Regina George (Mean Girls)",
         "Tony Stark (Iron Man)",
