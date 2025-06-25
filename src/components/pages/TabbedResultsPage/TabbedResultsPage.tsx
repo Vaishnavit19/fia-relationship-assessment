@@ -90,10 +90,10 @@ const getPersonaRedFlags = (persona: PersonaCard): string[] => {
   const redFlags: string[] = [];
 
   // Convert psychological tactics to red flags
-  persona.psychologicalTactics?.forEach(tactic => {
-    const flag = convertTacticToRedFlag(tactic);
-    if (flag) redFlags.push(flag);
-  });
+  // persona.psychologicalTactics?.forEach(tactic => {
+  //   const flag = convertTacticToRedFlag(tactic);
+  //   if (flag) redFlags.push(flag);
+  // });
 
   // Convert manipulator types to red flags
   persona.manipulatorTypes?.forEach(type => {
@@ -231,6 +231,27 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
   const secondaryArchetype = formattedResults?.topMatches?.[1] || null;
 
   const selectedPersonas = vulnerabilityAssessment?.personaSelection?.selectedPersonas ?? [];
+
+  // Generate comprehensive red flags from all personas
+  const allRedFlags = extractKeyRedFlags(selectedPersonas);
+
+  const uniqueTypes = new Set();
+  selectedPersonas.forEach(persona => {
+    persona.manipulatorTypes?.forEach(type => uniqueTypes.add(type));
+  });
+
+  const uniqueStrats = new Set();
+  selectedPersonas.forEach(persona => {
+    const strats = getPersonaProtectionStrategies(persona);
+    strats.forEach(strat => uniqueStrats.add(strat));
+  });
+
+  // const complexityScore = Math.round(
+  //   selectedPersonas.reduce(
+  //     (total, persona) => total + (persona.psychologicalTactics?.length || 0),
+  //     0
+  //   ) / selectedPersonas.length
+  // );
 
   // ==========================================================================
   // SAFE UTILITY FUNCTIONS
@@ -673,10 +694,12 @@ Total Questions Answered: ${answers?.length || 0}
                   // Split trait on " - " to get title and description
                   const [title, description] = trait.split(' - ');
                   return (
-                    <Card key={index} className={styles.traitItem}>
+                    <Card size="small" padding="small" key={index} className={styles.traitItem}>
                       <div>
-                        <strong>{title}</strong>
-                        {description && <span> - {description}</span>}
+                        <p>
+                          <strong>{title}</strong>
+                        </p>
+                        {description && <span>{description}</span>}
                       </div>
                     </Card>
                   );
@@ -901,9 +924,6 @@ Total Questions Answered: ${answers?.length || 0}
       );
     }
 
-    // Generate comprehensive red flags from all personas
-    const allRedFlags = extractKeyRedFlags(selectedPersonas);
-
     return (
       <div className={styles.vulnerabilitiesContent}>
         <div className={styles.vulnerabilitiesHeader}>
@@ -933,8 +953,8 @@ Total Questions Answered: ${answers?.length || 0}
                 <span className={styles.statLabel}>Risk Patterns</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{allRedFlags.length}</span>
-                <span className={styles.statLabel}>Red Flags</span>
+                <span className={styles.statValue}>{uniqueStrats.size}</span>
+                <span className={styles.statLabel}>Unique Protection Strategies</span>
               </div>
             </div>
 
@@ -1071,9 +1091,17 @@ Total Questions Answered: ${answers?.length || 0}
                 {/* Expanded Content When Selected */}
                 {selectedPersona?.id === persona.id && (
                   <div className={styles.expandedPersonaContent}>
+                    {/* Blind Spot Warning */}
+                    {persona.blindSpot && (
+                      <div className={styles.blindSpotWarning}>
+                        <h4>⚠️ Your Blind Spot</h4>
+                        <p>{persona.blindSpot}</p>
+                      </div>
+                    )}
+
                     {/* Red Flags Section */}
                     <div className={styles.warningSignsSection}>
-                      <h4>🚩 Warning Signs</h4>
+                      <h4>&nbsp;🚩 Warning Signs</h4>
                       <ul>
                         {personaRedFlags.map((flag, idx) => (
                           <li key={idx}>{flag}</li>
@@ -1092,14 +1120,14 @@ Total Questions Answered: ${answers?.length || 0}
                     </div>
 
                     {/* Manipulation Tactics */}
-                    <div className={styles.tacticsSection}>
+                    {/* <div className={styles.tacticsSection}>
                       <h4>🎭 Common Tactics</h4>
                       <ul>
                         {persona.psychologicalTactics?.map((tactic, idx) => (
                           <li key={idx}>&nbsp;&nbsp;{tactic}</li>
                         )) || <li>Uses various psychological manipulation techniques</li>}
                       </ul>
-                    </div>
+                    </div> */}
 
                     {/* Reality Check */}
                     {persona.plotTwist && (
@@ -1109,21 +1137,13 @@ Total Questions Answered: ${answers?.length || 0}
                       </div>
                     )}
 
-                    {/* Blind Spot Warning */}
-                    {persona.blindSpot && (
-                      <div className={styles.blindSpotWarning}>
-                        <h4>⚠️ Your Blind Spot</h4>
-                        <p>{persona.blindSpot}</p>
-                      </div>
-                    )}
-
                     {/* Memorable Takeaway */}
-                    {persona.punchline && (
+                    {/* {persona.punchline && (
                       <div className={styles.takeawaySection}>
                         <h4>🎯 Remember This</h4>
                         <p className={styles.punchline}>{persona.punchline}</p>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 )}
               </Card>

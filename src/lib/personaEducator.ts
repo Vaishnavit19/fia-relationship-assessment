@@ -117,10 +117,10 @@ export const extractKeyRedFlags = (personas: PersonaCard[]): string[] => {
 
   personas.forEach(persona => {
     // Extract red flags from psychological tactics
-    persona.psychologicalTactics.forEach(tactic => {
-      const flag = convertTacticToRedFlag(tactic);
-      if (flag) redFlags.add(flag);
-    });
+    // persona.psychologicalTactics.forEach(tactic => {
+    //   const flag = convertTacticToRedFlag(tactic);
+    //   if (flag) redFlags.add(flag);
+    // });
 
     // Extract red flags from manipulator types
     persona.manipulatorTypes.forEach(type => {
@@ -137,26 +137,25 @@ export const extractKeyRedFlags = (personas: PersonaCard[]): string[] => {
  */
 export const convertTacticToRedFlag = (tactic: string): string | null => {
   const tacticRedFlags: Record<string, string> = {
-    'Strategic vulnerability displays':
-      '🚩 Partner shares "perfect" problems that only you can solve',
-    'Emotional complexity as bait': '🚩 Relationship feels like solving an emotional puzzle',
-    'Dramatic intensity to hook empathy': '🚩 Everything feels like a crisis or emergency',
-    'Passive-aggressive undermining': '🚩 Constant subtle criticisms disguised as "help"',
+    'Strategic vulnerability displays': 'Partner shares "perfect" problems that only you can solve',
+    'Emotional complexity as bait': 'Relationship feels like solving an emotional puzzle',
+    'Dramatic intensity to hook empathy': 'Everything feels like a crisis or emergency',
+    'Passive-aggressive undermining': 'Constant subtle criticisms disguised as "help"',
     'Subtle emotional manipulation':
-      '🚩 You feel confused about your own feelings after conversations',
-    'Kindness as strategic weapon': '🚩 Nice gestures followed by guilt-tripping',
-    'Emotional overwhelming': '🚩 Relationship intensity escalates extremely quickly',
-    'Dependency as control': '🚩 Partner becomes completely dependent on you for everything',
-    'Anxiety disguised as devotion': '🚩 "Love" feels more like panic or desperation',
-    'Chaos as emotional bait': '🚩 Drama and instability presented as "passion"',
-    'Brokenness as attraction': "🚩 Partner's problems become your identity project",
-    'Self-destruction as manipulation': '🚩 Threats of self-harm to control your behavior',
-    'Seduction as primary strategy': '🚩 Relationship moves to physical intimacy unusually fast',
-    'Charm used for conquest': '🚩 You feel like a trophy to be won rather than a person',
-    'Romance without commitment': '🚩 Grand romantic gestures but no concrete future plans',
-    'False future promises': '🚩 Elaborate plans that never materialize into action',
-    'Fantasy creation without follow-through': '🚩 Talks about "someday" but avoids "when"',
-    'Hope manipulation': '🚩 Keeps you waiting with vague promises of change',
+      'You feel confused about your own feelings after conversations',
+    'Kindness as strategic weapon': 'Nice gestures followed by guilt-tripping',
+    'Emotional overwhelming': 'Relationship intensity escalates extremely quickly',
+    'Dependency as control': 'Partner becomes completely dependent on you for everything',
+    'Anxiety disguised as devotion': '"Love" feels more like panic or desperation',
+    'Chaos as emotional bait': 'Drama and instability presented as "passion"',
+    'Brokenness as attraction': "Partner's problems become your identity project",
+    'Self-destruction as manipulation': 'Threats of self-harm to control your behavior',
+    'Seduction as primary strategy': 'Relationship moves to physical intimacy unusually fast',
+    'Charm used for conquest': 'You feel like a trophy to be won rather than a person',
+    'Romance without commitment': 'Grand romantic gestures but no concrete future plans',
+    'False future promises': 'Elaborate plans that never materialize into action',
+    'Fantasy creation without follow-through': 'Talks about "someday" but avoids "when"',
+    'Hope manipulation': 'Keeps you waiting with vague promises of change',
   };
 
   return tacticRedFlags[tactic] || null;
@@ -168,27 +167,25 @@ export const convertTacticToRedFlag = (tactic: string): string | null => {
 export const convertManipulatorTypeToRedFlag = (type: string): string | null => {
   const typeRedFlags: Record<string, string> = {
     'Emotional Predator / Puppet Master':
-      '🚩 Seems to know exactly what to say to get emotional reactions',
-    'The Charismatic': '🚩 Unusually charming but charm feels calculated or "on"',
-    'The Seducer':
-      '🚩 Makes you feel special but similar stories about other "special" people emerge',
-    'The Water Torturer': '🚩 Constantly questioning your perceptions and memory',
-    'The Subtle Saboteur': '🚩 Your confidence decreases after spending time together',
-    'The Nitpicker': '🚩 Nothing you do ever seems quite good enough',
-    'The Clinger': '🚩 Panic or anger when you spend time with other people',
-    'The Demand Man': '🚩 Your needs become less important than theirs',
-    'The Parental Seeker': '🚩 You feel more like a parent than a partner',
-    'The Addict': '🚩 Your relationship revolves around their "recovery" journey',
-    'The Perpetual Victim': '🚩 Everyone in their life has supposedly wronged them',
-    'The Player': "🚩 Stories about their romantic past don't quite add up",
+      'Seems to know exactly what to say to get emotional reactions',
+    'The Charismatic': 'Unusually charming but charm feels calculated or "on"',
+    'The Seducer': 'Makes you feel special but similar stories about other "special" people emerge',
+    'The Water Torturer': 'Constantly questioning your perceptions and memory',
+    'The Subtle Saboteur': 'Your confidence decreases after spending time together',
+    'The Nitpicker': 'Nothing you do ever seems quite good enough',
+    'The Clinger': 'Panic or anger when you spend time with other people',
+    'The Demand Man': 'Your needs become less important than theirs',
+    'The Parental Seeker': 'You feel more like a parent than a partner',
+    'The Addict': 'Your relationship revolves around their "recovery" journey',
+    'The Perpetual Victim': 'Everyone in their life has supposedly wronged them',
+    'The Player': "Stories about their romantic past don't quite add up",
     'The Rake':
-      '🚩 Relationship feels like being swept into their adventure rather than building something together',
-    'The Future Faker': '🚩 Big promises about the future but no concrete steps toward them',
-    'The Ideal Lover': '🚩 Seems too good to be true and mirrors your interests perfectly',
-    'The Self-Obsessed': '🚩 Conversations always circle back to them',
-    'Master of Everything': '🚩 Never admits fault or apologizes genuinely',
-    'The Drill Sergeant':
-      '🚩 Relationship feels like boot camp with constant "improvement" demands',
+      'Relationship feels like being swept into their adventure rather than building something together',
+    'The Future Faker': 'Big promises about the future but no concrete steps toward them',
+    'The Ideal Lover': 'Seems too good to be true and mirrors your interests perfectly',
+    'The Self-Obsessed': 'Conversations always circle back to them',
+    'Master of Everything': 'Never admits fault or apologizes genuinely',
+    'The Drill Sergeant': 'Relationship feels like boot camp with constant "improvement" demands',
   };
 
   return typeRedFlags[type] || null;
