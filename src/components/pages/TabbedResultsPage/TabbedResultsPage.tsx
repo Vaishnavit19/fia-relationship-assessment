@@ -384,11 +384,7 @@ export const TabbedResultsPage: React.FC<TabbedResultsPageProps> = ({
     // resetAssessment();
     // router.push('/assessment');
     // Chatbot link here
-    window.open(
-      'https://6851c5d59fdb71b6babeee51--partner-assessment-tool.netlify.app/',
-      '_blank',
-      'noopener,noreferrer'
-    );
+    window.open('https://partner-assessment-tool.netlify.app/', '_blank', 'noopener,noreferrer');
     // window.open(
     //   'https://6848340aa0a2233a0e0a63e9--partner-assessment-tool.netlify.app/',
     //   '_blank',
