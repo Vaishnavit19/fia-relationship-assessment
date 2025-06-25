@@ -174,12 +174,14 @@ export const generateResultsSummary = (
     topConfidence >= 80 ? 'high' : topConfidence >= 60 ? 'medium' : 'low';
 
   // Determine path complexity
-  const pathComplexity: 'simple' | 'moderate' | 'complex' =
-    userPath.branchingPoints === 0
-      ? 'simple'
-      : userPath.branchingPoints <= 2
-        ? 'moderate'
-        : 'complex';
+  // const pathComplexity: 'simple' | 'moderate' | 'complex' =
+  //   userPath.branchingPoints === 0
+  //     ? 'simple'
+  //     : userPath.branchingPoints <= 2
+  //       ? 'moderate'
+  //       : 'complex';
+
+  const pathComplexity = 'simple';
 
   return {
     totalAnswers: answers.length,
@@ -266,7 +268,7 @@ const mapConfidenceGapToSelectionReason = (
     smallGap: 'small_gap' as const,
   };
 
-  return mapping[gapType!] || 'small_gap';
+  return mapping[gapType] || 'small_gap';
 };
 
 /**

@@ -1165,9 +1165,10 @@ export const useEnhancedAssessmentStore = create<EnhancedAssessmentStore>()(
               return null;
             };
 
-            const startTimeDate = parseDate(state.startTime);
-            const currentTime = Date.now();
-            const totalTime = startTimeDate ? currentTime - startTimeDate.getTime() : 0;
+            const startTimeDate = new Date(state.startTime);
+            // const currentTime = Date.now();
+            const lastActivityDate = new Date(state.lastActivityTime);
+            const totalTime = startTimeDate ? lastActivityDate - startTimeDate : 0;
 
             return {
               answers: state.answers,
